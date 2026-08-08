@@ -10,13 +10,18 @@ import { Footer } from "@/components/site/Footer";
 export default function Home() {
   return (
     <main className="w-full overflow-x-hidden bg-white">
+      <div id="home" className="absolute top-0" />
       <Hero />
       <Pillars />
+      <div id="about" />
       <About />
       <Journey />
       <Leadership />
+      <div id="global-presence" />
       <Regions />
+      <div id="careers" />
       <Forms />
+      <div id="contact" />
       <Footer />
     </main>
   );

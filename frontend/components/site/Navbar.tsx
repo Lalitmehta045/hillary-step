@@ -4,7 +4,13 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
-const NAV = ["Home", "About", "Global Presence", "Careers", "Contact"];
+const NAV = [
+  { name: "Home", href: "/#home" },
+  { name: "About", href: "/#about" },
+  { name: "Global Presence", href: "/#global-presence" },
+  { name: "Careers", href: "/#careers" },
+  { name: "Contact", href: "/#contact" }
+];
 const TOP_TRIGGER_ZONE = 75; // px from top of viewport
 const HIDE_DELAY_MS = 250; // ms to wait before hiding on mouse leave
 const SCROLL_THRESHOLD = 80; // px scroll offset considered "Hero / top of page"
@@ -156,11 +162,11 @@ export function Navbar() {
           <nav className="hidden items-center gap-[36px] lg:flex">
             {NAV.map((item) => (
               <a
-                key={item}
-                href="#"
+                key={item.name}
+                href={item.href}
                 className="font-sans text-[14px] font-[510] leading-[20px] text-[#111111] transition-opacity hover:opacity-70"
               >
-                {item}
+                {item.name}
               </a>
             ))}
           </nav>
@@ -218,12 +224,12 @@ export function Navbar() {
           <div className="flex flex-col px-[24px] pt-[40px] gap-[32px]">
             {NAV.map((item) => (
               <a
-                key={item}
-                href="#"
+                key={item.name}
+                href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="font-display text-[32px] font-[600] leading-[36px] text-[#111111]"
               >
-                {item}
+                {item.name}
               </a>
             ))}
             <div className="mt-[40px] flex flex-col gap-[16px] border-t border-black/10 pt-[40px]">
