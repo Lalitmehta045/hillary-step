@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
 
-export const EASING = [0.25, 1, 0.5, 1]; // easeOut
+export const EASING: [number, number, number, number] = [0.25, 1, 0.5, 1]; // easeOut
 export const DURATION = 0.8;
 
 interface FadeInProps {
