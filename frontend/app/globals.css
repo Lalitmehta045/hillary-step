@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap");
-
 @font-face {
   font-family: "SF Pro Display";
   src: url("/sf-pro-display/SFPRODISPLAYREGULAR.OTF") format("opentype");
@@ -27,10 +25,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-display:
-    "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, sans-serif;
-  --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-sans), "Hanken Grotesk", system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -72,7 +68,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior handled by Lenis — CSS smooth conflicts with JS smooth scroll */
 }
 
 body {
@@ -86,15 +82,18 @@ body {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
 }
 
-/* Multi-stop brand gradient used on headline fragments */
+/* Multi-stop brand gradient used on headline fragments
+   will-change + translateZ(0) promotes to GPU layer, isolating paint cost */
 .grad-text {
   background-image: linear-gradient(90deg,
       #1a6cff 0%,
@@ -106,7 +105,8 @@ body {
   color: transparent;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
-  animation: shimmerText 6s ease-in-out infinite;
+  will-change: background-position;
+  transform: translateZ(0);
 }
 
 .grad-text-bg {
@@ -115,7 +115,8 @@ body {
   color: transparent;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
-  animation: shimmerText 6s ease-in-out infinite;
+  will-change: background-position;
+  transform: translateZ(0);
 }
 
 .grad-text-bgreen {
@@ -124,7 +125,8 @@ body {
   color: transparent;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
-  animation: shimmerText 5s ease-in-out infinite;
+  will-change: background-position;
+  transform: translateZ(0);
 }
 
 .grad-text-green {
@@ -133,7 +135,25 @@ body {
   color: transparent;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
-  animation: shimmerText 5s ease-in-out infinite;
+  will-change: background-position;
+  transform: translateZ(0);
+}
+
+/* Sweep overlay for heading animations */
+.sweep-overlay {
+  background-image: linear-gradient(105deg, transparent 25%, rgba(255, 255, 255, 0.6) 50%, transparent 75%);
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  mix-blend-mode: overlay;
+}
+
+.sweep-overlay * {
+  background: none !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
 }
 
 .grad-border {

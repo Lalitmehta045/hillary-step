@@ -1,4 +1,5 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
+import { GradientReveal } from "@/components/motion/GradientReveal";
 import Image from "next/image";
 
 const LEADERS = [
@@ -45,7 +46,7 @@ export function Leadership() {
 
           <StaggerItem>
             <h2 className="mt-[24px] max-w-[768px] font-display text-[56px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[44px] max-lg:leading-[48px] font-[590] leading-[56px] tracking-[-1.4px] max-md:tracking-[-1px] text-[#111111]">
-              An <span className="grad-text">Operating partnership</span>, not a boardroom.
+              An <GradientReveal className="grad-text">Operating partnership</GradientReveal>, not a boardroom.
             </h2>
           </StaggerItem>
         </StaggerContainer>

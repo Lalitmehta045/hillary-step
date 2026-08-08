@@ -1,39 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { m, useScroll, useTransform } from "framer-motion";
 import { StaggerContainer, StaggerItem, FadeIn } from "@/components/motion/FadeIn";
 import Image from "next/image";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
-
-const NAV = ["Home", "About", "Global Presence", "Careers", "Contact"];
+import { Navbar } from "@/components/site/Navbar";
 
 export function Hero() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
-
-  const headerOpacity = useTransform(scrollY, [0, 80], [0, 1]);
-  const headerBorder = useTransform(scrollY, [0, 80], ["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0.05)"]);
 
   // Parallax for background
   const y = useTransform(scrollY, [0, 1000], [0, 150]);
-
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isMobileMenuOpen]);
 
   return (
     <section className="relative min-h-[1190px] max-md:min-h-[850px] max-lg:min-h-[1000px] w-full overflow-hidden bg-white">
       <m.div
         style={{ y }}
-        className="absolute inset-0 h-[110%] w-full"
+        className="absolute inset-0 h-[110%] w-full transform-gpu will-change-transform"
       >
         <Image
           src="/assets/hero-towers.png"
@@ -47,113 +30,7 @@ export function Hero() {
       <div className="absolute inset-x-0 top-0 h-[120px] bg-linear-to-b from-white/80 to-transparent pointer-events-none" />
 
       {/* Navigation */}
-      <m.header
-        style={{
-          borderBottomWidth: 1,
-          borderBottomColor: headerBorder
-        }}
-        className="fixed top-0 inset-x-0 z-50"
-      >
-        <m.div
-          style={{ opacity: headerOpacity }}
-          className="absolute inset-0 bg-white/80 backdrop-blur-[12px] -z-10 pointer-events-none"
-        />
-        <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between px-[64px] max-md:px-[24px] max-lg:px-[40px] py-[24px]">
-          <a href="#" className="shrink-0 leading-none">
-            <Image
-              src="/assets/logo-hillary-step.png"
-              alt="Hillary Step Solutions Logo"
-              width={63}
-              height={43}
-              className="object-contain"
-            />
-          </a>
-
-          <nav className="hidden items-center gap-[36px] lg:flex">
-            {NAV.map((item) => (
-              <a
-                key={item}
-                href="#"
-                className="font-sans text-[14px] font-[510] leading-[20px] text-[#111111] transition-opacity hover:opacity-70"
-              >
-                {item}
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-[24px] max-lg:hidden">
-            <button
-              type="button"
-              className="flex items-center gap-[7px] font-sans text-[14px] font-[510] leading-[20px] text-[#111111]"
-            >
-              <GlobeIcon />
-              USA
-              <ChevronIcon />
-            </button>
-            <AnimatedButton
-              href="#"
-              variant="subtleShadow"
-              className="flex h-[44px] items-center gap-[9px] rounded-full border border-[#111111]/10 bg-white/50 px-[22px] font-sans text-[14px] font-[510] leading-[20px] text-[#111111] backdrop-blur-sm"
-            >
-              Admin Portal
-              <ArrowUpRight />
-            </AnimatedButton>
-          </div>
-
-          <button
-            className="lg:hidden flex h-[44px] w-[44px] items-center justify-center rounded-full bg-white/20 backdrop-blur-md border border-black/10 text-ink"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open Menu"
-          >
-            <MenuIcon />
-          </button>
-        </div>
-      </m.header>
-
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-white overflow-y-auto animate-in fade-in duration-300">
-          <div className="mx-auto flex w-full items-center justify-between px-[24px] pt-[24px] pb-[24px]">
-            <a href="#" className="shrink-0 leading-none" onClick={() => setIsMobileMenuOpen(false)}>
-              <Image
-                src="/assets/logo-hillary-step.png"
-                alt="Hillary Step Solutions Logo"
-                width={63}
-                height={43}
-                className="object-contain"
-              />
-            </a>
-            <button
-              className="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-black/5 border border-black/10 text-black"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-label="Close Menu"
-            >
-              <CloseIcon />
-            </button>
-          </div>
-          <div className="flex flex-col px-[24px] pt-[40px] gap-[32px]">
-            {NAV.map((item) => (
-              <a
-                key={item}
-                href="#"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="font-display text-[32px] font-[600] leading-[36px] text-[#111111]"
-              >
-                {item}
-              </a>
-            ))}
-            <div className="mt-[40px] flex flex-col gap-[16px] border-t border-black/10 pt-[40px]">
-              <a
-                href="#"
-                className="flex h-[54px] w-full items-center justify-center gap-[9px] rounded-full bg-brand-blue px-[22px] font-sans text-[16px] font-semibold text-white"
-              >
-                Admin Portal
-                <ArrowUpRight />
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
+      <Navbar />
 
       {/* Hero copy */}
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-[64px] max-md:px-[24px] max-lg:px-[40px] pt-[262px] max-md:pt-[120px] max-lg:pt-[180px]">
@@ -208,23 +85,6 @@ export function Hero() {
   );
 }
 
-function GlobeIcon() {
-  return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18" />
-    </svg>
-  );
-}
-
-function ChevronIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  );
-}
-
 export function ArrowUpRight() {
   return (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -237,25 +97,6 @@ export function ArrowRight() {
   return (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
       <path d="M4 12h15M13 6l6 6-6-6" />
-    </svg>
-  );
-}
-
-function MenuIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <line x1="18" y1="6" x2="6" y2="18"></line>
-      <line x1="6" y1="6" x2="18" y2="18"></line>
     </svg>
   );
 }

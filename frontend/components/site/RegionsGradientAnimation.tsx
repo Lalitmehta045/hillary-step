@@ -25,9 +25,10 @@ export function RegionsGradientAnimation() {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    let animationFrameId: number;
+    let animationFrameId: number = 0;
     let width = 0;
     let height = 0;
+    let isVisible = false;
 
     // Angle of diagonal rays: -22 degrees for a sweeping look
     const angleRad = (-22 * Math.PI) / 180;
@@ -73,6 +74,11 @@ export function RegionsGradientAnimation() {
     const startTime = performance.now();
 
     const render = (now: number) => {
+      if (!isVisible) {
+        animationFrameId = 0;
+        return;
+      }
+
       const time = (now - startTime) * 0.001;
 
       ctx.clearRect(0, 0, width, height);
@@ -139,10 +145,26 @@ export function RegionsGradientAnimation() {
       animationFrameId = requestAnimationFrame(render);
     };
 
-    animationFrameId = requestAnimationFrame(render);
+    // IntersectionObserver to only run animation when visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible && !animationFrameId) {
+            animationFrameId = requestAnimationFrame(render);
+          }
+        });
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(container);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
       window.removeEventListener("resize", handleResize);
     };
   }, []);

@@ -2,6 +2,7 @@ import { ArrowRight } from "./Hero";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { MountainAnimation } from "@/components/motion/MountainAnimation";
 import { AnimatedMountainMask } from "@/components/motion/AnimatedMountainMask";
+import { GradientReveal } from "@/components/motion/GradientReveal";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
 const TIMELINE = [
@@ -28,8 +29,10 @@ export function About() {
               </p>
               <h2 className="mt-[24px] max-w-[790px] font-display text-[72px] max-md:text-[40px] max-md:leading-[44px] max-lg:text-[56px] font-[590] leading-[72px] max-lg:leading-[60px] tracking-[-1.8px] max-md:tracking-[-1px] text-[#111111]">
                 Every Summit Begins<br className="hidden md:block" />
-                with <span className="grad-text">One Defining</span><br className="hidden md:block" />
-                <span className="text-[#1a6cff]">Step.</span>
+                <GradientReveal>
+                  with <span className="grad-text">One Defining</span><br className="hidden md:block" />
+                  <span className="text-[#1a6cff]">Step.</span>
+                </GradientReveal>
               </h2>
             </StaggerItem>
 

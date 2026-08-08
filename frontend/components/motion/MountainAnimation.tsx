@@ -21,8 +21,8 @@ export function MountainAnimation({ children, className = "" }: { children: Reac
       ref={ref}
       style={{ y: yParallax }}
       className={className}
-      initial={{ opacity: 0, filter: "blur(8px)", scale: 0.96 }}
-      whileInView={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+      initial={{ opacity: 0, scale: 0.96 }}
+      whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ 
         duration: 1.8, 
@@ -30,7 +30,7 @@ export function MountainAnimation({ children, className = "" }: { children: Reac
         delay: 0.2
       }}
     >
-      {/* Continuous breathing effect */}
+      {/* Continuous breathing effect — GPU-only: translate3d + scale */}
       <m.div
         animate={{ 
           y: [0, -12, 0],
@@ -42,7 +42,7 @@ export function MountainAnimation({ children, className = "" }: { children: Reac
           repeat: Infinity,
           repeatType: "reverse" 
         }}
-        className="w-full h-full transform-gpu"
+        className="w-full h-full transform-gpu will-change-transform"
       >
         {children}
       </m.div>

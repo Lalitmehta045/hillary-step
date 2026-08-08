@@ -1,5 +1,6 @@
 import { ArrowRight } from "./Hero";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
+import { GradientReveal } from "@/components/motion/GradientReveal";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
 const PRACTICES = ["Engineering", "Data & AI", "Civil & Infrastructure", "Corporate"];
@@ -20,7 +21,7 @@ export function Forms() {
 
             <StaggerItem>
               <h2 className="mt-[24px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
-                Submit your <span className="grad-text-bgreen">candidacy.</span>
+                Submit your <GradientReveal className="grad-text-bgreen">candidacy.</GradientReveal>
               </h2>
             </StaggerItem>
 
@@ -87,7 +88,7 @@ export function Forms() {
                   <span className="mt-[4px] font-sans text-[14px] text-[#4B5563]">
                     or click to browse · PDF, DOC, DOCX · 5MB
                   </span>
-                  <input type="file" className="hidden" />
+                  <input type="file" className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0" accept=".pdf,.doc,.docx" />
                 </label>
 
                 <AnimatedButton

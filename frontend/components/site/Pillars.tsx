@@ -1,4 +1,5 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
+import { GradientReveal } from "@/components/motion/GradientReveal";
 import { PillarCard } from "@/components/ui/PillarCard";
 
 const PILLARS = [
@@ -37,7 +38,7 @@ export function Pillars() {
             <h2 className="mt-[24px] font-display text-[72px] max-md:text-[40px] max-md:leading-[44px] max-lg:text-[56px] max-lg:leading-[60px] font-[590] leading-[72px] tracking-[-1.8px] max-md:tracking-[-1px] text-[#111111]">
               One Company, Three Pillars,
               <br />
-              <span className="grad-text-bg">Infinite Solutions</span>
+              <GradientReveal className="grad-text-bg">Infinite Solutions</GradientReveal>
             </h2>
           </StaggerItem>
 

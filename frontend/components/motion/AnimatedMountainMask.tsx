@@ -4,13 +4,9 @@ import { m } from "framer-motion";
 
 export function AnimatedMountainMask() {
   return (
-    <m.div
-      animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-      transition={{ duration: 15, ease: "easeInOut", repeat: Infinity }}
-      className="w-full h-full opacity-70"
+    <div
+      className="w-full h-full opacity-70 overflow-hidden"
       style={{
-        background: "linear-gradient(-45deg, #1a6cff, #40f600, #ff9500, #1a6cff)",
-        backgroundSize: "400% 400%",
         WebkitMaskImage: "url(/assets/mountain-outline.png)",
         WebkitMaskSize: "contain",
         WebkitMaskRepeat: "no-repeat",
@@ -20,6 +16,21 @@ export function AnimatedMountainMask() {
         maskRepeat: "no-repeat",
         maskPosition: "bottom right",
       }}
-    />
+    >
+      {/* 
+        Instead of animating backgroundPosition (triggers paint every frame),
+        use a wider gradient div and animate translateX (compositor-only, GPU accelerated).
+        The visual result is identical: a gradient that shifts across the mask.
+      */}
+      <m.div
+        animate={{ x: ["0%", "-50%", "0%"] }}
+        transition={{ duration: 15, ease: "easeInOut", repeat: Infinity }}
+        className="h-full will-change-transform transform-gpu"
+        style={{
+          width: "200%",
+          background: "linear-gradient(-45deg, #1a6cff, #40f600, #ff9500, #1a6cff, #40f600, #ff9500)",
+        }}
+      />
+    </div>
   );
 }

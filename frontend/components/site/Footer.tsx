@@ -1,7 +1,8 @@
-import { FooterGradientAnimation } from "@/components/site/FooterGradientAnimation";
+import { FooterWave } from "@/components/site/FooterWave";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import Image from "next/image";
+import { FaInstagram, FaXTwitter, FaLinkedinIn, FaFacebookF } from "react-icons/fa6";
 
 const COLUMNS = [
   {
@@ -38,16 +39,16 @@ const COLUMNS = [
 ];
 
 const SOCIALS = [
-  { src: "/assets/social-instagram.png", alt: "Instagram" },
-  { src: "/assets/social-x.png", alt: "X" },
-  { src: "/assets/social-linkedin.png", alt: "LinkedIn" },
-  { src: "/assets/social-facebook.png", alt: "Facebook" },
+  { icon: FaInstagram, alt: "Instagram", hoverBg: "hover:bg-[#E1306C]" },
+  { icon: FaXTwitter, alt: "X", hoverBg: "hover:bg-[#000000]" },
+  { icon: FaLinkedinIn, alt: "LinkedIn", hoverBg: "hover:bg-[#0A66C2]" },
+  { icon: FaFacebookF, alt: "Facebook", hoverBg: "hover:bg-[#1877F2]" },
 ];
 
 export function Footer() {
   return (
     <footer className="relative w-full overflow-hidden border-t border-[#353434]/20 bg-white py-[64px] max-md:py-[40px]">
-      <FooterGradientAnimation />
+      <FooterWave className="pointer-events-none absolute inset-0 h-full w-full" />
 
       <div className="relative mx-auto w-full max-w-[1280px] px-[96px] max-md:px-[24px]">
         <StaggerContainer className="grid grid-cols-2 max-md:grid-cols-1 gap-[48px] max-md:gap-[32px] md:grid-cols-4 pb-[58px] max-md:pb-[40px]">
@@ -75,17 +76,20 @@ export function Footer() {
         </StaggerContainer>
 
         <FadeIn delay={0.2} className="flex items-center gap-[19px]">
-          {SOCIALS.map((s) => (
-            <AnimatedButton
-              key={s.alt}
-              variant="socialIcon"
-              href="#"
-              aria-label={s.alt}
-              className="flex h-[45px] w-[45px] items-center justify-center rounded-[8px] overflow-hidden hover:opacity-80 transition-opacity bg-black/10"
-            >
-              <Image src={s.src} alt={s.alt} width={45} height={45} className="h-full w-full object-cover" />
-            </AnimatedButton>
-          ))}
+          {SOCIALS.map((s) => {
+            const Icon = s.icon;
+            return (
+              <AnimatedButton
+                key={s.alt}
+                variant="socialIcon"
+                href="#"
+                aria-label={s.alt}
+                className={`group flex h-[45px] w-[45px] items-center justify-center rounded-[8px] overflow-hidden transition-colors bg-[#666666] ${s.hoverBg}`}
+              >
+                <Icon className={`h-[24px] w-[24px] text-white transition-colors`} />
+              </AnimatedButton>
+            );
+          })}
         </FadeIn>
 
         <FadeIn delay={0.3}>

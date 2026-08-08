@@ -3,6 +3,14 @@
 import { m } from "framer-motion";
 import { hoverVariants } from "@/components/motion/variants";
 import Image from "next/image";
+import { memo } from "react";
+
+// Hoisted transition objects
+const cardHoverTransition = { duration: 0.3, ease: "easeOut" as const };
+const imageRevealTransition = { duration: 1.2, ease: "easeOut" as const };
+const imageInitial = { scale: 1.05 };
+const imageAnimate = { scale: 1 };
+const imageViewport = { once: true as const };
 
 interface PillarCardProps {
   image: string;
@@ -11,19 +19,19 @@ interface PillarCardProps {
   title: string;
 }
 
-export function PillarCard({ image, alt, eyebrow, title }: PillarCardProps) {
+export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title }: PillarCardProps) {
   return (
     <m.article
       whileHover={hoverVariants.cardLift}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      transition={cardHoverTransition}
       className="relative h-[721px] max-md:h-[400px] max-lg:h-[500px] overflow-hidden rounded-[32px] border border-[#EFEFF1] shadow-sm bg-white"
     >
       <m.div
-        initial={{ scale: 1.05 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        viewport={{ once: true }}
-        className="absolute inset-0 h-full w-full"
+        initial={imageInitial}
+        whileInView={imageAnimate}
+        transition={imageRevealTransition}
+        viewport={imageViewport}
+        className="absolute inset-0 h-full w-full transform-gpu"
       >
         <Image
           src={image}
@@ -48,7 +56,7 @@ export function PillarCard({ image, alt, eyebrow, title }: PillarCardProps) {
       </div>
     </m.article>
   );
-}
+});
 
 function ExpandIcon() {
   return (

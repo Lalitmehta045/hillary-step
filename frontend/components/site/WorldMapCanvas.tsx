@@ -30,9 +30,20 @@ const CONTINENT_CLUSTERS = [
   { cx: 0.79, cy: 0.73, rx: 0.08, ry: 0.09, count: 35 },
 ];
 
+// Arcs between hubs: US <-> India, India <-> Australia, US <-> Australia
+const CONNECTIONS_INIT = [
+  { from: "United States", to: "India", progress: 0.2 },
+  { from: "India", to: "Australia", progress: 0.6 },
+  { from: "Australia", to: "United States", progress: 0.8 },
+];
+
 export function WorldMapCanvas({ activeRegion }: { activeRegion: string }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const activeRegionRef = useRef(activeRegion);
+
+  // Update ref without causing effect teardown/rebuild
+  activeRegionRef.current = activeRegion;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -42,9 +53,10 @@ export function WorldMapCanvas({ activeRegion }: { activeRegion: string }) {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    let animationFrameId: number;
+    let animationFrameId: number = 0;
     let width = 0;
     let height = 0;
+    let isVisible = false;
 
     // Generate static world map dot points once per resize
     interface WorldDot {
@@ -54,6 +66,8 @@ export function WorldMapCanvas({ activeRegion }: { activeRegion: string }) {
       alpha: number;
     }
     const worldDots: WorldDot[] = [];
+
+    const connections = CONNECTIONS_INIT.map((c) => ({ ...c }));
 
     const initDots = () => {
       worldDots.length = 0;
@@ -105,16 +119,14 @@ export function WorldMapCanvas({ activeRegion }: { activeRegion: string }) {
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    // Arcs between hubs: US <-> India, India <-> Australia, US <-> Australia
-    const connections = [
-      { from: "United States", to: "India", progress: 0.2 },
-      { from: "India", to: "Australia", progress: 0.6 },
-      { from: "Australia", to: "United States", progress: 0.8 },
-    ];
-
     const startTime = performance.now();
 
     const render = (now: number) => {
+      if (!isVisible) {
+        animationFrameId = 0;
+        return;
+      }
+
       const time = (now - startTime) * 0.001;
 
       ctx.clearRect(0, 0, width, height);
@@ -192,7 +204,8 @@ export function WorldMapCanvas({ activeRegion }: { activeRegion: string }) {
       });
 
       // 4. Draw Animated Sonar / Radar Pulse Rings from the Active Hub
-      const activeHub = HUBS[activeRegion];
+      const currentRegion = activeRegionRef.current;
+      const activeHub = HUBS[currentRegion];
       if (activeHub) {
         const ax = activeHub.xPercent * width;
         const ay = activeHub.yPercent * height;
@@ -224,13 +237,29 @@ export function WorldMapCanvas({ activeRegion }: { activeRegion: string }) {
       animationFrameId = requestAnimationFrame(render);
     };
 
-    animationFrameId = requestAnimationFrame(render);
+    // IntersectionObserver to only run animation when visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible && !animationFrameId) {
+            animationFrameId = requestAnimationFrame(render);
+          }
+        });
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(container);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
       window.removeEventListener("resize", handleResize);
     };
-  }, [activeRegion]);
+  }, []); // Removed [activeRegion] — now uses ref to avoid teardown/rebuild
 
   return (
     <div

@@ -9,16 +9,10 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Apple-like easing
       smoothWheel: true,
-      syncTouch: true,
-      touchMultiplier: 2,
+      syncTouch: false,     // Disabled: let native touch handling work, avoids mobile jitter
+      touchMultiplier: 1.5, // Reduced from 2 to prevent over-scrolling
+      autoRaf: true,        // Let Lenis manage its own optimal RAF loop
     });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
 
     return () => {
       lenis.destroy();

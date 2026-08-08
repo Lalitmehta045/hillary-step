@@ -1,0 +1,20 @@
+import { Sidebar } from "@/components/admin/Sidebar";
+import React from "react";
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="min-h-screen bg-[#f8f9fb] font-display">
+      <Sidebar />
+      <div className="lg:pl-[260px]">
+        {/* Main Content */}
+        <main className="p-4 sm:p-8 pt-20 lg:pt-8 max-w-[1280px]">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}

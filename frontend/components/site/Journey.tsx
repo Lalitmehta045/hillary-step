@@ -1,4 +1,5 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
+import { GradientReveal } from "@/components/motion/GradientReveal";
 import Image from "next/image";
 
 export function Journey() {
@@ -10,7 +11,7 @@ export function Journey() {
             <h2 className="mx-auto max-w-[720px] text-center font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#111111]">
               The Journey
               <br />
-              That <span className="grad-text-green">Defines Us.</span>
+              That <GradientReveal className="grad-text-green">Defines Us.</GradientReveal>
             </h2>
           </StaggerItem>
 
