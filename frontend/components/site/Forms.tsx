@@ -1,4 +1,8 @@
+"use client";
+
 import { ArrowRight } from "./Hero";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
+import { motion } from "framer-motion";
 
 const PRACTICES = ["Engineering", "Data & AI", "Civil & Infrastructure", "Corporate"];
 const LOCATIONS = ["USA", "Australia", "India"];
@@ -9,20 +13,28 @@ export function Forms() {
       {/* Candidacy */}
       <section className="w-full bg-white py-[100px] max-md:py-[60px]">
         <div className="mx-auto w-full max-w-[1280px] px-[32px] max-md:px-[24px]">
-          <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
-            Apply · Global Talent Programme
-          </p>
+          <StaggerContainer>
+            <StaggerItem>
+              <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
+                Apply · Global Talent Programme
+              </p>
+            </StaggerItem>
 
-          <h2 className="mt-[24px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
-            Submit your <span className="text-[#00FF44]">candidacy.</span>
-          </h2>
+            <StaggerItem>
+              <h2 className="mt-[24px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
+                Submit your <span className="text-[#00FF44]">candidacy.</span>
+              </h2>
+            </StaggerItem>
 
-          <p className="mt-[24px] max-md:mt-[16px] max-w-[650px] font-sans text-[18px] max-md:text-[16px] max-md:leading-[24px] font-[400] leading-[28px] text-[#4B5563]">
-            Every application is reviewed by a principal within the discipline. Attach a résumé (PDF
-            or Word, up to 5MB) — we will respond within ten business days.
-          </p>
+            <StaggerItem>
+              <p className="mt-[24px] max-md:mt-[16px] max-w-[650px] font-sans text-[18px] max-md:text-[16px] max-md:leading-[24px] font-[400] leading-[28px] text-[#4B5563]">
+                Every application is reviewed by a principal within the discipline. Attach a résumé (PDF
+                or Word, up to 5MB) — we will respond within ten business days.
+              </p>
+            </StaggerItem>
+          </StaggerContainer>
 
-          <div className="mx-auto mt-[48px] max-md:mt-[32px] rounded-[26px] bg-gradient-to-r from-[#00E5FF] via-[#15FF00] to-[#FF8800] p-[1px]">
+          <FadeIn delay={0.2} className="mx-auto mt-[48px] max-md:mt-[32px] rounded-[26px] bg-gradient-to-r from-[#00E5FF] via-[#15FF00] to-[#FF8800] p-[1px]">
             <form className="grid grid-cols-1 gap-[48px] max-md:gap-[32px] rounded-[25px] bg-white px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px] lg:grid-cols-[1fr_341px]">
               <div>
                 <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
@@ -49,7 +61,7 @@ export function Forms() {
 
               <div className="flex flex-col">
                 <Label>Résumé · Required</Label>
-                <label className="relative mt-[8px] flex h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-[24px] bg-white px-[24px] py-[64px] text-center">
+                <label className="relative mt-[8px] flex h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-[24px] bg-white px-[24px] py-[64px] text-center hover:bg-black/[0.02] transition-colors">
                   <svg className="pointer-events-none absolute inset-0 h-full w-full rounded-[24px]">
                     <defs>
                       <linearGradient id="dashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -80,13 +92,16 @@ export function Forms() {
                   <input type="file" className="hidden" />
                 </label>
 
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02, y: -2, boxShadow: "0px 8px 16px rgba(0,0,0,0.1)" }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.25 }}
                   type="submit"
                   className="mt-[24px] flex h-[56px] w-full items-center justify-center gap-[12px] rounded-full bg-[#111111] font-sans text-[16px] font-[500] text-white hover:bg-black transition-colors"
                 >
                   Submit Application
                   <ArrowRight />
-                </button>
+                </motion.button>
 
                 <p className="mx-auto mt-[16px] max-w-[258px] text-center font-sans text-[10px] leading-[15px] text-[#6B7280]">
                   By submitting, you consent to Hillary Step Solutions reviewing your credentials in
@@ -94,37 +109,49 @@ export function Forms() {
                 </p>
               </div>
             </form>
-          </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* Contact */}
       <section className="w-full bg-white py-[100px] max-md:py-[60px]">
         <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[96px] max-md:gap-[48px] max-lg:gap-[64px] px-[32px] max-md:px-[24px] lg:flex-row">
-          <div className="flex-1">
-            <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
-              CONTACT
-            </p>
+          <StaggerContainer className="flex-1">
+            <StaggerItem>
+              <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+                CONTACT
+              </p>
+            </StaggerItem>
 
-            <h2 className="mt-[24px] max-w-[560px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
-              Speak with us.
-            </h2>
+            <StaggerItem>
+              <h2 className="mt-[24px] max-w-[560px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
+                Speak with us.
+              </h2>
+            </StaggerItem>
 
             <div className="mt-[64px] max-md:mt-[40px] space-y-[46px] max-md:space-y-[32px]">
-              <Address
-                label="Global Headquarters"
-                lines={["Four World Trade Center, 78F", "New York, NY 10007 · United States"]}
-              />
-              <Address
-                label="Pacific"
-                lines={["1 Bligh Street, Level 32", "Sydney NSW 2000 · Australia"]}
-              />
-              <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
-              <Address label="General Enquiries" lines={["principals@hillarystep.com"]} />
+              <StaggerItem>
+                <Address
+                  label="Global Headquarters"
+                  lines={["Four World Trade Center, 78F", "New York, NY 10007 · United States"]}
+                />
+              </StaggerItem>
+              <StaggerItem>
+                <Address
+                  label="Pacific"
+                  lines={["1 Bligh Street, Level 32", "Sydney NSW 2000 · Australia"]}
+                />
+              </StaggerItem>
+              <StaggerItem>
+                <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
+              </StaggerItem>
+              <StaggerItem>
+                <Address label="General Enquiries" lines={["principals@hillarystep.com"]} />
+              </StaggerItem>
             </div>
-          </div>
+          </StaggerContainer>
 
-          <div className="w-full shrink-0 rounded-[25px] bg-gradient-to-r from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1px] lg:w-[560px]">
+          <FadeIn delay={0.2} className="w-full shrink-0 rounded-[25px] bg-gradient-to-r from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1px] lg:w-[560px]">
             <form className="rounded-[24px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px]">
               <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
                 <Field label="Name" />
@@ -138,15 +165,18 @@ export function Forms() {
                 <textarea className="mt-[8px] w-full min-h-[170px] resize-none rounded-[16px] border border-[#D1D5DB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:outline-hidden" />
               </div>
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02, y: -2, boxShadow: "0px 8px 16px rgba(0,0,0,0.1)" }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.25 }}
                 type="submit"
                 className="mt-[24px] flex h-[56px] w-fit items-center justify-center gap-[12px] rounded-full bg-[#111111] px-[32px] font-sans text-[16px] font-[500] text-white hover:bg-black transition-colors"
               >
                 Send Enquiry
                 <ArrowRight />
-              </button>
+              </motion.button>
             </form>
-          </div>
+          </FadeIn>
         </div>
       </section>
     </>

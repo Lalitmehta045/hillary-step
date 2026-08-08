@@ -1,3 +1,5 @@
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
+
 const LEADERS = [
   {
     image: "/assets/leader-1.png",
@@ -33,35 +35,43 @@ export function Leadership() {
   return (
     <section className="w-full bg-white py-[80px] max-md:py-[60px]">
       <div className="mx-auto w-full max-w-[1280px] px-[96px] max-md:px-[24px] max-lg:px-[40px]">
-        <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
-          LEADERSHIP
-        </p>
+        <StaggerContainer>
+          <StaggerItem>
+            <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+              LEADERSHIP
+            </p>
+          </StaggerItem>
 
-        <h2 className="mt-[24px] max-w-[768px] font-display text-[56px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[44px] max-lg:leading-[48px] font-[590] leading-[56px] tracking-[-1.4px] max-md:tracking-[-1px] text-[#111111]">
-          An <span className="grad-text-bg">Operating partnership</span>, not a boardroom.
-        </h2>
+          <StaggerItem>
+            <h2 className="mt-[24px] max-w-[768px] font-display text-[56px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[44px] max-lg:leading-[48px] font-[590] leading-[56px] tracking-[-1.4px] max-md:tracking-[-1px] text-[#111111]">
+              An <span className="grad-text-bg">Operating partnership</span>, not a boardroom.
+            </h2>
+          </StaggerItem>
+        </StaggerContainer>
 
-        <div className="mt-[64px] max-md:mt-[40px] grid grid-cols-1 gap-[32px] md:grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-1">
+        <StaggerContainer className="mt-[64px] max-md:mt-[40px] grid grid-cols-1 gap-[32px] md:grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-1">
           {LEADERS.map((l) => (
-            <article key={l.name} className="flex flex-col pb-[18px]">
-              <div className="overflow-hidden rounded-[24px]">
-                <img
-                  src={l.image}
-                  alt={l.alt}
-                  loading="lazy"
-                  className="aspect-[248/310] w-full object-cover"
-                />
-              </div>
-              <p className="mt-[24px] font-sans text-[12px] font-[600] uppercase tracking-[1.2px] text-[#8b8b8b]">
-                {l.role}
-              </p>
-              <h3 className="mt-[8px] font-sans text-[20px] font-[700] text-[#111111]">{l.name}</h3>
-              <p className="mt-[8px] font-sans text-[16px] italic leading-[24px] text-[#49454F]">
-                {l.quote}
-              </p>
-            </article>
+            <StaggerItem key={l.name}>
+              <article className="flex flex-col pb-[18px] group">
+                <div className="overflow-hidden rounded-[24px]">
+                  <img
+                    src={l.image}
+                    alt={l.alt}
+                    loading="lazy"
+                    className="aspect-[248/310] w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
+                  />
+                </div>
+                <p className="mt-[24px] font-sans text-[12px] font-[600] uppercase tracking-[1.2px] text-[#8b8b8b]">
+                  {l.role}
+                </p>
+                <h3 className="mt-[8px] font-sans text-[20px] font-[700] text-[#111111]">{l.name}</h3>
+                <p className="mt-[8px] font-sans text-[16px] italic leading-[24px] text-[#49454F]">
+                  {l.quote}
+                </p>
+              </article>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

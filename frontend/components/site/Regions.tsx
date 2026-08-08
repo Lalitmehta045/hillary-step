@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { RegionsGradientAnimation } from "@/components/site/RegionsGradientAnimation";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 
 const REGIONS = {
   "United States": {
@@ -42,15 +43,21 @@ export function Regions() {
       <RegionsGradientAnimation />
 
       <div className="relative mx-auto w-full max-w-[1280px] px-[32px] max-md:px-[24px]">
-        <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
-          GLOBAL PRESENCE
-        </p>
+        <StaggerContainer>
+          <StaggerItem>
+            <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+              GLOBAL PRESENCE
+            </p>
+          </StaggerItem>
 
-        <h2 className="mt-[24px] max-w-[672px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#171717]">
-          Three regions. One operating standard.
-        </h2>
+          <StaggerItem>
+            <h2 className="mt-[24px] max-w-[672px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#171717]">
+              Three regions. One operating standard.
+            </h2>
+          </StaggerItem>
+        </StaggerContainer>
 
-        <div className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
+        <FadeIn delay={0.2} className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
           {/* Map card */}
           <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 rounded-[24px] bg-white p-[32px] max-md:p-[16px] shadow-sm lg:w-[691px]">
             <span className="absolute left-[16%] top-[29%] h-[4px] w-[4px] rounded-full bg-black/12" />
@@ -95,8 +102,8 @@ export function Regions() {
                     key={name}
                     type="button"
                     onClick={() => setActive(name)}
-                    className={`flex h-[40px] items-center rounded-full px-[20px] font-sans text-[14px] font-[500] transition-colors ${
-                      isActive ? "bg-[#007BFF] text-white" : "bg-white text-[#171717] shadow-sm"
+                    className={`flex h-[40px] items-center rounded-full px-[20px] font-sans text-[14px] font-[500] transition-all duration-250 hover:-translate-y-[2px] ${
+                      isActive ? "bg-[#007BFF] text-white shadow-md hover:shadow-lg" : "bg-white text-[#171717] shadow-sm hover:shadow-md"
                     }`}
                   >
                     {name}
@@ -119,7 +126,7 @@ export function Regions() {
               </dl>
             </div>
           </div>
-        </div>
+        </FadeIn>
       </div>
     </section>
   );
