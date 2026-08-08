@@ -1,4 +1,5 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
+import Image from "next/image";
 
 const LEADERS = [
   {
@@ -44,7 +45,7 @@ export function Leadership() {
 
           <StaggerItem>
             <h2 className="mt-[24px] max-w-[768px] font-display text-[56px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[44px] max-lg:leading-[48px] font-[590] leading-[56px] tracking-[-1.4px] max-md:tracking-[-1px] text-[#111111]">
-              An <span className="grad-text-bg">Operating partnership</span>, not a boardroom.
+              An <span className="grad-text">Operating partnership</span>, not a boardroom.
             </h2>
           </StaggerItem>
         </StaggerContainer>
@@ -53,19 +54,20 @@ export function Leadership() {
           {LEADERS.map((l) => (
             <StaggerItem key={l.name}>
               <article className="flex flex-col pb-[18px] group">
-                <div className="overflow-hidden rounded-[24px]">
-                  <img
+                <div className="relative overflow-hidden rounded-[24px] aspect-[248/310]">
+                  <Image
                     src={l.image}
                     alt={l.alt}
-                    loading="lazy"
-                    className="aspect-[248/310] w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
                   />
                 </div>
                 <p className="mt-[24px] font-sans text-[12px] font-[600] uppercase tracking-[1.2px] text-[#8b8b8b]">
                   {l.role}
                 </p>
                 <h3 className="mt-[8px] font-sans text-[20px] font-[700] text-[#111111]">{l.name}</h3>
-                <p className="mt-[8px] font-sans text-[16px] italic leading-[24px] text-[#49454F]">
+                <p className="mt-[8px] font-sans text-[15px] italic leading-[24.38px] text-[#1A1A1A]">
                   {l.quote}
                 </p>
               </article>

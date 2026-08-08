@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ReactNode } from "react";
 
 export const EASING: [number, number, number, number] = [0.25, 1, 0.5, 1]; // easeOut
@@ -15,7 +15,7 @@ interface FadeInProps {
 
 export function FadeIn({ children, delay = 0, className = "", amount = 0.3 }: FadeInProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount }}
@@ -27,16 +27,18 @@ export function FadeIn({ children, delay = 0, className = "", amount = 0.3 }: Fa
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
-export function StaggerContainer({ children, className = "" }: { children: ReactNode; className?: string }) {
+export function StaggerContainer({ children, className = "", animateOnMount = false }: { children: ReactNode; className?: string; animateOnMount?: boolean }) {
+  const animationProps = animateOnMount ? { animate: "visible" } : { whileInView: "visible" };
+
   return (
-    <motion.div
+    <m.div
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
+      {...animationProps}
+      viewport={{ once: true, amount: 0.1 }}
       variants={{
         visible: {
           transition: {
@@ -47,13 +49,13 @@ export function StaggerContainer({ children, className = "" }: { children: React
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
 export function StaggerItem({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div
+    <m.div
       variants={{
         hidden: { opacity: 0, y: 32 },
         visible: {
@@ -65,6 +67,6 @@ export function StaggerItem({ children, className = "" }: { children: ReactNode;
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

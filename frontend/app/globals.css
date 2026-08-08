@@ -5,6 +5,7 @@
   src: url("/sf-pro-display/SFPRODISPLAYREGULAR.OTF") format("opentype");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -12,6 +13,7 @@
   src: url("/sf-pro-display/SFPRODISPLAYMEDIUM.OTF") format("opentype");
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -19,6 +21,7 @@
   src: url("/sf-pro-display/SFPRODISPLAYBOLD.OTF") format("opentype");
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @import "tailwindcss";
@@ -79,26 +82,40 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+@keyframes shimmerText {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 /* Multi-stop brand gradient used on headline fragments */
 .grad-text {
-  background-image: linear-gradient(
-    90deg,
-    #1a6cff 0%,
-    #1a8fe0 22%,
-    #40f600 52%,
-    #b7d900 72%,
-    #ff9500 100%
-  );
+  background-image: linear-gradient(90deg,
+      #1a6cff 0%,
+      #1a8fe0 22%,
+      #40f600 52%,
+      #b7d900 72%,
+      #ff9500 100%);
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: shimmerText 6s ease-in-out infinite;
 }
 
 .grad-text-bg {
-  background-image: linear-gradient(90deg, #1a6cff 0%, #1aa1c8 45%, #40f600 78%, #c8d400 100%);
+  background-image: linear-gradient(90deg, #1f65ff 0%, #2b7cff 46%, #2bb0ed 56%, #38e338 76%, #d1ab06 100%);
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: shimmerText 6s ease-in-out infinite;
 }
 
 .grad-text-bgreen {
@@ -106,6 +123,8 @@ body {
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: shimmerText 5s ease-in-out infinite;
 }
 
 .grad-text-green {
@@ -113,6 +132,8 @@ body {
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: shimmerText 5s ease-in-out infinite;
 }
 
 .grad-border {

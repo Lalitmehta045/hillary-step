@@ -1,4 +1,5 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
+import Image from "next/image";
 
 export function Journey() {
   return (
@@ -24,10 +25,12 @@ export function Journey() {
         <FadeIn delay={0.2}>
           <div className="mx-auto mt-[56px] max-md:mt-[40px] w-full max-w-[1186px] rounded-[50px] max-md:rounded-[24px] bg-gradient-to-r from-[#FF6200] via-[#00FF11] to-[#007BFF] p-[1px]">
             <div className="relative h-[545px] max-md:h-[250px] max-lg:h-[400px] w-full overflow-hidden rounded-[49px] max-md:rounded-[23px] bg-black">
-              <img
+              <Image
                 src="/assets/mountain-journey.png"
                 alt="Mountain range"
-                className="h-full w-full object-cover transition-transform duration-1000 ease-out hover:scale-105"
+                fill
+                sizes="(max-width: 1024px) 100vw, 1200px"
+                className="object-cover transition-transform duration-1000 ease-out hover:scale-105"
               />
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#FF6200] via-[#00FF11] to-[#007BFF] p-[4px] shadow-[0_0_46px_14px_rgba(0,255,17,0.25)]">
                 <button

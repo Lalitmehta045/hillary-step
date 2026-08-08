@@ -1,8 +1,7 @@
-"use client";
-
 import { FooterGradientAnimation } from "@/components/site/FooterGradientAnimation";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
-import { motion } from "framer-motion";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import Image from "next/image";
 
 const COLUMNS = [
   {
@@ -77,17 +76,15 @@ export function Footer() {
 
         <FadeIn delay={0.2} className="flex items-center gap-[19px]">
           {SOCIALS.map((s) => (
-            <motion.a
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
+            <AnimatedButton
               key={s.alt}
+              variant="socialIcon"
               href="#"
               aria-label={s.alt}
               className="flex h-[45px] w-[45px] items-center justify-center rounded-[8px] overflow-hidden hover:opacity-80 transition-opacity bg-black/10"
             >
-              <img src={s.src} alt={s.alt} className="h-full w-full object-cover" />
-            </motion.a>
+              <Image src={s.src} alt={s.alt} width={45} height={45} className="h-full w-full object-cover" />
+            </AnimatedButton>
           ))}
         </FadeIn>
 
@@ -97,9 +94,6 @@ export function Footer() {
 
         <FadeIn delay={0.4}>
           <div className="relative flex h-[28px] max-md:h-auto max-md:flex-col max-md:items-start items-center">
-            <div className="absolute left-[-72px] max-md:static max-md:mb-[16px] flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[#111111]">
-              <span className="font-serif text-[20px] italic text-white">N</span>
-            </div>
             <p className="font-sans text-[16px] font-[500] text-[#111111]">Hillary Step Solution</p>
           </div>
         </FadeIn>

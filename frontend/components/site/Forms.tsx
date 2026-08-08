@@ -1,8 +1,6 @@
-"use client";
-
 import { ArrowRight } from "./Hero";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
-import { motion } from "framer-motion";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
 const PRACTICES = ["Engineering", "Data & AI", "Civil & Infrastructure", "Corporate"];
 const LOCATIONS = ["USA", "Australia", "India"];
@@ -22,7 +20,7 @@ export function Forms() {
 
             <StaggerItem>
               <h2 className="mt-[24px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
-                Submit your <span className="text-[#00FF44]">candidacy.</span>
+                Submit your <span className="grad-text-bgreen">candidacy.</span>
               </h2>
             </StaggerItem>
 
@@ -92,16 +90,14 @@ export function Forms() {
                   <input type="file" className="hidden" />
                 </label>
 
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -2, boxShadow: "0px 8px 16px rgba(0,0,0,0.1)" }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ duration: 0.25 }}
+                <AnimatedButton
                   type="submit"
+                  variant="formShadow"
                   className="mt-[24px] flex h-[56px] w-full items-center justify-center gap-[12px] rounded-full bg-[#111111] font-sans text-[16px] font-[500] text-white hover:bg-black transition-colors"
                 >
                   Submit Application
                   <ArrowRight />
-                </motion.button>
+                </AnimatedButton>
 
                 <p className="mx-auto mt-[16px] max-w-[258px] text-center font-sans text-[10px] leading-[15px] text-[#6B7280]">
                   By submitting, you consent to Hillary Step Solutions reviewing your credentials in
@@ -165,16 +161,14 @@ export function Forms() {
                 <textarea className="mt-[8px] w-full min-h-[170px] resize-none rounded-[16px] border border-[#D1D5DB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:outline-hidden" />
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.02, y: -2, boxShadow: "0px 8px 16px rgba(0,0,0,0.1)" }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.25 }}
+              <AnimatedButton
                 type="submit"
+                variant="formShadow"
                 className="mt-[24px] flex h-[56px] w-fit items-center justify-center gap-[12px] rounded-full bg-[#111111] px-[32px] font-sans text-[16px] font-[500] text-white hover:bg-black transition-colors"
               >
                 Send Enquiry
                 <ArrowRight />
-              </motion.button>
+              </AnimatedButton>
             </form>
           </FadeIn>
         </div>

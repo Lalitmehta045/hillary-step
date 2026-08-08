@@ -1,8 +1,8 @@
-"use client";
-
 import { ArrowRight } from "./Hero";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
-import { motion } from "framer-motion";
+import { MountainAnimation } from "@/components/motion/MountainAnimation";
+import { AnimatedMountainMask } from "@/components/motion/AnimatedMountainMask";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
 const TIMELINE = [
   { year: "XXXX", text: "Founded as a civil consulting practice in India." },
@@ -15,63 +15,55 @@ const TIMELINE = [
 export function About() {
   return (
     <>
-      <section className="relative w-full overflow-hidden bg-white pt-[150px] max-md:pt-[80px]">
-        <FadeIn delay={0.4}>
-          <img
-            src="/assets/mountain-outline.png"
-            alt="Pencil sketch of a mountain summit"
-            className="pointer-events-none absolute bottom-0 right-0 w-[840px] max-w-[62%] max-md:max-w-[120%] select-none opacity-50 object-cover"
-          />
-        </FadeIn>
+      <section className="relative w-full overflow-hidden bg-white">
+        <MountainAnimation className="pointer-events-none absolute bottom-0 right-0 w-[840px] h-[600px] max-w-[62%] max-md:max-w-[120%] select-none">
+          <AnimatedMountainMask />
+        </MountainAnimation>
 
-        <div className="relative mx-auto w-full max-w-[1280px] px-[64px] max-md:px-[24px]">
-          <StaggerContainer>
+        <div className="relative mx-auto w-full max-w-[1280px] pt-[128px] pb-[256px] px-[24px] max-md:pt-[80px] max-md:pb-[120px]">
+          <StaggerContainer className="flex flex-col gap-[80px] max-md:gap-[40px]">
             <StaggerItem>
               <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
                 ABOUT HILLARY STEP
               </p>
-            </StaggerItem>
-
-            <StaggerItem>
               <h2 className="mt-[24px] max-w-[790px] font-display text-[72px] max-md:text-[40px] max-md:leading-[44px] max-lg:text-[56px] font-[590] leading-[72px] max-lg:leading-[60px] tracking-[-1.8px] max-md:tracking-[-1px] text-[#111111]">
-                Every Summit Begins with <span className="grad-text-bg">One Defining Step.</span>
+                Every Summit Begins<br className="hidden md:block" />
+                with <span className="grad-text">One Defining</span><br className="hidden md:block" />
+                <span className="text-[#1a6cff]">Step.</span>
               </h2>
             </StaggerItem>
 
             <StaggerItem>
-              <p className="mt-[44px] max-md:mt-[24px] max-w-[976px] font-sans text-[24px] max-md:text-[18px] max-md:leading-[26px] font-[400] leading-[32px] text-[#A3A3A3]">
+              <p className="max-w-[976px] font-sans text-[24px] max-md:text-[18px] max-md:leading-[26px] font-[400] leading-[32px] text-[#A3A3A3]">
                 Inspired by one of the world&apos;s most iconic symbols of perseverance, Hillary Step
                 Solutions represents the determination to overcome complexity, embrace innovation, and
                 achieve meaningful progress. We help organizations navigate their most critical
                 challenges through technology, global workforce solutions, and engineering excellence.
               </p>
             </StaggerItem>
-            
+
             <StaggerItem>
-              <p className="mt-[24px] max-w-[702px] font-sans text-[20px] max-md:text-[16px] max-md:leading-[24px] font-[400] leading-[28px] tracking-[-0.6px] text-[#1B1B1C]">
-                Hillary Step Solutions is a global business solutions company empowering organizations
-                through intelligent technology, world-class workforce solutions, and engineering
-                excellence. We partner with businesses across the USA, Australia, and India to deliver
-                AI-driven digital transformation, custom software development, international
-                recruitment, strategic staffing, and infrastructure consulting. By combining innovation,
-                industry expertise, and a client-first approach, we help organizations overcome complex
-                challenges, accelerate growth, and build a sustainable future.
-              </p>
+              <div className="flex max-w-[702px] flex-col items-start gap-[24px]">
+                <p className="font-sans text-[20px] max-md:text-[16px] max-md:leading-[24px] font-[400] leading-[28px] tracking-[-0.6px] text-[#1B1B1C]">
+                  Hillary Step Solutions is a global business solutions company empowering organizations
+                  through intelligent technology, world-class workforce solutions, and engineering
+                  excellence. We partner with businesses across the USA, Australia, and India to deliver
+                  AI-driven digital transformation, custom software development, international
+                  recruitment, strategic staffing, and infrastructure consulting. By combining innovation,
+                  industry expertise, and a client-first approach, we help organizations overcome complex
+                  challenges, accelerate growth, and build a sustainable future.
+                </p>
+                <AnimatedButton
+                  href="#"
+                  variant="blueGlow"
+                  className="inline-flex h-[52px] items-center gap-[11px] rounded-full bg-brand-blue px-[24px] font-sans text-[16px] font-[590] leading-[24px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)]"
+                >
+                  Contact Us
+                  <ArrowRight />
+                </AnimatedButton>
+              </div>
             </StaggerItem>
           </StaggerContainer>
-
-          <FadeIn delay={0.4} className="mt-[250px] max-md:mt-[80px] pb-[120px] max-md:pb-[80px]">
-            <motion.a
-              whileHover={{ scale: 1.02, y: -2, boxShadow: "0px 8px 20px rgba(0,85,255,0.3)" }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.25 }}
-              href="#"
-              className="inline-flex h-[52px] items-center gap-[11px] rounded-full bg-brand-blue px-[24px] font-sans text-[16px] font-[590] leading-[24px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)]"
-            >
-              Contact Us
-              <ArrowRight />
-            </motion.a>
-          </FadeIn>
         </div>
       </section>
 

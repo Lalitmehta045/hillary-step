@@ -40,18 +40,12 @@ export function FooterGradientAnimation() {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    let animationFrameId: number;
+    let animationFrameId: number = 0;
     let width = 0;
     let height = 0;
+    let isVisible = false;
 
     // Color gradient stops precisely matched to the brand palette:
-    // Left (0.0): Deep Electric Blue (#1463ff)
-    // 0.20: Vivid Sky Blue (#009be5)
-    // 0.40: Mint / Aquamarine (#05c994)
-    // 0.58: Vibrant Lime-Green (#40f600)
-    // 0.76: Golden Chartreuse (#ded200)
-    // 0.90: Warm Amber (#ffaa00)
-    // 1.00: Radiant Orange (#ff6600)
     const colorStops = [
       { stop: 0.0, r: 20, g: 99, b: 255 },
       { stop: 0.2, r: 0, g: 165, b: 235 },
@@ -84,8 +78,6 @@ export function FooterGradientAnimation() {
       return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     };
 
-    // Calculate baseline curve height across X
-    // Left starts at y ~ 78-88%, center rises to y ~ 60-70%, right rises to y ~ 35-50%
     const getWaveBaselineY = (xRatio: number, time: number): number => {
       const trajectory =
         0.84 - 0.46 * Math.pow(xRatio, 1.25) + Math.sin(xRatio * Math.PI * 1.5) * 0.05;
@@ -96,7 +88,6 @@ export function FooterGradientAnimation() {
       return height * trajectory + dynamicWave;
     };
 
-    // Wave ribbon bundle configurations (representing the multiple swooping flowing tracks)
     const waveRibbons = [
       { freq: 3.6, speed: 0.7, amp: 22, phase: 0.0, yOffset: 0, width: 1.5, alpha: 0.4 },
       { freq: 4.8, speed: -0.6, amp: 18, phase: 1.4, yOffset: -16, width: 1.0, alpha: 0.3 },
@@ -108,7 +99,6 @@ export function FooterGradientAnimation() {
       { freq: 4.5, speed: 0.9, amp: 16, phase: 5.5, yOffset: 32, width: 0.9, alpha: 0.2 },
     ];
 
-    // Nodes for the constellation / plexus mesh
     const nodes: NodePoint[] = [];
 
     const initNodes = () => {
@@ -122,11 +112,9 @@ export function FooterGradientAnimation() {
         const xRatio = clampedX / width;
 
         const baseY = getWaveBaselineY(xRatio, 0);
-        // Scatter nodes around the wave path
         const ySpread = (Math.random() - 0.5) * (height * 0.4);
         const y = Math.min(height - 8, Math.max(height * 0.2, baseY + ySpread));
 
-        // Prominent glowing nodes
         const isFeatured = i % 4 === 0 || Math.random() < 0.25;
         const radius = isFeatured ? 3.2 + Math.random() * 3.0 : 1.6 + Math.random() * 1.8;
 
@@ -144,7 +132,6 @@ export function FooterGradientAnimation() {
       }
     };
 
-    // Flowing particles along the waves
     const particles: StreamParticle[] = [];
     const TOTAL_PARTICLES = 320;
     for (let i = 0; i < TOTAL_PARTICLES; i++) {
@@ -192,17 +179,19 @@ export function FooterGradientAnimation() {
     const startTime = performance.now();
 
     const render = (now: number) => {
-      const time = (now - startTime) * 0.001;
+      if (!isVisible) {
+        animationFrameId = 0;
+        return;
+      }
 
+      const time = (now - startTime) * 0.001;
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Draw Master Multi-stop Gradient Line Stroke
       const lineGrad = ctx.createLinearGradient(0, 0, width, 0);
       for (const stop of colorStops) {
         lineGrad.addColorStop(stop.stop, `rgb(${stop.r}, ${stop.g}, ${stop.b})`);
       }
 
-      // 2. Draw Continuous Harmonic Wave Ribbons
       waveRibbons.forEach((wave, wIdx) => {
         const step = 6;
         const totalSteps = Math.ceil(width / step) + 1;
@@ -229,7 +218,6 @@ export function FooterGradientAnimation() {
         ctx.globalAlpha = wave.alpha;
         ctx.stroke();
 
-        // Stippled particle dots along wave curves
         const dotGap = 16;
         for (let x = 0; x <= width; x += dotGap) {
           const xRatio = x / width;
@@ -249,7 +237,6 @@ export function FooterGradientAnimation() {
 
       ctx.globalAlpha = 1.0;
 
-      // 3. Draw Streaming Wave Particles
       particles.forEach((p) => {
         p.progress += p.speed;
         if (p.progress > 1) p.progress -= 1;
@@ -270,23 +257,19 @@ export function FooterGradientAnimation() {
         ctx.fill();
       });
 
-      // 4. Update and Draw Plexus Network (Nodes & Connecting Web)
       const mouse = mouseRef.current;
       const MAX_LINK_DIST = Math.min(125, width * 0.11);
 
-      // Update node positions
       nodes.forEach((node) => {
         node.x += node.vx;
         node.y += node.vy;
 
-        // Keep nodes gently anchored along the organic wave corridor
         const xRatio = node.x / width;
         node.colorProgress = xRatio;
         const targetBaseY = getWaveBaselineY(xRatio, time * 0.25);
         const diffY = targetBaseY - node.y;
         node.y += diffY * 0.006;
 
-        // Bounce at boundaries
         if (node.x < 12) {
           node.x = 12;
           node.vx = Math.abs(node.vx);
@@ -303,7 +286,6 @@ export function FooterGradientAnimation() {
           node.vy = -Math.abs(node.vy);
         }
 
-        // Mouse hover interaction
         if (mouse.active) {
           const dx = node.x - mouse.x;
           const dy = node.y - mouse.y;
@@ -316,7 +298,6 @@ export function FooterGradientAnimation() {
         }
       });
 
-      // Draw Plexus Lines
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const n1 = nodes[i];
@@ -340,14 +321,12 @@ export function FooterGradientAnimation() {
         }
       }
 
-      // Draw Plexus Nodes with Luminescent Glowing Halos
       nodes.forEach((node) => {
         const xRatio = node.colorProgress;
         const pulse = Math.sin(time * node.pulseSpeed + node.pulsePhase);
         const currentRadius = Math.max(1.2, node.radius + (node.hasGlow ? pulse * 0.7 : 0));
 
         if (node.hasGlow) {
-          // Soft radial glow aura
           const auraRadius = currentRadius * 4.2 + pulse * 2.0;
           const radial = ctx.createRadialGradient(
             node.x,
@@ -366,7 +345,6 @@ export function FooterGradientAnimation() {
           ctx.fillStyle = radial;
           ctx.fill();
 
-          // Concentric delicate ring
           const ringColor = getColorAtProgress(xRatio, 0.35 + pulse * 0.15);
           ctx.beginPath();
           ctx.arc(node.x, node.y, currentRadius * 2.2, 0, Math.PI * 2);
@@ -375,14 +353,12 @@ export function FooterGradientAnimation() {
           ctx.stroke();
         }
 
-        // Solid Node Core
         const coreColor = getColorAtProgress(xRatio, 0.95);
         ctx.beginPath();
         ctx.arc(node.x, node.y, currentRadius, 0, Math.PI * 2);
         ctx.fillStyle = coreColor;
         ctx.fill();
 
-        // Inner white light pin-point for featured nodes
         if (node.hasGlow) {
           ctx.beginPath();
           ctx.arc(node.x, node.y, Math.max(0.8, currentRadius * 0.38), 0, Math.PI * 2);
@@ -394,10 +370,25 @@ export function FooterGradientAnimation() {
       animationFrameId = requestAnimationFrame(render);
     };
 
-    animationFrameId = requestAnimationFrame(render);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible && !animationFrameId) {
+            animationFrameId = requestAnimationFrame(render);
+          }
+        });
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(container);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
       window.removeEventListener("resize", handleResize);
       container.removeEventListener("mousemove", handleMouseMove);
       container.removeEventListener("mouseleave", handleMouseLeave);
