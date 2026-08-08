@@ -1,0 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap");
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/sf-pro-display/SFPRODISPLAYREGULAR.OTF") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/sf-pro-display/SFPRODISPLAYMEDIUM.OTF") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("/sf-pro-display/SFPRODISPLAYBOLD.OTF") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@import "tailwindcss";
+
+@theme inline {
+  --font-display:
+    "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-deep: var(--brand-blue-deep);
+  --color-brand-green: var(--brand-green);
+  --color-brand-orange: var(--brand-orange);
+  --color-ink: var(--ink);
+  --color-panel: var(--panel);
+  --color-footer-link: var(--footer-link);
+  --color-label: var(--label);
+  --color-body: var(--body);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Brand palette sampled from the source design */
+  --brand-blue: #1a6cff;
+  --brand-blue-deep: #1e3a8a;
+  --brand-green: #40f600;
+  --brand-orange: #ff9500;
+  --ink: #111111;
+  --panel: #f2f2f2;
+  --footer-link: #1e3a8a;
+  --label: #8e8e8e;
+  --body: #5e5e5e;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Multi-stop brand gradient used on headline fragments */
+.grad-text {
+  background-image: linear-gradient(
+    90deg,
+    #1a6cff 0%,
+    #1a8fe0 22%,
+    #40f600 52%,
+    #b7d900 72%,
+    #ff9500 100%
+  );
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.grad-text-bg {
+  background-image: linear-gradient(90deg, #1a6cff 0%, #1aa1c8 45%, #40f600 78%, #c8d400 100%);
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.grad-text-bgreen {
+  background-image: linear-gradient(90deg, #1a6cff 0%, #22b46a 45%, #40f600 100%);
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.grad-text-green {
+  background-image: linear-gradient(90deg, #0fb37a 0%, #2ee02b 55%, #40f600 100%);
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.grad-border {
+  position: relative;
+  background-image: linear-gradient(135deg, #40f600 0%, #1a6cff 35%, #1a6cff 62%, #ff9500 100%);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}

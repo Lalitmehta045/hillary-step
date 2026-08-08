@@ -1,0 +1,102 @@
+import { FooterGradientAnimation } from "@/components/site/FooterGradientAnimation";
+
+const COLUMNS = [
+  {
+    title: "Company",
+    links: ["About", "Leadership", "Innovation Lab", "Sustainability", "Newsroom"],
+  },
+  {
+    title: "Solutions",
+    links: [
+      "Built Environment",
+      "Digital Frontier",
+      "Human Capital",
+      "Joint Ventures",
+      "International EPC",
+    ],
+  },
+  {
+    title: "Investors",
+    links: ["Investor Portal", "Annual Reports", "Governance", "Filings", "ESG Reporting"],
+  },
+  {
+    title: "Compliance",
+    links: [
+      "Companies Act 2013",
+      "International Arbitration",
+      "Global Compliance",
+      "Privacy",
+      "Terms of Service",
+      "CSR",
+      "Skill Development",
+      "Employee Welfare",
+    ],
+  },
+];
+
+const SOCIALS = [
+  { src: "/assets/social-instagram.png", alt: "Instagram" },
+  { src: "/assets/social-x.png", alt: "X" },
+  { src: "/assets/social-linkedin.png", alt: "LinkedIn" },
+  { src: "/assets/social-facebook.png", alt: "Facebook" },
+];
+
+export function Footer() {
+  return (
+    <footer className="relative w-full overflow-hidden border-t border-[#353434]/20 bg-white py-[64px]">
+      <FooterGradientAnimation />
+
+      <div className="relative mx-auto w-full max-w-[1280px] px-[96px]">
+        <div className="grid grid-cols-2 gap-[48px] md:grid-cols-4 pb-[58px]">
+          {COLUMNS.map((col) => (
+            <nav key={col.title} className="flex flex-col gap-[8px]">
+              <h2 className="font-sans text-[16px] font-[500] leading-[24px] text-[#0070F3]">
+                {col.title}
+              </h2>
+              <ul className="flex flex-col gap-[8px]">
+                {col.links.map((link) => (
+                  <li key={link}>
+                    <a
+                      href="#"
+                      className="font-sans text-[16px] font-[400] leading-[24px] text-[#0070F3] hover:underline transition-opacity"
+                    >
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-[19px]">
+          {SOCIALS.map((s) => (
+            <a
+              key={s.alt}
+              href="#"
+              aria-label={s.alt}
+              className="flex h-[45px] w-[45px] items-center justify-center rounded-[8px] overflow-hidden hover:opacity-80 transition-opacity bg-black/10"
+            >
+              <img src={s.src} alt={s.alt} className="h-full w-full object-cover" />
+            </a>
+          ))}
+        </div>
+
+        <div className="my-[32px] h-px w-full bg-[#353434]/20" />
+
+        <div className="relative flex h-[28px] items-center">
+          <div className="absolute left-[-72px] flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[#111111]">
+            <span className="font-serif text-[20px] italic text-white">N</span>
+          </div>
+          <p className="font-sans text-[16px] font-[500] text-[#111111]">Hillary Step Solution</p>
+        </div>
+
+        <div className="flex w-full justify-center pt-[24px]">
+          <p className="font-sans text-[10px] tracking-[2.4px] text-[#111111]/60 uppercase">
+            OPERATING AS PRINCIPAL AND AGENT WORLDWIDE.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}

@@ -1,0 +1,68 @@
+const LEADERS = [
+  {
+    image: "/assets/leader-1.png",
+    role: "Group Managing Principal",
+    name: "K. Kundra",
+    quote: '"Infrastructure is a promise a nation makes to itself."',
+    alt: "Portrait of K. Kundra, group managing principal",
+  },
+  {
+    image: "/assets/leader-2.png",
+    role: "Regional Principal · Pacific",
+    name: "D. Kotari",
+    quote: '"Precision at scale is the only scale worth pursuing."',
+    alt: "Portrait of D. Kotari, regional principal for the Pacific",
+  },
+  {
+    image: "/assets/leader-3.png",
+    role: "Regional Principal · South Asia",
+    name: "R. Iyer",
+    quote: '"Public systems become invisible when they are built well."',
+    alt: "Portrait of R. Iyer, regional principal for South Asia",
+  },
+  {
+    image: "/assets/leader-4.png",
+    role: "Chief Scientist, Innovation Lab",
+    name: "M. Halberg",
+    quote: '"Research is our compounding advantage."',
+    alt: "Portrait of M. Halberg, chief scientist of the innovation lab",
+  },
+];
+
+export function Leadership() {
+  return (
+    <section className="w-full bg-white py-[80px]">
+      <div className="mx-auto w-full max-w-[1280px] px-[96px]">
+        <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+          LEADERSHIP
+        </p>
+
+        <h2 className="mt-[24px] max-w-[768px] font-display text-[56px] font-[590] leading-[56px] tracking-[-1.4px] text-[#111111]">
+          An <span className="grad-text-bg">Operating partnership</span>, not a boardroom.
+        </h2>
+
+        <div className="mt-[64px] grid grid-cols-1 gap-[32px] md:grid-cols-4">
+          {LEADERS.map((l) => (
+            <article key={l.name} className="flex flex-col pb-[18px]">
+              <div className="overflow-hidden rounded-[24px]">
+                <img
+                  src={l.image}
+                  alt={l.alt}
+                  loading="lazy"
+                  className="aspect-[248/310] w-full object-cover"
+                />
+              </div>
+              <p className="mt-[24px] font-sans text-[12px] font-[600] uppercase tracking-[1.2px] text-[#8b8b8b]">
+                {l.role}
+              </p>
+              <h3 className="mt-[8px] font-sans text-[20px] font-[700] text-[#111111]">{l.name}</h3>
+              <p className="mt-[8px] font-sans text-[16px] italic leading-[24px] text-[#49454F]">
+                {l.quote}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
