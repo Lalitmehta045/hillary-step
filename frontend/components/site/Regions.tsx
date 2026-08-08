@@ -38,21 +38,21 @@ export function Regions() {
   const region = REGIONS[active];
 
   return (
-    <section className="relative w-full overflow-hidden bg-white py-[148px]">
+    <section className="relative w-full overflow-hidden bg-white py-[148px] max-md:py-[80px]">
       <RegionsGradientAnimation />
 
-      <div className="relative mx-auto w-full max-w-[1280px] px-[32px]">
+      <div className="relative mx-auto w-full max-w-[1280px] px-[32px] max-md:px-[24px]">
         <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
           GLOBAL PRESENCE
         </p>
 
-        <h2 className="mt-[24px] max-w-[672px] font-display text-[60px] font-[590] leading-[60px] tracking-[-1.5px] text-[#171717]">
+        <h2 className="mt-[24px] max-w-[672px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#171717]">
           Three regions. One operating standard.
         </h2>
 
-        <div className="mt-[64px] flex flex-col gap-[48px] lg:flex-row">
+        <div className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
           {/* Map card */}
-          <div className="relative h-[500px] w-full shrink-0 rounded-[24px] bg-white p-[32px] shadow-sm lg:w-[691px]">
+          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 rounded-[24px] bg-white p-[32px] max-md:p-[16px] shadow-sm lg:w-[691px]">
             <span className="absolute left-[16%] top-[29%] h-[4px] w-[4px] rounded-full bg-black/12" />
             <span className="absolute left-[18%] top-[29%] h-[4px] w-[4px] rounded-full bg-black/12" />
 
@@ -105,8 +105,8 @@ export function Regions() {
               })}
             </div>
 
-            <div className="mt-[32px] flex h-auto min-h-[467px] flex-col gap-[32px] rounded-[24px] bg-white p-[40px] shadow-sm lg:w-[492px]">
-              <h3 className="font-sans text-[30px] font-[600] leading-[38px] text-[#171717]">
+            <div className="mt-[32px] flex h-auto min-h-[467px] max-md:min-h-0 flex-col gap-[32px] max-md:gap-[24px] rounded-[24px] bg-white p-[40px] max-md:p-[24px] shadow-sm lg:w-[492px]">
+              <h3 className="font-sans text-[30px] max-md:text-[24px] font-[600] leading-[38px] max-md:leading-[32px] text-[#171717]">
                 {active}
               </h3>
 

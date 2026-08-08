@@ -31,17 +31,17 @@ const LEADERS = [
 
 export function Leadership() {
   return (
-    <section className="w-full bg-white py-[80px]">
-      <div className="mx-auto w-full max-w-[1280px] px-[96px]">
+    <section className="w-full bg-white py-[80px] max-md:py-[60px]">
+      <div className="mx-auto w-full max-w-[1280px] px-[96px] max-md:px-[24px] max-lg:px-[40px]">
         <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
           LEADERSHIP
         </p>
 
-        <h2 className="mt-[24px] max-w-[768px] font-display text-[56px] font-[590] leading-[56px] tracking-[-1.4px] text-[#111111]">
+        <h2 className="mt-[24px] max-w-[768px] font-display text-[56px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[44px] max-lg:leading-[48px] font-[590] leading-[56px] tracking-[-1.4px] max-md:tracking-[-1px] text-[#111111]">
           An <span className="grad-text-bg">Operating partnership</span>, not a boardroom.
         </h2>
 
-        <div className="mt-[64px] grid grid-cols-1 gap-[32px] md:grid-cols-4">
+        <div className="mt-[64px] max-md:mt-[40px] grid grid-cols-1 gap-[32px] md:grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-1">
           {LEADERS.map((l) => (
             <article key={l.name} className="flex flex-col pb-[18px]">
               <div className="overflow-hidden rounded-[24px]">

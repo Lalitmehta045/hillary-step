@@ -68,6 +68,10 @@
   --body: #5e5e5e;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);

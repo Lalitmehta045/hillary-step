@@ -7,23 +7,23 @@ export function Forms() {
   return (
     <>
       {/* Candidacy */}
-      <section className="w-full bg-white py-[100px]">
-        <div className="mx-auto w-full max-w-[1280px] px-[32px]">
+      <section className="w-full bg-white py-[100px] max-md:py-[60px]">
+        <div className="mx-auto w-full max-w-[1280px] px-[32px] max-md:px-[24px]">
           <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
             Apply · Global Talent Programme
           </p>
 
-          <h2 className="mt-[24px] font-display text-[60px] font-[590] leading-[60px] tracking-[-1.5px] text-[#000000]">
+          <h2 className="mt-[24px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
             Submit your <span className="text-[#00FF44]">candidacy.</span>
           </h2>
 
-          <p className="mt-[24px] max-w-[650px] font-sans text-[18px] font-[400] leading-[28px] text-[#4B5563]">
+          <p className="mt-[24px] max-md:mt-[16px] max-w-[650px] font-sans text-[18px] max-md:text-[16px] max-md:leading-[24px] font-[400] leading-[28px] text-[#4B5563]">
             Every application is reviewed by a principal within the discipline. Attach a résumé (PDF
             or Word, up to 5MB) — we will respond within ten business days.
           </p>
 
-          <div className="mx-auto mt-[48px] rounded-[26px] bg-gradient-to-r from-[#00E5FF] via-[#15FF00] to-[#FF8800] p-[1px]">
-            <form className="grid grid-cols-1 gap-[48px] rounded-[25px] bg-white px-[48px] py-[48px] lg:grid-cols-[1fr_341px]">
+          <div className="mx-auto mt-[48px] max-md:mt-[32px] rounded-[26px] bg-gradient-to-r from-[#00E5FF] via-[#15FF00] to-[#FF8800] p-[1px]">
+            <form className="grid grid-cols-1 gap-[48px] max-md:gap-[32px] rounded-[25px] bg-white px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px] lg:grid-cols-[1fr_341px]">
               <div>
                 <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
                   <Field label="Full name" />
@@ -99,18 +99,18 @@ export function Forms() {
       </section>
 
       {/* Contact */}
-      <section className="w-full bg-white py-[100px]">
-        <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[96px] px-[32px] lg:flex-row">
+      <section className="w-full bg-white py-[100px] max-md:py-[60px]">
+        <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[96px] max-md:gap-[48px] max-lg:gap-[64px] px-[32px] max-md:px-[24px] lg:flex-row">
           <div className="flex-1">
             <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
               CONTACT
             </p>
 
-            <h2 className="mt-[24px] max-w-[560px] font-display text-[60px] font-[590] leading-[60px] tracking-[-1.5px] text-[#000000]">
+            <h2 className="mt-[24px] max-w-[560px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
               Speak with us.
             </h2>
 
-            <div className="mt-[64px] space-y-[46px]">
+            <div className="mt-[64px] max-md:mt-[40px] space-y-[46px] max-md:space-y-[32px]">
               <Address
                 label="Global Headquarters"
                 lines={["Four World Trade Center, 78F", "New York, NY 10007 · United States"]}
@@ -125,7 +125,7 @@ export function Forms() {
           </div>
 
           <div className="w-full shrink-0 rounded-[25px] bg-gradient-to-r from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1px] lg:w-[560px]">
-            <form className="rounded-[24px] bg-[#F3F3F4] px-[48px] py-[48px]">
+            <form className="rounded-[24px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px]">
               <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
                 <Field label="Name" />
                 <Field label="Email" type="email" />

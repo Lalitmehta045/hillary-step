@@ -43,11 +43,11 @@ const SOCIALS = [
 
 export function Footer() {
   return (
-    <footer className="relative w-full overflow-hidden border-t border-[#353434]/20 bg-white py-[64px]">
+    <footer className="relative w-full overflow-hidden border-t border-[#353434]/20 bg-white py-[64px] max-md:py-[40px]">
       <FooterGradientAnimation />
 
-      <div className="relative mx-auto w-full max-w-[1280px] px-[96px]">
-        <div className="grid grid-cols-2 gap-[48px] md:grid-cols-4 pb-[58px]">
+      <div className="relative mx-auto w-full max-w-[1280px] px-[96px] max-md:px-[24px]">
+        <div className="grid grid-cols-2 max-md:grid-cols-1 gap-[48px] max-md:gap-[32px] md:grid-cols-4 pb-[58px] max-md:pb-[40px]">
           {COLUMNS.map((col) => (
             <nav key={col.title} className="flex flex-col gap-[8px]">
               <h2 className="font-sans text-[16px] font-[500] leading-[24px] text-[#0070F3]">
@@ -84,15 +84,15 @@ export function Footer() {
 
         <div className="my-[32px] h-px w-full bg-[#353434]/20" />
 
-        <div className="relative flex h-[28px] items-center">
-          <div className="absolute left-[-72px] flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[#111111]">
+        <div className="relative flex h-[28px] max-md:h-auto max-md:flex-col max-md:items-start items-center">
+          <div className="absolute left-[-72px] max-md:static max-md:mb-[16px] flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[#111111]">
             <span className="font-serif text-[20px] italic text-white">N</span>
           </div>
           <p className="font-sans text-[16px] font-[500] text-[#111111]">Hillary Step Solution</p>
         </div>
 
-        <div className="flex w-full justify-center pt-[24px]">
-          <p className="font-sans text-[10px] tracking-[2.4px] text-[#111111]/60 uppercase">
+        <div className="flex w-full justify-center max-md:justify-start pt-[24px]">
+          <p className="font-sans text-[10px] tracking-[2.4px] max-md:tracking-[1px] text-[#111111]/60 uppercase max-md:text-left max-md:leading-[16px]">
             OPERATING AS PRINCIPAL AND AGENT WORLDWIDE.
           </p>
         </div>

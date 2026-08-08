@@ -1,8 +1,25 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
 const NAV = ["Home", "About", "Global Presence", "Careers", "Contact"];
 
 export function Hero() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
   return (
-    <section className="relative min-h-[1190px] w-full overflow-hidden bg-white">
+    <section className="relative min-h-[1190px] max-md:min-h-[850px] max-lg:min-h-[1000px] w-full overflow-hidden bg-white">
       <img
         src="/assets/hero-towers.png"
         alt="Glass skyscrapers photographed from street level against an overcast sky"
@@ -12,7 +29,7 @@ export function Hero() {
 
       {/* Navigation */}
       <header className="relative z-20">
-        <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between px-[64px] pt-[24px] pb-[48px]">
+        <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between px-[64px] max-md:px-[24px] max-lg:px-[40px] pt-[24px] pb-[48px] max-md:pb-[24px]">
           <a href="#" className="shrink-0 leading-none">
             <img
               src="/assets/logo-hillary-step.png"
@@ -33,7 +50,7 @@ export function Hero() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-[24px]">
+          <div className="flex items-center gap-[24px] max-lg:hidden">
             <button
               type="button"
               className="flex items-center gap-[7px] font-sans text-[14px] font-[510] leading-[20px] text-[#111111]"
@@ -50,31 +67,82 @@ export function Hero() {
               <ArrowUpRight />
             </a>
           </div>
+
+          <button
+            className="lg:hidden flex h-[44px] w-[44px] items-center justify-center rounded-full bg-white/20 backdrop-blur-md border border-white/40 text-ink"
+            onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="Open Menu"
+          >
+            <MenuIcon />
+          </button>
         </div>
       </header>
 
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-white overflow-y-auto animate-in fade-in duration-300">
+          <div className="mx-auto flex w-full items-center justify-between px-[24px] pt-[24px] pb-[24px]">
+            <a href="#" className="shrink-0 leading-none" onClick={() => setIsMobileMenuOpen(false)}>
+              <img
+                src="/assets/logo-hillary-step.png"
+                alt="Hillary Step Solutions Logo"
+                className="h-[43px] w-[63px] object-contain"
+              />
+            </a>
+            <button
+              className="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-black/5 border border-black/10 text-black"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close Menu"
+            >
+              <CloseIcon />
+            </button>
+          </div>
+          <div className="flex flex-col px-[24px] pt-[40px] gap-[32px]">
+            {NAV.map((item) => (
+              <a
+                key={item}
+                href="#"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="font-display text-[32px] font-[600] leading-[36px] text-[#111111]"
+              >
+                {item}
+              </a>
+            ))}
+            <div className="mt-[40px] flex flex-col gap-[16px] border-t border-black/10 pt-[40px]">
+              <a
+                href="#"
+                className="flex h-[54px] w-full items-center justify-center gap-[9px] rounded-full bg-brand-blue px-[22px] font-sans text-[16px] font-semibold text-white"
+              >
+                Admin Portal
+                <ArrowUpRight />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero copy */}
-      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-[64px] pt-[262px]">
-        <h1 className="max-w-[690px] font-display text-[88px] font-[700] leading-[88px] tracking-[-2.2px] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.28)]">
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-[64px] max-md:px-[24px] max-lg:px-[40px] pt-[262px] max-md:pt-[120px] max-lg:pt-[180px]">
+        <h1 className="max-w-[690px] max-md:max-w-full font-display text-[88px] max-md:text-[44px] max-lg:text-[64px] font-[700] leading-[88px] max-md:leading-[48px] max-lg:leading-[68px] tracking-[-2.2px] max-md:tracking-[-1px] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.28)] max-md:[text-shadow:0_2px_12px_rgba(0,0,0,0.5)]">
           Connecting Technology, Talent, and Global Growth.
         </h1>
 
-        <p className="mt-[38px] max-w-[620px] font-sans text-[20px] font-normal leading-[28px] text-[#1B1B1C]">
+        <p className="mt-[38px] max-md:mt-[24px] max-w-[620px] max-md:max-w-full font-sans text-[20px] max-md:text-[17px] font-normal leading-[28px] max-md:leading-[24px] text-[#1B1B1C] max-md:text-white max-md:[text-shadow:0_1px_4px_rgba(0,0,0,0.4)]">
           A global technology and workforce partner delivering AI, software engineering, digital
           transformation, and international staffing solutions.
         </p>
 
-        <div className="mt-[24px] flex items-center gap-[16px]">
+        <div className="mt-[24px] max-md:mt-[32px] flex items-center gap-[16px] max-md:flex-col max-md:items-stretch max-md:gap-[12px]">
           <a
             href="#"
-            className="flex h-[54px] items-center gap-[13px] rounded-full bg-brand-blue px-[30px] font-sans text-[17px] font-semibold text-white"
+            className="flex h-[54px] max-md:justify-center items-center gap-[13px] rounded-full bg-brand-blue px-[30px] font-sans text-[17px] font-semibold text-white"
           >
             Explore Global Projects
             <ArrowRight />
           </a>
           <a
             href="#"
-            className="flex h-[54px] items-center gap-[12px] rounded-full border border-white/60 bg-white/20 px-[30px] font-sans text-[17px] font-semibold text-ink backdrop-blur-sm"
+            className="flex h-[54px] max-md:justify-center items-center gap-[12px] rounded-full border border-white/60 bg-white/20 px-[30px] font-sans text-[17px] font-semibold text-ink max-md:text-white max-md:bg-black/30 max-md:border-white/30 backdrop-blur-sm"
           >
             Partner With Us
             <ArrowUpRight />
@@ -83,9 +151,9 @@ export function Hero() {
       </div>
 
       {/* Bottom row */}
-      <div className="absolute inset-x-0 bottom-[38px] z-10">
-        <div className="mx-auto flex w-full max-w-[1440px] h-[48px] items-center px-[64px]">
-          <div className="flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[#252525]">
+      <div className="absolute inset-x-0 bottom-[38px] max-md:bottom-[24px] z-10">
+        <div className="mx-auto flex w-full max-w-[1440px] h-[48px] items-center px-[64px] max-md:px-[24px] max-lg:px-[40px]">
+          <div className="flex h-[54px] w-[54px] shrink-0 items-center justify-center rounded-full bg-[#252525]">
             <span className="font-serif text-[22px] italic text-white">N</span>
           </div>
           <span className="mx-auto font-sans text-[14px] tracking-[0.22em] text-white/60">
@@ -158,3 +226,39 @@ export function ArrowRight() {
     </svg>
   );
 }
+
+function MenuIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    >
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  );
+}
+
