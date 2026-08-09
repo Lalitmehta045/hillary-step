@@ -46,7 +46,7 @@ export function Regions() {
       <div className="relative mx-auto w-full max-w-[1280px] px-[32px] max-md:px-[24px]">
         <StaggerContainer>
           <StaggerItem>
-            <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+            <p className="font-display text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
               GLOBAL PRESENCE
             </p>
           </StaggerItem>
@@ -124,7 +124,7 @@ export function Regions() {
                     key={name}
                     type="button"
                     onClick={() => setActive(name)}
-                    className={`flex h-[40px] items-center rounded-full px-[20px] font-sans text-[14px] font-[500] transition-all duration-250 hover:-translate-y-[2px] ${
+                    className={`flex h-[40px] items-center rounded-full px-[20px] font-sans text-[14px] leading-[20px] tracking-[0px] font-[500] transition-all duration-250 hover:-translate-y-[2px] ${
                       isActive ? "bg-[#007BFF] text-white shadow-md hover:shadow-lg" : "bg-white text-[#171717] shadow-sm hover:shadow-md"
                     }`}
                   >
@@ -135,7 +135,7 @@ export function Regions() {
             </div>
 
             <div className="mt-[32px] flex h-auto min-h-[467px] max-md:min-h-0 flex-col gap-[32px] max-md:gap-[24px] rounded-[24px] bg-white p-[40px] max-md:p-[24px] shadow-sm lg:w-[492px]">
-              <h3 className="font-sans text-[30px] max-md:text-[24px] font-[600] leading-[38px] max-md:leading-[32px] text-[#171717]">
+              <h3 className="font-sans text-[30px] max-md:text-[24px] font-[600] leading-[36px] max-md:leading-[32px] tracking-[0px] text-[#171717]">
                 {active}
               </h3>
 

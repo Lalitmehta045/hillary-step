@@ -24,7 +24,7 @@ export function About() {
         <div className="relative mx-auto w-full max-w-[1280px] pt-[128px] pb-[256px] px-[24px] max-md:pt-[80px] max-md:pb-[120px]">
           <StaggerContainer className="flex flex-col gap-[80px] max-md:gap-[40px]">
             <StaggerItem>
-              <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+              <p className="font-display text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
                 ABOUT HILLARY STEP
               </p>
               <h2 className="mt-[24px] max-w-[790px] font-display text-[72px] max-md:text-[40px] max-md:leading-[44px] max-lg:text-[56px] font-[590] leading-[72px] max-lg:leading-[60px] tracking-[-1.8px] max-md:tracking-[-1px] text-[#111111]">
@@ -37,7 +37,7 @@ export function About() {
             </StaggerItem>
 
             <StaggerItem>
-              <p className="max-w-[976px] font-sans text-[24px] max-md:text-[18px] max-md:leading-[26px] font-[400] leading-[32px] text-[#A3A3A3]">
+              <p className="max-w-[976px] font-sans text-[24px] max-md:text-[18px] max-md:leading-[26px] font-[400] leading-[32px] tracking-[0px] text-[#A3A3A3]">
                 Inspired by one of the world&apos;s most iconic symbols of perseverance, Hillary Step
                 Solutions represents the determination to overcome complexity, embrace innovation, and
                 achieve meaningful progress. We help organizations navigate their most critical
@@ -59,7 +59,7 @@ export function About() {
                 <AnimatedButton
                   href="#"
                   variant="blueGlow"
-                  className="inline-flex h-[52px] items-center gap-[11px] rounded-full bg-brand-blue px-[24px] font-sans text-[16px] font-[590] leading-[24px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)]"
+                  className="inline-flex h-[52px] items-center gap-[11px] rounded-full bg-brand-blue px-[24px] font-display text-[16px] font-[590] leading-[24px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)]"
                 >
                   Contact Us
                   <ArrowRight />
@@ -73,7 +73,7 @@ export function About() {
       <section className="w-full bg-[#121212] py-[80px] max-md:py-[60px]">
         <div className="mx-auto w-full max-w-[1280px] px-[24px]">
           <FadeIn>
-            <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-brand-green uppercase">
+            <p className="font-display text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-brand-green uppercase">
               RESEARCH TIMELINE
             </p>
           </FadeIn>

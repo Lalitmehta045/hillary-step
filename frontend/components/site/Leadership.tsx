@@ -39,14 +39,15 @@ export function Leadership() {
       <div className="mx-auto w-full max-w-[1280px] px-[96px] max-md:px-[24px] max-lg:px-[40px]">
         <StaggerContainer>
           <StaggerItem>
-            <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+            <p className="font-display text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
               LEADERSHIP
             </p>
           </StaggerItem>
 
           <StaggerItem>
             <h2 className="mt-[24px] max-w-[768px] font-display text-[56px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[44px] max-lg:leading-[48px] font-[590] leading-[56px] tracking-[-1.4px] max-md:tracking-[-1px] text-[#111111]">
-              An <GradientReveal className="grad-text">Operating partnership</GradientReveal>, not a boardroom.
+              An <GradientReveal className="grad-text">Operating</GradientReveal>{" "}
+              <GradientReveal className="grad-text">partnership</GradientReveal>, not a boardroom.
             </h2>
           </StaggerItem>
         </StaggerContainer>
@@ -64,10 +65,10 @@ export function Leadership() {
                     className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
                   />
                 </div>
-                <p className="mt-[24px] font-sans text-[12px] font-[600] uppercase tracking-[1.2px] text-[#8b8b8b]">
+                <p className="mt-[24px] font-sans text-[12px] font-[600] leading-[18px] uppercase tracking-[1.8px] text-[#737373]">
                   {l.role}
                 </p>
-                <h3 className="mt-[8px] font-sans text-[20px] font-[700] text-[#111111]">{l.name}</h3>
+                <h3 className="mt-[8px] font-display text-[20px] font-[700] text-[#111111]">{l.name}</h3>
                 <p className="mt-[8px] font-sans text-[15px] italic leading-[24.38px] text-[#1A1A1A]">
                   {l.quote}
                 </p>

@@ -36,7 +36,7 @@ export function Hero() {
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-[64px] max-md:px-[24px] max-lg:px-[40px] pt-[262px] max-md:pt-[120px] max-lg:pt-[180px]">
         <StaggerContainer animateOnMount={true}>
           <StaggerItem>
-            <h1 className="max-w-[690px] max-md:max-w-full font-display text-[88px] max-md:text-[44px] max-lg:text-[64px] font-[700] leading-[88px] max-md:leading-[48px] max-lg:leading-[68px] tracking-[-2.2px] max-md:tracking-[-1px] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.28)] max-md:[text-shadow:0_2px_12px_rgba(0,0,0,0.5)]">
+            <h1 className="max-w-[690px] max-md:max-w-full font-display text-[88px] max-md:text-[44px] max-lg:text-[64px] font-[700] leading-[88px] max-md:leading-[48px] max-lg:leading-[68px] tracking-[-2.2px] max-md:tracking-[-1px] text-white [text-shadow:0px_4px_12px_rgba(0,0,0,0.15)] max-md:[text-shadow:0px_2px_12px_rgba(0,0,0,0.5)]">
               Connecting Technology, Talent, and Global Growth.
             </h1>
           </StaggerItem>
@@ -53,7 +53,7 @@ export function Hero() {
               <AnimatedButton
                 href="#"
                 variant="blueGlow"
-                className="flex h-[54px] max-md:justify-center items-center gap-[13px] rounded-full bg-brand-blue px-[30px] font-sans text-[17px] font-semibold text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)]"
+                className="flex h-[54px] max-md:justify-center items-center gap-[8px] rounded-full bg-brand-blue px-[24px] py-[14px] font-display text-[16px] leading-[24px] font-[590] tracking-[0px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)]"
               >
                 Explore Global Projects
                 <ArrowRight />
@@ -61,7 +61,7 @@ export function Hero() {
               <AnimatedButton
                 href="#"
                 variant="subtleShadow"
-                className="flex h-[54px] max-md:justify-center items-center gap-[12px] rounded-full border border-white/60 bg-white/20 px-[30px] font-sans text-[17px] font-semibold text-ink max-md:text-white max-md:bg-black/30 max-md:border-white/30 backdrop-blur-sm shadow-[0px_4px_10px_rgba(0,0,0,0.05)]"
+                className="flex h-[54px] max-md:justify-center items-center gap-[8px] rounded-full border border-[rgba(255,255,255,0.3)] bg-[rgba(255,255,255,0.21)] px-[24px] py-[14px] font-display text-[16px] leading-[24px] font-[590] tracking-[0px] text-white max-md:bg-black/30 max-md:border-white/30 backdrop-blur-[4px] shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
               >
                 Partner With Us
                 <ArrowUpRight />
@@ -75,7 +75,7 @@ export function Hero() {
       <div className="absolute inset-x-0 bottom-[38px] max-md:bottom-[24px] z-10 pointer-events-none">
         <FadeIn delay={0.6}>
           <div className="mx-auto flex w-full max-w-[1440px] h-[48px] items-center justify-center px-[64px] max-md:px-[24px] max-lg:px-[40px]">
-            <span className="font-sans text-[14px] tracking-[0.22em] text-white/60">
+            <span className="font-display text-[14px] tracking-[0.22em] text-white/60">
               SCROLL
             </span>
           </div>

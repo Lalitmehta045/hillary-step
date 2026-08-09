@@ -14,7 +14,7 @@ export function Forms() {
         <div className="mx-auto w-full max-w-[1280px] px-[32px] max-md:px-[24px]">
           <StaggerContainer>
             <StaggerItem>
-              <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
+              <p className="font-display text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
                 Apply · Global Talent Programme
               </p>
             </StaggerItem>
@@ -33,9 +33,9 @@ export function Forms() {
             </StaggerItem>
           </StaggerContainer>
 
-          <FadeIn delay={0.2} className="mx-auto mt-[48px] max-md:mt-[32px] rounded-[26px] border border-[#E5E7EB] shadow-sm">
-            <form className="grid grid-cols-1 gap-[48px] max-md:gap-[32px] rounded-[25px] bg-white px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px] lg:grid-cols-[1fr_341px]">
-              <div>
+          <FadeIn delay={0.2} className="mx-auto mt-[48px] max-md:mt-[32px] rounded-[24px] overflow-hidden bg-gradient-to-tr from-[#00FF11] via-[#007BFF] to-[#FF6200] p-[1px] shadow-sm">
+            <form className="grid grid-cols-1 gap-[48px] max-md:gap-[32px] rounded-[23px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px] lg:grid-cols-[1fr_341px]">
+              <div className="flex flex-col gap-[24px]">
                 <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
                   <Field label="Full name" />
                   <Field label="Email" type="email" />
@@ -45,15 +45,13 @@ export function Forms() {
                   <Select label="Preferred Location" options={LOCATIONS} />
                 </div>
 
-                <div className="mt-[24px]">
-                  <Field label="Years of Experience" />
-                </div>
+                <Field label="Years of Experience" />
 
-                <div className="mt-[24px]">
+                <div>
                   <Label>Cover Note</Label>
                   <textarea
                     placeholder="Add a cover note."
-                    className="mt-[8px] w-full min-h-[170px] resize-none rounded-[16px] border border-[#D1D5DB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] placeholder:text-[#9a9a9a] shadow-sm focus:border-[#007BFF] focus:outline-hidden"
+                    className="mt-[8px] w-full min-h-[170px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] placeholder:text-[#9a9a9a] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden"
                   />
                 </div>
               </div>
@@ -65,8 +63,8 @@ export function Forms() {
                     <defs>
                       <linearGradient id="dashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#007BFF" />
-                        <stop offset="50%" stopColor="#00FF44" />
-                        <stop offset="100%" stopColor="#FF9500" />
+                        <stop offset="50%" stopColor="#00FF11" />
+                        <stop offset="100%" stopColor="#FF6200" />
                       </linearGradient>
                     </defs>
                     <rect
@@ -76,8 +74,8 @@ export function Forms() {
                       height="calc(100% - 2px)"
                       rx="23"
                       fill="none"
-                      stroke="#D1D5DB"
-                      strokeWidth="1.5"
+                      stroke="url(#dashGrad)"
+                      strokeWidth="2"
                       strokeDasharray="6 4"
                     />
                   </svg>
@@ -93,8 +91,7 @@ export function Forms() {
 
                 <AnimatedButton
                   type="submit"
-                  variant="formShadow"
-                  className="mt-[24px] flex h-[56px] w-full items-center justify-center gap-[12px] rounded-full bg-[#111111] font-sans text-[16px] font-[500] text-white hover:bg-black transition-colors"
+                  className="mt-[24px] flex h-[54px] w-full items-center justify-center gap-[8px] rounded-full bg-[#111111] font-display text-[16px] font-[590] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
                 >
                   Submit Application
                   <ArrowRight />
@@ -115,7 +112,7 @@ export function Forms() {
         <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[96px] max-md:gap-[48px] max-lg:gap-[64px] px-[32px] max-md:px-[24px] lg:flex-row">
           <StaggerContainer className="flex-1">
             <StaggerItem>
-              <p className="font-sans text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+              <p className="font-display text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
                 CONTACT
               </p>
             </StaggerItem>
@@ -126,7 +123,7 @@ export function Forms() {
               </h2>
             </StaggerItem>
 
-            <div className="mt-[64px] max-md:mt-[40px] space-y-[46px] max-md:space-y-[32px]">
+            <div className="pt-[48px] max-md:pt-[32px] flex flex-col gap-[40px] max-md:gap-[32px]">
               <StaggerItem>
                 <Address
                   label="Global Headquarters"
@@ -148,7 +145,7 @@ export function Forms() {
             </div>
           </StaggerContainer>
 
-          <FadeIn delay={0.2} className="w-full shrink-0 rounded-[24px] overflow-hidden bg-gradient-to-tr from-[#FF9500] via-[#00FF44] to-[#0070F3] p-[1px] shadow-sm lg:w-[560px]">
+          <FadeIn delay={0.2} className="w-full shrink-0 rounded-[24px] overflow-hidden bg-gradient-to-br from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1px] shadow-sm lg:w-[560px]">
             <form className="h-full w-full rounded-[23px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px]">
               <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
                 <Field label="Name" />
@@ -159,13 +156,12 @@ export function Forms() {
 
               <div className="mt-[24px]">
                 <Label>Message</Label>
-                <textarea className="mt-[8px] w-full min-h-[170px] resize-none rounded-[16px] border border-[#D1D5DB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:outline-hidden" />
+                <textarea className="mt-[8px] w-full min-h-[170px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden" />
               </div>
 
               <AnimatedButton
                 type="submit"
-                variant="formShadow"
-                className="mt-[24px] flex h-[56px] w-fit items-center justify-center gap-[12px] rounded-full bg-[#111111] px-[32px] font-sans text-[16px] font-[500] text-white hover:bg-black transition-colors"
+                className="mt-[24px] flex h-[54px] w-fit items-center justify-center gap-[8px] rounded-full bg-[#111111] px-[32px] font-display text-[16px] font-[590] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
               >
                 Send Enquiry
                 <ArrowRight />
@@ -192,7 +188,7 @@ function Field({ label, type = "text" }: { label: string; type?: string }) {
       <Label>{label}</Label>
       <input
         type={type}
-        className="mt-[8px] h-[50px] w-full rounded-[16px] border border-[#D1D5DB] bg-white px-[16px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:outline-hidden"
+        className="mt-[8px] h-[50px] w-full rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden"
       />
     </div>
   );
@@ -203,7 +199,7 @@ function Select({ label, options }: { label: string; options: readonly string[] 
     <div className="min-w-0">
       <Label>{label}</Label>
       <div className="relative mt-[8px]">
-        <select className="h-[50px] w-full appearance-none rounded-[16px] border border-[#D1D5DB] bg-white px-[16px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:outline-hidden">
+        <select className="h-[50px] w-full appearance-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden">
           {options.map((o) => (
             <option key={o}>{o}</option>
           ))}
@@ -226,9 +222,9 @@ function Select({ label, options }: { label: string; options: readonly string[] 
 
 function Address({ label, lines }: { label: string; lines: string[] }) {
   return (
-    <div>
+    <div className="flex flex-col gap-[8px]">
       <Label>{label}</Label>
-      <div className="mt-[12px] space-y-[4px]">
+      <div className="flex flex-col">
         {lines.map((l) => (
           <p key={l} className="font-sans text-[16px] leading-[24px] text-[#111111]">
             {l}

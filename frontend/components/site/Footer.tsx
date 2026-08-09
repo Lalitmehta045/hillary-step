@@ -55,7 +55,7 @@ export function Footer() {
           {COLUMNS.map((col) => (
             <StaggerItem key={col.title}>
               <nav className="flex flex-col gap-[8px]">
-                <h2 className="font-sans text-[16px] font-[500] leading-[24px] text-[#0070F3]">
+                <h2 className="font-display text-[16px] font-[400] leading-[24px] tracking-[0px] text-[#1E3A8A]">
                   {col.title}
                 </h2>
                 <ul className="flex flex-col gap-[8px]">
@@ -63,7 +63,7 @@ export function Footer() {
                     <li key={link}>
                       <a
                         href="#"
-                        className="font-sans text-[16px] font-[400] leading-[24px] text-[#0070F3] hover:underline transition-opacity"
+                        className="font-display text-[16px] font-[400] leading-[24px] tracking-[0px] text-[#1E3A8A] hover:underline transition-opacity"
                       >
                         {link}
                       </a>
@@ -98,7 +98,9 @@ export function Footer() {
 
         <FadeIn delay={0.4}>
           <div className="relative flex h-[28px] max-md:h-auto max-md:flex-col max-md:items-start items-center">
-            <p className="font-sans text-[16px] font-[500] text-[#111111]">Hillary Step Solution</p>
+            <p className="font-display text-[20px] font-[400] leading-[28px] tracking-[-0.5px] text-[#000000]">
+              Hillary Step Solution
+            </p>
           </div>
         </FadeIn>
 
