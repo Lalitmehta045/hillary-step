@@ -112,7 +112,7 @@ export function Forms() {
         <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[96px] max-md:gap-[48px] max-lg:gap-[64px] px-[32px] max-md:px-[24px] lg:flex-row">
           <StaggerContainer className="flex-1">
             <StaggerItem>
-              <p className="font-display text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+              <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
                 CONTACT
               </p>
             </StaggerItem>

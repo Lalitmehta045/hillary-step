@@ -46,7 +46,7 @@ export function Regions() {
       <div className="relative mx-auto w-full max-w-[1280px] px-[32px] max-md:px-[24px]">
         <StaggerContainer>
           <StaggerItem>
-            <p className="font-display text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+            <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
               GLOBAL PRESENCE
             </p>
           </StaggerItem>

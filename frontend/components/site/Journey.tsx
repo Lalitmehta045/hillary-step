@@ -31,7 +31,7 @@ export function Journey() {
           </StaggerItem>
 
           <StaggerItem>
-            <p className="mx-auto mt-[38px] max-md:mt-[24px] max-w-[966px] text-center font-sans text-[24px] max-md:text-[16px] max-md:leading-[24px] font-[400] leading-[32px] tracking-[0px] text-[#A3A3A3]">
+            <p className="mx-auto mt-[38px] max-md:mt-[24px] max-w-[966px] text-center font-sans text-[20px] max-md:text-[16px] max-md:leading-[24px] font-[400] leading-[28px] tracking-[0px] text-[#A3A3A3]">
               Discover the story behind Hillary Step Solutions and how we help organizations transform
               ideas into technology, talent, and infrastructure that create lasting impact.
             </p>

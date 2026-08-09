@@ -39,7 +39,7 @@ export function Leadership() {
       <div className="mx-auto w-full max-w-[1280px] px-[96px] max-md:px-[24px] max-lg:px-[40px]">
         <StaggerContainer>
           <StaggerItem>
-            <p className="font-display text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+            <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
               LEADERSHIP
             </p>
           </StaggerItem>

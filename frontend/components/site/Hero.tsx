@@ -13,7 +13,7 @@ export function Hero() {
   const y = useTransform(scrollY, [0, 1000], [0, 150]);
 
   return (
-    <section className="relative min-h-[1190px] max-md:min-h-[850px] max-lg:min-h-[1000px] w-full overflow-hidden bg-white">
+    <section className="relative min-h-[1050px] max-md:min-h-[750px] max-lg:min-h-[900px] w-full overflow-hidden bg-white">
       <m.div
         style={{ y }}
         className="absolute inset-0 h-[110%] w-full transform-gpu will-change-transform"
@@ -42,7 +42,7 @@ export function Hero() {
           </StaggerItem>
 
           <StaggerItem>
-            <p className="mt-[38px] max-md:mt-[24px] max-w-[620px] max-md:max-w-full font-sans text-[20px] max-md:text-[17px] font-normal leading-[28px] max-md:leading-[24px] text-[#1B1B1C] max-md:text-white max-md:[text-shadow:0_1px_4px_rgba(0,0,0,0.4)]">
+            <p className="mt-[38px] max-md:mt-[24px] max-w-[620px] max-md:max-w-full font-sans text-[18px] max-md:text-[16px] font-normal leading-[26px] max-md:leading-[23px] text-[#1B1B1C] max-md:text-white max-md:[text-shadow:0_1px_4px_rgba(0,0,0,0.4)]">
               A global technology and workforce partner delivering AI, software engineering, digital
               transformation, and international staffing solutions.
             </p>

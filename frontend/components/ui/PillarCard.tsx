@@ -3,6 +3,7 @@
 import { m } from "framer-motion";
 import { hoverVariants } from "@/components/motion/variants";
 import Image from "next/image";
+import Link from "next/link";
 import { memo } from "react";
 
 // Hoisted transition objects
@@ -17,14 +18,15 @@ interface PillarCardProps {
   alt: string;
   eyebrow: string;
   title: string;
+  href?: string;
 }
 
-export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title }: PillarCardProps) {
-  return (
+export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title, href }: PillarCardProps) {
+  const content = (
     <m.article
       whileHover={hoverVariants.cardLift}
       transition={cardHoverTransition}
-      className="relative h-[721px] max-md:h-[400px] max-lg:h-[500px] overflow-hidden rounded-[32px] border border-[#EFEFF1] shadow-sm bg-white"
+      className="relative h-[620px] max-md:h-[350px] max-lg:h-[450px] overflow-hidden rounded-[32px] border border-[#EFEFF1] shadow-sm bg-white"
     >
       <m.div
         initial={imageInitial}
@@ -56,6 +58,16 @@ export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title 
       </div>
     </m.article>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className="block outline-none focus-visible:ring-2 focus-visible:ring-[#1A6CFF] rounded-[32px]">
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 });
 
 function ExpandIcon() {

@@ -9,6 +9,7 @@ const NAV = [
   { name: "About", href: "/#about" },
   { name: "Global Presence", href: "/#global-presence" },
   { name: "Careers", href: "/#careers" },
+  { name: "Post a Job", href: "/post-a-job" },
   { name: "Contact", href: "/#contact" }
 ];
 const TOP_TRIGGER_ZONE = 75; // px from top of viewport
@@ -164,7 +165,7 @@ export function Navbar() {
               <a
                 key={item.name}
                 href={item.href}
-                className="font-sans text-[14px] font-[510] leading-[20px] text-[#111111] transition-opacity hover:opacity-70"
+                className="font-display text-[14px] font-[510] leading-[20px] text-[#111111] transition-opacity hover:opacity-70"
               >
                 {item.name}
               </a>
@@ -172,18 +173,33 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-[24px] max-lg:hidden">
-            <button
-              type="button"
-              className="flex items-center gap-[7px] font-sans text-[14px] font-[510] leading-[20px] text-[#111111] cursor-pointer"
-            >
-              <GlobeIcon />
-              USA
-              <ChevronIcon />
-            </button>
+            <div className="relative group">
+              <button
+                type="button"
+                className="flex items-center gap-[7px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] cursor-pointer py-[10px]"
+              >
+                <GlobeIcon />
+                USA
+                <ChevronIcon />
+              </button>
+              
+              {/* Invisible bridge for hover continuity */}
+              <div className="absolute top-full left-0 right-0 h-[10px]" />
+              
+              {/* Dropdown Menu */}
+              <div className="absolute top-[100%] right-0 mt-[4px] w-[140px] rounded-[12px] bg-white border border-[#E5E7EB] shadow-[0_8px_30px_rgb(0,0,0,0.08)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-[8px] z-50 translate-y-[-10px] group-hover:translate-y-0">
+                <button className="flex w-full items-center px-[16px] py-[10px] text-left font-display text-[14px] font-[510] text-[#111111] hover:bg-[#F8F9FB] hover:text-[#1A6CFF] transition-colors">
+                  Australia
+                </button>
+                <button className="flex w-full items-center px-[16px] py-[10px] text-left font-display text-[14px] font-[510] text-[#111111] hover:bg-[#F8F9FB] hover:text-[#1A6CFF] transition-colors">
+                  India
+                </button>
+              </div>
+            </div>
             <AnimatedButton
               href="/admin/login"
               variant="subtleShadow"
-              className="flex h-[44px] items-center gap-[9px] rounded-full border border-[#111111]/10 bg-white/50 px-[22px] font-sans text-[14px] font-[510] leading-[20px] text-[#111111] backdrop-blur-sm"
+              className="flex h-[44px] items-center gap-[9px] rounded-full border border-[#111111]/10 bg-white/50 px-[22px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] backdrop-blur-sm"
             >
               Admin Portal
               <ArrowUpRight />

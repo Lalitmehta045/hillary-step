@@ -21,11 +21,6 @@ const navigation = [
   { name: "Dashboard", href: "/admin", icon: LuLayoutDashboard },
   { name: "Applications", href: "/admin/applications", icon: LuFileText },
   { name: "Enquiries", href: "/admin/enquiries", icon: LuMessageSquare },
-  { name: "Website", href: "/admin/website", icon: LuGlobe },
-  { name: "Design", href: "/admin/design", icon: LuPenTool },
-  { name: "Leadership", href: "/admin/leadership", icon: LuUsers },
-  { name: "Timeline", href: "/admin/timeline", icon: LuActivity },
-  { name: "Media", href: "/admin/media", icon: LuImage },
   { name: "Settings", href: "/admin/settings", icon: LuSettings },
 ];
 

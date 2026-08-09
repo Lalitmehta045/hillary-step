@@ -17,7 +17,10 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fb] font-display">
+    <div 
+      className="min-h-screen bg-[#f8f9fb]"
+      style={{ fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+    >
       <Sidebar />
       <div className="lg:pl-[260px]">
         {/* Main Content */}

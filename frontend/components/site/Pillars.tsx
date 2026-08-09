@@ -14,6 +14,7 @@ const PILLARS = [
     title: "Global Staffing",
     image: "/assets/pillar-staffing.png",
     alt: "Dotted world map with connection arcs in green",
+    href: "/post-a-job",
   },
   {
     eyebrow: "PILLAR THREE",
@@ -29,7 +30,7 @@ export function Pillars() {
       <div className="mx-auto w-full max-w-[1280px] px-[64px] max-md:px-[24px]">
         <StaggerContainer>
           <StaggerItem>
-            <p className="font-display text-[14px] font-[600] leading-[20px] tracking-[2.8px] text-[#0070F3] uppercase">
+            <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
               THREE STRATEGIC PILLARS
             </p>
           </StaggerItem>
@@ -43,7 +44,7 @@ export function Pillars() {
           </StaggerItem>
 
           <StaggerItem>
-            <p className="mt-[38px] max-md:mt-[24px] max-w-[737px] font-sans text-[24px] max-md:text-[18px] max-md:leading-[26px] font-[300] leading-[32px] tracking-[0px] text-[#49454F]">
+            <p className="mt-[38px] max-md:mt-[24px] max-w-[737px] font-sans text-[20px] max-md:text-[16px] max-md:leading-[24px] font-[300] leading-[28px] tracking-[0px] text-[#49454F]">
               We convene civil engineers, AI researchers, and workforce architects under a single
               principal — designing outcomes that compound across regions.
             </p>
@@ -58,6 +59,7 @@ export function Pillars() {
                 alt={p.alt}
                 title={p.title}
                 eyebrow={p.eyebrow}
+                href={p.href}
               />
             </StaggerItem>
           ))}
