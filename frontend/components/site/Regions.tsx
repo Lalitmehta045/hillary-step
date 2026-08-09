@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { RegionsGradientAnimation } from "@/components/site/RegionsGradientAnimation";
+import { WorldMapCanvas } from "@/components/site/WorldMapCanvas";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 
 const REGIONS = {
@@ -59,10 +60,11 @@ export function Regions() {
 
         <FadeIn delay={0.2} className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
           {/* Map card */}
-          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 rounded-[24px] bg-white p-[32px] max-md:p-[16px] shadow-sm lg:w-[691px]">
-            <span className="absolute left-[16%] top-[29%] h-[4px] w-[4px] rounded-full bg-black/12" />
-            <span className="absolute left-[18%] top-[29%] h-[4px] w-[4px] rounded-full bg-black/12" />
+          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-b from-[#FAFBFD] to-[#F3F6FA] border border-[#EAEEF4] p-[32px] max-md:p-[16px] shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] lg:w-[691px]">
+            {/* Animated Canvas World Map Background */}
+            <WorldMapCanvas activeRegion={active} />
 
+            {/* Hub Pins */}
             {NAMES.map((name) => {
               const isActive = name === active;
               return (
@@ -71,22 +73,42 @@ export function Regions() {
                   type="button"
                   onClick={() => setActive(name)}
                   style={REGIONS[name].marker}
-                  className="group absolute flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center gap-[13px] transition-transform duration-150 hover:scale-105"
+                  className="group absolute z-10 flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center gap-[10px] transition-all duration-300 hover:scale-110"
                 >
-                  <span
-                    className={`h-[19px] w-[19px] rounded-full transition-all duration-300 ${
+                  {/* Pin Dot & Ripple */}
+                  <div className="relative flex items-center justify-center">
+                    {isActive && (
+                      <>
+                        <span className="absolute h-[28px] w-[28px] animate-ping rounded-full bg-[#FF9500]/30" />
+                        <span className="absolute h-[42px] w-[42px] animate-pulse rounded-full bg-[#FF9500]/15" />
+                      </>
+                    )}
+                    <span
+                      className={`relative h-[16px] w-[16px] rounded-full border-2 transition-all duration-300 ${
+                        isActive
+                          ? "border-white bg-[#FF9500] shadow-[0_0_15px_rgba(255,149,0,0.8)]"
+                          : "border-white/80 bg-[#171717] group-hover:bg-[#0070F3] group-hover:shadow-[0_0_10px_rgba(0,112,243,0.5)]"
+                      }`}
+                    />
+                  </div>
+
+                  {/* Pin Badge Label */}
+                  <div
+                    className={`flex items-center gap-[6px] rounded-full px-[12px] py-[5px] backdrop-blur-md border transition-all duration-300 ${
                       isActive
-                        ? "bg-[#FF9500] ring-4 ring-[#FF9500]/20 shadow-[0_0_10px_rgba(255,149,0,0.5)]"
-                        : "bg-[#111111] group-hover:bg-[#0070F3]"
-                    }`}
-                  />
-                  <span
-                    className={`whitespace-nowrap font-sans text-[12px] font-[600] uppercase tracking-[1.4px] transition-colors ${
-                      isActive ? "text-[#111111]" : "text-[#111111]"
+                        ? "bg-[#171717]/90 border-[#FF9500]/40 text-white shadow-lg shadow-black/10 scale-105"
+                        : "bg-white/80 border-[#E2E8F0] text-[#475569] group-hover:border-[#0070F3]/40 group-hover:bg-white group-hover:text-[#171717]"
                     }`}
                   >
-                    {name}
-                  </span>
+                    <span
+                      className={`h-[6px] w-[6px] rounded-full ${
+                        isActive ? "bg-[#FF9500] animate-pulse" : "bg-[#94A3B8]"
+                      }`}
+                    />
+                    <span className="font-sans text-[11px] font-[600] uppercase tracking-[1.2px]">
+                      {name}
+                    </span>
+                  </div>
                 </button>
               );
             })}

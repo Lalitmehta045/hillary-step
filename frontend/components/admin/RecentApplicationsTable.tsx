@@ -63,7 +63,7 @@ export function RecentApplicationsTable() {
   return (
     <div className="bg-white rounded-md border border-gray-200 p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-base font-bold text-gray-900">Recent Applications</h2>
+        <h2 className="text-base font-bold text-[#191c1e] font-display">Recent Applications</h2>
         <Link href="/admin/applications" className="text-xs font-semibold text-blue-600 hover:underline">
           View All
         </Link>

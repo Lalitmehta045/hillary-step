@@ -2,17 +2,6 @@
 
 import React, { useEffect, useRef } from "react";
 
-interface SpeedLine {
-  offset: number; // random horizontal offset
-  lengthRatio: number;
-  width: number;
-  baseAlpha: number;
-  alpha: number;
-  pulsePhase: number;
-  pulseSpeed: number;
-  isDark: boolean;
-}
-
 export function RegionsGradientAnimation() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -30,30 +19,6 @@ export function RegionsGradientAnimation() {
     let height = 0;
     let isVisible = false;
 
-    // Angle of diagonal rays: -22 degrees for a sweeping look
-    const angleRad = (-22 * Math.PI) / 180;
-    const cosA = Math.cos(angleRad);
-    const sinA = Math.sin(angleRad);
-
-    const speedLines: SpeedLine[] = [];
-    const NUM_LINES = 150; // High density for the textured look
-
-    const initLines = () => {
-      speedLines.length = 0;
-      for (let i = 0; i < NUM_LINES; i++) {
-        speedLines.push({
-          offset: Math.random(),
-          lengthRatio: 0.6 + Math.random() * 0.4,
-          width: Math.random() < 0.1 ? 3 : Math.random() < 0.4 ? 1.5 : 0.8,
-          baseAlpha: 0.1 + Math.random() * 0.25,
-          alpha: 0,
-          pulsePhase: Math.random() * Math.PI * 2,
-          pulseSpeed: 0.3 + Math.random() * 1.2,
-          isDark: Math.random() > 0.8, // 20% dark lines
-        });
-      }
-    };
-
     const handleResize = () => {
       if (!container || !canvas) return;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -65,7 +30,6 @@ export function RegionsGradientAnimation() {
       canvas.style.height = `${height}px`;
       ctx.resetTransform();
       ctx.scale(dpr, dpr);
-      initLines();
     };
 
     handleResize();
@@ -79,73 +43,122 @@ export function RegionsGradientAnimation() {
         return;
       }
 
-      const time = (now - startTime) * 0.001;
-
+      const time = (now - startTime) * 0.0012; // smooth 60fps animation speed
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Draw vibrant horizontal gradient at the bottom
-      const baseGrad = ctx.createLinearGradient(0, 0, width, 0);
-      baseGrad.addColorStop(0, "#0055FF"); // Deep Blue
-      baseGrad.addColorStop(0.25, "#00E5FF"); // Cyan
-      baseGrad.addColorStop(0.5, "#15FF00"); // Vibrant Green
-      baseGrad.addColorStop(0.75, "#FFF000"); // Bright Yellow
-      baseGrad.addColorStop(1, "#FF8800"); // Orange
+      // Organic fluid wave height calculation at normalized x (u from 0 to 1)
+      const getWaveY = (u: number, lineOffset: number = 0, lineRatio: number = 0) => {
+        // Curve starts at 88% height on left, gently curving up to 32% height on right
+        const baseCurve = height * (0.88 - 0.56 * Math.pow(u, 1.15) - 0.10 * Math.sin(u * Math.PI));
+        
+        // Multi-frequency liquid wave ripples
+        const wave1 = Math.sin(u * 5.2 - time * 2.2 + lineRatio * 2.0) * (8 + lineRatio * 6);
+        const wave2 = Math.cos(u * 3.4 + time * 1.6 - lineRatio * 1.5) * 5;
+        
+        return baseCurve + wave1 + wave2 + lineOffset;
+      };
 
-      ctx.fillStyle = baseGrad;
-      // Fill the bottom half
-      ctx.fillRect(0, height * 0.3, width, height * 0.7);
-
-      // 2. Draw diagonal speed lines
-      const originXMin = -width * 0.4;
-      const originXMax = width * 1.4;
-      const originY = height + 100; // Start slightly below the canvas
-      const diagLength = width * 2.5;
-
-      speedLines.forEach((line) => {
-        const pulse = Math.sin(time * line.pulseSpeed + line.pulsePhase);
-        line.alpha = Math.max(0.02, line.baseAlpha + pulse * 0.1);
-
-        const startX = originXMin + (originXMax - originXMin) * line.offset;
-        const startY = originY;
-
-        const currentLength = diagLength * line.lengthRatio;
-        const endX = startX + cosA * currentLength;
-        const endY = startY + sinA * currentLength;
-
-        // Animate the line moving slightly
-        const moveOffset = (time * line.pulseSpeed * 20) % (width * 0.2);
-        const animStartX = startX + moveOffset;
-        const animEndX = endX + moveOffset;
-
-        ctx.beginPath();
-        ctx.moveTo(animStartX, startY);
-        ctx.lineTo(animEndX, endY);
-
-        ctx.strokeStyle = line.isDark
-          ? `rgba(0, 0, 0, ${line.alpha * 0.4})`
-          : `rgba(255, 255, 255, ${line.alpha * 1.5})`;
-        ctx.lineWidth = line.width;
-        ctx.stroke();
-      });
-
-      // 3. Draw white fade from top down to blend smoothly
-      // This makes the colors only appear at the bottom and fade into the white background
-      const fadeGrad = ctx.createLinearGradient(0, height * 0.2, 0, height * 0.95);
-      fadeGrad.addColorStop(0, "rgba(255, 255, 255, 1)");
-      fadeGrad.addColorStop(0.65, "rgba(255, 255, 255, 0.75)");
-      fadeGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
-
-      ctx.fillStyle = fadeGrad;
+      // Fill top background area above wave curve with pure white
+      ctx.fillStyle = "rgb(255, 255, 255)";
       ctx.fillRect(0, 0, width, height);
 
-      // Solid white block at the top to ensure no gradient bleeds up
-      ctx.fillStyle = "rgba(255, 255, 255, 1)";
-      ctx.fillRect(0, 0, width, height * 0.2);
+      const STEPS = 70;
+
+      // 1. Draw Main Continuous Gradient Wave Ribbon Fill ONLY below wave curve
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(0, getWaveY(0, 0, 0));
+      for (let s = 1; s <= STEPS; s++) {
+        const u = s / STEPS;
+        ctx.lineTo(u * width, getWaveY(u, 0, 0));
+      }
+      ctx.lineTo(width, height);
+      ctx.lineTo(0, height);
+      ctx.closePath();
+
+      // Shimmering horizontal gradient shift over time
+      const shiftX = Math.sin(time * 0.5) * 20;
+      const ribbonGrad = ctx.createLinearGradient(shiftX, height * 0.8, width + shiftX, height * 0.2);
+      ribbonGrad.addColorStop(0.0, "#2563EB");   // Deep Royal Blue
+      ribbonGrad.addColorStop(0.18, "#0284C7");  // Cyan Blue
+      ribbonGrad.addColorStop(0.35, "#06B6D4");  // Vibrant Turquoise
+      ribbonGrad.addColorStop(0.52, "#10B981");  // Emerald Green
+      ribbonGrad.addColorStop(0.68, "#84CC16");  // Lime Green
+      ribbonGrad.addColorStop(0.82, "#EAB308");  // Warm Yellow
+      ribbonGrad.addColorStop(0.92, "#F97316");  // Vibrant Orange
+      ribbonGrad.addColorStop(1.0, "#EA580C");   // Deep Amber
+
+      ctx.fillStyle = ribbonGrad;
+      ctx.fill();
+
+      // Clip subsequent orange glow & hatching to the wave ribbon area
+      ctx.clip();
+
+      // 2. Orange Glow Block (Clipped inside wave ribbon)
+      const rightOrangeGlow = ctx.createLinearGradient(width * 0.75, 0, width, 0);
+      rightOrangeGlow.addColorStop(0, "rgba(249, 115, 22, 0)");
+      rightOrangeGlow.addColorStop(0.5, "rgba(249, 115, 22, 0.4)");
+      rightOrangeGlow.addColorStop(1.0, "rgba(234, 88, 12, 0.85)");
+      ctx.fillStyle = rightOrangeGlow;
+      ctx.fillRect(width * 0.75, 0, width * 0.25, height);
+
+      // Bottom-right corner white fade
+      const botRightWhite = ctx.createRadialGradient(width, height, 0, width, height, width * 0.35);
+      botRightWhite.addColorStop(0, "rgba(255, 255, 255, 0.85)");
+      botRightWhite.addColorStop(1, "rgba(255, 255, 255, 0)");
+      ctx.fillStyle = botRightWhite;
+      ctx.fillRect(width * 0.65, height * 0.65, width * 0.35, height * 0.35);
+
+      // Bottom-left blue/purple shadow accent
+      const botLeftShadow = ctx.createRadialGradient(0, height, 0, 0, height, width * 0.28);
+      botLeftShadow.addColorStop(0, "rgba(79, 70, 229, 0.55)");
+      botLeftShadow.addColorStop(1, "rgba(79, 70, 229, 0)");
+      ctx.fillStyle = botLeftShadow;
+      ctx.fillRect(0, height * 0.55, width * 0.35, height * 0.45);
+
+      // 3. Fluid Wave Fanning Lines (Animated vector lines flowing inside the wave)
+      const NUM_LINES = 52;
+      for (let i = 0; i < NUM_LINES; i++) {
+        const lineRatio = i / (NUM_LINES - 1);
+        const yOffset = Math.pow(lineRatio, 1.35) * (height * 0.52);
+
+        ctx.beginPath();
+        ctx.moveTo(0, getWaveY(0, yOffset, lineRatio));
+
+        for (let s = 1; s <= STEPS; s++) {
+          const u = s / STEPS;
+          const dynamicSpread = u * lineRatio * (12 + Math.sin(time * 2 + u * 3) * 4);
+          ctx.lineTo(u * width, getWaveY(u, yOffset + dynamicSpread, lineRatio));
+        }
+
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
+        ctx.lineWidth = i < 12 ? 1.25 : 0.85;
+        ctx.globalAlpha = Math.max(0.1, 0.78 - lineRatio * 0.65);
+        ctx.stroke();
+      }
+
+      ctx.globalAlpha = 1.0;
+
+      // 4. Far-Right White Diagonal Hatching Lines (Clipped inside wave ribbon)
+      const hatchStartX = width * 0.94;
+      const HATCH_COUNT = 22;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
+      ctx.lineWidth = 1.0;
+
+      for (let h = 0; h < HATCH_COUNT; h++) {
+        const yPos = (h / HATCH_COUNT) * height * 0.9 + Math.sin(time * 1.5 + h * 0.3) * 2;
+        ctx.beginPath();
+        ctx.moveTo(hatchStartX, yPos);
+        ctx.lineTo(width, yPos - height * 0.15);
+        ctx.stroke();
+      }
+
+      ctx.restore();
 
       animationFrameId = requestAnimationFrame(render);
     };
 
-    // IntersectionObserver to only run animation when visible
+    // IntersectionObserver to only run animation when section is in viewport
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -179,3 +192,10 @@ export function RegionsGradientAnimation() {
     </div>
   );
 }
+
+
+
+
+
+
+

@@ -39,10 +39,10 @@ const COLUMNS = [
 ];
 
 const SOCIALS = [
-  { icon: FaInstagram, alt: "Instagram", hoverBg: "hover:bg-[#E1306C]" },
-  { icon: FaXTwitter, alt: "X", hoverBg: "hover:bg-[#000000]" },
-  { icon: FaLinkedinIn, alt: "LinkedIn", hoverBg: "hover:bg-[#0A66C2]" },
-  { icon: FaFacebookF, alt: "Facebook", hoverBg: "hover:bg-[#1877F2]" },
+  { icon: FaInstagram, alt: "Instagram" },
+  { icon: FaXTwitter, alt: "X" },
+  { icon: FaLinkedinIn, alt: "LinkedIn" },
+  { icon: FaFacebookF, alt: "Facebook" },
 ];
 
 export function Footer() {
@@ -84,9 +84,9 @@ export function Footer() {
                 variant="socialIcon"
                 href="#"
                 aria-label={s.alt}
-                className={`group flex h-[45px] w-[45px] items-center justify-center rounded-[8px] overflow-hidden transition-colors bg-[#666666] ${s.hoverBg}`}
+                className="group flex h-[45px] w-[45px] items-center justify-center rounded-[10px] overflow-hidden transition-colors bg-[#616161] hover:bg-[#4a4a4a]"
               >
-                <Icon className={`h-[24px] w-[24px] text-white transition-colors`} />
+                <Icon className="h-[24px] w-[24px] text-white transition-colors" />
               </AnimatedButton>
             );
           })}

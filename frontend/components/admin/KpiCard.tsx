@@ -32,7 +32,7 @@ export function KpiCard({
       </div>
       
       <div>
-        <p className="text-3xl font-bold text-gray-900 mb-2">{value}</p>
+        <p className="text-3xl font-bold text-[#191c1e] mb-2 font-display">{value}</p>
         <div className="flex items-center text-xs">
           <span
             className={`font-medium mr-1 ${

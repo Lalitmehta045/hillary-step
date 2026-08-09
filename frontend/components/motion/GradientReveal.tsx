@@ -22,9 +22,9 @@ const textVariants: Variants = {
     y: 0,
     scale: 1,
     transition: {
-      opacity: { delay: 0.3, duration: 0.8, ease: "linear" },
-      y: { delay: 0.3, duration: 1.0, ease: customEase },
-      scale: { delay: 0.3, duration: 1.0, ease: customEase },
+      opacity: { duration: 0.5, ease: "linear" },
+      y: { duration: 0.7, ease: customEase },
+      scale: { duration: 0.7, ease: customEase },
     },
   },
 };
@@ -35,8 +35,8 @@ const sweepVariants: Variants = {
     opacity: [0, 0.4, 0.4, 0],
     backgroundPosition: ["-250% 0", "-250% 0", "250% 0", "250% 0"],
     transition: {
-      duration: 1.5,
-      times: [0, 0.2, 0.8, 1.0], // Starts at 0.3s (0.2 * 1.5), sweeps until 1.2s
+      duration: 1.2,
+      times: [0, 0.1, 0.7, 1.0],
       ease: [0.16, 1, 0.3, 1],
     },
   },
@@ -54,7 +54,7 @@ export function GradientReveal({ children, className = "" }: GradientRevealProps
       className="relative inline-block"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.8, margin: "-50px" }}
+      viewport={{ once: true, amount: 0.1 }}
       variants={parentVariants}
     >
       {/* Base Text */}

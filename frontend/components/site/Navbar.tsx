@@ -181,7 +181,7 @@ export function Navbar() {
               <ChevronIcon />
             </button>
             <AnimatedButton
-              href="/admin"
+              href="/admin/login"
               variant="subtleShadow"
               className="flex h-[44px] items-center gap-[9px] rounded-full border border-[#111111]/10 bg-white/50 px-[22px] font-sans text-[14px] font-[510] leading-[20px] text-[#111111] backdrop-blur-sm"
             >
@@ -234,7 +234,7 @@ export function Navbar() {
             ))}
             <div className="mt-[40px] flex flex-col gap-[16px] border-t border-black/10 pt-[40px]">
               <a
-                href="/admin"
+                href="/admin/login"
                 className="flex h-[54px] w-full items-center justify-center gap-[9px] rounded-full bg-brand-blue px-[22px] font-sans text-[16px] font-semibold text-white"
               >
                 Admin Portal

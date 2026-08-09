@@ -10,7 +10,7 @@ import {
 export default function AdminDashboardPage() {
   return (
     <div className="max-w-[1020px]">
-      <h1 className="text-sm font-bold text-blue-900 mb-6">Dashboard</h1>
+      <h1 className="text-sm font-bold text-[#191c1e] mb-6 font-display">Dashboard</h1>
       
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -52,14 +52,14 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart Placeholder */}
         <div className="lg:col-span-1 bg-white rounded-md border border-gray-200 p-6 flex flex-col">
-          <h2 className="text-base font-bold text-gray-900 mb-6">Application Overview</h2>
+          <h2 className="text-base font-bold text-[#191c1e] mb-6 font-display">Application Overview</h2>
           <div className="flex-1 flex flex-col items-center justify-center min-h-[300px]">
             {/* Fake Donut Chart Center */}
             <div className="relative w-48 h-48 mb-8 flex items-center justify-center">
               <div className="absolute inset-0 border-[24px] border-gray-100 rounded-full"></div>
               {/* This would be a real chart in production */}
               <div className="text-center z-10">
-                <span className="block text-2xl font-bold text-gray-900">Total</span>
+                <span className="block text-2xl font-bold text-[#191c1e] font-display">Total</span>
                 <span className="block text-sm text-gray-500">2,482</span>
               </div>
             </div>

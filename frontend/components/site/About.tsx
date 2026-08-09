@@ -78,16 +78,16 @@ export function About() {
             </p>
           </FadeIn>
 
-          <StaggerContainer className="mt-[92px] max-md:mt-[40px] grid grid-cols-2 max-md:grid-cols-1 max-md:gap-y-[40px] gap-x-[6px] md:grid-cols-5">
+          <StaggerContainer className="relative mt-[92px] max-md:mt-[40px] grid grid-cols-2 max-md:grid-cols-1 max-md:gap-y-[40px] gap-x-[6px] md:grid-cols-5">
+            <div className="absolute left-0 right-0 top-[8px] h-px -translate-y-1/2 bg-[#2A2A2A] max-md:hidden pointer-events-none" />
             {TIMELINE.map((item, i) => (
               <StaggerItem key={i}>
                 <div className="relative pr-[40px] max-md:pr-0">
                   <div className="relative flex h-[16px] items-center">
-                    <span className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-[#2A2A2A] max-md:hidden" />
                     {item.last ? (
-                      <span className="relative h-[9px] w-[9px] bg-white" />
+                      <span className="relative z-10 h-[9px] w-[9px] bg-white" />
                     ) : (
-                      <span className="relative h-[14px] w-[14px] rounded-full bg-brand-green shadow-[0_0_14px_4px_rgba(64,246,0,0.45)]" />
+                      <span className="relative z-10 h-[14px] w-[14px] rounded-full bg-brand-green shadow-[0_0_14px_4px_rgba(64,246,0,0.45)]" />
                     )}
                   </div>
                   <h3 className="mt-[42px] max-md:mt-[16px] font-display text-[23px] max-md:text-[20px] font-bold tracking-[0.01em] text-white">

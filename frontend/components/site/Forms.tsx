@@ -33,7 +33,7 @@ export function Forms() {
             </StaggerItem>
           </StaggerContainer>
 
-          <FadeIn delay={0.2} className="mx-auto mt-[48px] max-md:mt-[32px] rounded-[26px] bg-gradient-to-r from-[#00E5FF] via-[#15FF00] to-[#FF8800] p-[1px]">
+          <FadeIn delay={0.2} className="mx-auto mt-[48px] max-md:mt-[32px] rounded-[26px] border border-[#E5E7EB] shadow-sm">
             <form className="grid grid-cols-1 gap-[48px] max-md:gap-[32px] rounded-[25px] bg-white px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px] lg:grid-cols-[1fr_341px]">
               <div>
                 <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
@@ -76,8 +76,8 @@ export function Forms() {
                       height="calc(100% - 2px)"
                       rx="23"
                       fill="none"
-                      stroke="url(#dashGrad)"
-                      strokeWidth="2"
+                      stroke="#D1D5DB"
+                      strokeWidth="1.5"
                       strokeDasharray="6 4"
                     />
                   </svg>
@@ -148,8 +148,8 @@ export function Forms() {
             </div>
           </StaggerContainer>
 
-          <FadeIn delay={0.2} className="w-full shrink-0 rounded-[25px] bg-gradient-to-r from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1px] lg:w-[560px]">
-            <form className="rounded-[24px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px]">
+          <FadeIn delay={0.2} className="w-full shrink-0 rounded-[24px] overflow-hidden bg-gradient-to-tr from-[#FF9500] via-[#00FF44] to-[#0070F3] p-[1px] shadow-sm lg:w-[560px]">
+            <form className="h-full w-full rounded-[23px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px]">
               <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
                 <Field label="Name" />
                 <Field label="Email" type="email" />

@@ -1,4 +1,7 @@
+"use client";
+
 import { Sidebar } from "@/components/admin/Sidebar";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 export default function AdminLayout({
@@ -6,6 +9,13 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const isLoginPage = pathname === "/admin/login";
+
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen bg-[#f8f9fb] font-display">
       <Sidebar />

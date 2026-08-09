@@ -14,20 +14,24 @@ const HUBS: Record<string, Hub> = {
   Australia: { name: "Australia", xPercent: 0.77, yPercent: 0.74 },
 };
 
-// Continent dot clusters to render a minimalist, high-tech world dot-matrix
+// Continent dot clusters to render a rich high-tech geographic world dot matrix
 const CONTINENT_CLUSTERS = [
-  // North America
-  { cx: 0.26, cy: 0.4, rx: 0.12, ry: 0.14, count: 55 },
+  // North America (Alaska to East Coast)
+  { cx: 0.22, cy: 0.32, rx: 0.12, ry: 0.10, count: 70 },
+  { cx: 0.28, cy: 0.44, rx: 0.09, ry: 0.11, count: 65 },
   // South America
-  { cx: 0.35, cy: 0.7, rx: 0.08, ry: 0.16, count: 40 },
+  { cx: 0.35, cy: 0.68, rx: 0.06, ry: 0.15, count: 60 },
   // Europe
-  { cx: 0.52, cy: 0.36, rx: 0.07, ry: 0.09, count: 35 },
+  { cx: 0.51, cy: 0.34, rx: 0.06, ry: 0.08, count: 50 },
   // Africa
-  { cx: 0.53, cy: 0.58, rx: 0.09, ry: 0.16, count: 50 },
-  // Asia
-  { cx: 0.68, cy: 0.42, rx: 0.16, ry: 0.15, count: 85 },
+  { cx: 0.52, cy: 0.56, rx: 0.08, ry: 0.15, count: 75 },
+  // Asia & Middle East
+  { cx: 0.64, cy: 0.38, rx: 0.12, ry: 0.12, count: 110 },
+  { cx: 0.72, cy: 0.45, rx: 0.08, ry: 0.10, count: 70 },
+  // India Subcontinent Focus
+  { cx: 0.64, cy: 0.54, rx: 0.04, ry: 0.06, count: 45 },
   // Australia / Oceania
-  { cx: 0.79, cy: 0.73, rx: 0.08, ry: 0.09, count: 35 },
+  { cx: 0.78, cy: 0.73, rx: 0.07, ry: 0.08, count: 55 },
 ];
 
 // Arcs between hubs: US <-> India, India <-> Australia, US <-> Australia
