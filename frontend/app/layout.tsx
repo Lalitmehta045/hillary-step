@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { CookieConsent } from "@/components/site/CookieConsent";
 
 const hankenGrotesk = Hanken_Grotesk({
   subsets: ["latin"],
@@ -41,6 +42,7 @@ export default function RootLayout({
     <html lang="en" className={hankenGrotesk.variable}>
       <body className="antialiased font-sans">
         <SmoothScroll>{children}</SmoothScroll>
+        <CookieConsent />
       </body>
     </html>
   );
