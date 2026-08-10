@@ -35,7 +35,7 @@ const LEADERS = [
 
 export function Leadership() {
   return (
-    <section className="w-full bg-white py-[80px] max-md:py-[60px]">
+    <section className="w-full bg-white pt-[80px] pb-[40px] max-md:pt-[60px] max-md:pb-[40px]">
       <div className="mx-auto w-full max-w-[1280px] px-[96px] max-md:px-[24px] max-lg:px-[40px]">
         <StaggerContainer>
           <StaggerItem>

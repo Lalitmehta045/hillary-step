@@ -21,8 +21,8 @@ export function About() {
           <AnimatedMountainMask />
         </MountainAnimation>
 
-        <div className="relative mx-auto w-full max-w-[1280px] pt-[128px] pb-[256px] px-[24px] max-md:pt-[80px] max-md:pb-[120px]">
-          <StaggerContainer className="flex flex-col gap-[80px] max-md:gap-[40px]">
+        <div className="relative mx-auto w-full max-w-[1280px] pt-[64px] pb-[256px] px-[24px] max-md:pt-[40px] max-md:pb-[120px]">
+          <StaggerContainer className="flex flex-col gap-[40px] max-md:gap-[24px]">
             <StaggerItem>
               <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
                 ABOUT HILLARY STEP
@@ -37,7 +37,7 @@ export function About() {
             </StaggerItem>
 
             <StaggerItem>
-              <p className="max-w-[976px] font-sans text-[20px] max-md:text-[16px] max-md:leading-[24px] font-[400] leading-[28px] tracking-[0px] text-[#A3A3A3]">
+              <p className="max-w-[976px] font-sans text-[20px] max-md:text-[16px] max-md:leading-[24px] font-[400] leading-[28px] tracking-[0px] text-[#49454F]">
                 Inspired by one of the world&apos;s most iconic symbols of perseverance, Hillary Step
                 Solutions represents the determination to overcome complexity, embrace innovation, and
                 achieve meaningful progress. We help organizations navigate their most critical
@@ -47,7 +47,7 @@ export function About() {
 
             <StaggerItem>
               <div className="flex max-w-[702px] flex-col items-start gap-[24px]">
-                <p className="font-sans text-[18px] max-md:text-[15px] max-md:leading-[22px] font-[400] leading-[26px] tracking-[-0.4px] text-[#1B1B1C]">
+                <p className="font-sans text-[18px] max-md:text-[15px] max-md:leading-[22px] font-[400] leading-[26px] tracking-[-0.4px] text-[#49454F]">
                   Hillary Step Solutions is a global business solutions company empowering organizations
                   through intelligent technology, world-class workforce solutions, and engineering
                   excellence. We partner with businesses across the USA, Australia, and India to deliver

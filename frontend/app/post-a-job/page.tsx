@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { m, AnimatePresence } from "framer-motion";
+import { Navbar } from "@/components/site/Navbar";
+import { Footer } from "@/components/site/Footer";
 
 const STEPS = [
   {
@@ -20,8 +22,10 @@ const STEPS = [
     description: "Define the skills, experience, and qualifications required.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-        <path d="M22 12A10 10 0 0 0 12 2v10z" />
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M8 7h8" />
+        <path d="M8 12h8" />
+        <path d="M8 17h5" />
       </svg>
     ),
   },
@@ -31,9 +35,8 @@ const STEPS = [
     description: "Specify the work location or remote preference.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-        <line x1="12" y1="22.08" x2="12" y2="12" />
+        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z" />
+        <circle cx="12" cy="10" r="3" />
       </svg>
     ),
   },
@@ -43,8 +46,11 @@ const STEPS = [
     description: "Write a detailed description of the role and responsibilities.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-        <path d="m9 12 2 2 4-4" />
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+        <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+        <path d="M10 13h4" />
+        <path d="M10 17h4" />
+        <path d="M10 9h1" />
       </svg>
     ),
   },
@@ -54,10 +60,10 @@ const STEPS = [
     description: "Upload any supporting documents or attachments.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M8 3 4 7l4 4" />
-        <path d="M4 7h16" />
-        <path d="m16 21 4-4-4-4" />
-        <path d="M20 17H4" />
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+        <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+        <path d="M12 18v-6" />
+        <path d="m9 15 3-3 3 3" />
       </svg>
     ),
   },
@@ -65,6 +71,7 @@ const STEPS = [
 
 export default function PostAJobPage() {
   const [activeStep, setActiveStep] = useState(0);
+  const stepRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [formData, setFormData] = useState({
     jobTitle: "",
     organizationName: "",
@@ -77,6 +84,18 @@ export default function PostAJobPage() {
     jobDescription: "",
     requirements: "",
   });
+
+  // Auto-scroll active step tab into view on mobile
+  useEffect(() => {
+    const activeBtn = stepRefs.current[activeStep];
+    if (activeBtn) {
+      activeBtn.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [activeStep]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -96,12 +115,13 @@ export default function PostAJobPage() {
 
   return (
     <div className="min-h-screen w-full bg-white font-display">
+      <Navbar />
       {/* Fixed width 1210px container like Figma */}
       <div className="mx-auto w-full max-w-[1210px] px-[32px] max-md:px-[16px] pb-[96px]">
         {/* Title - centered */}
-        <div className="pt-[60px] max-md:pt-[40px] mb-[40px] max-md:mb-[28px] text-center">
+        <div className="pt-[100px] max-md:pt-[70px] mb-[40px] max-md:mb-[28px] text-center">
           <h1 className="font-display text-[44px] max-md:text-[28px] font-[700] leading-[52.8px] max-md:leading-[36px] tracking-[-1.1px] max-md:tracking-[-0.5px] text-[#111111]">
-            <span className="text-[#1A6CFF]">Post a Job</span>{" "}
+            <span className="bg-gradient-to-r from-[#1A6CFF] via-[#3AF900] to-[#FF9500] bg-clip-text text-transparent">Post a Job</span>{" "}
             Find the Right Talent.
           </h1>
         </div>
@@ -117,6 +137,7 @@ export default function PostAJobPage() {
                 <m.button
                   layout
                   key={step.id}
+                  ref={(el) => { stepRefs.current[index] = el; }}
                   type="button"
                   onClick={() => setActiveStep(index)}
                   className={`relative overflow-hidden flex w-full max-md:w-auto max-md:shrink-0 max-md:snap-start items-start max-md:items-center text-left transition-all duration-500 ease-out ${
@@ -412,6 +433,7 @@ export default function PostAJobPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

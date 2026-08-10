@@ -40,7 +40,7 @@ export function Regions() {
   const region = REGIONS[active];
 
   return (
-    <section className="relative w-full overflow-hidden bg-white py-[148px] max-md:py-[80px]">
+    <section className="relative w-full overflow-hidden bg-white pt-[64px] pb-[148px] max-md:pt-[40px] max-md:pb-[80px]">
       <RegionsGradientAnimation />
 
       <div className="relative mx-auto w-full max-w-[1280px] px-[32px] max-md:px-[24px]">

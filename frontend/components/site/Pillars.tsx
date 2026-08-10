@@ -26,7 +26,7 @@ const PILLARS = [
 
 export function Pillars() {
   return (
-    <section className="w-full bg-white pt-[100px] pb-[100px] max-md:py-[60px]">
+    <section className="w-full bg-white pt-[100px] pb-[40px] max-md:pt-[60px] max-md:pb-[40px]">
       <div className="mx-auto w-full max-w-[1280px] px-[64px] max-md:px-[24px]">
         <StaggerContainer>
           <StaggerItem>
@@ -51,7 +51,7 @@ export function Pillars() {
           </StaggerItem>
         </StaggerContainer>
 
-        <StaggerContainer className="mt-[86px] max-md:mt-[48px] grid grid-cols-1 gap-[35px] md:grid-cols-3">
+        <StaggerContainer className="mt-[40px] max-md:mt-[32px] grid grid-cols-1 gap-[35px] md:grid-cols-3">
           {PILLARS.map((p) => (
             <StaggerItem key={p.title}>
               <PillarCard

@@ -106,22 +106,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-@keyframes shimmerText {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 /* Multi-stop brand gradient used on headline fragments
-   will-change + translateZ(0) promotes to GPU layer, isolating paint cost */
+   will-change:transform + translateZ(0) promotes to own GPU layer,
+   isolating paint cost to that compositing layer only. */
 .grad-text {
   background-image: linear-gradient(90deg,
       #1a6cff 0%,
@@ -130,40 +117,44 @@ body {
       #b7d900 72%,
       #ff9500 100%);
   background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
-  will-change: background-position;
+  will-change: transform;
   transform: translateZ(0);
 }
 
 .grad-text-bg {
   background-image: linear-gradient(90deg, #1f65ff 0%, #2b7cff 46%, #2bb0ed 56%, #38e338 76%, #d1ab06 100%);
   background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
-  will-change: background-position;
+  will-change: transform;
   transform: translateZ(0);
 }
 
 .grad-text-bgreen {
   background-image: linear-gradient(90deg, #1a6cff 0%, #22b46a 45%, #40f600 100%);
   background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
-  will-change: background-position;
+  will-change: transform;
   transform: translateZ(0);
 }
 
 .grad-text-green {
   background-image: linear-gradient(90deg, #0fb37a 0%, #2ee02b 55%, #40f600 100%);
   background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
   background-size: 200% auto;
-  will-change: background-position;
+  will-change: transform;
   transform: translateZ(0);
 }
 

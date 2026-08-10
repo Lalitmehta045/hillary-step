@@ -14,9 +14,8 @@ export function Journey() {
     offset: ["start end", "center center"],
   });
 
-  // Direct transform without heavy spring calculations for 60fps performance
+  // GPU-safe: only scale (composited) — no borderRadius (triggers repaint per frame)
   const scale = useTransform(scrollYProgress, [0, 1], [0.85, 1.05]);
-  const borderRadius = useTransform(scrollYProgress, [0, 1], ["40px", "24px"]);
 
   return (
     <section ref={containerRef} className="w-full bg-white pt-[152px] max-md:pt-[80px] pb-[60px] max-md:pb-[40px] overflow-hidden">
@@ -41,8 +40,8 @@ export function Journey() {
         <FadeIn delay={0.2}>
           <div className="mx-auto mt-[56px] max-md:mt-[40px] w-full max-w-[1186px] flex justify-center">
             <m.div
-              style={{ scale, borderRadius }}
-              className="relative h-[545px] max-md:h-[260px] max-lg:h-[400px] w-full overflow-hidden bg-gradient-to-r from-[#FF6200] via-[#00FF11] to-[#007BFF] p-[1px] origin-center will-change-transform translate-z-0"
+              style={{ scale }}
+              className="relative h-[545px] max-md:h-[260px] max-lg:h-[400px] w-full overflow-hidden rounded-[24px] bg-gradient-to-r from-[#FF6200] via-[#00FF11] to-[#007BFF] p-[1px] origin-center will-change-transform translate-z-0"
             >
               <div className="relative w-full h-full overflow-hidden rounded-[inherit] bg-black">
                 <video
