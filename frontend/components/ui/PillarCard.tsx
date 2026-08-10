@@ -40,7 +40,7 @@ export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title,
           alt={alt}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover"
+          className="object-cover opacity-80"
         />
       </m.div>
       <div className="relative flex items-start justify-between p-[32px]">

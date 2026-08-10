@@ -21,7 +21,6 @@ export default function Home() {
       <Regions />
       <div id="careers" />
       <Forms />
-      <div id="contact" />
       <Footer />
     </main>
   );

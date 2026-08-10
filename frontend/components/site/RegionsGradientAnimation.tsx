@@ -216,7 +216,7 @@ export function RegionsGradientAnimation() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute inset-0 h-full w-full overflow-hidden select-none"
+      className="pointer-events-none absolute inset-0 h-full w-full overflow-hidden select-none opacity-[0.06]"
       aria-hidden="true"
     >
       <canvas ref={canvasRef} className="block h-full w-full" />

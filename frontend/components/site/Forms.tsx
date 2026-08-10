@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
 import { ArrowRight } from "./Hero";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { GradientReveal } from "@/components/motion/GradientReveal";
@@ -10,7 +13,7 @@ export function Forms() {
   return (
     <>
       {/* Candidacy */}
-      <section className="w-full bg-white pt-[100px] pb-[40px] max-md:pt-[60px] max-md:pb-[20px]">
+      <section className="w-full bg-white pt-[64px] pb-[40px] max-md:pt-[40px] max-md:pb-[20px]">
         <div className="mx-auto w-full max-w-[1280px] px-[32px] max-md:px-[24px]">
           <StaggerContainer>
             <StaggerItem>
@@ -39,13 +42,11 @@ export function Forms() {
                 <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
                   <Field label="Full name" />
                   <Field label="Email" type="email" />
-                  <Field label="Phone" />
+                  <PhoneField />
                   <Field label="LinkedIn Profile" />
                   <Select label="Practice" options={PRACTICES} />
                   <Select label="Preferred Location" options={LOCATIONS} />
                 </div>
-
-                <Field label="Years of Experience" />
 
                 <div>
                   <Label>Cover Note</Label>
@@ -108,7 +109,7 @@ export function Forms() {
       </section>
 
       {/* Contact */}
-      <section className="w-full bg-white pt-[40px] pb-[100px] max-md:pt-[20px] max-md:pb-[60px]">
+      <section id="contact" className="w-full bg-white pt-[40px] pb-[100px] max-md:pt-[20px] max-md:pb-[60px]">
         <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[96px] max-md:gap-[48px] max-lg:gap-[64px] px-[32px] max-md:px-[24px] lg:flex-row">
           <StaggerContainer className="flex-1">
             <StaggerItem>
@@ -195,26 +196,127 @@ function Field({ label, type = "text" }: { label: string; type?: string }) {
 }
 
 function Select({ label, options }: { label: string; options: readonly string[] }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState(options[0]);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <div className="min-w-0">
+    <div className="min-w-0" ref={dropdownRef}>
       <Label>{label}</Label>
       <div className="relative mt-[8px]">
-        <select className="h-[50px] w-full appearance-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden">
-          {options.map((o) => (
-            <option key={o}>{o}</option>
-          ))}
-        </select>
-        <svg
-          className="pointer-events-none absolute right-[16px] top-1/2 -translate-y-1/2"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#4a4a4a"
-          strokeWidth="1.8"
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className={`flex h-[50px] w-full items-center justify-between rounded-[16px] border bg-white px-[16px] font-sans text-[16px] text-[#111111] shadow-sm transition-all focus:outline-hidden ${isOpen ? "border-[#007BFF] ring-1 ring-[#007BFF]" : "border-[#E5E7EB] hover:border-[#d1d5db]"}`}
         >
-          <path d="M6 9l6 6 6-6" />
-        </svg>
+          {selected}
+          <svg
+            className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#4a4a4a"
+            strokeWidth="1.8"
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+
+        {isOpen && (
+          <div className="absolute left-0 top-[calc(100%+8px)] z-50 w-full overflow-hidden rounded-[16px] border border-[#E5E7EB] bg-white py-[8px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] transform-gpu animate-in fade-in slide-in-from-top-2 duration-200">
+            {options.map((o) => (
+              <button
+                key={o}
+                type="button"
+                onClick={() => {
+                  setSelected(o);
+                  setIsOpen(false);
+                }}
+                className={`flex w-full items-center px-[16px] py-[10px] text-left font-sans text-[15px] transition-colors ${selected === o ? "bg-[#F8F9FB] text-[#007BFF] font-[500]" : "text-[#111111] hover:bg-[#F8F9FB] hover:text-[#007BFF]"}`}
+              >
+                {o}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function PhoneField() {
+  const COUNTRY_CODES = ["+1 (USA)", "+91 (IND)", "+61 (AUS)"];
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState(COUNTRY_CODES[0]);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="min-w-0">
+      <Label>Phone</Label>
+      <div className="mt-[8px] flex h-[50px] w-full rounded-[16px] border border-[#E5E7EB] bg-white shadow-sm focus-within:border-[#007BFF] focus-within:ring-1 focus-within:ring-[#007BFF]">
+        <div className="relative flex items-center border-r border-[#E5E7EB] bg-[#F8F9FB] rounded-l-[16px]" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex h-full items-center justify-between gap-[8px] pl-[12px] pr-[12px] font-sans text-[14px] text-[#111111] focus:outline-hidden"
+          >
+            {selected}
+            <svg
+              className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#4a4a4a"
+              strokeWidth="1.8"
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+          
+          {isOpen && (
+            <div className="absolute left-0 top-[calc(100%+8px)] z-50 w-[140px] overflow-hidden rounded-[16px] border border-[#E5E7EB] bg-white py-[8px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] transform-gpu animate-in fade-in slide-in-from-top-2 duration-200">
+              {COUNTRY_CODES.map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => {
+                    setSelected(code);
+                    setIsOpen(false);
+                  }}
+                  className={`flex w-full items-center px-[16px] py-[10px] text-left font-sans text-[14px] transition-colors ${selected === code ? "bg-[#F8F9FB] text-[#007BFF] font-[500]" : "text-[#111111] hover:bg-[#F8F9FB] hover:text-[#007BFF]"}`}
+                >
+                  {code}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <input
+          type="tel"
+          className="h-full flex-1 bg-transparent px-[16px] font-sans text-[16px] text-[#111111] focus:outline-hidden rounded-r-[16px]"
+        />
       </div>
     </div>
   );

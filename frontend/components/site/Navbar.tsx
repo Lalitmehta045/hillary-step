@@ -23,7 +23,7 @@ export function Navbar() {
   const [isDesktop, setIsDesktop] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState("USA");
 
-  const REGIONS = ["USA", "Australia", "India"];
+  const REGIONS = ["USA", "IND", "AUS"];
 
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isOverNavbarRef = useRef(false);

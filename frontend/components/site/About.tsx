@@ -93,7 +93,7 @@ export function About() {
                   <h3 className="mt-[42px] max-md:mt-[16px] font-display text-[23px] max-md:text-[20px] font-bold tracking-[0.01em] text-white">
                     {item.year}
                   </h3>
-                  <p className="mt-[16px] max-md:mt-[8px] max-w-[250px] max-md:max-w-full font-sans text-[17px] max-md:text-[15px] leading-[1.62] text-white/55">
+                  <p className={`mt-[16px] max-md:mt-[8px] max-w-[250px] max-md:max-w-full font-sans text-[17px] max-md:text-[15px] leading-[1.62] ${i === 0 ? "text-brand-green" : "text-white/55"}`}>
                     {item.text}
                   </p>
                 </div>
