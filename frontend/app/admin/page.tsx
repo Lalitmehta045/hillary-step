@@ -8,10 +8,10 @@ import {
   LuStar, 
   LuMessageSquare 
 } from "react-icons/lu";
-import { m } from "framer-motion";
+import { m, Variants } from "framer-motion";
 import { useState } from "react";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { 
     opacity: 1,
@@ -21,7 +21,7 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: { 
     y: 0, 
