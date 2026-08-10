@@ -53,7 +53,7 @@ export function Hero() {
               <AnimatedButton
                 href="#"
                 variant="blueGlow"
-                className="flex h-[54px] max-md:justify-center items-center gap-[8px] rounded-full bg-brand-blue px-[24px] py-[14px] font-display text-[16px] leading-[24px] font-[590] tracking-[0px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)]"
+                className="flex h-[54px] max-md:justify-center items-center gap-[8px] rounded-full bg-brand-blue px-[24px] py-[14px] font-sans text-[14px] leading-[20px] font-[500] tracking-[0px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)]"
               >
                 Explore Global Projects
                 <ArrowRight />
@@ -61,7 +61,7 @@ export function Hero() {
               <AnimatedButton
                 href="#"
                 variant="subtleShadow"
-                className="flex h-[54px] max-md:justify-center items-center gap-[8px] rounded-full border border-[rgba(255,255,255,0.3)] bg-[rgba(255,255,255,0.21)] px-[24px] py-[14px] font-display text-[16px] leading-[24px] font-[590] tracking-[0px] text-white max-md:bg-black/30 max-md:border-white/30 backdrop-blur-[4px] shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
+                className="flex h-[54px] max-md:justify-center items-center gap-[8px] rounded-full border border-[rgba(255,255,255,0.3)] bg-[rgba(255,255,255,0.21)] px-[24px] py-[14px] font-sans text-[14px] leading-[20px] font-[500] tracking-[0px] text-white max-md:bg-black/30 max-md:border-white/30 backdrop-blur-[4px] shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
               >
                 Partner With Us
                 <ArrowUpRight />
@@ -95,8 +95,8 @@ export function ArrowUpRight() {
 
 export function ArrowRight() {
   return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-      <path d="M4 12h15M13 6l6 6-6-6" />
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14M12 5l7 7-7 7" />
     </svg>
   );
 }

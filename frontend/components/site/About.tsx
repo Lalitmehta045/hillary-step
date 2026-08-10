@@ -37,17 +37,14 @@ export function About() {
             </StaggerItem>
 
             <StaggerItem>
-              <p className="max-w-[976px] font-sans text-[20px] max-md:text-[16px] max-md:leading-[24px] font-[400] leading-[28px] tracking-[0px] text-[#49454F]">
-                Inspired by one of the world&apos;s most iconic symbols of perseverance, Hillary Step
-                Solutions represents the determination to overcome complexity, embrace innovation, and
-                achieve meaningful progress. We help organizations navigate their most critical
-                challenges through technology, global workforce solutions, and engineering excellence.
-              </p>
-            </StaggerItem>
-
-            <StaggerItem>
-              <div className="flex max-w-[702px] flex-col items-start gap-[24px]">
-                <p className="font-sans text-[18px] max-md:text-[15px] max-md:leading-[22px] font-[400] leading-[26px] tracking-[-0.4px] text-[#49454F]">
+              <div className="flex flex-col gap-[20px] max-md:gap-[16px]">
+                <p className="max-w-[976px] font-sans text-[18px] max-md:text-[15px] max-md:leading-[22px] font-[400] leading-[26px] tracking-[0px] text-[#49454F]">
+                  Inspired by one of the world&apos;s most iconic symbols of perseverance, Hillary Step
+                  Solutions represents the determination to overcome complexity, embrace innovation, and
+                  achieve meaningful progress. We help organizations navigate their most critical
+                  challenges through technology, global workforce solutions, and engineering excellence.
+                </p>
+                <p className="max-w-[976px] font-sans text-[18px] max-md:text-[15px] max-md:leading-[22px] font-[400] leading-[26px] tracking-[0px] text-[#49454F]">
                   Hillary Step Solutions is a global business solutions company empowering organizations
                   through intelligent technology, world-class workforce solutions, and engineering
                   excellence. We partner with businesses across the USA, Australia, and India to deliver
@@ -56,15 +53,18 @@ export function About() {
                   industry expertise, and a client-first approach, we help organizations overcome complex
                   challenges, accelerate growth, and build a sustainable future.
                 </p>
-                <AnimatedButton
-                  href="#"
-                  variant="blueGlow"
-                  className="inline-flex h-[52px] items-center gap-[11px] rounded-full bg-brand-blue px-[24px] font-display text-[16px] font-[590] leading-[24px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)]"
-                >
-                  Contact Us
-                  <ArrowRight />
-                </AnimatedButton>
               </div>
+            </StaggerItem>
+
+            <StaggerItem>
+              <AnimatedButton
+                href="#"
+                variant="blueGlow"
+                className="inline-flex h-[52px] items-center gap-[11px] rounded-full bg-brand-blue px-[24px] font-sans text-[14px] font-[500] leading-[20px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)] mt-[8px]"
+              >
+                Contact Us
+                <ArrowRight />
+              </AnimatedButton>
             </StaggerItem>
           </StaggerContainer>
         </div>

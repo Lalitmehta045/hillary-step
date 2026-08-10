@@ -7,8 +7,8 @@ export const EASING: [number, number, number, number] = [0.25, 1, 0.5, 1]; // ea
 export const DURATION = 0.8;
 
 // Hoisted outside component — prevents re-creation on every render
-const fadeInInitial = { opacity: 0, y: 32 };
-const fadeInAnimate = { opacity: 1, y: 0 };
+const fadeInInitial = { opacity: 0, y: 32, filter: "blur(8px)" };
+const fadeInAnimate = { opacity: 1, y: 0, filter: "blur(0px)" };
 const staggerContainerVariants = {
   visible: {
     transition: {
@@ -17,10 +17,11 @@ const staggerContainerVariants = {
   },
 };
 const staggerItemVariants = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 32, filter: "blur(8px)" },
   visible: {
     opacity: 1,
     y: 0,
+    filter: "blur(0px)",
     transition: { duration: DURATION, ease: EASING },
   },
 };

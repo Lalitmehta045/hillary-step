@@ -21,6 +21,9 @@ export function Navbar() {
   const [isRevealed, setIsRevealed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState("USA");
+
+  const REGIONS = ["USA", "Australia", "India"];
 
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isOverNavbarRef = useRef(false);
@@ -151,7 +154,7 @@ export function Navbar() {
         <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between px-[64px] max-md:px-[24px] max-lg:px-[40px] py-[24px]">
           <a href="#" className="shrink-0 leading-none">
             <Image
-              src="/assets/logo-hillary-step.png"
+              src="/assets/Hillary Step Solutions  logo.png"
               alt="Hillary Step Solutions Logo"
               width={63}
               height={43}
@@ -179,7 +182,7 @@ export function Navbar() {
                 className="flex items-center gap-[7px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] cursor-pointer py-[10px]"
               >
                 <GlobeIcon />
-                USA
+                {selectedRegion}
                 <ChevronIcon />
               </button>
               
@@ -188,12 +191,15 @@ export function Navbar() {
               
               {/* Dropdown Menu */}
               <div className="absolute top-[100%] right-0 mt-[4px] w-[140px] rounded-[12px] bg-white border border-[#E5E7EB] shadow-[0_8px_30px_rgb(0,0,0,0.08)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-[8px] z-50 translate-y-[-10px] group-hover:translate-y-0">
-                <button className="flex w-full items-center px-[16px] py-[10px] text-left font-display text-[14px] font-[510] text-[#111111] hover:bg-[#F8F9FB] hover:text-[#1A6CFF] transition-colors">
-                  Australia
-                </button>
-                <button className="flex w-full items-center px-[16px] py-[10px] text-left font-display text-[14px] font-[510] text-[#111111] hover:bg-[#F8F9FB] hover:text-[#1A6CFF] transition-colors">
-                  India
-                </button>
+                {REGIONS.filter(r => r !== selectedRegion).map(region => (
+                  <button 
+                    key={region}
+                    onClick={() => setSelectedRegion(region)}
+                    className="flex w-full items-center px-[16px] py-[10px] text-left font-display text-[14px] font-[510] text-[#111111] hover:bg-[#F8F9FB] hover:text-[#1A6CFF] transition-colors"
+                  >
+                    {region}
+                  </button>
+                ))}
               </div>
             </div>
             <AnimatedButton
@@ -222,7 +228,7 @@ export function Navbar() {
           <div className="mx-auto flex w-full items-center justify-between px-[24px] pt-[24px] pb-[24px]">
             <a href="#" className="shrink-0 leading-none" onClick={() => setIsMobileMenuOpen(false)}>
               <Image
-                src="/assets/logo-hillary-step.png"
+                src="/assets/Hillary Step Solutions  logo.png"
                 alt="Hillary Step Solutions Logo"
                 width={63}
                 height={43}

@@ -16,15 +16,15 @@ const parentVariants: Variants = {
 const customEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 const textVariants: Variants = {
-  hidden: { opacity: 0, y: 16, scale: 0.98 },
+  hidden: { opacity: 0, y: 24, scale: 0.96, filter: "blur(10px)" },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
+    filter: "blur(0px)",
     transition: {
-      opacity: { duration: 0.5, ease: "linear" },
-      y: { duration: 0.7, ease: customEase },
-      scale: { duration: 0.7, ease: customEase },
+      duration: 1.2,
+      ease: [0.16, 1, 0.3, 1],
     },
   },
 };
@@ -61,7 +61,6 @@ export function GradientReveal({ children, className = "" }: GradientRevealProps
       <m.span
         className={`inline-block ${className}`}
         variants={textVariants}
-        style={{ animation: "none" }} // Force remove infinite shimmer
       >
         {children}
       </m.span>

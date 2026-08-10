@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { 
@@ -32,9 +33,17 @@ export function Sidebar() {
     <>
       {/* Mobile Top Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#061a3d] flex items-center justify-between px-4 z-40 shadow-md">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <Image
+            src="/assets/Hillary Step Solutions  logo.png"
+            alt="Hillary Step Solutions Logo"
+            width={28}
+            height={20}
+            priority
+            className="object-contain brightness-0 invert"
+          />
           <h1 className="text-lg font-bold text-white tracking-wide">Hillary Step</h1>
-          <span className="text-[9px] uppercase tracking-widest text-blue-200 border border-blue-200/30 px-1.5 py-0.5 rounded">Admin</span>
+          <span className="text-[9px] uppercase tracking-widest text-blue-200 border border-blue-200/30 px-1.5 py-0.5 rounded ml-1">Admin</span>
         </div>
         <button 
           onClick={() => setIsOpen(!isOpen)}
@@ -60,8 +69,20 @@ export function Sidebar() {
       `}>
         {/* Logo Area */}
         <div className="h-[100px] flex flex-col justify-center px-8 border-b border-white/10 shrink-0 relative">
-          <h1 className="text-xl font-bold tracking-wide">Hillary Step</h1>
-          <p className="text-[10px] uppercase tracking-widest text-blue-200 mt-1">Admin Suite</p>
+          <div className="flex items-center gap-3">
+            <Image
+              src="/assets/Hillary Step Solutions  logo.png"
+              alt="Hillary Step Solutions Logo"
+              width={40}
+              height={28}
+              priority
+              className="object-contain brightness-0 invert"
+            />
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold tracking-wide">Hillary Step</h1>
+              <p className="text-[10px] uppercase tracking-widest text-blue-200 mt-0.5">Admin Suite</p>
+            </div>
+          </div>
           
           <button 
             className="lg:hidden absolute top-4 right-4 p-2 text-white/70 hover:text-white"
@@ -80,7 +101,7 @@ export function Sidebar() {
                 key={item.name}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-4 px-4 py-3 rounded-md text-sm font-medium transition-colors ${
+                className={`flex items-center gap-4 px-4 py-3 rounded-md text-sm font-normal transition-colors ${
                   isActive 
                     ? "bg-white/10 text-white" 
                     : "text-blue-100 hover:bg-white/5 hover:text-white"

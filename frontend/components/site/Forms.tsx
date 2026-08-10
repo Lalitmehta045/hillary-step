@@ -10,7 +10,7 @@ export function Forms() {
   return (
     <>
       {/* Candidacy */}
-      <section className="w-full bg-white py-[100px] max-md:py-[60px]">
+      <section className="w-full bg-white pt-[100px] pb-[40px] max-md:pt-[60px] max-md:pb-[20px]">
         <div className="mx-auto w-full max-w-[1280px] px-[32px] max-md:px-[24px]">
           <StaggerContainer>
             <StaggerItem>
@@ -91,7 +91,7 @@ export function Forms() {
 
                 <AnimatedButton
                   type="submit"
-                  className="mt-[24px] flex h-[54px] w-full items-center justify-center gap-[8px] rounded-full bg-[#111111] font-display text-[16px] font-[590] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
+                  className="mt-[24px] flex h-[54px] w-full items-center justify-center gap-[8px] rounded-full bg-[#111111] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
                 >
                   Submit Application
                   <ArrowRight />
@@ -108,7 +108,7 @@ export function Forms() {
       </section>
 
       {/* Contact */}
-      <section className="w-full bg-white py-[100px] max-md:py-[60px]">
+      <section className="w-full bg-white pt-[40px] pb-[100px] max-md:pt-[20px] max-md:pb-[60px]">
         <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[96px] max-md:gap-[48px] max-lg:gap-[64px] px-[32px] max-md:px-[24px] lg:flex-row">
           <StaggerContainer className="flex-1">
             <StaggerItem>
@@ -161,7 +161,7 @@ export function Forms() {
 
               <AnimatedButton
                 type="submit"
-                className="mt-[24px] flex h-[54px] w-fit items-center justify-center gap-[8px] rounded-full bg-[#111111] px-[32px] font-display text-[16px] font-[590] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
+                className="mt-[24px] flex h-[54px] w-fit items-center justify-center gap-[8px] rounded-full bg-[#111111] px-[32px] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
               >
                 Send Enquiry
                 <ArrowRight />

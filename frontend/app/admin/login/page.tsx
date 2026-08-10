@@ -36,10 +36,10 @@ export default function AdminLoginPage() {
       {/* Top Header Logo */}
       <Link href="/" className="mb-8 flex flex-col items-center gap-3 transition-transform duration-200 hover:scale-105">
         <Image
-          src="/assets/logo-hillary-step.png"
+          src="/assets/Hillary Step Solutions  logo.png"
           alt="Hillary Step Solutions"
-          width={120}
-          height={80}
+          width={180}
+          height={60}
           priority
           className="h-12 w-auto object-contain"
         />

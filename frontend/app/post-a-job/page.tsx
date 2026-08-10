@@ -119,7 +119,7 @@ export default function PostAJobPage() {
       {/* Fixed width 1210px container like Figma */}
       <div className="mx-auto w-full max-w-[1210px] px-[32px] max-md:px-[16px] pb-[96px]">
         {/* Title - centered */}
-        <div className="pt-[100px] max-md:pt-[70px] mb-[40px] max-md:mb-[28px] text-center">
+        <div className="pt-[100px] max-md:pt-[110px] mb-[40px] max-md:mb-[28px] text-center">
           <h1 className="font-display text-[44px] max-md:text-[28px] font-[700] leading-[52.8px] max-md:leading-[36px] tracking-[-1.1px] max-md:tracking-[-0.5px] text-[#111111]">
             <span className="bg-gradient-to-r from-[#1A6CFF] via-[#3AF900] to-[#FF9500] bg-clip-text text-transparent">Post a Job</span>{" "}
             Find the Right Talent.

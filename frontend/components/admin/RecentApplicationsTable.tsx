@@ -61,7 +61,7 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 export function RecentApplicationsTable() {
   return (
-    <div className="bg-white rounded-md border border-gray-200 p-6">
+    <div className="bg-white rounded-md border border-gray-200 p-6 hover:shadow-md transition-shadow duration-300">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-base font-bold text-[#191c1e] font-display">Recent Applications</h2>
         <Link href="/admin/applications" className="text-xs font-semibold text-blue-600 hover:underline">
@@ -83,7 +83,7 @@ export function RecentApplicationsTable() {
           </thead>
           <tbody>
             {mockApplications.map((app) => (
-              <tr key={app.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors group">
+              <tr key={app.id} className="border-b border-gray-50 hover:bg-blue-50/30 transition-colors duration-200 group">
                 <td className="py-4 pr-4">
                   <div className="flex items-center gap-3">
                     {app.avatar ? (

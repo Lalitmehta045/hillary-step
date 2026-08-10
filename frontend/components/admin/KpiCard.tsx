@@ -21,7 +21,7 @@ export function KpiCard({
   const isNegative = percentageChange < 0;
 
   return (
-    <div className="bg-white rounded-md border border-gray-200 p-6 flex flex-col justify-between h-[168px]">
+    <div className="bg-white rounded-md border border-gray-200 p-6 flex flex-col justify-between h-[168px] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 group cursor-pointer">
       <div className="flex justify-between items-start">
         <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-wider w-24">
           {title}

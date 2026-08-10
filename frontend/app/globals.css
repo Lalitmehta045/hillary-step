@@ -51,6 +51,7 @@
 @theme inline {
   --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-sans: var(--font-hanken), "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sf: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -106,56 +107,31 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Multi-stop brand gradient used on headline fragments
-   will-change:transform + translateZ(0) promotes to own GPU layer,
-   isolating paint cost to that compositing layer only. */
-.grad-text {
-  background-image: linear-gradient(90deg,
-      #1a6cff 0%,
-      #1a8fe0 22%,
-      #40f600 52%,
-      #b7d900 72%,
-      #ff9500 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% auto;
-  will-change: transform;
-  transform: translateZ(0);
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.grad-text-bg {
-  background-image: linear-gradient(90deg, #1f65ff 0%, #2b7cff 46%, #2bb0ed 56%, #38e338 76%, #d1ab06 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% auto;
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-.grad-text-bgreen {
-  background-image: linear-gradient(90deg, #1a6cff 0%, #22b46a 45%, #40f600 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% auto;
-  will-change: transform;
-  transform: translateZ(0);
-}
-
+/* Unified animated gradient using logo colors (Blue, Green, Orange) */
+.grad-text,
+.grad-text-bg,
+.grad-text-bgreen,
 .grad-text-green {
-  background-image: linear-gradient(90deg, #0fb37a 0%, #2ee02b 55%, #40f600 100%);
+  background-image: linear-gradient(
+    90deg,
+    #1a6cff 0%,
+    #40f600 33%,
+    #ff9500 66%,
+    #1a6cff 100%
+  );
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  background-size: 200% auto;
-  will-change: transform;
-  transform: translateZ(0);
+  background-size: 300% 100%;
+  will-change: background-position;
+  animation: gradient-flow 8s ease infinite;
 }
 
 /* Sweep overlay for heading animations */
