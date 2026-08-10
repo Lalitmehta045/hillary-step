@@ -313,11 +313,17 @@ export function Globe({ active = "India" }: { active?: string }) {
 
       // arcs
       const nextLabels: Label[] = [];
+      const cycle = 28; // Increased cycle to allow full animation sequence gracefully
+      
       arcs.forEach((arc, idx) => {
-        const cycle = arc.def.duration + 3.2;
-        const local = (t - arc.def.delay + cycle * 10) % cycle;
-        const prog = Math.min(1, Math.max(0, local / arc.def.duration));
-        if (prog <= 0) return;
+        const timeOffset = t - arc.def.delay;
+        const local = ((timeOffset % cycle) + cycle) % cycle;
+        
+        const headProg = local / arc.def.duration;
+        const tailProg = headProg - 0.55;
+        
+        const head = Math.min(1, Math.max(0, headProg));
+        const tail = Math.min(1, Math.max(0, tailProg));
         const lift = 0.28;
 
         const pointAt = (u: number) => {
@@ -326,34 +332,7 @@ export function Globe({ active = "India" }: { active?: string }) {
           return { x: base.x * alt, y: base.y * alt, z: base.z * alt };
         };
 
-        const head = prog;
-        const tail = Math.max(0, prog - 0.55);
-        ctx.lineWidth = Math.max(1.3, R / 420);
-        ctx.lineCap = "round";
-        const steps = 64;
-        ctx.beginPath();
-        let started = false;
-        for (let s = 0; s <= steps; s++) {
-          const u = tail + ((head - tail) * s) / steps;
-          const pr = project(pointAt(u));
-          if (pr.z < -0.35) {
-            started = false;
-            continue;
-          }
-          if (!started) {
-            ctx.moveTo(pr.x, pr.y);
-            started = true;
-          } else ctx.lineTo(pr.x, pr.y);
-        }
-        const pa = project(pointAt(tail));
-        const pb = project(pointAt(head));
-        const grad = ctx.createLinearGradient(pa.x, pa.y, pb.x, pb.y);
-        grad.addColorStop(0, `${arc.def.hue}00`);
-        grad.addColorStop(1, `${arc.def.hue}ee`);
-        ctx.strokeStyle = grad;
-        ctx.stroke();
-
-        // endpoint rings
+        // endpoint rings helper
         const ring = (v: Vec3, alpha: number) => {
           const pr = project(v);
           if (pr.z < 0 || alpha <= 0) return null;
@@ -373,16 +352,63 @@ export function Globe({ active = "India" }: { active?: string }) {
           ctx.fill();
           return pr;
         };
-        ring(arc.a, Math.min(1, prog * 6));
-        const dest = ring(arc.b, prog > 0.97 ? 1 : 0);
 
-        if (dest && prog >= 0.99) {
-          const fadeOut = Math.min(1, (cycle - local) / 0.6);
+        if (tail < 1 && head > 0) {
+          ctx.lineWidth = Math.max(1.3, R / 420);
+          ctx.lineCap = "round";
+          const steps = 64;
+          ctx.beginPath();
+          let started = false;
+          for (let s = 0; s <= steps; s++) {
+            const u = tail + ((head - tail) * s) / steps;
+            const pr = project(pointAt(u));
+            if (pr.z < -0.35) {
+              started = false;
+              continue;
+            }
+            if (!started) {
+              ctx.moveTo(pr.x, pr.y);
+              started = true;
+            } else ctx.lineTo(pr.x, pr.y);
+          }
+          const pa = project(pointAt(tail));
+          const pb = project(pointAt(head));
+          
+          const dx = pb.x - pa.x;
+          const dy = pb.y - pa.y;
+          const distSq = dx * dx + dy * dy;
+          
+          if (distSq > 0.5) {
+            const grad = ctx.createLinearGradient(pa.x, pa.y, pb.x, pb.y);
+            grad.addColorStop(0, `${arc.def.hue}00`);
+            grad.addColorStop(1, `${arc.def.hue}ee`);
+            ctx.strokeStyle = grad;
+            ctx.stroke();
+          }
+          
+          // start ring
+          const startRingAlpha = Math.min(1, headProg * 6) * (1 - tail);
+          ring(arc.a, startRingAlpha);
+        }
+
+        let destAlpha = 0;
+        const tailArrivalTime = arc.def.duration * 1.55;
+        const labelEndTime = tailArrivalTime + 1.5;
+        
+        if (headProg > 0.9) {
+          const fadeIn = Math.min(1, (headProg - 0.9) / 0.1);
+          const fadeOut = local <= labelEndTime ? Math.min(1, (labelEndTime - local) / 0.6) : 0;
+          destAlpha = Math.min(fadeIn, fadeOut);
+        }
+        
+        const dest = ring(arc.b, destAlpha);
+
+        if (dest && headProg >= 0.9) {
           nextLabels.push({
             id: idx,
             x: dest.x,
             y: dest.y,
-            o: Math.max(0, Math.min(1, fadeOut)),
+            o: Math.max(0, Math.min(1, destAlpha)),
             def: arc.def.label,
           });
         }

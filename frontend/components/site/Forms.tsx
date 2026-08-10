@@ -5,6 +5,7 @@ import { ArrowRight } from "./Hero";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { GradientReveal } from "@/components/motion/GradientReveal";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { m, useScroll, useTransform } from "framer-motion";
 
 const PRACTICES = ["Engineering", "Data & AI", "Civil & Infrastructure", "Corporate"];
 const LOCATIONS = ["USA", "Australia", "India"];
@@ -109,44 +110,57 @@ export function Forms() {
       </section>
 
       {/* Contact */}
-      <section id="contact" className="w-full bg-white pt-[40px] pb-[100px] max-md:pt-[20px] max-md:pb-[60px]">
+      <ContactSection />
+    </>
+  );
+}
+
+function ContactSection() {
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  const [isClient, setIsClient] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(true);
+
+  useEffect(() => {
+    setIsClient(true);
+    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const contentX = useTransform(scrollYProgress, (v) => (isDesktop ? 312 * (1 - v) : 0));
+  const formX = useTransform(scrollYProgress, (v) => (isDesktop ? 150 * (1 - v) : 0));
+  const formOpacity = useTransform(scrollYProgress, (v) => {
+    if (!isDesktop) return 1;
+    if (v < 0.4) return 0;
+    return (v - 0.4) / 0.6;
+  });
+
+  return (
+    <section ref={containerRef} id="contact" className="relative w-full bg-white lg:h-[200vh]">
+      <div className="pt-[40px] pb-[100px] max-md:pt-[20px] max-md:pb-[60px] lg:sticky lg:top-0 lg:flex lg:min-h-screen lg:items-center lg:py-[40px]">
         <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[96px] max-md:gap-[48px] max-lg:gap-[64px] px-[32px] max-md:px-[24px] lg:flex-row">
-          <StaggerContainer className="flex-1">
-            <StaggerItem>
-              <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
-                CONTACT
-              </p>
-            </StaggerItem>
-
-            <StaggerItem>
-              <h2 className="mt-[24px] max-w-[560px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
-                Speak with us.
-              </h2>
-            </StaggerItem>
-
+          <m.div style={{ x: contentX }} className="flex-1">
+            <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
+              CONTACT
+            </p>
+            <h2 className="mt-[24px] max-w-[560px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
+              Speak with us.
+            </h2>
             <div className="pt-[48px] max-md:pt-[32px] flex flex-col gap-[40px] max-md:gap-[32px]">
-              <StaggerItem>
-                <Address
-                  label="Global Headquarters"
-                  lines={["Four World Trade Center, 78F", "New York, NY 10007 · United States"]}
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <Address
-                  label="Pacific"
-                  lines={["1 Bligh Street, Level 32", "Sydney NSW 2000 · Australia"]}
-                />
-              </StaggerItem>
-              <StaggerItem>
-                <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
-              </StaggerItem>
-              <StaggerItem>
-                <Address label="General Enquiries" lines={["info@hillarystepsolutions.com"]} />
-              </StaggerItem>
+              <Address label="Global Headquarters" lines={["Four World Trade Center, 78F", "New York, NY 10007 · United States"]} />
+              <Address label="Pacific" lines={["1 Bligh Street, Level 32", "Sydney NSW 2000 · Australia"]} />
+              <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
+              <Address label="General Enquiries" lines={["info@hillarystepsolutions.com"]} />
             </div>
-          </StaggerContainer>
+          </m.div>
 
-          <FadeIn delay={0.2} className="w-full shrink-0 rounded-[24px] overflow-hidden bg-gradient-to-br from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1px] shadow-sm lg:w-[560px]">
+          <m.div style={{ x: formX, opacity: formOpacity }} className="w-full shrink-0 rounded-[24px] overflow-hidden bg-gradient-to-br from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1px] shadow-sm lg:w-[560px]">
             <form className="h-full w-full rounded-[23px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px]">
               <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
                 <Field label="Name" />
@@ -169,10 +183,10 @@ export function Forms() {
                 <ArrowRight />
               </AnimatedButton>
             </form>
-          </FadeIn>
+          </m.div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
 
@@ -295,7 +309,7 @@ function PhoneField() {
               <path d="M6 9l6 6 6-6" />
             </svg>
           </button>
-          
+
           {isOpen && (
             <div className="absolute left-0 top-[calc(100%+8px)] z-50 w-[140px] overflow-hidden rounded-[16px] border border-[#E5E7EB] bg-white py-[8px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] transform-gpu animate-in fade-in slide-in-from-top-2 duration-200">
               {COUNTRY_CODES.map((code) => (
@@ -316,7 +330,7 @@ function PhoneField() {
         </div>
         <input
           type="tel"
-          className="h-full flex-1 bg-transparent px-[16px] font-sans text-[16px] text-[#111111] focus:outline-hidden rounded-r-[16px]"
+          className="h-full min-w-0 flex-1 bg-transparent px-[16px] font-sans text-[16px] text-[#111111] focus:outline-hidden rounded-r-[16px]"
         />
       </div>
     </div>

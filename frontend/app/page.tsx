@@ -9,7 +9,7 @@ import { Footer } from "@/components/site/Footer";
 
 export default function Home() {
   return (
-    <main className="w-full overflow-x-hidden bg-white">
+    <main className="w-full overflow-x-clip bg-white">
       <div id="home" className="absolute top-0" />
       <Hero />
       <Pillars />

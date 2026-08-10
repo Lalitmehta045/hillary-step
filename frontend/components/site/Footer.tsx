@@ -47,11 +47,11 @@ const SOCIALS = [
 
 export function Footer() {
   return (
-    <footer className="relative w-full overflow-hidden border-t border-[#353434]/20 bg-white py-[64px] max-md:py-[40px]">
-      <FooterWave className="pointer-events-none absolute inset-0 h-full w-full" />
-
-      <div className="relative mx-auto w-full max-w-[1280px] px-[96px] max-md:px-[24px]">
-        <StaggerContainer className="grid grid-cols-2 max-md:grid-cols-1 gap-[48px] max-md:gap-[32px] md:grid-cols-4 pb-[58px] max-md:pb-[40px]">
+    <footer className="relative w-full overflow-hidden border-t border-[#353434]/20 bg-white">
+      <FooterWave className="pointer-events-none absolute inset-0 z-20 h-full w-full" />
+      
+      <div className="relative z-10 mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[96px] max-md:px-[24px] pt-[64px] max-md:pt-[40px]">
+        <StaggerContainer className="grid grid-cols-2 max-md:grid-cols-1 gap-[48px] max-md:gap-[32px] md:grid-cols-4">
           {COLUMNS.map((col) => (
             <StaggerItem key={col.title}>
               <nav className="flex flex-col gap-[8px]">
@@ -96,29 +96,33 @@ export function Footer() {
         </FadeIn>
 
         <FadeIn delay={0.3}>
-          <div className="my-[32px] h-px w-full bg-[#353434]/20" />
+          <div className="h-px w-full bg-[#353434]/20" />
         </FadeIn>
+      </div>
 
-        <FadeIn delay={0.4}>
-          <div className="relative flex flex-col items-start gap-[12px]">
-            <Image
-              src="/assets/Hillary Step Solutions  logo.png"
-              alt="Hillary Step Solutions Logo"
-              width={63}
-              height={43}
-              className="object-contain"
-            />
-            <p className="font-display text-[20px] font-[400] leading-[28px] tracking-[-0.5px] text-[#000000]">
-              Hillary Step Solutions
+      <div className="relative z-10 w-full bg-[#424549]">
+        <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[96px] max-md:px-[24px] py-[30px]">
+          <FadeIn delay={0.4}>
+            <div className="relative flex flex-col items-start gap-[12px]">
+              <Image
+                src="/hillary-gunmetal.png"
+                alt="Hillary Step Solutions Logo"
+                width={63}
+                height={43}
+                className="object-contain"
+              />
+              <p className="font-display text-[20px] font-[400] leading-[28px] tracking-[-0.5px] text-white">
+                Hillary Step Solutions
+              </p>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.5} className="flex w-full justify-center max-md:justify-start">
+            <p className="font-sans text-[10px] tracking-[2.4px] max-md:tracking-[1px] text-white/60 uppercase max-md:text-left max-md:leading-[16px]">
+              OPERATING AS PRINCIPAL AND AGENT WORLDWIDE.
             </p>
-          </div>
-        </FadeIn>
-
-        <FadeIn delay={0.5} className="flex w-full justify-center max-md:justify-start pt-[24px]">
-          <p className="font-sans text-[10px] tracking-[2.4px] max-md:tracking-[1px] text-[#111111]/60 uppercase max-md:text-left max-md:leading-[16px]">
-            OPERATING AS PRINCIPAL AND AGENT WORLDWIDE.
-          </p>
-        </FadeIn>
+          </FadeIn>
+        </div>
       </div>
     </footer>
   );
