@@ -37,7 +37,7 @@ type RegionName = keyof typeof REGIONS;
 const NAMES = Object.keys(REGIONS) as RegionName[];
 
 export function Regions() {
-  const [active, setActive] = useState<RegionName>("United States");
+  const [active, setActive] = useState<RegionName>("India");
   const region = REGIONS[active];
 
   return (
@@ -62,7 +62,7 @@ export function Regions() {
         <FadeIn delay={0.2} className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
           {/* Map card */}
           <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-b from-[#FAFBFD] to-[#F3F6FA] border border-[#EAEEF4] shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] lg:w-[691px]">
-            <Globe />
+            <Globe active={active} />
           </div>
 
           {/* Details */}

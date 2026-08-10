@@ -127,24 +127,26 @@ const ARCS: ArcDef[] = [
 
 const TILT = -0.38;
 
-function mix(a: number[], b: number[], t: number) {
-  return [
-    Math.round(a[0]! + (b[0]! - a[0]!) * t),
-    Math.round(a[1]! + (b[1]! - a[1]!) * t),
-    Math.round(a[2]! + (b[2]! - a[2]!) * t),
-  ];
-}
-
 const BLUE = [26, 108, 255];
 const GREEN = [64, 246, 0];
 const ORANGE = [255, 149, 0];
 
 type Label = { id: number; x: number; y: number; o: number; def: ArcDef["label"] };
 
-export function Globe() {
+export function Globe({ active = "India" }: { active?: string }) {
   const wrap = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [labels, setLabels] = useState<Label[]>([]);
+  // target longitude for each region
+  const targetLon = active === "United States" ? -95 : active === "Australia" ? 135 : 80;
+  const targetSpin = -targetLon * (Math.PI / 180);
+  const targetSpinRef = useRef(targetSpin);
+  const focusRef = useRef(targetSpin);
+  const lastTime = useRef(performance.now());
+
+  useEffect(() => {
+    targetSpinRef.current = -targetLon * (Math.PI / 180);
+  }, [active, targetLon]);
 
   useEffect(() => {
     const el = wrap.current;
@@ -153,7 +155,7 @@ export function Globe() {
     const ctx = cv.getContext("2d");
     if (!ctx) return;
 
-    const dots = landPoints(230000);
+    const dots = landPoints(60000);
     // per-dot drift parameters (floating petal motion)
     const n = dots.length;
     const ph0 = new Float32Array(n);
@@ -199,14 +201,29 @@ export function Globe() {
     io.observe(el);
 
     const start = performance.now();
+    lastTime.current = start;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       if (!isVisible) return;
 
-      const t = (now - start) / 1000 + 15; // Added 15 seconds offset to start on land-heavy side
-      const spin = reduce ? 0.6 : t * 0.055;
+      const dt = (now - lastTime.current) / 1000;
+      lastTime.current = now;
+      const t = (now - start) / 1000 + 15; 
+      
+      // Continuously spin the target
+      if (!reduce) {
+        targetSpinRef.current += dt * 0.055;
+      }
+
+      let diff = targetSpinRef.current - focusRef.current;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      // smoothly seek the target
+      focusRef.current += diff * 0.08;
+
+      const spin = focusRef.current;
 
       const isMobile = w < 768;
       // On mobile, scale globe to fill width (48%) and shift down (60%) so top arcs don't clip. On desktop, keep at 35% perfectly centered.
@@ -254,7 +271,7 @@ export function Globe() {
       ctx.stroke();
 
       // dots — floating / drifting like petals
-      for (let i = 0; i < dots.length; i++) {
+      for (let i = 0; i < n; i++) {
         const d = dots[i]!;
         const sp = spd[i]!;
         const a = amp[i]!;
@@ -266,15 +283,30 @@ export function Globe() {
         drifted.y = d.y * lift + a * f2;
         drifted.z = d.z * lift + a * f3;
         const p = project(drifted);
-        if (p.z < 0.06) continue;
-        const fade = Math.min(1, Math.max(0, (p.z - 0.06) / 0.3));
+        
+        const isFront = p.z >= 0.22;
+        
         // Normalize position more broadly across the globe to span 0 to 1
         const g = 0.5 + ((p.x - cx) / R) * 0.5 - ((p.y - cy) / R) * 0.5;
         const k = Math.min(1, Math.max(0, g));
-        const c = k < 0.5 ? mix(BLUE, GREEN, k / 0.5) : mix(GREEN, ORANGE, (k - 0.5) / 0.5);
+        
+        const rCol = k < 0.5 ? BLUE[0]! + (GREEN[0]! - BLUE[0]!) * (k / 0.5) : GREEN[0]! + (ORANGE[0]! - GREEN[0]!) * ((k - 0.5) / 0.5);
+        const gCol = k < 0.5 ? BLUE[1]! + (GREEN[1]! - BLUE[1]!) * (k / 0.5) : GREEN[1]! + (ORANGE[1]! - GREEN[1]!) * ((k - 0.5) / 0.5);
+        const bCol = k < 0.5 ? BLUE[2]! + (GREEN[2]! - BLUE[2]!) * (k / 0.5) : GREEN[2]! + (ORANGE[2]! - GREEN[2]!) * ((k - 0.5) / 0.5);
+        
         const twinkle = 0.78 + 0.22 * f2;
-        ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${((0.22 + 0.62 * fade) * twinkle).toFixed(3)})`;
-        const r = Math.max(0.45, 0.8 * p.s * (R / 620));
+        
+        let opacity = 0;
+        if (isFront) {
+          const fade = Math.min(1, (p.z - 0.22) / 0.2);
+          opacity = (0.22 + 0.62 * fade) * twinkle;
+        } else {
+          // Back dots are faint
+          opacity = 0.06;
+        }
+        
+        ctx.fillStyle = `rgba(${rCol | 0},${gCol | 0},${bCol | 0},${opacity.toFixed(3)})`;
+        const r = Math.max(0.45, (isFront ? 0.8 : 0.6) * p.s * (R / 620));
         ctx.fillRect(p.x - r, p.y - r, r * 2, r * 2);
       }
 

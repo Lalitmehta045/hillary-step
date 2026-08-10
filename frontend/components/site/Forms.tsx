@@ -141,7 +141,7 @@ export function Forms() {
                 <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
               </StaggerItem>
               <StaggerItem>
-                <Address label="General Enquiries" lines={["principals@hillarystep.com"]} />
+                <Address label="General Enquiries" lines={["info@hillarystepsolutions.com"]} />
               </StaggerItem>
             </div>
           </StaggerContainer>
@@ -151,6 +151,7 @@ export function Forms() {
               <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
                 <Field label="Name" />
                 <Field label="Email" type="email" />
+                <PhoneField />
                 <Field label="Organization" />
                 <Select label="Region" options={LOCATIONS} />
               </div>
@@ -279,7 +280,7 @@ function PhoneField() {
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="flex h-full items-center justify-between gap-[8px] pl-[12px] pr-[12px] font-sans text-[14px] text-[#111111] focus:outline-hidden"
+            className="flex h-full items-center justify-between gap-[8px] pl-[12px] pr-[12px] font-sans text-[14px] text-[#111111] focus:outline-hidden whitespace-nowrap"
           >
             {selected}
             <svg
