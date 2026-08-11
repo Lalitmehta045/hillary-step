@@ -5,7 +5,7 @@ import { ArrowRight } from "./Hero";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { GradientReveal } from "@/components/motion/GradientReveal";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
-import { m, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from "framer-motion";
 
 const PRACTICES = ["Engineering", "Data & AI", "Civil & Infrastructure", "Corporate"];
 const LOCATIONS = ["USA", "Australia", "India"];
@@ -133,36 +133,41 @@ function ContactSection() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const contentX = useTransform(scrollYProgress, (v) => (isDesktop ? 312 * (1 - v) : 0));
-  const formX = useTransform(scrollYProgress, (v) => (isDesktop ? 150 * (1 - v) : 0));
-  const formOpacity = useTransform(scrollYProgress, (v) => {
-    if (!isDesktop) return 1;
-    if (v < 0.4) return 0;
-    return (v - 0.4) / 0.6;
-  });
+  const scrollRange = [0.05, 0.4];
+  const textX = useTransform(scrollYProgress, scrollRange, [isDesktop ? 340 : 0, 0]);
+  const formX = useTransform(scrollYProgress, scrollRange, [isDesktop ? 150 : 0, 0]);
+  const formOpacity = useTransform(scrollYProgress, scrollRange, [isDesktop ? 0 : 1, 1]);
+  const formPointer = useTransform(formOpacity, v => v > 0.1 ? "auto" : "none");
 
   return (
     <section ref={containerRef} id="contact" className="relative w-full bg-white lg:h-[200vh]">
-      <div className="pt-[40px] pb-[100px] max-md:pt-[20px] max-md:pb-[60px] lg:sticky lg:top-0 lg:flex lg:min-h-screen lg:items-center lg:py-[40px]">
-        <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[96px] max-md:gap-[48px] max-lg:gap-[64px] px-[32px] max-md:px-[24px] lg:flex-row">
-          <m.div style={{ x: contentX }} className="flex-1">
-            <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase">
-              CONTACT
-            </p>
-            <h2 className="mt-[24px] max-w-[560px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000]">
-              Speak with us.
-            </h2>
-            <div className="pt-[48px] max-md:pt-[32px] flex flex-col gap-[40px] max-md:gap-[32px]">
-              <Address label="Global Headquarters" lines={["Four World Trade Center, 78F", "New York, NY 10007 · United States"]} />
-              <Address label="Pacific" lines={["1 Bligh Street, Level 32", "Sydney NSW 2000 · Australia"]} />
-              <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
-              <Address label="General Enquiries" lines={["info@hillarystepsolutions.com"]} />
+      <div className="pt-[40px] pb-[100px] max-md:pt-[20px] max-md:pb-[60px] lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:py-0 overflow-hidden">
+        
+        <div className="relative mx-auto flex w-full max-w-[1280px] flex-col gap-[64px] max-md:gap-[48px] px-[32px] max-md:px-[24px]">
+          
+          <div className="flex w-full flex-col">
+            
+            <m.div style={{ x: textX }} className="flex flex-col w-fit">
+              <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase text-left">
+                CONTACT
+              </p>
+              <h2 className="mt-[24px] max-w-[560px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#000000] text-left">
+                Speak with us.
+              </h2>
+            </m.div>
+            
+            <div className="pt-[48px] max-md:pt-[32px] w-full">
+              {isClient && <AddressScrub scrollYProgress={scrollYProgress} isDesktop={isDesktop} />}
             </div>
-          </m.div>
 
-          <m.div style={{ x: formX, opacity: formOpacity }} className="w-full shrink-0 rounded-[24px] overflow-hidden bg-gradient-to-br from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1px] shadow-sm lg:w-[560px]">
-            <form className="h-full w-full rounded-[23px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px]">
-              <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
+          </div>
+
+          <m.div 
+            style={{ x: formX, opacity: formOpacity, pointerEvents: formPointer as any }} 
+            className="w-full shrink-0 rounded-[24px] overflow-hidden bg-gradient-to-br from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1px] shadow-sm lg:w-[560px] lg:absolute lg:right-[32px] lg:top-0"
+          >
+            <form className="h-full w-full rounded-[23px] bg-[#F3F3F4] px-[40px] max-md:px-[24px] py-[32px]">
+              <div className="grid grid-cols-1 gap-[16px] sm:grid-cols-2">
                 <Field label="Name" />
                 <Field label="Email" type="email" />
                 <PhoneField />
@@ -170,14 +175,14 @@ function ContactSection() {
                 <Select label="Region" options={LOCATIONS} />
               </div>
 
-              <div className="mt-[24px]">
+              <div className="mt-[16px]">
                 <Label>Message</Label>
-                <textarea className="mt-[8px] w-full min-h-[170px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden" />
+                <textarea className="mt-[8px] w-full min-h-[100px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden" />
               </div>
 
               <AnimatedButton
                 type="submit"
-                className="mt-[24px] flex h-[54px] w-fit items-center justify-center gap-[8px] rounded-full bg-[#111111] px-[32px] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
+                className="mt-[24px] flex h-[50px] w-fit items-center justify-center gap-[8px] rounded-full bg-[#111111] px-[32px] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
               >
                 Send Enquiry
                 <ArrowRight />
@@ -187,6 +192,41 @@ function ContactSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+function AddressScrub({ scrollYProgress, isDesktop }: { scrollYProgress: any; isDesktop: boolean }) {
+  const scrollRange = [0.05, 0.4];
+
+  const a0_x = useTransform(scrollYProgress, scrollRange, [0, 0]);
+  const a0_y = useTransform(scrollYProgress, scrollRange, [0, 0]);
+  
+  const a1_x = useTransform(scrollYProgress, scrollRange, [isDesktop ? 328 : 0, 0]);
+  const a1_y = useTransform(scrollYProgress, scrollRange, [0, isDesktop ? 96 : 0]);
+  
+  const a2_x = useTransform(scrollYProgress, scrollRange, [isDesktop ? 656 : 0, 0]);
+  const a2_y = useTransform(scrollYProgress, scrollRange, [0, isDesktop ? 192 : 0]);
+  
+  const a3_x = useTransform(scrollYProgress, scrollRange, [isDesktop ? 984 : 0, 0]);
+  const a3_y = useTransform(scrollYProgress, scrollRange, [0, isDesktop ? 288 : 0]);
+
+  const width = useTransform(scrollYProgress, scrollRange, [isDesktop ? "296px" : "100%", isDesktop ? "560px" : "100%"]);
+
+  return (
+    <div className={`relative w-full ${isDesktop ? 'h-[360px]' : 'flex flex-col gap-[32px]'}`}>
+      <m.div style={{ x: a0_x, y: a0_y, width }} className={isDesktop ? 'absolute top-0 left-0' : ''}>
+        <Address label="Global Headquarters" lines={["Four World Trade Center, 78F", "New York, NY 10007 · United States"]} />
+      </m.div>
+      <m.div style={{ x: a1_x, y: a1_y, width }} className={isDesktop ? 'absolute top-0 left-0' : ''}>
+        <Address label="Pacific" lines={["1 Bligh Street, Level 32", "Sydney NSW 2000 · Australia"]} />
+      </m.div>
+      <m.div style={{ x: a2_x, y: a2_y, width }} className={isDesktop ? 'absolute top-0 left-0' : ''}>
+        <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
+      </m.div>
+      <m.div style={{ x: a3_x, y: a3_y, width }} className={isDesktop ? 'absolute top-0 left-0' : ''}>
+        <Address label="General Enquiries" lines={["info@hillarystepsolutions.com"]} />
+      </m.div>
+    </div>
   );
 }
 
@@ -337,9 +377,9 @@ function PhoneField() {
   );
 }
 
-function Address({ label, lines }: { label: string; lines: string[] }) {
+function Address({ label, lines, layout, transition }: { label: string; lines: string[]; layout?: boolean; transition?: any }) {
   return (
-    <div className="flex flex-col gap-[8px]">
+    <m.div layout={layout} transition={transition} className="flex flex-col gap-[8px]">
       <Label>{label}</Label>
       <div className="flex flex-col">
         {lines.map((l) => (
@@ -348,7 +388,7 @@ function Address({ label, lines }: { label: string; lines: string[] }) {
           </p>
         ))}
       </div>
-    </div>
+    </m.div>
   );
 }
 
