@@ -1,8 +1,22 @@
+"use client";
+
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { GradientReveal } from "@/components/motion/GradientReveal";
 import { PillarCard } from "@/components/ui/PillarCard";
+import { GlobalStaffingModal } from "@/components/site/GlobalStaffingModal";
+import { ITSolutionsModal } from "@/components/site/ITSolutionsModal";
+import { useState } from "react";
 
-const PILLARS = [
+type Pillar = {
+  eyebrow: string;
+  title: string;
+  image: string;
+  alt: string;
+  href?: string;
+  id?: string;
+};
+
+const PILLARS: Pillar[] = [
   {
     eyebrow: "PILLAR ONE",
     title: "IT Solutions",
@@ -14,7 +28,7 @@ const PILLARS = [
     title: "Global Staffing",
     image: "/assets/pillar-staffing.png",
     alt: "Dotted world map with connection arcs in green",
-    href: "/post-a-job",
+    id: "global-staffing",
   },
   {
     eyebrow: "PILLAR THREE",
@@ -25,6 +39,9 @@ const PILLARS = [
 ];
 
 export function Pillars() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isITModalOpen, setIsITModalOpen] = useState(false);
+
   return (
     <section className="w-full bg-white pt-[100px] pb-[40px] max-md:pt-[60px] max-md:pb-[40px]">
       <div className="mx-auto w-full max-w-[1280px] px-[64px] max-md:px-[24px]">
@@ -60,11 +77,20 @@ export function Pillars() {
                 title={p.title}
                 eyebrow={p.eyebrow}
                 href={p.href}
+                onClick={
+                  p.id === "global-staffing" 
+                    ? () => setIsModalOpen(true) 
+                    : p.title === "IT Solutions" 
+                      ? () => setIsITModalOpen(true) 
+                      : undefined
+                }
               />
             </StaggerItem>
           ))}
         </StaggerContainer>
       </div>
+      <GlobalStaffingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <ITSolutionsModal isOpen={isITModalOpen} onClose={() => setIsITModalOpen(false)} />
     </section>
   );
 }

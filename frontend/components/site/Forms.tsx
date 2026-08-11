@@ -167,7 +167,8 @@ function DesktopContact() {
   });
 
   const scrollRange = [0, 0.05, 0.4, 1];
-  const textX = useTransform(scrollYProgress, scrollRange, [340, 340, 0, 0]);
+  const itemLeft = useTransform(scrollYProgress, scrollRange, ["50%", "50%", "0%", "0%"]);
+  const itemX = useTransform(scrollYProgress, scrollRange, ["-50%", "-50%", "0%", "0%"]);
   const formX = useTransform(scrollYProgress, scrollRange, [150, 150, 0, 0]);
   const formOpacity = useTransform(scrollYProgress, scrollRange, [0, 0, 1, 1]);
   const formPointer = useTransform(formOpacity, v => v > 0.1 ? "auto" : "none");
@@ -179,22 +180,22 @@ function DesktopContact() {
         <div className="relative mx-auto flex w-full max-w-[1280px] px-[32px]">
           
           <div className="flex w-full flex-col">
-            <m.div style={{ x: textX, z: 0 }} className="flex flex-col w-fit">
-              <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase text-left">
+            <m.div style={{ left: itemLeft, x: itemX, position: "relative" }} className="flex flex-col w-fit items-center">
+              <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase text-center">
                 CONTACT
               </p>
-              <h2 className="mt-[24px] max-w-[560px] font-display text-[56px] font-[590] leading-[60px] tracking-[-1.5px] text-[#000000] text-left">
+              <h2 className="mt-[24px] max-w-[560px] font-display text-[56px] font-[590] leading-[60px] tracking-[-1.5px] text-[#000000] text-center">
                 Speak with us.
               </h2>
             </m.div>
-            
+
             <div className="pt-[40px] w-full">
               <AddressScrub scrollYProgress={scrollYProgress} />
             </div>
           </div>
 
-          <m.div 
-            style={{ x: formX, opacity: formOpacity, z: 0, pointerEvents: formPointer as any }} 
+          <m.div
+            style={{ x: formX, opacity: formOpacity, z: 0, pointerEvents: formPointer as any }}
             className="w-[560px] shrink-0 rounded-[24px] overflow-hidden bg-gradient-to-br from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1px] shadow-sm absolute right-[32px] top-0"
           >
             <ContactForm />
@@ -209,17 +210,17 @@ function MobileContact() {
   return (
     <section id="contact" className="relative w-full bg-white pt-[60px] pb-[80px]">
       <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[48px] px-[24px]">
-        
+
         <div className="flex w-full flex-col">
-          <div className="flex flex-col w-fit">
-            <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase text-left">
+          <div className="flex flex-col w-full items-center">
+            <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase text-center">
               CONTACT
             </p>
-            <h2 className="mt-[24px] font-display text-[36px] leading-[40px] font-[590] tracking-[-1px] text-[#000000] text-left">
+            <h2 className="mt-[24px] font-display text-[36px] leading-[40px] font-[590] tracking-[-1px] text-[#000000] text-center">
               Speak with us.
             </h2>
           </div>
-          
+
           <div className="pt-[40px] w-full flex flex-col gap-[32px]">
             <Address label="Global Headquarters" lines={["Four World Trade Center, 78F", "New York, NY 10007 · United States"]} />
             <Address label="Pacific" lines={["1 Bligh Street, Level 32", "Sydney NSW 2000 · Australia"]} />
@@ -241,13 +242,13 @@ function AddressScrub({ scrollYProgress }: { scrollYProgress: any }) {
 
   const a0_x = useTransform(scrollYProgress, scrollRange, [0, 0, 0, 0]);
   const a0_y = useTransform(scrollYProgress, scrollRange, [0, 0, 0, 0]);
-  
+
   const a1_x = useTransform(scrollYProgress, scrollRange, [328, 328, 0, 0]);
   const a1_y = useTransform(scrollYProgress, scrollRange, [0, 0, 96, 96]);
-  
+
   const a2_x = useTransform(scrollYProgress, scrollRange, [656, 656, 0, 0]);
   const a2_y = useTransform(scrollYProgress, scrollRange, [0, 0, 192, 192]);
-  
+
   const a3_x = useTransform(scrollYProgress, scrollRange, [984, 984, 0, 0]);
   const a3_y = useTransform(scrollYProgress, scrollRange, [0, 0, 288, 288]);
 

@@ -17,13 +17,19 @@ type ArcDef = {
 const IND_MUM = { lat: 19.07, lon: 72.87 };
 const IND_DEL = { lat: 28.61, lon: 77.20 };
 const IND_BLR = { lat: 12.97, lon: 77.59 };
+const IND_HYD = { lat: 17.38, lon: 78.48 };
+const IND_MAA = { lat: 13.08, lon: 80.27 };
 
-const USA_DC = { lat: 38.90, lon: -77.03 };
+const USA_LA = { lat: 34.05, lon: -118.24 };
+const USA_SJ = { lat: 37.33, lon: -121.88 };
 const USA_NY = { lat: 40.71, lon: -74.00 };
-const USA_SF = { lat: 37.77, lon: -122.41 };
+const USA_DAL = { lat: 32.77, lon: -96.79 };
+const USA_BOS = { lat: 42.36, lon: -71.05 };
+const USA_CHI = { lat: 41.87, lon: -87.62 };
 
 const AUS_SYD = { lat: -33.86, lon: 151.2 };
 const AUS_MEL = { lat: -37.81, lon: 144.96 };
+const AUS_BNE = { lat: -27.47, lon: 153.03 };
 const AUS_PER = { lat: -31.95, lon: 115.86 };
 
 const ARCS: ArcDef[] = [
@@ -32,14 +38,14 @@ const ARCS: ArcDef[] = [
     to: USA_NY,
     hue: "#ff3d9e",
     delay: 0,
-    duration: 5.2,
+    duration: 5.5,
     label: { city: "New York", country: "USA", tint: "#7c6cf6", glyph: "◈" },
   },
   {
     from: USA_NY,
     to: AUS_SYD,
     hue: "#6f5bf5",
-    delay: 1.2,
+    delay: 1.8,
     duration: 6.8,
     label: { city: "Sydney", country: "Australia", tint: "#3fa0ff", glyph: "●" },
   },
@@ -47,23 +53,23 @@ const ARCS: ArcDef[] = [
     from: AUS_SYD,
     to: IND_DEL,
     hue: "#ff8a3d",
-    delay: 2.5,
+    delay: 3.6,
     duration: 5.6,
-    label: { city: "New Delhi", country: "India", tint: "#f0b429", glyph: "◐" },
+    label: { city: "Delhi NCR", country: "India", tint: "#f0b429", glyph: "◐" },
   },
   {
     from: IND_DEL,
-    to: USA_SF,
+    to: USA_LA,
     hue: "#e0399f",
-    delay: 3.8,
+    delay: 5.4,
     duration: 6.0,
-    label: { city: "San Francisco", country: "USA", tint: "#ff3d9e", glyph: "▲" },
+    label: { city: "Los Angeles", country: "USA", tint: "#ff3d9e", glyph: "▲" },
   },
   {
-    from: USA_SF,
+    from: USA_LA,
     to: AUS_MEL,
     hue: "#5b8def",
-    delay: 5.1,
+    delay: 7.2,
     duration: 6.5,
     label: { city: "Melbourne", country: "Australia", tint: "#ff7a59", glyph: "◆" },
   },
@@ -71,57 +77,81 @@ const ARCS: ArcDef[] = [
     from: AUS_MEL,
     to: IND_BLR,
     hue: "#8b5cf6",
-    delay: 6.4,
+    delay: 9.0,
     duration: 5.4,
     label: { city: "Bengaluru", country: "India", tint: "#22b07d", glyph: "◼" },
   },
   {
     from: IND_BLR,
-    to: USA_DC,
+    to: USA_SJ,
     hue: "#ff3d9e",
-    delay: 7.7,
+    delay: 10.8,
     duration: 5.8,
-    label: { city: "Washington", country: "USA", tint: "#e0399f", glyph: "◈" },
+    label: { city: "San Jose", country: "USA", tint: "#e0399f", glyph: "◈" },
   },
   {
-    from: USA_DC,
-    to: AUS_PER,
+    from: USA_SJ,
+    to: AUS_BNE,
     hue: "#6f5bf5",
-    delay: 9.0,
+    delay: 12.6,
     duration: 7.2,
-    label: { city: "Perth", country: "Australia", tint: "#ff8a3d", glyph: "●" },
+    label: { city: "Brisbane", country: "Australia", tint: "#ff8a3d", glyph: "●" },
+  },
+  {
+    from: AUS_BNE,
+    to: IND_HYD,
+    hue: "#ff8a3d",
+    delay: 14.4,
+    duration: 5.6,
+    label: { city: "Hyderabad", country: "India", tint: "#7c6cf6", glyph: "▲" },
+  },
+  {
+    from: IND_HYD,
+    to: USA_DAL,
+    hue: "#e0399f",
+    delay: 16.2,
+    duration: 5.8,
+    label: { city: "Dallas", country: "USA", tint: "#3fa0ff", glyph: "◐" },
+  },
+  {
+    from: USA_DAL,
+    to: AUS_PER,
+    hue: "#5b8def",
+    delay: 18.0,
+    duration: 6.2,
+    label: { city: "Perth", country: "Australia", tint: "#ff7a59", glyph: "◆" },
   },
   {
     from: AUS_PER,
+    to: IND_MAA,
+    hue: "#8b5cf6",
+    delay: 19.8,
+    duration: 6.5,
+    label: { city: "Chennai", country: "India", tint: "#0f4bd8", glyph: "◼" },
+  },
+  {
+    from: IND_MAA,
+    to: USA_CHI,
+    hue: "#ff3d9e",
+    delay: 21.6,
+    duration: 5.8,
+    label: { city: "Chicago", country: "USA", tint: "#7c6cf6", glyph: "◈" },
+  },
+  {
+    from: USA_CHI,
+    to: USA_BOS,
+    hue: "#6f5bf5",
+    delay: 23.4,
+    duration: 3.5,
+    label: { city: "Boston", country: "USA", tint: "#3fa0ff", glyph: "●" },
+  },
+  {
+    from: USA_BOS,
     to: IND_MUM,
     hue: "#ff8a3d",
-    delay: 10.3,
+    delay: 25.2,
     duration: 5.6,
-    label: { city: "Mumbai", country: "India", tint: "#7c6cf6", glyph: "▲" },
-  },
-  {
-    from: IND_MUM,
-    to: AUS_MEL,
-    hue: "#e0399f",
-    delay: 11.6,
-    duration: 5.8,
-    label: { city: "Melbourne", country: "Australia", tint: "#3fa0ff", glyph: "◐" },
-  },
-  {
-    from: USA_SF,
-    to: IND_BLR,
-    hue: "#5b8def",
-    delay: 12.9,
-    duration: 6.2,
-    label: { city: "Bengaluru", country: "India", tint: "#ff7a59", glyph: "◆" },
-  },
-  {
-    from: AUS_SYD,
-    to: USA_DC,
-    hue: "#8b5cf6",
-    delay: 14.2,
-    duration: 6.5,
-    label: { city: "Washington", country: "USA", tint: "#0f4bd8", glyph: "◼" },
+    label: { city: "Mumbai", country: "India", tint: "#f0b429", glyph: "◐" },
   },
 ];
 

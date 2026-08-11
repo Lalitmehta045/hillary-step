@@ -19,9 +19,10 @@ interface PillarCardProps {
   eyebrow: string;
   title: string;
   href?: string;
+  onClick?: () => void;
 }
 
-export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title, href }: PillarCardProps) {
+export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title, href, onClick }: PillarCardProps) {
   const content = (
     <m.article
       whileHover={hoverVariants.cardLift}
@@ -64,6 +65,14 @@ export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title,
       <Link href={href} className="block outline-none focus-visible:ring-2 focus-visible:ring-[#1A6CFF] rounded-[32px]">
         {content}
       </Link>
+    );
+  }
+
+  if (onClick) {
+    return (
+      <button onClick={onClick} className="block w-full text-left outline-none focus-visible:ring-2 focus-visible:ring-[#1A6CFF] rounded-[32px]">
+        {content}
+      </button>
     );
   }
 
