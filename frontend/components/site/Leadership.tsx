@@ -5,31 +5,24 @@ import Image from "next/image";
 const LEADERS = [
   {
     image: "/assets/leader-1.png",
-    role: "Group Managing Principal",
-    name: "K. Kundra",
+    role: "Founder, MD & CEO",
+    name: "Kunal Priyadarshi",
     quote: '"Infrastructure is a promise a nation makes to itself."',
-    alt: "Portrait of K. Kundra, group managing principal",
+    alt: "Portrait of Kunal Priyadarshi, Founder, MD & CEO",
   },
   {
     image: "/assets/leader-2.png",
-    role: "Regional Principal · Pacific",
-    name: "D. Kotari",
+    role: "Director (IND) & CFO",
+    name: "Kantesh Prasad Singh",
     quote: '"Precision at scale is the only scale worth pursuing."',
-    alt: "Portrait of D. Kotari, regional principal for the Pacific",
+    alt: "Portrait of Kantesh Prasad Singh, Director (IND) & CFO",
   },
   {
     image: "/assets/leader-3.png",
-    role: "Regional Principal · South Asia",
-    name: "R. Iyer",
+    role: "Director (AUS) & COO",
+    name: "Mrinal Priyadarshi",
     quote: '"Public systems become invisible when they are built well."',
-    alt: "Portrait of R. Iyer, regional principal for South Asia",
-  },
-  {
-    image: "/assets/leader-4.png",
-    role: "Chief Scientist, Innovation Lab",
-    name: "M. Halberg",
-    quote: '"Research is our compounding advantage."',
-    alt: "Portrait of M. Halberg, chief scientist of the innovation lab",
+    alt: "Portrait of Mrinal Priyadarshi, Director (AUS) & COO",
   },
 ];
 
@@ -52,7 +45,7 @@ export function Leadership() {
           </StaggerItem>
         </StaggerContainer>
 
-        <StaggerContainer className="mt-[64px] max-md:mt-[40px] grid grid-cols-1 gap-[32px] md:grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-1">
+        <StaggerContainer className="mt-[64px] max-md:mt-[40px] grid grid-cols-1 gap-[32px] md:grid-cols-3 max-md:grid-cols-1">
           {LEADERS.map((l) => (
             <StaggerItem key={l.name}>
               <article className="flex flex-col pb-[18px] group">
@@ -61,7 +54,7 @@ export function Leadership() {
                     src={l.image}
                     alt={l.alt}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 33vw"
                     className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
                   />
                 </div>
@@ -69,9 +62,11 @@ export function Leadership() {
                   {l.role}
                 </p>
                 <h3 className="mt-[8px] font-display text-[20px] font-[700] text-[#111111]">{l.name}</h3>
-                <p className="mt-[8px] font-sans text-[15px] italic leading-[24.38px] text-[#1A1A1A]">
-                  {l.quote}
-                </p>
+                {l.quote && (
+                  <p className="mt-[8px] font-sans text-[15px] italic leading-[24.38px] text-[#1A1A1A]">
+                    {l.quote}
+                  </p>
+                )}
               </article>
             </StaggerItem>
           ))}

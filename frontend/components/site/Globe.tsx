@@ -39,7 +39,7 @@ const ARCS: ArcDef[] = [
     hue: "#ff3d9e",
     delay: 0,
     duration: 5.5,
-    label: { city: "New York", country: "USA", tint: "#7c6cf6", glyph: "◈" },
+    label: { city: "New York", country: "NY", tint: "#7c6cf6", glyph: "◈" },
   },
   {
     from: USA_NY,
@@ -47,7 +47,7 @@ const ARCS: ArcDef[] = [
     hue: "#6f5bf5",
     delay: 1.8,
     duration: 6.8,
-    label: { city: "Sydney", country: "Australia", tint: "#3fa0ff", glyph: "●" },
+    label: { city: "Sydney", country: "NSW", tint: "#3fa0ff", glyph: "●" },
   },
   {
     from: AUS_SYD,
@@ -55,7 +55,7 @@ const ARCS: ArcDef[] = [
     hue: "#ff8a3d",
     delay: 3.6,
     duration: 5.6,
-    label: { city: "Delhi NCR", country: "India", tint: "#f0b429", glyph: "◐" },
+    label: { city: "Delhi NCR", country: "", tint: "#f0b429", glyph: "◐" },
   },
   {
     from: IND_DEL,
@@ -63,7 +63,7 @@ const ARCS: ArcDef[] = [
     hue: "#e0399f",
     delay: 5.4,
     duration: 6.0,
-    label: { city: "Los Angeles", country: "USA", tint: "#ff3d9e", glyph: "▲" },
+    label: { city: "Los Angeles", country: "CA", tint: "#ff3d9e", glyph: "▲" },
   },
   {
     from: USA_LA,
@@ -71,7 +71,7 @@ const ARCS: ArcDef[] = [
     hue: "#5b8def",
     delay: 7.2,
     duration: 6.5,
-    label: { city: "Melbourne", country: "Australia", tint: "#ff7a59", glyph: "◆" },
+    label: { city: "Melbourne", country: "VIC", tint: "#ff7a59", glyph: "◆" },
   },
   {
     from: AUS_MEL,
@@ -79,7 +79,7 @@ const ARCS: ArcDef[] = [
     hue: "#8b5cf6",
     delay: 9.0,
     duration: 5.4,
-    label: { city: "Bengaluru", country: "India", tint: "#22b07d", glyph: "◼" },
+    label: { city: "Bengaluru", country: "KA", tint: "#22b07d", glyph: "◼" },
   },
   {
     from: IND_BLR,
@@ -87,7 +87,7 @@ const ARCS: ArcDef[] = [
     hue: "#ff3d9e",
     delay: 10.8,
     duration: 5.8,
-    label: { city: "San Jose", country: "USA", tint: "#e0399f", glyph: "◈" },
+    label: { city: "San Jose", country: "CA", tint: "#e0399f", glyph: "◈" },
   },
   {
     from: USA_SJ,
@@ -95,7 +95,7 @@ const ARCS: ArcDef[] = [
     hue: "#6f5bf5",
     delay: 12.6,
     duration: 7.2,
-    label: { city: "Brisbane", country: "Australia", tint: "#ff8a3d", glyph: "●" },
+    label: { city: "Brisbane", country: "QLD", tint: "#ff8a3d", glyph: "●" },
   },
   {
     from: AUS_BNE,
@@ -103,7 +103,7 @@ const ARCS: ArcDef[] = [
     hue: "#ff8a3d",
     delay: 14.4,
     duration: 5.6,
-    label: { city: "Hyderabad", country: "India", tint: "#7c6cf6", glyph: "▲" },
+    label: { city: "Hydrabad", country: "TN", tint: "#7c6cf6", glyph: "▲" },
   },
   {
     from: IND_HYD,
@@ -111,7 +111,7 @@ const ARCS: ArcDef[] = [
     hue: "#e0399f",
     delay: 16.2,
     duration: 5.8,
-    label: { city: "Dallas", country: "USA", tint: "#3fa0ff", glyph: "◐" },
+    label: { city: "Dallas", country: "TX", tint: "#3fa0ff", glyph: "◐" },
   },
   {
     from: USA_DAL,
@@ -119,7 +119,7 @@ const ARCS: ArcDef[] = [
     hue: "#5b8def",
     delay: 18.0,
     duration: 6.2,
-    label: { city: "Perth", country: "Australia", tint: "#ff7a59", glyph: "◆" },
+    label: { city: "Perth", country: "WA", tint: "#ff7a59", glyph: "◆" },
   },
   {
     from: AUS_PER,
@@ -127,7 +127,7 @@ const ARCS: ArcDef[] = [
     hue: "#8b5cf6",
     delay: 19.8,
     duration: 6.5,
-    label: { city: "Chennai", country: "India", tint: "#0f4bd8", glyph: "◼" },
+    label: { city: "Chennai", country: "TN", tint: "#0f4bd8", glyph: "◼" },
   },
   {
     from: IND_MAA,
@@ -135,7 +135,7 @@ const ARCS: ArcDef[] = [
     hue: "#ff3d9e",
     delay: 21.6,
     duration: 5.8,
-    label: { city: "Chicago", country: "USA", tint: "#7c6cf6", glyph: "◈" },
+    label: { city: "Chicago", country: "IL", tint: "#7c6cf6", glyph: "◈" },
   },
   {
     from: USA_CHI,
@@ -143,7 +143,7 @@ const ARCS: ArcDef[] = [
     hue: "#6f5bf5",
     delay: 23.4,
     duration: 3.5,
-    label: { city: "Boston", country: "USA", tint: "#3fa0ff", glyph: "●" },
+    label: { city: "Boston", country: "MA", tint: "#3fa0ff", glyph: "●" },
   },
   {
     from: USA_BOS,
@@ -151,7 +151,7 @@ const ARCS: ArcDef[] = [
     hue: "#ff8a3d",
     delay: 25.2,
     duration: 5.6,
-    label: { city: "Mumbai", country: "India", tint: "#f0b429", glyph: "◐" },
+    label: { city: "Mumbai", country: "MH", tint: "#f0b429", glyph: "◐" },
   },
 ];
 
@@ -240,8 +240,8 @@ export function Globe({ active = "India" }: { active?: string }) {
 
       const dt = (now - lastTime.current) / 1000;
       lastTime.current = now;
-      const t = (now - start) / 1000 + 15; 
-      
+      const t = (now - start) / 1000 + 15;
+
       // Continuously spin the target
       if (!reduce) {
         targetSpinRef.current += dt * 0.055;
@@ -313,19 +313,19 @@ export function Globe({ active = "India" }: { active?: string }) {
         drifted.y = d.y * lift + a * f2;
         drifted.z = d.z * lift + a * f3;
         const p = project(drifted);
-        
+
         const isFront = p.z >= 0.22;
-        
+
         // Normalize position more broadly across the globe to span 0 to 1
         const g = 0.5 + ((p.x - cx) / R) * 0.5 - ((p.y - cy) / R) * 0.5;
         const k = Math.min(1, Math.max(0, g));
-        
+
         const rCol = k < 0.5 ? BLUE[0]! + (GREEN[0]! - BLUE[0]!) * (k / 0.5) : GREEN[0]! + (ORANGE[0]! - GREEN[0]!) * ((k - 0.5) / 0.5);
         const gCol = k < 0.5 ? BLUE[1]! + (GREEN[1]! - BLUE[1]!) * (k / 0.5) : GREEN[1]! + (ORANGE[1]! - GREEN[1]!) * ((k - 0.5) / 0.5);
         const bCol = k < 0.5 ? BLUE[2]! + (GREEN[2]! - BLUE[2]!) * (k / 0.5) : GREEN[2]! + (ORANGE[2]! - GREEN[2]!) * ((k - 0.5) / 0.5);
-        
+
         const twinkle = 0.78 + 0.22 * f2;
-        
+
         let opacity = 0;
         if (isFront) {
           const fade = Math.min(1, (p.z - 0.22) / 0.2);
@@ -334,7 +334,7 @@ export function Globe({ active = "India" }: { active?: string }) {
           // Back dots are faint
           opacity = 0.06;
         }
-        
+
         ctx.fillStyle = `rgba(${rCol | 0},${gCol | 0},${bCol | 0},${opacity.toFixed(3)})`;
         const r = Math.max(0.45, (isFront ? 0.8 : 0.6) * p.s * (R / 620));
         ctx.fillRect(p.x - r, p.y - r, r * 2, r * 2);
@@ -344,14 +344,14 @@ export function Globe({ active = "India" }: { active?: string }) {
       // arcs
       const nextLabels: Label[] = [];
       const cycle = 28; // Increased cycle to allow full animation sequence gracefully
-      
+
       arcs.forEach((arc, idx) => {
         const timeOffset = t - arc.def.delay;
         const local = ((timeOffset % cycle) + cycle) % cycle;
-        
+
         const headProg = local / arc.def.duration;
         const tailProg = headProg - 0.55;
-        
+
         const head = Math.min(1, Math.max(0, headProg));
         const tail = Math.min(1, Math.max(0, tailProg));
         const lift = 0.28;
@@ -403,11 +403,11 @@ export function Globe({ active = "India" }: { active?: string }) {
           }
           const pa = project(pointAt(tail));
           const pb = project(pointAt(head));
-          
+
           const dx = pb.x - pa.x;
           const dy = pb.y - pa.y;
           const distSq = dx * dx + dy * dy;
-          
+
           if (distSq > 0.5) {
             const grad = ctx.createLinearGradient(pa.x, pa.y, pb.x, pb.y);
             grad.addColorStop(0, `${arc.def.hue}00`);
@@ -415,7 +415,7 @@ export function Globe({ active = "India" }: { active?: string }) {
             ctx.strokeStyle = grad;
             ctx.stroke();
           }
-          
+
           // start ring
           const startRingAlpha = Math.min(1, headProg * 6) * (1 - tail);
           ring(arc.a, startRingAlpha);
@@ -424,13 +424,13 @@ export function Globe({ active = "India" }: { active?: string }) {
         let destAlpha = 0;
         const tailArrivalTime = arc.def.duration * 1.55;
         const labelEndTime = tailArrivalTime + 1.5;
-        
+
         if (headProg > 0.9) {
           const fadeIn = Math.min(1, (headProg - 0.9) / 0.1);
           const fadeOut = local <= labelEndTime ? Math.min(1, (labelEndTime - local) / 0.6) : 0;
           destAlpha = Math.min(fadeIn, fadeOut);
         }
-        
+
         const dest = ring(arc.b, destAlpha);
 
         if (dest && headProg >= 0.9) {
@@ -498,8 +498,12 @@ export function Globe({ active = "India" }: { active?: string }) {
             >
               {l.def.glyph}
             </span>
-            <span className="text-[13px] font-semibold text-foreground">{l.def.city},</span>
-            <span className="text-[13px] text-muted-foreground">{l.def.country}</span>
+            <span className="text-[13px] font-semibold text-foreground">
+              {l.def.city}{l.def.country ? "," : ""}
+            </span>
+            {l.def.country && (
+              <span className="text-[13px] text-muted-foreground">{l.def.country}</span>
+            )}
           </div>
         ))}
       </div>

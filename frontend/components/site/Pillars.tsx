@@ -5,6 +5,7 @@ import { GradientReveal } from "@/components/motion/GradientReveal";
 import { PillarCard } from "@/components/ui/PillarCard";
 import { GlobalStaffingModal } from "@/components/site/GlobalStaffingModal";
 import { ITSolutionsModal } from "@/components/site/ITSolutionsModal";
+import { CivilInfraModal } from "@/components/site/CivilInfraModal";
 import { useState } from "react";
 
 type Pillar = {
@@ -41,6 +42,7 @@ const PILLARS: Pillar[] = [
 export function Pillars() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isITModalOpen, setIsITModalOpen] = useState(false);
+  const [isCivilModalOpen, setIsCivilModalOpen] = useState(false);
 
   return (
     <section className="w-full bg-white pt-[100px] pb-[40px] max-md:pt-[60px] max-md:pb-[40px]">
@@ -82,7 +84,9 @@ export function Pillars() {
                     ? () => setIsModalOpen(true) 
                     : p.title === "IT Solutions" 
                       ? () => setIsITModalOpen(true) 
-                      : undefined
+                      : p.title === "Civil & Infrastructure"
+                        ? () => setIsCivilModalOpen(true)
+                        : undefined
                 }
               />
             </StaggerItem>
@@ -91,6 +95,7 @@ export function Pillars() {
       </div>
       <GlobalStaffingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <ITSolutionsModal isOpen={isITModalOpen} onClose={() => setIsITModalOpen(false)} />
+      <CivilInfraModal isOpen={isCivilModalOpen} onClose={() => setIsCivilModalOpen(false)} />
     </section>
   );
 }

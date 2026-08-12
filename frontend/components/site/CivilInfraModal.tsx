@@ -2,14 +2,14 @@
 
 import { useEffect, useRef } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { ITSolutionsContent } from "./ITSolutionsContent";
+import { CivilInfraContent } from "./CivilInfraContent";
 
-interface ITSolutionsModalProps {
+interface CivilInfraModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function ITSolutionsModal({ isOpen, onClose }: ITSolutionsModalProps) {
+export function CivilInfraModal({ isOpen, onClose }: CivilInfraModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export function ITSolutionsModal({ isOpen, onClose }: ITSolutionsModalProps) {
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-[#001405]/40 backdrop-blur-[10px]"
+            className="absolute inset-0 bg-[#1C0D00]/40 backdrop-blur-[10px]"
             onClick={onClose}
           />
 
@@ -68,7 +68,7 @@ export function ITSolutionsModal({ isOpen, onClose }: ITSolutionsModalProps) {
             </div>
 
             {/* Content */}
-            <ITSolutionsContent />
+            <CivilInfraContent />
           </m.div>
         </m.div>
       )}

@@ -55,16 +55,18 @@ export function GlobalStaffingModal({ isOpen, onClose }: GlobalStaffingModalProp
             className="relative flex flex-col w-full max-w-[1140px] max-md:max-w-[calc(100vw-24px)] h-full max-h-[calc(100vh-24px)] overflow-y-auto overflow-x-hidden bg-white rounded-t-[16px] rounded-b-none shadow-2xl z-10 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute top-[32px] right-[32px] w-[32px] h-[32px] flex items-center justify-center rounded-[8px] bg-[#E8F8EA] text-[#3AF900] transition-colors hover:bg-[#D4F4D8] z-20"
-              aria-label="Close modal"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
+            {/* Sticky Close Button Header */}
+            <div className="sticky top-0 z-50 w-full flex justify-end pointer-events-none p-[24px] pb-0 -mb-[56px]">
+              <button
+                onClick={onClose}
+                className="pointer-events-auto w-[36px] h-[36px] flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-md border border-gray-200/80 text-gray-700 transition-all hover:bg-white hover:scale-110"
+                aria-label="Close modal"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
             {/* Content */}
             <GlobalStaffingContent isModal={true} />

@@ -5,28 +5,29 @@ import { RegionsGradientAnimation } from "@/components/site/RegionsGradientAnima
 import { WorldMapCanvas } from "@/components/site/WorldMapCanvas";
 import { Globe } from "@/components/site/Globe";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
+import { GradientReveal } from "@/components/motion/GradientReveal";
 
 const REGIONS = {
   "United States": {
     marker: { left: "30%", top: "47%" },
-    offices: "New York · San Francisco · Houston",
-    principal: "A. Whitmore, Managing Principal",
+    offices: "Los Angeles · San Jose · New York · Dallas · Boston · Chicago",
+    principal: "Kunal Priyadarshi, Founder, MD & CEO",
     capabilities: "Civil EPC · AI · Executive Search",
     registrations: "SEC · GSA · SAM Registered",
     projects: "JFK T-9 Modernization · DoE Grid AI",
   },
   Australia: {
     marker: { left: "77%", top: "74%" },
-    offices: "Sydney · Melbourne · Perth",
-    principal: "D. Kotari, Regional Principal",
+    offices: "Sydney · Melbourne · Brisbane · Perth",
+    principal: "Mrinal Priyadarshi, Director (AUS) & COO",
     capabilities: "Smart Terminals · Rail · Workforce",
     registrations: "ASIC · AusTender Registered",
     projects: "Sydney Smart Terminal · NSW Grid",
   },
   India: {
     marker: { left: "65%", top: "54%" },
-    offices: "Mumbai · Bengaluru · Delhi NCR",
-    principal: "R. Iyer, Regional Principal",
+    offices: "Delhi NCR · Bengaluru · Mumbai · Hydrabad · Chennai",
+    principal: "Kantesh Prasad Singh, Director (IND) & CFO",
     capabilities: "Digital Public Infrastructure · EPC",
     registrations: "MCA · GeM Registered",
     projects: "DPI Mandate · Metro Line Expansion",
@@ -54,14 +55,14 @@ export function Regions() {
 
           <StaggerItem>
             <h2 className="mt-[24px] max-w-[672px] font-display text-[60px] max-md:text-[36px] max-md:leading-[40px] max-lg:text-[48px] max-lg:leading-[48px] font-[590] leading-[60px] tracking-[-1.5px] max-md:tracking-[-1px] text-[#171717]">
-              Three regions. One operating standard.
+              <GradientReveal className="grad-text">Three regions</GradientReveal>. One operating standard.
             </h2>
           </StaggerItem>
         </StaggerContainer>
 
         <FadeIn delay={0.2} className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
           {/* Map card */}
-          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-b from-[#FAFBFD] to-[#F3F6FA] border border-[#EAEEF4] shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] lg:w-[691px]">
+          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-white border border-[#EAEEF4] shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] lg:w-[691px]">
             <Globe active={active} />
           </div>
 
@@ -75,9 +76,8 @@ export function Regions() {
                     key={name}
                     type="button"
                     onClick={() => setActive(name)}
-                    className={`flex h-[40px] items-center rounded-full px-[20px] font-sans text-[14px] leading-[20px] tracking-[0px] font-[500] transition-all duration-250 hover:-translate-y-[2px] ${
-                      isActive ? "bg-[#007BFF] text-white shadow-md hover:shadow-lg" : "bg-white text-[#171717] shadow-sm hover:shadow-md"
-                    }`}
+                    className={`flex h-[40px] items-center rounded-full px-[20px] font-sans text-[14px] leading-[20px] tracking-[0px] font-[500] transition-all duration-250 hover:-translate-y-[2px] ${isActive ? "bg-[#007BFF] text-white shadow-md hover:shadow-lg" : "bg-white text-[#171717] shadow-sm hover:shadow-md"
+                      }`}
                   >
                     {name}
                   </button>

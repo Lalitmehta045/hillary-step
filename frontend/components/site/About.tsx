@@ -1,3 +1,6 @@
+"use client";
+
+import { m } from "framer-motion";
 import { ArrowRight } from "./Hero";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { MountainAnimation } from "@/components/motion/MountainAnimation";
@@ -6,11 +9,11 @@ import { GradientReveal } from "@/components/motion/GradientReveal";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
 const TIMELINE = [
-  { year: "XXXX", text: "Founded as a civil consulting practice in India." },
-  { year: "XXXX", text: "First international EPC delivered — smart terminal, Sydney." },
-  { year: "XXXX", text: "AI Research work . First patent filed." },
-  { year: "XXXX", text: "Digital Public Infrastructure mandate with Government of India." },
-  { year: "XXXX", text: "Global workforce exceeds 10,000 professionals.", last: true },
+  { year: "2015", title: "Genesis & Strategic Vision", text: "A decade of corporate experience led to an independent research journey and the founding vision of HSS." },
+  { year: "2015–2019", title: "Infrastructure & Operations", text: "Built expertise through government tenders, civil infrastructure, staffing, vendor management and cross-border operations." },
+  { year: "21 FEB 2020", title: "Incorporation & Governance", text: "HSS was formally incorporated under the Companies Act, 2013, establishing a transparent and structured corporate foundation." },
+  { year: "2021–2024", title: "Technology & Global Systems", text: "Expanded into telecom, secure cloud networks and cross-border compliance across India, Australia and the USA." },
+  { year: "2024–PRESENT", title: "AI & Global Expansion", text: "Advanced AI-driven resource systems and global staffing architecture, culminating in HSS's expansion across Australia and the USA.", last: true },
 ];
 
 export function About() {
@@ -78,28 +81,61 @@ export function About() {
             </p>
           </FadeIn>
 
-          <StaggerContainer className="relative mt-[92px] max-md:mt-[40px] grid grid-cols-2 max-md:grid-cols-1 max-md:gap-y-[40px] gap-x-[6px] md:grid-cols-5">
-            <div className="absolute left-0 right-0 top-[8px] h-px -translate-y-1/2 bg-[#2A2A2A] max-md:hidden pointer-events-none" />
+          <m.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="relative mt-[92px] max-md:mt-[40px] grid grid-cols-2 max-md:grid-cols-1 max-md:gap-y-[40px] gap-x-[6px] md:grid-cols-5"
+          >
+            <m.div
+              variants={{
+                hidden: { scaleX: 0 },
+                visible: { scaleX: 1, transition: { duration: 2.5, ease: "linear" } }
+              }}
+              className="absolute left-0 right-0 top-[8px] h-px -translate-y-1/2 bg-[#2A2A2A] max-md:hidden pointer-events-none origin-left"
+            />
             {TIMELINE.map((item, i) => (
-              <StaggerItem key={i}>
+              <div key={i}>
                 <div className="relative pr-[40px] max-md:pr-0">
                   <div className="relative flex h-[16px] items-center">
                     {item.last ? (
-                      <span className="relative z-10 h-[9px] w-[9px] bg-white" />
+                      <m.span
+                        variants={{
+                          hidden: { scale: 0 },
+                          visible: { scale: 1, transition: { delay: i * 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+                        }}
+                        className="relative z-10 h-[9px] w-[9px] bg-white"
+                      />
                     ) : (
-                      <span className="relative z-10 h-[14px] w-[14px] rounded-full bg-brand-green shadow-[0_0_14px_4px_rgba(64,246,0,0.45)]" />
+                      <m.span
+                        variants={{
+                          hidden: { scale: 0 },
+                          visible: { scale: 1, transition: { delay: i * 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+                        }}
+                        className="relative z-10 h-[14px] w-[14px] rounded-full bg-brand-green shadow-[0_0_14px_4px_rgba(64,246,0,0.45)]"
+                      />
                     )}
                   </div>
-                  <h3 className="mt-[42px] max-md:mt-[16px] font-display text-[23px] max-md:text-[20px] font-bold tracking-[0.01em] text-white">
-                    {item.year}
-                  </h3>
-                  <p className={`mt-[16px] max-md:mt-[8px] max-w-[250px] max-md:max-w-full font-sans text-[17px] max-md:text-[15px] leading-[1.62] ${i === 0 ? "text-brand-green" : "text-white/55"}`}>
-                    {item.text}
-                  </p>
+                  <m.div
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0, transition: { delay: i * 0.5 + 0.15, duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+                    }}
+                  >
+                    <h3 className="mt-[42px] max-md:mt-[16px] font-display text-[23px] max-md:text-[20px] font-bold tracking-[0.01em] text-white">
+                      {item.year}
+                    </h3>
+                    <h4 className="mt-[12px] font-sans text-[18px] max-md:text-[16px] font-semibold text-white/90">
+                      {item.title}
+                    </h4>
+                    <p className={`mt-[8px] max-md:mt-[6px] max-w-[250px] max-md:max-w-full font-sans text-[16px] max-md:text-[15px] leading-[1.62] ${i === 0 ? "text-brand-green" : "text-white/55"}`}>
+                      {item.text}
+                    </p>
+                  </m.div>
                 </div>
-              </StaggerItem>
+              </div>
             ))}
-          </StaggerContainer>
+          </m.div>
         </div>
       </section>
     </>
