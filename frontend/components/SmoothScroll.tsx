@@ -14,8 +14,13 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       autoRaf: true,        // Let Lenis manage its own optimal RAF loop
     });
 
+    // @ts-ignore
+    window.lenis = lenis;
+
     return () => {
       lenis.destroy();
+      // @ts-ignore
+      delete window.lenis;
     };
   }, []);
 

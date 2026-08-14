@@ -62,8 +62,10 @@ export function Regions() {
 
         <FadeIn delay={0.2} className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
           {/* Map card */}
-          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-white border border-[#EAEEF4] shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] lg:w-[691px]">
-            <Globe active={active} />
+          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-tr from-[#00FF11] via-[#007BFF] to-[#FF6200] p-[1px] shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] lg:w-[691px]">
+            <div className="h-full w-full overflow-hidden rounded-[23px] bg-white">
+              <Globe active={active} />
+            </div>
           </div>
 
           {/* Details */}
@@ -91,7 +93,6 @@ export function Regions() {
               </h3>
 
               <dl className="flex flex-col gap-[24px]">
-                <Row label="Offices" value={region.offices} />
                 <Row label="Managing Principal" value={region.principal} />
                 <Row label="Capabilities" value={region.capabilities} />
                 <Row label="Registrations" value={region.registrations} />

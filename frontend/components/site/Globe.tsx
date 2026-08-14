@@ -155,7 +155,7 @@ const ARCS: ArcDef[] = [
   },
 ];
 
-const TILT = -0.38;
+const TILT = 0.2;
 
 const BLUE = [26, 108, 255];
 const GREEN = [64, 246, 0];
@@ -242,9 +242,9 @@ export function Globe({ active = "India" }: { active?: string }) {
       lastTime.current = now;
       const t = (now - start) / 1000 + 15;
 
-      // Continuously spin the target
+      // Continuously spin the target, but slower so the map stays visible longer
       if (!reduce) {
-        targetSpinRef.current += dt * 0.055;
+        targetSpinRef.current += dt * 0.015;
       }
 
       let diff = targetSpinRef.current - focusRef.current;
@@ -256,10 +256,10 @@ export function Globe({ active = "India" }: { active?: string }) {
       const spin = focusRef.current;
 
       const isMobile = w < 768;
-      // On mobile, scale globe to fill width (48%) and shift down (60%) so top arcs don't clip. On desktop, keep at 35% perfectly centered.
-      const R = isMobile ? Math.min(w, h) * 0.48 : Math.min(w, h) * 0.35;
+      // Keep globe perfectly centered and scaled to avoid cutting off at the bottom
+      const R = isMobile ? Math.min(w, h) * 0.42 : Math.min(w, h) * 0.35;
       const cx = w * 0.5;
-      const cy = isMobile ? h * 0.6 : h * 0.5;
+      const cy = h * 0.5;
       const cam = 4.2; // camera distance in radii
       const cosT = Math.cos(TILT);
       const sinT = Math.sin(TILT);
@@ -289,9 +289,9 @@ export function Globe({ active = "India" }: { active?: string }) {
         R * 1.05,
       );
       // Soft translucent sphere to give volume without being a solid white block
-      body.addColorStop(0, "rgba(255,255,255,0.85)");
-      body.addColorStop(0.72, "rgba(250,248,255,0.65)");
-      body.addColorStop(1, "rgba(238,233,252,0.25)");
+      body.addColorStop(0, "rgba(255,255,255,0.9)");
+      body.addColorStop(0.72, "rgba(222,235,255,0.85)");
+      body.addColorStop(1, "rgba(222,235,255,0.35)");
       ctx.beginPath();
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.fillStyle = body;
@@ -329,10 +329,10 @@ export function Globe({ active = "India" }: { active?: string }) {
         let opacity = 0;
         if (isFront) {
           const fade = Math.min(1, (p.z - 0.22) / 0.2);
-          opacity = (0.22 + 0.62 * fade) * twinkle;
+          opacity = Math.min(1, (0.9 + 0.5 * fade) * twinkle);
         } else {
           // Back dots are faint
-          opacity = 0.06;
+          opacity = 0.05;
         }
 
         ctx.fillStyle = `rgba(${rCol | 0},${gCol | 0},${bCol | 0},${opacity.toFixed(3)})`;

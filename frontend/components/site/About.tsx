@@ -1,6 +1,7 @@
 "use client";
 
-import { m } from "framer-motion";
+import { useState } from "react";
+import { m, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "./Hero";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { MountainAnimation } from "@/components/motion/MountainAnimation";
@@ -17,6 +18,8 @@ const TIMELINE = [
 ];
 
 export function About() {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <>
       <section className="relative w-full overflow-hidden bg-white">
@@ -56,18 +59,39 @@ export function About() {
                   industry expertise, and a client-first approach, we help organizations overcome complex
                   challenges, accelerate growth, and build a sustainable future.
                 </p>
+                <AnimatePresence>
+                  {isExpanded && (
+                    <m.div
+                      initial={{ height: 0, opacity: 0, marginTop: -20 }}
+                      animate={{ height: "auto", opacity: 1, marginTop: 0 }}
+                      exit={{ height: 0, opacity: 0, marginTop: -20 }}
+                      className="flex flex-col gap-[20px] max-md:gap-[16px] overflow-hidden"
+                    >
+                      <p className="max-w-[976px] font-sans text-[18px] max-md:text-[15px] max-md:leading-[22px] font-[400] leading-[26px] tracking-[0px] text-[#49454F]">
+                        Our dedicated teams work relentlessly to build scalable, future-proof architectures
+                        that drive operational efficiency and create new avenues for revenue generation. From
+                        modernizing legacy systems to deploying cutting-edge AI models, we tailor our approach
+                        to meet the unique demands of each client.
+                      </p>
+                      <p className="max-w-[976px] font-sans text-[18px] max-md:text-[15px] max-md:leading-[22px] font-[400] leading-[26px] tracking-[0px] text-[#49454F]">
+                        With a deep understanding of global markets and regulatory landscapes, Hillary Step Solutions
+                        ensures seamless cross-border operations. We believe in fostering long-term partnerships built
+                        on trust, transparency, and a shared vision for success.
+                      </p>
+                    </m.div>
+                  )}
+                </AnimatePresence>
               </div>
             </StaggerItem>
 
             <StaggerItem>
-              <AnimatedButton
-                href="#"
-                variant="blueGlow"
-                className="inline-flex h-[52px] items-center gap-[11px] rounded-full bg-brand-blue px-[24px] font-sans text-[14px] font-[500] leading-[20px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)] mt-[8px]"
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="inline-flex h-[52px] items-center gap-[11px] rounded-full bg-brand-blue px-[24px] font-sans text-[14px] font-[500] leading-[20px] text-white shadow-[0px_4px_10px_rgba(0,85,255,0.2)] mt-[8px] transition-transform hover:scale-105 active:scale-95"
               >
-                Contact Us
-                <ArrowRight />
-              </AnimatedButton>
+                {isExpanded ? "Read Less" : "Read More"}
+                <ArrowRight className={`transition-transform ${isExpanded ? "rotate-90" : ""}`} />
+              </button>
             </StaggerItem>
           </StaggerContainer>
         </div>
@@ -128,9 +152,6 @@ export function About() {
                     <h4 className="mt-[12px] font-sans text-[18px] max-md:text-[16px] font-semibold text-white/90">
                       {item.title}
                     </h4>
-                    <p className={`mt-[8px] max-md:mt-[6px] max-w-[250px] max-md:max-w-full font-sans text-[16px] max-md:text-[15px] leading-[1.62] ${i === 0 ? "text-brand-green" : "text-white/55"}`}>
-                      {item.text}
-                    </p>
                   </m.div>
                 </div>
               </div>

@@ -4,21 +4,28 @@ import Image from "next/image";
 
 const LEADERS = [
   {
-    image: "/assets/leader-1.png",
-    role: "Founder, MD & CEO",
+    image: "/assets/founder-images/priyadarshi.jpeg",
+    role: "Director (HSS) & CEO",
     name: "Kunal Priyadarshi",
     quote: '"Infrastructure is a promise a nation makes to itself."',
-    alt: "Portrait of Kunal Priyadarshi, Founder, MD & CEO",
+    alt: "Portrait of Kunal Priyadarshi, Director (HSS) & CEO",
   },
   {
-    image: "/assets/leader-2.png",
+    image: "/assets/founder-images/Kantesh Prasad Singh.png",
     role: "Director (IND) & CFO",
     name: "Kantesh Prasad Singh",
     quote: '"Precision at scale is the only scale worth pursuing."',
     alt: "Portrait of Kantesh Prasad Singh, Director (IND) & CFO",
   },
   {
-    image: "/assets/leader-3.png",
+    image: "/assets/leader-4.png",
+    role: "Director (USA) & CTO",
+    name: "Alex Carter",
+    quote: '"Technology is the ultimate lever for global infrastructure."',
+    alt: "Portrait of Alex Carter, Director (USA) & CTO",
+  },
+  {
+    image: "/assets/founder-images/Mrinal Priyadarshi.png",
     role: "Director (AUS) & COO",
     name: "Mrinal Priyadarshi",
     quote: '"Public systems become invisible when they are built well."',
@@ -45,7 +52,7 @@ export function Leadership() {
           </StaggerItem>
         </StaggerContainer>
 
-        <StaggerContainer className="mt-[64px] max-md:mt-[40px] grid grid-cols-1 gap-[32px] md:grid-cols-3 max-md:grid-cols-1">
+        <StaggerContainer className="mt-[64px] max-md:mt-[40px] grid grid-cols-1 gap-[32px] md:grid-cols-2 lg:grid-cols-4 max-md:grid-cols-1">
           {LEADERS.map((l) => (
             <StaggerItem key={l.name}>
               <article className="flex flex-col pb-[18px] group">

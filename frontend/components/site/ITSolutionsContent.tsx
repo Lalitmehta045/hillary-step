@@ -208,7 +208,7 @@ export function ITSolutionsContent() {
           IT Solutions
         </p>
         <h2 className="font-display text-[48px] max-md:text-[36px] font-[700] leading-[1.1] tracking-[-1px] text-[#111111] mb-[20px]">
-          Technology that powers<br className="max-md:hidden" /> your business forward.
+          <span className="bg-gradient-to-r from-[#60A5FA] via-[#1E3A8A] to-[#60A5FA] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Technology</span> that powers<br className="max-md:hidden" /> your business forward.
         </h2>
         <p className="text-[18px] max-md:text-[16px] leading-[28px] text-[#6B7280] max-w-[700px]">
           From strategy to deployment, we build secure, scalable, and future-ready solutions to help your business adapt, innovate, and grow.

@@ -15,6 +15,10 @@ export function CivilInfraModal({ isOpen, onClose }: CivilInfraModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      // @ts-ignore
+      window.lenis?.stop();
+      
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === "Escape") onClose();
       };
@@ -22,9 +26,15 @@ export function CivilInfraModal({ isOpen, onClose }: CivilInfraModalProps) {
       return () => {
         document.removeEventListener("keydown", handleEscape);
         document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+        // @ts-ignore
+        window.lenis?.start();
       };
     } else {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      // @ts-ignore
+      window.lenis?.start();
     }
   }, [isOpen, onClose]);
 
@@ -40,7 +50,7 @@ export function CivilInfraModal({ isOpen, onClose }: CivilInfraModalProps) {
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-[#1C0D00]/40 backdrop-blur-[10px]"
+            className="absolute inset-0 bg-[#EA580C]/5 backdrop-blur-[2px]"
             onClick={onClose}
           />
 
@@ -51,14 +61,14 @@ export function CivilInfraModal({ isOpen, onClose }: CivilInfraModalProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: "100%", scale: 0.95 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex flex-col w-full max-w-[1140px] max-md:max-w-[calc(100vw-24px)] h-full max-h-[calc(100vh-24px)] overflow-y-auto overflow-x-hidden bg-white rounded-t-[16px] rounded-b-none shadow-2xl z-10 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full"
+            className="relative flex flex-col w-full max-w-[1140px] max-md:max-w-[calc(100vw-24px)] h-full max-h-[calc(100vh-24px)] overflow-y-auto overflow-x-hidden overscroll-contain bg-white rounded-t-[16px] rounded-b-none shadow-2xl z-10 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Sticky Close Button Header */}
             <div className="sticky top-0 z-50 w-full flex justify-end pointer-events-none p-[24px] pb-0 -mb-[56px]">
               <button
                 onClick={onClose}
-                className="pointer-events-auto w-[36px] h-[36px] flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-md border border-gray-200/80 text-gray-700 transition-all hover:bg-white hover:scale-110"
+                className="pointer-events-auto w-[36px] h-[36px] flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-md border border-[#EA580C]/20 text-[#EA580C] transition-all hover:bg-[#EA580C]/10 hover:scale-110"
                 aria-label="Close modal"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

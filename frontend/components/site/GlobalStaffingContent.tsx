@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { m, AnimatePresence } from "framer-motion";
+import { CandidacySection } from "./Forms";
 
 const STEPS = [
   {
@@ -68,6 +69,7 @@ const STEPS = [
 ];
 
 export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }) {
+  const [activeTab, setActiveTab] = useState<"post" | "find">("post");
   const [activeStep, setActiveStep] = useState(0);
   const stepRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [formData, setFormData] = useState({
@@ -120,7 +122,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
             Global Staffing
           </p>
           <h2 className="font-display text-[48px] font-[700] leading-[1.1] tracking-[-1px] text-[#111111] mb-[20px]">
-            Global Talent. Local<br />Understanding.
+            <span className="bg-gradient-to-r from-[#86EFAC] via-[#14532D] to-[#86EFAC] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Global Talent.</span> Local<br />Understanding.
           </h2>
           <p className="text-[18px] leading-[28px] text-[#6B7280] max-w-[700px]">
             We connect businesses with qualified professionals across markets, helping organizations build reliable teams without the complexity of international hiring.
@@ -128,15 +130,66 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
         </div>
       )}
 
-      {/* Title */}
-      <div className={`${isModal ? "mb-[48px] text-center" : "mb-[40px] max-md:mb-[28px] text-center"}`}>
-        <h2 className={`${isModal ? "text-[36px] leading-[44px] tracking-[-0.5px]" : "text-[44px] max-md:text-[28px] leading-[52.8px] max-md:leading-[36px] tracking-[-1.1px] max-md:tracking-[-0.5px]"} font-[700] text-[#111111]`}>
-          <span className="bg-gradient-to-r from-[#1A6CFF] via-[#3AF900] to-[#FF9500] bg-clip-text text-transparent">Post a Job</span> Find the Right Talent.
-        </h2>
+      {/* Toggle Buttons */}
+      <div className="flex justify-center mb-[48px] max-md:mb-[32px]">
+        <div className="relative flex w-[320px] rounded-full bg-[#F3F3F4] p-[4px]">
+          {/* Animated Background */}
+          <m.div
+            className="absolute top-[4px] bottom-[4px] w-[156px] rounded-full bg-white shadow-[0px_2px_8px_rgba(0,0,0,0.06)]"
+            initial={false}
+            animate={{ x: activeTab === "post" ? 0 : 156 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          />
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("post")}
+            className={`relative z-10 flex-1 rounded-full py-[12px] text-center font-sans text-[15px] font-[600] transition-colors duration-200 ${activeTab === "post" ? "text-[#111111]" : "text-[#6B7280] hover:text-[#111111]"}`}
+          >
+            Post a Job
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("find")}
+            className={`relative z-10 flex-1 rounded-full py-[12px] text-center font-sans text-[15px] font-[600] transition-colors duration-200 ${activeTab === "find" ? "text-[#111111]" : "text-[#6B7280] hover:text-[#111111]"}`}
+          >
+            Find a Job
+          </button>
+        </div>
       </div>
 
-      {/* Layout wrapper */}
-      <div className={`flex ${isModal ? "flex-row max-md:flex-col gap-[48px] items-stretch" : "gap-[48px] max-md:flex-col max-md:gap-[24px] items-start"}`}>
+      <AnimatePresence mode="wait">
+        {activeTab === "find" && (
+          <m.div
+            key="find"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Candidacy */}
+            <CandidacySection isModal={isModal} />
+          </m.div>
+        )}
+
+        {activeTab === "post" && (
+          <m.div
+            key="post"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Title */}
+            <div className={`${isModal ? "mb-[48px] text-center" : "mb-[40px] max-md:mb-[28px] text-center"}`}>
+              <h2 className={`${isModal ? "text-[36px] leading-[44px] tracking-[-0.5px]" : "text-[44px] max-md:text-[28px] leading-[52.8px] max-md:leading-[36px] tracking-[-1.1px] max-md:tracking-[-0.5px]"} font-[700] text-[#111111]`}>
+                <span className="bg-gradient-to-r from-[#86EFAC] via-[#14532D] to-[#86EFAC] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Post a Job</span> Find the Right Talent.
+              </h2>
+            </div>
+
+            {/* Layout wrapper */}
+            <div className={`flex ${isModal ? "flex-row max-md:flex-col gap-[48px] items-stretch" : "gap-[48px] max-md:flex-col max-md:gap-[24px] items-start"}`}>
 
         {/* Left Sidebar - Steps */}
         <div className={`${isModal ? "w-[320px] max-md:w-full shrink-0 flex flex-col max-md:flex-row gap-[12px] max-md:overflow-x-auto max-md:snap-x [&::-webkit-scrollbar]:hidden" : "w-[400px] max-md:w-[100vw] max-md:-mx-[16px] max-md:px-[16px] shrink-0 self-start flex flex-col max-md:flex-row gap-[8px] max-md:overflow-x-auto max-md:snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"}`}>
@@ -509,6 +562,9 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
           </div>
         </div>
       )}
+        </m.div>
+      )}
+      </AnimatePresence>
     </div>
   );
 }

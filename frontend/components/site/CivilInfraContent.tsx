@@ -213,7 +213,7 @@ export function CivilInfraContent() {
           Civil & Infrastructure
         </p>
         <h2 className="font-display text-[48px] max-md:text-[36px] font-[700] leading-[1.1] tracking-[-1px] text-[#111111] mb-[20px]">
-          Building durable foundations<br className="max-md:hidden" /> for tomorrow's world.
+          <span className="bg-gradient-to-r from-[#FDBA74] via-[#7C2D12] to-[#FDBA74] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Building durable</span> foundations<br className="max-md:hidden" /> for tomorrow's world.
         </h2>
         <p className="text-[18px] max-md:text-[16px] leading-[28px] text-[#6B7280] max-w-[700px]">
           From megastructure structural engineering to smart urban transportation, we engineer resilient infrastructure that powers communities.
