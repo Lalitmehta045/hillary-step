@@ -12,31 +12,32 @@ interface GlobalStaffingModalProps {
 export function GlobalStaffingModal({ isOpen, onClose }: GlobalStaffingModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
+  const onCloseRef = useRef(onClose);
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-      // @ts-ignore
-      window.lenis?.stop();
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
-      const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === "Escape") onClose();
-      };
-      document.addEventListener("keydown", handleEscape);
-      return () => {
-        document.removeEventListener("keydown", handleEscape);
-        document.body.style.overflow = "";
-        document.documentElement.style.overflow = "";
-        // @ts-ignore
-        window.lenis?.start();
-      };
-    } else {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    // @ts-ignore
+    window.lenis?.stop();
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onCloseRef.current();
+    };
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
       // @ts-ignore
       window.lenis?.start();
-    }
-  }, [isOpen, onClose]);
+    };
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -50,7 +51,7 @@ export function GlobalStaffingModal({ isOpen, onClose }: GlobalStaffingModalProp
         >
           {/* Backdrop with section-specific tint and reduced blur */}
           <div
-            className="absolute inset-0 bg-[#3AF900]/5 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-[#3AF900]/12 backdrop-blur-[4px]"
             onClick={onClose}
           />
 

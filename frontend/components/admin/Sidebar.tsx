@@ -2,17 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/lib/auth-context";
 import { 
   LuLayoutDashboard, 
   LuFileText, 
   LuMessageSquare, 
-  LuGlobe, 
-  LuPenTool, 
-  LuUsers, 
-  LuActivity, 
-  LuImage, 
   LuSettings,
   LuMenu,
   LuX
@@ -27,7 +23,14 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout, admin } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/admin/login");
+  };
 
   return (
     <>
@@ -119,17 +122,12 @@ export function Sidebar() {
 
         {/* Footer Logout */}
         <div className="p-4 border-t border-white/10 shrink-0">
-          <Link
-            href="/admin/login"
-            onClick={() => {
-              if (typeof window !== "undefined") {
-                localStorage.removeItem("admin_authenticated");
-              }
-            }}
-            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-red-300 hover:bg-red-500/10 hover:text-red-200 transition-colors"
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-red-300 hover:bg-red-500/10 hover:text-red-200 transition-colors"
           >
             <span>Sign Out</span>
-          </Link>
+          </button>
         </div>
       </aside>
     </>

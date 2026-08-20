@@ -1,18 +1,24 @@
 "use client";
 
 import { Sidebar } from "@/components/admin/Sidebar";
+import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { AnimatePresence, m } from "framer-motion";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isLoginPage = pathname === "/admin/login";
+  const { isLoading } = useAuth();
+
+  if (isLoading && !isLoginPage) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="text-gray-500">Loading...</div>
+      </div>
+    );
+  }
 
   if (isLoginPage) {
     return <div className="font-sf">{children}</div>;
@@ -40,5 +46,17 @@ export default function AdminLayout({
         </main>
       </div>
     </div>
+  );
+}
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <AuthProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </AuthProvider>
   );
 }

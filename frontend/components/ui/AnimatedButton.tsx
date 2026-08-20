@@ -15,6 +15,7 @@ interface AnimatedButtonProps {
   type?: "button" | "submit" | "reset";
   variant?: keyof typeof hoverVariants;
   "aria-label"?: string;
+  disabled?: boolean;
 }
 
 export const AnimatedButton = memo(function AnimatedButton({
@@ -25,6 +26,7 @@ export const AnimatedButton = memo(function AnimatedButton({
   type = "button",
   variant = "subtleShadow",
   "aria-label": ariaLabel,
+  disabled,
 }: AnimatedButtonProps) {
   const hoverVariant = hoverVariants[variant];
   const tapVariant = variant === "socialIcon" ? hoverVariants.socialTap : hoverVariants.tap;
@@ -49,11 +51,12 @@ export const AnimatedButton = memo(function AnimatedButton({
     <m.button
       type={type}
       className={className}
-      whileHover={hoverVariant}
-      whileTap={tapVariant}
+      whileHover={disabled ? undefined : hoverVariant}
+      whileTap={disabled ? undefined : tapVariant}
       transition={defaultTransition}
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
       aria-label={ariaLabel}
+      disabled={disabled}
     >
       {children}
     </m.button>

@@ -6,6 +6,9 @@ import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeI
 import { GradientReveal } from "@/components/motion/GradientReveal";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { m, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from "framer-motion";
+import { contactApi } from "@/lib/api/contact";
+import { applicationsApi } from "@/lib/api/applications";
+import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 
 const PRACTICES = ["Engineering", "Data & AI", "Civil & Infrastructure", "Corporate"];
 const LOCATIONS = ["USA", "Australia", "India"];
@@ -20,6 +23,114 @@ export function Forms() {
 }
 
 export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    linkedinUrl: "",
+    practice: PRACTICES[0],
+    preferredLocation: LOCATIONS[0],
+    coverLetter: ""
+  });
+  const [file, setFile] = useState<File | null>(null);
+  const [resumeData, setResumeData] = useState<{ key: string, fileName: string, fileSize: number, mimeType: string } | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string>('');
+  const turnstileRef = useRef<TurnstileInstance>(null);
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    
+    if (f.size > 5 * 1024 * 1024) {
+      alert("File too large (max 5MB)");
+      return;
+    }
+    
+    setFile(f);
+    setIsUploading(true);
+    setResumeData(null);
+    
+    if (!turnstileToken) {
+      alert("Please complete the security check first");
+      return;
+    }
+
+    try {
+      const response = await applicationsApi.uploadResume(f, turnstileToken);
+      setResumeData({
+        key: response.key,
+        fileName: response.fileName,
+        fileSize: response.fileSize,
+        mimeType: response.mimeType,
+      });
+      
+      if (response.parsedData) {
+        setFormData(prev => ({
+          ...prev,
+          fullName: prev.fullName || response.parsedData.fullName || "",
+          email: prev.email || response.parsedData.email || "",
+          phone: prev.phone || response.parsedData.phone || "",
+          linkedinUrl: prev.linkedinUrl || response.parsedData.linkedinUrl || "",
+          practice: response.parsedData.practice || prev.practice,
+          preferredLocation: response.parsedData.preferredLocation || prev.preferredLocation,
+        }));
+      }
+      setTurnstileToken('');
+      turnstileRef.current?.reset();
+    } catch (err) {
+      console.error("Failed to parse resume", err);
+      alert("Failed to process resume. Please try again or fill manually.");
+      setFile(null); // Reset if upload/scan fails
+      setTurnstileToken('');
+      turnstileRef.current?.reset();
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file || !resumeData) {
+      alert("Please upload your résumé and wait for it to process");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    try {
+      // Submit application directly with existing key
+      await applicationsApi.submitApplication({
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        linkedinProfile: formData.linkedinUrl,
+        practice: formData.practice,
+        preferredLocation: formData.preferredLocation,
+        coverNote: formData.coverLetter,
+        resumeFileKey: resumeData.key,
+        resumeFileName: resumeData.fileName,
+        resumeFileSize: resumeData.fileSize,
+        resumeMimeType: resumeData.mimeType,
+      }, turnstileToken);
+      
+      setIsSuccess(true);
+      setFormData({
+        fullName: "", email: "", phone: "", linkedinUrl: "",
+        practice: PRACTICES[0], preferredLocation: LOCATIONS[0], coverLetter: ""
+      });
+      setFile(null);
+      setResumeData(null);
+    } catch (err) {
+      console.error("Failed to submit application", err);
+      alert("Failed to submit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section className={`w-full ${isModal ? "pb-[64px] max-md:pb-[40px]" : "bg-white pt-[64px] pb-[40px] max-md:pt-[40px] max-md:pb-[20px]"}`}>
       <div className={`mx-auto w-full ${isModal ? "" : "max-w-[1280px] px-[32px] max-md:px-[24px]"}`}>
@@ -45,20 +156,22 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
         </StaggerContainer>
 
         <FadeIn delay={0.2} className="mx-auto mt-[48px] max-md:mt-[32px] rounded-[24px] overflow-hidden bg-gradient-to-tr from-[#00FF11] via-[#007BFF] to-[#FF6200] p-[1px] shadow-sm">
-          <form className="grid grid-cols-1 gap-[48px] max-md:gap-[32px] rounded-[23px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px] lg:grid-cols-[1fr_341px]">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-[48px] max-md:gap-[32px] rounded-[23px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px] lg:grid-cols-[1fr_341px]">
             <div className="flex flex-col gap-[24px]">
               <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
-                <Field label="Full name" />
-                <Field label="Email" type="email" />
-                <PhoneField />
-                <Field label="LinkedIn Profile" />
-                <Select label="Practice" options={PRACTICES} />
-                <Select label="Preferred Location" options={LOCATIONS} />
+                <Field label="Full name" value={formData.fullName} onChange={(e) => setFormData({...formData, fullName: e.target.value})} required />
+                <Field label="Email" type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
+                <PhoneField value={formData.phone} onChange={(val: string) => setFormData({...formData, phone: val})} />
+                <Field label="LinkedIn Profile" value={formData.linkedinUrl} onChange={(e) => setFormData({...formData, linkedinUrl: e.target.value})} />
+                <Select label="Practice" options={PRACTICES} value={formData.practice} onChange={(val: string) => setFormData({...formData, practice: val})} />
+                <Select label="Preferred Location" options={LOCATIONS} value={formData.preferredLocation} onChange={(val: string) => setFormData({...formData, preferredLocation: val})} />
               </div>
 
               <div>
                 <Label>Cover Note</Label>
                 <textarea
+                  value={formData.coverLetter}
+                  onChange={(e) => setFormData({...formData, coverLetter: e.target.value})}
                   placeholder="Add a cover note."
                   className="mt-[8px] w-full min-h-[170px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] placeholder:text-[#9a9a9a] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden"
                 />
@@ -66,8 +179,23 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
             </div>
 
             <div className="flex flex-col">
+              {siteKey && (
+                <div className="mb-[16px]">
+                  <Turnstile
+                    ref={turnstileRef}
+                    siteKey={siteKey}
+                    onSuccess={(token) => setTurnstileToken(token)}
+                    onError={() => {
+                      setTurnstileToken('');
+                      alert('Security check failed. Please try again.');
+                    }}
+                    onExpire={() => setTurnstileToken('')}
+                    options={{ theme: 'light' }}
+                  />
+                </div>
+              )}
               <Label>Résumé · Required</Label>
-              <label className="relative mt-[8px] flex h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-[24px] bg-white px-[24px] py-[64px] text-center hover:bg-black/[0.02] transition-colors">
+              <label className={`relative mt-[8px] flex h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-[24px] bg-white px-[24px] py-[64px] text-center transition-colors ${!turnstileToken || isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-black/[0.02]'}`}>
                 <svg className="pointer-events-none absolute inset-0 h-full w-full rounded-[24px]">
                   <defs>
                     <linearGradient id="dashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -90,19 +218,27 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                 </svg>
                 <UploadIcon />
                 <span className="mt-[16px] font-sans text-[16px] font-[500] text-[#111111]">
-                  Drop résumé here
+                  {file ? file.name : "Drop résumé here"}
                 </span>
                 <span className="mt-[4px] font-sans text-[14px] text-[#4B5563]">
-                  or click to browse · PDF, DOC, DOCX · 5MB
+                  {file ? `${(file.size / 1024 / 1024).toFixed(2)} MB` : "or click to browse · PDF, DOC, DOCX · 5MB"}
                 </span>
-                <input type="file" className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0" accept=".pdf,.doc,.docx" />
+                <input 
+                  type="file" 
+                  className={`absolute inset-0 z-10 h-full w-full opacity-0 ${!turnstileToken || isUploading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleFileChange}
+                  disabled={!turnstileToken || isUploading}
+                  required
+                />
               </label>
 
               <AnimatedButton
                 type="submit"
-                className="mt-[24px] flex h-[54px] w-full items-center justify-center gap-[8px] rounded-full bg-[#111111] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
+                disabled={isSubmitting || isSuccess || isUploading || !turnstileToken}
+                className="mt-[24px] flex h-[54px] w-full items-center justify-center gap-[8px] rounded-full bg-[#111111] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)] disabled:opacity-50"
               >
-                Submit Application
+                {isSubmitting ? "Submitting..." : isSuccess ? "Success!" : isUploading ? "Processing Résumé..." : "Submit Application"}
                 <ArrowRight />
               </AnimatedButton>
 
@@ -136,25 +272,56 @@ function ContactSection() {
 }
 
 function ContactForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    companyName: "",
+    message: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await contactApi.submitEnquiry(formData);
+      setIsSuccess(true);
+      setFormData({ name: "", email: "", phone: "", companyName: "", message: "" });
+    } catch (err) {
+      console.error("Failed to submit contact", err);
+      alert("Failed to submit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <form className="h-full w-full rounded-[23px] bg-[#F3F3F4] px-[40px] max-md:px-[24px] py-[32px]">
+    <form onSubmit={handleSubmit} className="h-full w-full rounded-[23px] bg-[#F3F3F4] px-[40px] max-md:px-[24px] py-[32px]">
       <div className="grid grid-cols-1 gap-[16px] sm:grid-cols-2">
-        <Field label="Name" />
-        <Field label="Email" type="email" />
-        <PhoneField />
-        <Field label="Organization" />
+        <Field label="Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+        <Field label="Email" type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
+        <PhoneField value={formData.phone} onChange={(val: string) => setFormData({...formData, phone: val})} />
+        <Field label="Organization" value={formData.companyName} onChange={(e) => setFormData({...formData, companyName: e.target.value})} />
       </div>
 
       <div className="mt-[16px]">
         <Label>Message</Label>
-        <textarea className="mt-[8px] w-full min-h-[100px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden" />
+        <textarea 
+          required
+          value={formData.message}
+          onChange={(e) => setFormData({...formData, message: e.target.value})}
+          className="mt-[8px] w-full min-h-[100px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden" 
+        />
       </div>
 
       <AnimatedButton
         type="submit"
-        className="mt-[24px] flex h-[50px] w-fit items-center justify-center gap-[8px] rounded-full bg-[#111111] px-[32px] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
+        disabled={isSubmitting || isSuccess}
+        className="mt-[24px] flex h-[50px] w-fit items-center justify-center gap-[8px] rounded-full bg-[#111111] px-[32px] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)] disabled:opacity-50"
       >
-        Send Enquiry
+        {isSubmitting ? "Sending..." : isSuccess ? "Sent!" : "Send Enquiry"}
         <ArrowRight />
       </AnimatedButton>
     </form>
@@ -282,21 +449,24 @@ function Label({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Field({ label, type = "text" }: { label: string; type?: string }) {
+function Field({ label, type = "text", value, onChange, required }: { label: string; type?: string; value?: string; onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; required?: boolean }) {
   return (
     <div className="min-w-0">
       <Label>{label}</Label>
       <input
         type={type}
+        value={value}
+        onChange={onChange}
+        required={required}
         className="mt-[8px] h-[50px] w-full rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden"
       />
     </div>
   );
 }
 
-function Select({ label, options }: { label: string; options: readonly string[] }) {
+function Select({ label, options, value, onChange }: { label: string; options: readonly string[]; value?: string; onChange?: (v: string) => void }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
+  const selected = value || options[0];
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -339,7 +509,7 @@ function Select({ label, options }: { label: string; options: readonly string[] 
                 key={o}
                 type="button"
                 onClick={() => {
-                  setSelected(o);
+                  if (onChange) onChange(o);
                   setIsOpen(false);
                 }}
                 className={`flex w-full items-center px-[16px] py-[10px] text-left font-sans text-[15px] transition-colors ${selected === o ? "bg-[#F8F9FB] text-[#007BFF] font-[500]" : "text-[#111111] hover:bg-[#F8F9FB] hover:text-[#007BFF]"}`}
@@ -354,11 +524,14 @@ function Select({ label, options }: { label: string; options: readonly string[] 
   );
 }
 
-function PhoneField() {
+function PhoneField({ value, onChange }: { value?: string; onChange?: (v: string) => void }) {
   const COUNTRY_CODES = ["+1 (USA)", "+91 (IND)", "+61 (AUS)"];
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(COUNTRY_CODES[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Extract just the phone number part if value is structured
+  const displayValue = value ? value.replace(/^\+\d+\s\(\w+\)\s/, "") : "";
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -402,6 +575,7 @@ function PhoneField() {
                   type="button"
                   onClick={() => {
                     setSelected(code);
+                    if (onChange) onChange(`${code} ${displayValue}`);
                     setIsOpen(false);
                   }}
                   className={`flex w-full items-center px-[16px] py-[10px] text-left font-sans text-[14px] transition-colors ${selected === code ? "bg-[#F8F9FB] text-[#007BFF] font-[500]" : "text-[#111111] hover:bg-[#F8F9FB] hover:text-[#007BFF]"}`}
@@ -414,6 +588,10 @@ function PhoneField() {
         </div>
         <input
           type="tel"
+          value={displayValue}
+          onChange={(e) => {
+            if (onChange) onChange(`${selected} ${e.target.value}`);
+          }}
           className="h-full min-w-0 flex-1 bg-transparent px-[16px] font-sans text-[16px] text-[#111111] focus:outline-hidden rounded-r-[16px]"
         />
       </div>

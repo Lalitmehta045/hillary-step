@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Admin users with authentication
+model Admin {
+  id             String    @id @default(uuid()) @db.Uuid
+  email          String    @unique
+  name           String
+  passwordHash   String    @map("password_hash")
+  role           AdminRole @default(ADMIN)
+  mfaEnabled     Boolean   @default(false) @map("mfa_enabled")
+  mfaSecret      String?   @map("mfa_secret")
+  recoveryCodes  Json?     @map("recovery_codes")
+  isActive       Boolean   @default(true) @map("is_active")
+  failedAttempts Int       @default(0) @map("failed_attempts")
+  lockedUntil    DateTime? @map("locked_until")
+  lastLoginAt    DateTime? @map("last_login_at")
+  lastLoginIp    String?   @map("last_login_ip")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  sessions   AdminSession[]
+  auditLogs  AuditLog[]
+  notes      InternalNote[]
+
+  @@map("admins")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+}
+
+// Admin sessions (secure cookie-based)
+model AdminSession {
+  id           String   @id @default(uuid()) @db.Uuid
+  adminId      String   @map("admin_id") @db.Uuid
+  token        String   @unique
+  ipAddress    String?  @map("ip_address")
+  userAgent    String?  @map("user_agent")
+  expiresAt    DateTime @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([adminId])
+  @@index([expiresAt])
+  @@map("admin_sessions")
+}
+
+// Jobs posted (both from admin and public "Post a Job" form)
+model Job {
+  id                String      @id @default(uuid()) @db.Uuid
+  jobTitle          String      @map("job_title")
+  organizationName  String?     @map("organization_name")
+  roleType          String?     @map("role_type")  // full-time, part-time, contract, etc.
+  experienceLevel   String?     @map("experience_level")  // entry, mid, senior, lead
+  country           String?
+  city              String?
+  jobDescription    String?     @map("job_description") @db.Text
+  industry          String?
+  salaryRange       String?     @map("salary_range")
+  applicationDeadline DateTime? @map("application_deadline")
+  contactPerson     String?     @map("contact_person")
+  contactEmail      String?     @map("contact_email")
+  contactPhone      String?     @map("contact_phone")
+  countryCode       String?     @map("country_code")
+  status            JobStatus   @default(DRAFT)
+  isPublic          Boolean     @default(false) @map("is_public")
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+  deletedAt         DateTime?   @map("deleted_at")
+
+  applications Application[]
+
+  @@index([status])
+  @@index([isPublic])
+  @@index([createdAt])
+  @@index([industry])
+  @@map("jobs")
+}
+
+enum JobStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  ARCHIVED
+}
+
+// Job applications (Find a Job form)
+model Application {
+  id                 String            @id @default(uuid()) @db.Uuid
+  applicationNumber  String            @unique @map("application_number") // e.g. APP-001
+  fullName           String            @map("full_name")
+  email              String
+  phone              String?
+  countryCode        String?           @map("country_code")
+  linkedinProfile    String?           @map("linkedin_profile")
+  currentDesignation String?           @map("current_designation")
+  practice           String?
+  industry           String?
+  experienceYears    String?           @map("experience_years")
+  preferredLocation  String?           @map("preferred_location")
+  coverNote          String?           @map("cover_note") @db.Text
+  resumeFileKey      String?           @map("resume_file_key")
+  resumeFileName     String?           @map("resume_file_name")
+  resumeFileSize     Int?              @map("resume_file_size")
+  resumeMimeType     String?           @map("resume_mime_type")
+  status             ApplicationStatus @default(NEW)
+  jobId              String?           @map("job_id") @db.Uuid
+  parsedData         Json?             @map("parsed_data")
+  submissionIp       String?           @map("submission_ip")
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  deletedAt          DateTime?         @map("deleted_at")
+
+  job       Job?            @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  documents Document[]
+  notes     InternalNote[]
+  activity  ActivityLog[]
+
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+  @@index([jobId])
+  @@map("applications")
+}
+
+enum ApplicationStatus {
+  NEW
+  REVIEWING
+  SHORTLISTED
+  INTERVIEW
+  HIRED
+  REJECTED
+}
+
+// Documents attached to applications
+model Document {
+  id            String   @id @default(uuid()) @db.Uuid
+  applicationId String   @map("application_id") @db.Uuid
+  fileName      String   @map("file_name")
+  fileKey       String   @map("file_key") // S3 key
+  fileSize      Int      @map("file_size")
+  mimeType      String   @map("mime_type")
+  uploadedAt    DateTime @default(now()) @map("uploaded_at")
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@map("documents")
+}
+
+// Contact/Enquiry submissions
+model Enquiry {
+  id             String        @id @default(uuid()) @db.Uuid
+  enquiryNumber  String        @unique @map("enquiry_number") // e.g. ENQ-001
+  // Contact form fields
+  name           String?
+  companyName    String?       @map("company_name")
+  contactPerson  String?       @map("contact_person")
+  email          String
+  phone          String?
+  countryCode    String?       @map("country_code")
+  organization   String?
+  industry       String?
+  serviceRequired String?      @map("service_required")
+  message        String?       @db.Text
+  projectDetails String?       @map("project_details") @db.Text
+  status         EnquiryStatus @default(NEW)
+  priority       EnquiryPriority @default(MEDIUM)
+  submissionIp   String?       @map("submission_ip")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+  @@map("enquiries")
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum EnquiryPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+// Internal notes on applications
+model InternalNote {
+  id            String   @id @default(uuid()) @db.Uuid
+  applicationId String   @map("application_id") @db.Uuid
+  adminId       String   @map("admin_id") @db.Uuid
+  content       String   @db.Text
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  admin       Admin       @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@map("internal_notes")
+}
+
+// Activity log for applications (system-generated)
+model ActivityLog {
+  id            String   @id @default(uuid()) @db.Uuid
+  applicationId String   @map("application_id") @db.Uuid
+  action        String   // e.g. "Application Received", "Status Changed", "Resume Downloaded"
+  performedBy   String   @map("performed_by") // "System" or admin name
+  metadata      Json?    // optional extra data
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+// Audit log for security/compliance
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  action     String   // e.g. "ADMIN_LOGIN", "APPLICATION_STATUS_CHANGE"
+  entityType String?  @map("entity_type") // e.g. "Application", "Job"
+  entityId   String?  @map("entity_id")
+  adminId    String?  @map("admin_id") @db.Uuid
+  ipAddress  String?  @map("ip_address")
+  userAgent  String?  @map("user_agent")
+  metadata   Json?    // flexible payload
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  admin Admin? @relation(fields: [adminId], references: [id], onDelete: SetNull)
+
+  @@index([action])
+  @@index([entityType, entityId])
+  @@index([adminId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}

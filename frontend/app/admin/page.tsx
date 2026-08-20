@@ -9,7 +9,9 @@ import {
   LuMessageSquare 
 } from "react-icons/lu";
 import { m, Variants } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { applicationsApi } from "@/lib/api/applications";
+import { contactApi } from "@/lib/api/contact";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -32,17 +34,81 @@ const itemVariants: Variants = {
 
 export default function AdminDashboardPage() {
   const [hoveredSegment, setHoveredSegment] = useState<string | null>(null);
+  
+  // Real Data State
+  const [kpiData, setKpiData] = useState({
+    totalApps: 0,
+    newApps: 0,
+    shortlistedApps: 0,
+    reviewedApps: 0,
+    enquiries: 0
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const [
+          totalAppsRes,
+          newAppsRes,
+          shortlistedAppsRes,
+          reviewedAppsRes,
+          enquiriesRes
+        ] = await Promise.all([
+          applicationsApi.getAdminApplications({ pageSize: 1 }),
+          applicationsApi.getAdminApplications({ status: "NEW", pageSize: 1 }),
+          applicationsApi.getAdminApplications({ status: "SHORTLISTED", pageSize: 1 }),
+          applicationsApi.getAdminApplications({ status: "REVIEWING", pageSize: 1 }), // Map reviewing to reviewed
+          contactApi.getAdminEnquiries({ pageSize: 1 })
+        ]);
+
+        setKpiData({
+          totalApps: totalAppsRes.meta.total,
+          newApps: newAppsRes.meta.total,
+          shortlistedApps: shortlistedAppsRes.meta.total,
+          reviewedApps: reviewedAppsRes.meta.total,
+          enquiries: enquiriesRes.meta.total
+        });
+      } catch (err) {
+        console.error("Failed to load dashboard data", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchDashboardData();
+  }, []);
+
+  const total = kpiData.totalApps || 1; // avoid div by 0
+  const otherApps = kpiData.totalApps - kpiData.newApps - kpiData.reviewedApps - kpiData.shortlistedApps;
+  
+  const pNew = (kpiData.newApps / total) * 100;
+  const pReviewed = (kpiData.reviewedApps / total) * 100;
+  const pShortlisted = (kpiData.shortlistedApps / total) * 100;
+  const pOther = (Math.max(0, otherApps) / total) * 100;
+
+  // Chart data calculations for strokeDashoffset
+  // Total circumference is 528
+  // offset = 528 - (percent / 100) * 528
+  const offsetNew = 528 - (pNew / 100) * 528;
+  const offsetReviewed = 528 - (pReviewed / 100) * 528;
+  const offsetShortlisted = 528 - (pShortlisted / 100) * 528;
+  const offsetOther = 528 - (pOther / 100) * 528;
+
+  // Rotations
+  const rotReviewed = (pNew / 100) * 360;
+  const rotShortlisted = rotReviewed + (pReviewed / 100) * 360;
+  const rotOther = rotShortlisted + (pShortlisted / 100) * 360;
 
   const chartData = {
-    new: { label: 'New', value: '1,116' },
-    reviewed: { label: 'Reviewed', value: '620' },
-    shortlisted: { label: 'Shortlisted', value: '372' },
-    other: { label: 'Other', value: '374' },
+    new: { label: 'New', value: kpiData.newApps.toLocaleString() },
+    reviewed: { label: 'Reviewed', value: kpiData.reviewedApps.toLocaleString() },
+    shortlisted: { label: 'Shortlisted', value: kpiData.shortlistedApps.toLocaleString() },
+    other: { label: 'Other', value: Math.max(0, otherApps).toLocaleString() },
   };
 
   const displayData = hoveredSegment 
     ? chartData[hoveredSegment as keyof typeof chartData] 
-    : { label: 'Total', value: '2,482' };
+    : { label: 'Total', value: kpiData.totalApps.toLocaleString() };
 
   return (
     <m.div 
@@ -58,8 +124,8 @@ export default function AdminDashboardPage() {
         <m.div variants={itemVariants}>
           <KpiCard
             title="Total Applications"
-            value="2,482"
-            percentageChange={12}
+            value={isLoading ? "..." : kpiData.totalApps.toLocaleString()}
+            percentageChange={0} // To be implemented with historical data
             icon={LuFileText}
             iconBgClass="bg-blue-50"
             iconColorClass="text-blue-600"
@@ -68,8 +134,8 @@ export default function AdminDashboardPage() {
         <m.div variants={itemVariants}>
           <KpiCard
             title="New Applications"
-            value="156"
-            percentageChange={5}
+            value={isLoading ? "..." : kpiData.newApps.toLocaleString()}
+            percentageChange={0}
             icon={LuBadgeCheck}
             iconBgClass="bg-green-50"
             iconColorClass="text-green-600"
@@ -78,8 +144,8 @@ export default function AdminDashboardPage() {
         <m.div variants={itemVariants}>
           <KpiCard
             title="Shortlisted Candidates"
-            value="42"
-            percentageChange={-2}
+            value={isLoading ? "..." : kpiData.shortlistedApps.toLocaleString()}
+            percentageChange={0}
             icon={LuStar}
             iconBgClass="bg-orange-50"
             iconColorClass="text-orange-500"
@@ -88,8 +154,8 @@ export default function AdminDashboardPage() {
         <m.div variants={itemVariants}>
           <KpiCard
             title="Contact Enquiries"
-            value="89"
-            percentageChange={18}
+            value={isLoading ? "..." : kpiData.enquiries.toLocaleString()}
+            percentageChange={0}
             icon={LuMessageSquare}
             iconBgClass="bg-amber-50/50"
             iconColorClass="text-amber-800"
@@ -109,48 +175,48 @@ export default function AdminDashboardPage() {
                 {/* Background Track */}
                 <circle cx="96" cy="96" r="84" fill="transparent" stroke="#f3f4f6" strokeWidth="24" />
                 
-                {/* New (45%) */}
+                {/* New */}
                 <m.circle
                   cx="96" cy="96" r="84" fill="transparent" stroke="#2563eb" strokeWidth="24"
                   strokeDasharray="528 528" strokeLinecap="round"
                   initial={{ strokeDashoffset: 528, rotate: 0, originX: "50%", originY: "50%" }}
-                  animate={{ strokeDashoffset: 290.4 }}
+                  animate={{ strokeDashoffset: isLoading ? 528 : offsetNew }}
                   transition={{ duration: 1, ease: "easeOut" }}
                   onMouseEnter={() => setHoveredSegment('new')}
                   onMouseLeave={() => setHoveredSegment(null)}
                   className="cursor-pointer hover:opacity-80 transition-opacity"
                 />
                 
-                {/* Reviewed (25%) */}
+                {/* Reviewed */}
                 <m.circle
                   cx="96" cy="96" r="84" fill="transparent" stroke="#22c55e" strokeWidth="24"
                   strokeDasharray="528 528" strokeLinecap="round"
-                  initial={{ strokeDashoffset: 528, rotate: 162, originX: "50%", originY: "50%" }}
-                  animate={{ strokeDashoffset: 396 }}
+                  initial={{ strokeDashoffset: 528, rotate: rotReviewed, originX: "50%", originY: "50%" }}
+                  animate={{ strokeDashoffset: isLoading ? 528 : offsetReviewed }}
                   transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
                   onMouseEnter={() => setHoveredSegment('reviewed')}
                   onMouseLeave={() => setHoveredSegment(null)}
                   className="cursor-pointer hover:opacity-80 transition-opacity"
                 />
 
-                {/* Shortlisted (15%) */}
+                {/* Shortlisted */}
                 <m.circle
                   cx="96" cy="96" r="84" fill="transparent" stroke="#f97316" strokeWidth="24"
                   strokeDasharray="528 528" strokeLinecap="round"
-                  initial={{ strokeDashoffset: 528, rotate: 252, originX: "50%", originY: "50%" }}
-                  animate={{ strokeDashoffset: 448.8 }}
+                  initial={{ strokeDashoffset: 528, rotate: rotShortlisted, originX: "50%", originY: "50%" }}
+                  animate={{ strokeDashoffset: isLoading ? 528 : offsetShortlisted }}
                   transition={{ duration: 1, ease: "easeOut", delay: 0.4 }}
                   onMouseEnter={() => setHoveredSegment('shortlisted')}
                   onMouseLeave={() => setHoveredSegment(null)}
                   className="cursor-pointer hover:opacity-80 transition-opacity"
                 />
 
-                {/* Other (15%) */}
+                {/* Other */}
                 <m.circle
                   cx="96" cy="96" r="84" fill="transparent" stroke="#9ca3af" strokeWidth="24"
                   strokeDasharray="528 528" strokeLinecap="round"
-                  initial={{ strokeDashoffset: 528, rotate: 306, originX: "50%", originY: "50%" }}
-                  animate={{ strokeDashoffset: 448.8 }}
+                  initial={{ strokeDashoffset: 528, rotate: rotOther, originX: "50%", originY: "50%" }}
+                  animate={{ strokeDashoffset: isLoading ? 528 : offsetOther }}
                   transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
                   onMouseEnter={() => setHoveredSegment('other')}
                   onMouseLeave={() => setHoveredSegment(null)}
@@ -191,7 +257,7 @@ export default function AdminDashboardPage() {
                   <div className="w-2 h-2 rounded-full bg-blue-600"></div>
                   <span className="text-gray-600 font-medium">New</span>
                 </div>
-                <span className="text-gray-900 font-semibold">45%</span>
+                <span className="text-gray-900 font-semibold">{Math.round(pNew)}%</span>
               </div>
               <div 
                 className="flex justify-between items-center text-sm cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"
@@ -202,7 +268,7 @@ export default function AdminDashboardPage() {
                   <div className="w-2 h-2 rounded-full bg-green-500"></div>
                   <span className="text-gray-600 font-medium">Reviewed</span>
                 </div>
-                <span className="text-gray-900 font-semibold">25%</span>
+                <span className="text-gray-900 font-semibold">{Math.round(pReviewed)}%</span>
               </div>
               <div 
                 className="flex justify-between items-center text-sm cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"
@@ -213,7 +279,7 @@ export default function AdminDashboardPage() {
                   <div className="w-2 h-2 rounded-full bg-orange-500"></div>
                   <span className="text-gray-600 font-medium">Shortlisted</span>
                 </div>
-                <span className="text-gray-900 font-semibold">15%</span>
+                <span className="text-gray-900 font-semibold">{Math.round(pShortlisted)}%</span>
               </div>
               <div 
                 className="flex justify-between items-center text-sm cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"
@@ -224,7 +290,7 @@ export default function AdminDashboardPage() {
                   <div className="w-2 h-2 rounded-full bg-gray-400"></div>
                   <span className="text-gray-600 font-medium">Other</span>
                 </div>
-                <span className="text-gray-900 font-semibold">15%</span>
+                <span className="text-gray-900 font-semibold">{Math.round(pOther)}%</span>
               </div>
             </div>
           </div>

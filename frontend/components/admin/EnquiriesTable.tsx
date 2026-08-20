@@ -2,48 +2,9 @@
 
 import { LuSearch, LuChevronDown, LuCalendar, LuEye } from "react-icons/lu";
 
-const mockEnquiries = [
-  {
-    id: "enq-1",
-    name: "Eleanor Vance",
-    email: "e.vance@structural.co",
-    initials: "EV",
-    organization: "Structural Engineering",
-    region: "North America",
-    dateReceived: "Oct 24, 2023",
-    status: "New",
-  },
-  {
-    id: "enq-2",
-    name: "Marcus Thorne",
-    email: "m.thorne@apexbuild.uk",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-    organization: "Apex Build Group",
-    region: "Europe",
-    dateReceived: "Oct 23, 2023",
-    status: "Read",
-  },
-  {
-    id: "enq-3",
-    name: "Sarah Rahim",
-    email: "s.rahim@globalinfra.ae",
-    initials: "SR",
-    organization: "Global Infrastructure",
-    region: "Middle East",
-    dateReceived: "Oct 21, 2023",
-    status: "Responded",
-  },
-  {
-    id: "enq-4",
-    name: "James Chen",
-    email: "j.chen@pacific-works.com",
-    initials: "JC",
-    organization: "Pacific Works",
-    region: "APAC",
-    dateReceived: "Oct 20, 2023",
-    status: "New",
-  }
-];
+import { useEffect, useState } from "react";
+import { contactApi } from "@/lib/api/contact";
+import { Enquiry } from "@/lib/api/types";
 
 const StatusBadge = ({ status }: { status: string }) => {
   let bg = "bg-gray-100";
@@ -72,6 +33,27 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 export function EnquiriesTable() {
+  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+
+  useEffect(() => {
+    const fetchEnquiries = async () => {
+      setIsLoading(true);
+      try {
+        const res = await contactApi.getAdminEnquiries({ page, pageSize });
+        setEnquiries(res.data);
+        setTotal(res.meta.total);
+      } catch (err) {
+        console.error("Failed to fetch enquiries", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchEnquiries();
+  }, [page]);
   return (
     <div className="bg-white rounded-md border border-gray-200">
       {/* Table Filters & Search */}
@@ -118,7 +100,19 @@ export function EnquiriesTable() {
             </tr>
           </thead>
           <tbody>
-            {mockEnquiries.map((enq) => (
+            {isLoading ? (
+              <tr>
+                <td colSpan={7} className="py-8 text-center text-sm text-gray-500">
+                  Loading enquiries...
+                </td>
+              </tr>
+            ) : enquiries.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="py-8 text-center text-sm text-gray-500">
+                  No enquiries found.
+                </td>
+              </tr>
+            ) : enquiries.map((enq) => (
               <tr 
                 key={enq.id} 
                 className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors group"
@@ -128,27 +122,23 @@ export function EnquiriesTable() {
                 </td>
                 <td className="py-5 pr-6">
                   <div className="flex items-center gap-4">
-                    {enq.avatar ? (
-                      <img src={enq.avatar} alt={enq.name} className="w-9 h-9 rounded-full object-cover bg-gray-200" />
-                    ) : (
-                      <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-600">
-                        {enq.initials}
-                      </div>
-                    )}
+                    <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-600">
+                      {enq.name ? enq.name.charAt(0).toUpperCase() : "?"}
+                    </div>
                     <div>
-                      <p className="text-sm font-semibold text-gray-900 leading-tight">{enq.name}</p>
+                      <p className="text-sm font-semibold text-gray-900 leading-tight">{enq.name || "Unknown"}</p>
                       <p className="text-[11px] text-gray-400 mt-0.5">{enq.email}</p>
                     </div>
                   </div>
                 </td>
                 <td className="py-5 px-6 text-xs text-gray-900 font-medium whitespace-nowrap">
-                  {enq.organization}
+                  {enq.companyName || enq.organization || "-"}
                 </td>
                 <td className="py-5 px-6 text-xs text-gray-500 whitespace-nowrap">
-                  {enq.region}
+                  -
                 </td>
                 <td className="py-5 px-6 text-xs text-gray-500 whitespace-nowrap">
-                  {enq.dateReceived}
+                  {new Date(enq.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                 </td>
                 <td className="py-5 px-6 whitespace-nowrap">
                   <StatusBadge status={enq.status} />
@@ -166,15 +156,23 @@ export function EnquiriesTable() {
       
       {/* Pagination Footer */}
       <div className="p-6 flex justify-between items-center text-xs font-medium text-gray-500 border-t border-gray-100 bg-white rounded-b-md">
-        <span>Showing 1 to 4 of 89 entries</span>
+        <span>Showing {enquiries.length > 0 ? (page - 1) * pageSize + 1 : 0} to {Math.min(page * pageSize, total)} of {total} entries</span>
         <div className="flex items-center gap-1 border border-gray-200 rounded-md p-0.5 bg-white shadow-sm">
-          <button className="p-1.5 hover:text-gray-900 transition-colors">{"<"}</button>
-          <button className="w-7 h-7 flex items-center justify-center bg-[#061a3d] text-white font-semibold rounded-[4px]">1</button>
-          <button className="w-7 h-7 flex items-center justify-center hover:bg-gray-50 rounded-[4px] text-gray-700">2</button>
-          <button className="w-7 h-7 flex items-center justify-center hover:bg-gray-50 rounded-[4px] text-gray-700">3</button>
-          <span className="px-1 text-gray-400">...</span>
-          <button className="w-7 h-7 flex items-center justify-center hover:bg-gray-50 rounded-[4px] text-gray-700">9</button>
-          <button className="p-1.5 hover:text-gray-900 transition-colors">{">"}</button>
+          <button 
+            disabled={page === 1}
+            onClick={() => setPage(p => p - 1)}
+            className="p-1.5 hover:text-gray-900 transition-colors disabled:opacity-50"
+          >
+            {"<"}
+          </button>
+          <button className="w-7 h-7 flex items-center justify-center bg-[#061a3d] text-white font-semibold rounded-[4px]">{page}</button>
+          <button 
+            disabled={page * pageSize >= total}
+            onClick={() => setPage(p => p + 1)}
+            className="p-1.5 hover:text-gray-900 transition-colors disabled:opacity-50"
+          >
+            {">"}
+          </button>
         </div>
       </div>
     </div>

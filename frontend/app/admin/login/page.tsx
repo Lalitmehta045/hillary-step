@@ -5,16 +5,23 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { LuLock, LuMail, LuEye, LuEyeOff, LuArrowRight } from "react-icons/lu";
+import { useAuth } from "@/lib/auth-context";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@hillarystep.com");
-  const [password, setPassword] = useState("••••••••••••");
+  const { login, verifyMfa } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  
+  // MFA state
+  const [requiresMfa, setRequiresMfa] = useState(false);
+  const [mfaToken, setMfaToken] = useState("");
+  const [mfaCode, setMfaCode] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
       setError("Please enter valid credentials");
@@ -23,12 +30,39 @@ export default function AdminLoginPage() {
     setError("");
     setIsLoading(true);
 
-    setTimeout(() => {
-      if (typeof window !== "undefined") {
-        localStorage.setItem("admin_authenticated", "true");
+    try {
+      const response = await login({ email, password });
+      
+      if (response.requiresMfa) {
+        setRequiresMfa(true);
+        setMfaToken(response.mfaToken || "");
       }
-      router.push("/admin");
-    }, 1000);
+      // If no MFA required, useAuth handles the redirect to /admin
+    } catch (err: any) {
+      setError(err.message || "Invalid credentials");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleMfaSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mfaCode) {
+      setError("Please enter the MFA code");
+      return;
+    }
+    
+    setError("");
+    setIsLoading(true);
+
+    try {
+      await verifyMfa({ mfaToken, code: mfaCode });
+      // useAuth handles the redirect to /admin
+    } catch (err: any) {
+      setError(err.message || "Invalid MFA code");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -66,75 +100,100 @@ export default function AdminLoginPage() {
             </div>
           )}
 
-          {/* Email */}
-          <div className="flex flex-col gap-1.5">
-            <label className="font-display text-xs font-[600] uppercase tracking-[1.2px] text-[#666666]">
-              Email Address
-            </label>
-            <div className="relative flex items-center">
-              <LuMail className="absolute left-3.5 h-4 w-4 text-[#999999]" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full rounded-xl border border-[#E1E1E1] bg-[#FAFAFA] py-3 pl-10 pr-4 font-display text-sm font-[400] text-[#111111] placeholder-[#A0A0A0] outline-none transition-all duration-200 focus:border-[#0070F3] focus:bg-white focus:ring-2 focus:ring-[#0070F3]/10"
-                placeholder="admin@hillarystep.com"
-              />
-            </div>
-          </div>
+          {/* Email and Password fields shown only if MFA not required */}
+          {!requiresMfa ? (
+            <>
+              {/* Email */}
+              <div className="flex flex-col gap-1.5">
+                <label className="font-display text-xs font-[600] uppercase tracking-[1.2px] text-[#666666]">
+                  Email Address
+                </label>
+                <div className="relative flex items-center">
+                  <LuMail className="absolute left-3.5 h-4 w-4 text-[#999999]" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full rounded-xl border border-[#E1E1E1] bg-[#FAFAFA] py-3 pl-10 pr-4 font-display text-sm font-[400] text-[#111111] placeholder-[#A0A0A0] outline-none transition-all duration-200 focus:border-[#0070F3] focus:bg-white focus:ring-2 focus:ring-[#0070F3]/10"
+                    placeholder="admin@hillarystep.com"
+                  />
+                </div>
+              </div>
 
-          {/* Password */}
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between">
+              {/* Password */}
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="font-display text-xs font-[600] uppercase tracking-[1.2px] text-[#666666]">
+                    Password
+                  </label>
+                  <button
+                    type="button"
+                    className="font-display text-xs font-[500] text-[#0070F3] hover:underline"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+                <div className="relative flex items-center">
+                  <LuLock className="absolute left-3.5 h-4 w-4 text-[#999999]" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full rounded-xl border border-[#E1E1E1] bg-[#FAFAFA] py-3 pl-10 pr-10 font-display text-sm font-[400] text-[#111111] placeholder-[#A0A0A0] outline-none transition-all duration-200 focus:border-[#0070F3] focus:bg-white focus:ring-2 focus:ring-[#0070F3]/10"
+                    placeholder="••••••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 text-[#999999] hover:text-[#111111] transition-colors"
+                  >
+                    {showPassword ? (
+                      <LuEyeOff className="h-4 w-4" />
+                    ) : (
+                      <LuEye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            /* MFA Code Field */
+            <div className="flex flex-col gap-1.5">
               <label className="font-display text-xs font-[600] uppercase tracking-[1.2px] text-[#666666]">
-                Password
+                Authenticator Code
               </label>
-              <button
-                type="button"
-                className="font-display text-xs font-[500] text-[#0070F3] hover:underline"
-              >
-                Forgot password?
-              </button>
+              <div className="relative flex items-center">
+                <LuLock className="absolute left-3.5 h-4 w-4 text-[#999999]" />
+                <input
+                  type="text"
+                  value={mfaCode}
+                  onChange={(e) => setMfaCode(e.target.value)}
+                  required
+                  className="w-full rounded-xl border border-[#E1E1E1] bg-[#FAFAFA] py-3 pl-10 pr-4 font-display text-sm font-[400] text-[#111111] placeholder-[#A0A0A0] outline-none transition-all duration-200 focus:border-[#0070F3] focus:bg-white focus:ring-2 focus:ring-[#0070F3]/10"
+                  placeholder="123456"
+                  maxLength={6}
+                />
+              </div>
             </div>
-            <div className="relative flex items-center">
-              <LuLock className="absolute left-3.5 h-4 w-4 text-[#999999]" />
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full rounded-xl border border-[#E1E1E1] bg-[#FAFAFA] py-3 pl-10 pr-10 font-display text-sm font-[400] text-[#111111] placeholder-[#A0A0A0] outline-none transition-all duration-200 focus:border-[#0070F3] focus:bg-white focus:ring-2 focus:ring-[#0070F3]/10"
-                placeholder="••••••••••••"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 text-[#999999] hover:text-[#111111] transition-colors"
-              >
-                {showPassword ? (
-                  <LuEyeOff className="h-4 w-4" />
-                ) : (
-                  <LuEye className="h-4 w-4" />
-                )}
-              </button>
-            </div>
-          </div>
+          )}
 
           {/* Submit Button */}
           <button
-            type="submit"
+            type={requiresMfa ? "button" : "submit"}
+            onClick={requiresMfa ? handleMfaSubmit : undefined}
             disabled={isLoading}
             className="group relative mt-2 flex h-11 w-full items-center justify-center rounded-xl bg-[#0070F3] font-display text-sm font-[500] text-white shadow-[0_2px_10px_rgba(0,112,243,0.25)] transition-all duration-200 hover:bg-[#0060DF] active:scale-[0.99] disabled:opacity-75"
           >
             {isLoading ? (
               <div className="flex items-center gap-2">
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                <span>Signing in...</span>
+                <span>{requiresMfa ? "Verifying..." : "Signing in..."}</span>
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <span>Sign in to Admin</span>
+                <span>{requiresMfa ? "Verify Code" : "Sign in to Admin"}</span>
                 <LuArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </div>
             )}

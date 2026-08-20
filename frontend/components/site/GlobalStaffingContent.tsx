@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { CandidacySection } from "./Forms";
+import { jobsApi } from "@/lib/api/jobs";
 
 const STEPS = [
   {
@@ -73,17 +74,19 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
   const [activeStep, setActiveStep] = useState(0);
   const stepRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [formData, setFormData] = useState({
-    jobTitle: "",
+    title: "",
     organizationName: "",
-    roleType: "",
+    type: "",
     experienceLevel: "",
     skills: "",
     country: "",
     city: "",
     workMode: "",
-    jobDescription: "",
+    description: "",
     requirements: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Auto-scroll active step tab into view on mobile
   useEffect(() => {
@@ -101,9 +104,28 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (activeStep < STEPS.length - 1) {
       setActiveStep(activeStep + 1);
+    } else {
+      setIsSubmitting(true);
+      try {
+        await jobsApi.createPublicJob({
+          title: formData.title,
+          description: formData.description,
+          organizationName: formData.organizationName,
+          type: formData.type,
+          location: `${formData.city}, ${formData.country}`,
+          experienceYears: formData.experienceLevel, // might need better mapping
+          requirements: [formData.skills, formData.experienceLevel].filter(Boolean),
+        });
+        setSubmitSuccess(true);
+      } catch (err) {
+        console.error("Failed to post job", err);
+        alert("Failed to submit job posting.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -326,8 +348,8 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                         <input
                           type="text"
                           placeholder="e.g. Senior Backend Engineer"
-                          value={formData.jobTitle}
-                          onChange={(e) => handleInputChange("jobTitle", e.target.value)}
+                          value={formData.title}
+                          onChange={(e) => handleInputChange("title", e.target.value)}
                           className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] placeholder-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
                         />
                       </div>
@@ -354,8 +376,8 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                           Role Type
                         </label>
                         <select
-                          value={formData.roleType}
-                          onChange={(e) => handleInputChange("roleType", e.target.value)}
+                          value={formData.type}
+                          onChange={(e) => handleInputChange("type", e.target.value)}
                           className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
                         >
                           <option value="">Select role type</option>
@@ -425,8 +447,8 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                       </label>
                       <textarea
                         placeholder="Describe the role..."
-                        value={formData.jobDescription}
-                        onChange={(e) => handleInputChange("jobDescription", e.target.value)}
+                        value={formData.description}
+                        onChange={(e) => handleInputChange("description", e.target.value)}
                         rows={isModal ? 6 : 5}
                         className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] py-[16px] font-display font-[400] text-[#111111] placeholder-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 resize-none ${isModal ? "text-[14px] leading-[22px]" : "text-[13px] leading-[20px]"}`}
                       />
@@ -463,10 +485,11 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
               )}
               <button
                 type="button"
-                onClick={activeStep === STEPS.length - 1 ? undefined : handleNext}
-                className={`flex items-center gap-[8px] rounded-[8px] bg-[#002868] font-display font-[510] text-white shadow-sm transition-all duration-200 hover:bg-[#002868]/90 h-[48px] px-[32px] text-[14px]`}
+                disabled={isSubmitting || submitSuccess}
+                onClick={activeStep === STEPS.length - 1 ? handleNext : handleNext}
+                className={`flex items-center gap-[8px] rounded-[8px] bg-[#002868] font-display font-[510] text-white shadow-sm transition-all duration-200 hover:bg-[#002868]/90 h-[48px] px-[32px] text-[14px] disabled:opacity-50`}
               >
-                {activeStep === STEPS.length - 1 ? "Submit" : "Next"}
+                {isSubmitting ? "Submitting..." : submitSuccess ? "Success!" : activeStep === STEPS.length - 1 ? "Submit" : "Next"}
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>

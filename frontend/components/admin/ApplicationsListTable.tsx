@@ -2,56 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { applicationsApi } from "@/lib/api/applications";
+import { Application } from "@/lib/api/types";
 import { LuSearch, LuChevronDown, LuFilterX } from "react-icons/lu";
-
-const mockApplications = [
-  {
-    id: "124",
-    name: "Devan Kotari",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-    email: "d.kotari@example.com",
-    practice: "IT Solutions",
-    location: "New York, USA",
-    experience: "8 Years",
-    dateApplied: "25 Jul 2026",
-    status: "Reviewed",
-  },
-  {
-    id: "125",
-    name: "Sarah Jenkins",
-    avatar: "",
-    initials: "SJ",
-    email: "s.jenkins@example.com",
-    practice: "Consulting",
-    location: "London, UK",
-    experience: "3 Years",
-    dateApplied: "24 Jul 2026",
-    status: "New",
-  },
-  {
-    id: "126",
-    name: "Michael Chen",
-    avatar: "https://i.pravatar.cc/150?img=11",
-    email: "m.chen@example.com",
-    practice: "Engineering",
-    location: "San Francisco, USA",
-    experience: "12 Years",
-    dateApplied: "22 Jul 2026",
-    status: "Shortlisted",
-  },
-  {
-    id: "127",
-    name: "Aisha Patel",
-    avatar: "",
-    initials: "AP",
-    email: "a.patel@example.com",
-    practice: "Finance",
-    location: "Toronto, CA",
-    experience: "5 Years",
-    dateApplied: "20 Jul 2026",
-    status: "Reviewed",
-  }
-];
 
 const StatusBadge = ({ status }: { status: string }) => {
   let bg = "bg-gray-100";
@@ -81,6 +35,27 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 export function ApplicationsListTable() {
   const router = useRouter();
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+
+  useEffect(() => {
+    const fetchApps = async () => {
+      setIsLoading(true);
+      try {
+        const res = await applicationsApi.getAdminApplications({ page, pageSize });
+        setApplications(res.data);
+        setTotal(res.meta.total);
+      } catch (err) {
+        console.error("Failed to fetch applications", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchApps();
+  }, [page]);
 
   const handleRowClick = (id: string) => {
     router.push(`/admin/applications/${id}`);
@@ -131,7 +106,19 @@ export function ApplicationsListTable() {
             </tr>
           </thead>
           <tbody>
-            {mockApplications.map((app) => (
+            {isLoading ? (
+              <tr>
+                <td colSpan={8} className="py-8 text-center text-sm text-gray-500">
+                  Loading applications...
+                </td>
+              </tr>
+            ) : applications.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="py-8 text-center text-sm text-gray-500">
+                  No applications found.
+                </td>
+              </tr>
+            ) : applications.map((app) => (
               <tr 
                 key={app.id} 
                 onClick={() => handleRowClick(app.id)}
@@ -142,30 +129,26 @@ export function ApplicationsListTable() {
                 </td>
                 <td className="py-4 pr-4">
                   <div className="flex items-center gap-3">
-                    {app.avatar ? (
-                      <img src={app.avatar} alt={app.name} className="w-8 h-8 rounded-full object-cover bg-gray-200" />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-semibold text-blue-700">
-                        {app.initials}
-                      </div>
-                    )}
-                    <span className="text-sm font-semibold text-gray-900 whitespace-nowrap group-hover:text-blue-600 transition-colors">{app.name}</span>
+                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-semibold text-blue-700">
+                      {app.fullName.charAt(0)}
+                    </div>
+                    <span className="text-sm font-semibold text-gray-900 whitespace-nowrap group-hover:text-blue-600 transition-colors">{app.fullName}</span>
                   </div>
                 </td>
                 <td className="py-4 px-4 text-xs text-gray-500 whitespace-nowrap">
                   {app.email}
                 </td>
                 <td className="py-4 px-4 text-xs text-gray-900 font-medium whitespace-nowrap">
-                  {app.practice}
+                  {app.practice || "-"}
                 </td>
                 <td className="py-4 px-4 text-xs text-gray-900 font-medium whitespace-nowrap">
-                  {app.location}
+                  {app.preferredLocation || "-"}
                 </td>
                 <td className="py-4 px-4 text-xs text-gray-500 whitespace-nowrap">
-                  {app.experience}
+                  {app.experienceYears || "-"}
                 </td>
                 <td className="py-4 px-4 text-xs text-gray-500 whitespace-nowrap">
-                  {app.dateApplied}
+                  {new Date(app.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                 </td>
                 <td className="py-4 px-4 whitespace-nowrap">
                   <StatusBadge status={app.status} />
@@ -178,15 +161,23 @@ export function ApplicationsListTable() {
       
       {/* Pagination Footer */}
       <div className="p-4 flex justify-between items-center text-xs font-medium text-gray-500">
-        <span>1-10 of 248</span>
+        <span>{applications.length > 0 ? (page - 1) * pageSize + 1 : 0}-{Math.min(page * pageSize, total)} of {total}</span>
         <div className="flex items-center gap-1">
-          <button className="p-1 hover:text-gray-900 transition-colors">{"<"}</button>
-          <button className="w-6 h-6 flex items-center justify-center bg-blue-50 text-blue-600 font-bold rounded">1</button>
-          <button className="w-6 h-6 flex items-center justify-center hover:bg-gray-50 rounded">2</button>
-          <button className="w-6 h-6 flex items-center justify-center hover:bg-gray-50 rounded">3</button>
-          <span className="px-1">...</span>
-          <button className="w-6 h-6 flex items-center justify-center hover:bg-gray-50 rounded">25</button>
-          <button className="p-1 hover:text-gray-900 transition-colors">{">"}</button>
+          <button 
+            disabled={page === 1}
+            onClick={() => setPage(p => p - 1)}
+            className="p-1 hover:text-gray-900 transition-colors disabled:opacity-50"
+          >
+            {"<"}
+          </button>
+          <button className="w-6 h-6 flex items-center justify-center bg-blue-50 text-blue-600 font-bold rounded">{page}</button>
+          <button 
+            disabled={page * pageSize >= total}
+            onClick={() => setPage(p => p + 1)}
+            className="p-1 hover:text-gray-900 transition-colors disabled:opacity-50"
+          >
+            {">"}
+          </button>
         </div>
       </div>
     </div>

@@ -1,0 +1,113 @@
+# ============================================================
+# CI/CD Pipeline — Hillary Step Solutions
+# Runs on every push and pull request to main
+# ============================================================
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ----------------------------------------------------------------
+  # Backend: lint, typecheck, unit tests, E2E tests, build, audit
+  # ----------------------------------------------------------------
+  backend:
+    name: Backend Quality Gate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: hillary_staging_test
+        ports:
+          - '5432:5432'
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run database migrations
+        env:
+          DATABASE_URL: postgresql://testuser:testpassword@localhost:5432/hillary_staging_test?schema=public
+        run: npx prisma migrate deploy
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npm test
+
+      - name: E2E tests
+        env:
+          DATABASE_URL: postgresql://testuser:testpassword@localhost:5432/hillary_staging_test?schema=public
+          JWT_SECRET: ci-jwt-secret
+          SESSION_SECRET: ci-session-secret
+          NODE_ENV: test
+        run: npm run test:e2e
+
+      - name: npm audit (high severity check)
+        run: npm audit --audit-level=high
+
+      - name: Build
+        run: npm run build
+
+  # ----------------------------------------------------------------
+  # Frontend: lint, typecheck, build
+  # ----------------------------------------------------------------
+  frontend:
+    name: Frontend Quality Gate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
