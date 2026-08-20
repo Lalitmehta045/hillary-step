@@ -4,6 +4,8 @@ import { FastifyRequest } from 'fastify';
 export const ClientIp = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest<FastifyRequest>();
-    return request.headers['x-forwarded-for'] || request.ip || 'Unknown';
+    const forwarded = request.headers['x-forwarded-for'];
+    const ip = Array.isArray(forwarded) ? forwarded[0] : forwarded;
+    return (ip || request.ip || 'Unknown').split(',')[0].trim();
   },
 );

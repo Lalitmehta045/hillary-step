@@ -72,10 +72,16 @@ export class AuthService {
       );
     }
 
-    const isPasswordValid = await argon2.verify(
-      admin.passwordHash,
-      loginDto.password,
-    );
+    let isPasswordValid = false;
+    try {
+      isPasswordValid = await argon2.verify(
+        admin.passwordHash,
+        loginDto.password,
+      );
+    } catch (e) {
+      this.logger.warn(`Argon2 verify failed for admin ${admin.id}: ${e.message}`);
+      isPasswordValid = false;
+    }
 
     if (!isPasswordValid) {
       const failedAttempts = admin.failedAttempts + 1;

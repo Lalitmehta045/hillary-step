@@ -36,7 +36,8 @@ export class AuthController {
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
   ) {
-    const userAgent = req.headers['user-agent'] || 'Unknown';
+    const uaHeader = req.headers['user-agent'];
+    const userAgent = Array.isArray(uaHeader) ? uaHeader[0] : (uaHeader || 'Unknown');
     const result = await this.authService.login(loginDto, ip, userAgent);
 
     // MFA challenge — do not set session cookie, return challenge token
@@ -65,7 +66,8 @@ export class AuthController {
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
   ) {
-    const userAgent = req.headers['user-agent'] || 'Unknown';
+    const uaHeader = req.headers['user-agent'];
+    const userAgent = Array.isArray(uaHeader) ? uaHeader[0] : (uaHeader || 'Unknown');
     const result = await this.authService.verifyMfa(
       mfaVerifyDto.mfaToken,
       mfaVerifyDto.code,
@@ -94,7 +96,8 @@ export class AuthController {
     @Req() req: FastifyRequest,
     @Res({ passthrough: true }) res: FastifyReply,
   ) {
-    const userAgent = req.headers['user-agent'] || 'Unknown';
+    const uaHeader = req.headers['user-agent'];
+    const userAgent = Array.isArray(uaHeader) ? uaHeader[0] : (uaHeader || 'Unknown');
     const result = await this.authService.verifyRecoveryCode(
       dto.mfaToken,
       dto.code,
@@ -130,7 +133,8 @@ export class AuthController {
     @ClientIp() ip: string,
     @Req() req: FastifyRequest,
   ) {
-    const userAgent = req.headers['user-agent'] || 'Unknown';
+    const uaHeader = req.headers['user-agent'];
+    const userAgent = Array.isArray(uaHeader) ? uaHeader[0] : (uaHeader || 'Unknown');
     return this.authService.enableMfa(admin.id, dto.code, ip, userAgent);
   }
 
@@ -142,7 +146,8 @@ export class AuthController {
     @ClientIp() ip: string,
     @Req() req: FastifyRequest,
   ) {
-    const userAgent = req.headers['user-agent'] || 'Unknown';
+    const uaHeader = req.headers['user-agent'];
+    const userAgent = Array.isArray(uaHeader) ? uaHeader[0] : (uaHeader || 'Unknown');
     return this.authService.disableMfa(admin.id, dto.password, ip, userAgent);
   }
 
@@ -159,7 +164,8 @@ export class AuthController {
     @Res({ passthrough: true }) res: FastifyReply,
   ) {
     const token = req.cookies['hs_session'];
-    const userAgent = req.headers['user-agent'] || 'Unknown';
+    const uaHeader = req.headers['user-agent'];
+    const userAgent = Array.isArray(uaHeader) ? uaHeader[0] : (uaHeader || 'Unknown');
 
     if (token) {
       await this.authService.logout(token, ip, userAgent);

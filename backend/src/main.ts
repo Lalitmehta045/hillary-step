@@ -77,7 +77,7 @@ async function bootstrap() {
   });
 
   await fastifyInstance.register(fastifyCookie, {
-    secret: configService.get<string>('auth.cookieDomain', 'secret'),
+    secret: configService.get<string>('auth.sessionSecret', 'fallback-secret-key-at-least-32-chars-long'),
     parseOptions: {
       httpOnly: true,
       secure: nodeEnv === 'production',
