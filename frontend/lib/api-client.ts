@@ -9,7 +9,12 @@ export class ApiError extends Error {
   }
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1";
+let API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1";
+
+// Auto-append /api/v1 to fix production 404s if the Vercel env var is missing it
+if (API_BASE_URL && !API_BASE_URL.endsWith("/api/v1")) {
+  API_BASE_URL = API_BASE_URL.replace(/\/$/, "") + "/api/v1";
+}
 
 async function handleResponse<T>(response: Response): Promise<T> {
   const isJson = response.headers.get("content-type")?.includes("application/json");
