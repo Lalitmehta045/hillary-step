@@ -44,6 +44,8 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package.json ./
+COPY start.sh ./
+RUN chmod +x start.sh
 
 # Copy nginx config (for reference, not used in container)
 COPY nginx ./nginx
@@ -64,4 +66,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 # Use dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]
 
-CMD ["node", "dist/main"]
+CMD ["/bin/sh", "start.sh"]
