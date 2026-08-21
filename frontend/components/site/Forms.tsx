@@ -151,12 +151,16 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
 
       if (response.parsedData) {
         const parsed = response.parsedData;
+        const parsedLinkedin =
+          parsed.linkedinUrl || parsed.linkedin || parsed.linkedinProfile || '';
+        // Prefer freshly parsed values so re-uploading another résumé replaces prior autofill.
+        // Keep previous value only when the parser did not return that field.
         setFormData(prev => ({
           ...prev,
-          fullName: prev.fullName.trim() !== '' ? prev.fullName : (parsed.fullName || ''),
-          email: prev.email.trim() !== '' ? prev.email : (parsed.email || ''),
-          phone: prev.phone.trim() !== '' ? prev.phone : (parsed.phone || ''),
-          linkedinUrl: prev.linkedinUrl.trim() !== '' ? prev.linkedinUrl : (parsed.linkedinUrl || parsed.linkedin || parsed.linkedinProfile || ''),
+          fullName: (parsed.fullName || '').trim() || prev.fullName,
+          email: (parsed.email || '').trim() || prev.email,
+          phone: (parsed.phone || '').trim() || prev.phone,
+          linkedinUrl: parsedLinkedin.trim() || prev.linkedinUrl,
           practice: parsed.practice && PRACTICES.includes(parsed.practice) ? parsed.practice : prev.practice,
           preferredLocation: parsed.preferredLocation && LOCATIONS.includes(parsed.preferredLocation) ? parsed.preferredLocation : prev.preferredLocation,
         }));
@@ -188,6 +192,8 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
     const f = e.target.files?.[0];
     if (!f) return;
     await validateAndProcessFile(f);
+    // Allow selecting the same or another file again without a page refresh.
+    e.target.value = '';
   };
 
   const handleDragOver = (e: React.DragEvent) => {
