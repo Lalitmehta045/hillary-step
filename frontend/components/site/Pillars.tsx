@@ -45,7 +45,7 @@ export function Pillars() {
   const [isCivilModalOpen, setIsCivilModalOpen] = useState(false);
 
   return (
-    <section className="w-full bg-white pt-[100px] pb-[40px] max-md:pt-[60px] max-md:pb-[40px]">
+    <section id="pillars" className="w-full bg-white pt-[100px] pb-[40px] max-md:pt-[60px] max-md:pb-[40px]">
       <div className="mx-auto w-full max-w-[1280px] px-[64px] max-md:px-[24px]">
         <StaggerContainer>
           <StaggerItem>

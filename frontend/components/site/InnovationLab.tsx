@@ -42,7 +42,7 @@ export function InnovationLab() {
   // Use activeIndex for timing instead of static delays
 
   return (
-    <section className="relative w-full overflow-hidden bg-white pt-[100px] pb-10 max-md:pt-[60px]">
+    <section id="ai-core" className="relative w-full overflow-hidden bg-white pt-[100px] pb-10 max-md:pt-[60px]">
       <div className="relative mx-auto w-full max-w-[1280px] px-[64px] max-md:px-[24px]">
         {/* Section Header */}
         <div className="max-w-[800px] mb-[40px]">

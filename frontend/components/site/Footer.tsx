@@ -1,39 +1,54 @@
+"use client";
+
+import { useState } from "react";
 import { FooterWave } from "@/components/site/FooterWave";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { GlobalStaffingModal } from "@/components/site/GlobalStaffingModal";
+import { ITSolutionsModal } from "@/components/site/ITSolutionsModal";
+import { CivilInfraModal } from "@/components/site/CivilInfraModal";
 import Image from "next/image";
 import { FaInstagram, FaXTwitter, FaLinkedinIn, FaFacebookF } from "react-icons/fa6";
 
-const COLUMNS = [
+type FooterLink = {
+  label: string;
+  href?: string;
+  action?: "it" | "staffing" | "civil";
+};
+
+const COLUMNS: {
+  title: string;
+  links: FooterLink[];
+}[] = [
   {
-    title: "Company",
-    links: ["About", "Leadership", "Innovation Lab", "Sustainability", "Newsroom"],
-  },
-  {
-    title: "Solutions",
+    title: "OPERATIONAL PILLARS",
     links: [
-      "Built Environment",
-      "Digital Frontier",
-      "Human Capital",
-      "Joint Ventures",
-      "International EPC",
+      { label: "IT Solutions - Platform", action: "it" },
+      { label: "Global Staffing - People", action: "staffing" },
+      { label: "Civil & Infrastructure - Projects", action: "civil" },
     ],
   },
   {
-    title: "Investors",
-    links: ["Investor Portal", "Annual Reports", "Governance", "Filings", "ESG Reporting"],
+    title: "STATUTORY COMPLIANCE",
+    links: [
+      { label: "MCA Parameters" },
+      { label: "ASIC Standards" },
+      { label: "US Corporate Labor Codes" },
+    ],
   },
   {
-    title: "Compliance",
+    title: "CORPORATE GATEWAY",
     links: [
-      "Companies Act 2013",
-      "International Arbitration",
-      "Global Compliance",
-      "Privacy",
-      "Terms of Service",
-      "CSR",
-      "Skill Development",
-      "Employee Welfare",
+      { label: "About the Ascent", href: "/#about" },
+      { label: "The Incubation Lab", href: "/#pillars" },
+      { label: "Contact the Sherpas", href: "/#contact" },
+    ],
+  },
+  {
+    title: "VALIDATIONS",
+    links: [
+      { label: "MSME Certified" },
+      { label: "DPIIT Recognition" },
     ],
   },
 ];
@@ -46,30 +61,57 @@ const SOCIALS = [
 ];
 
 export function Footer() {
+  const [isITModalOpen, setIsITModalOpen] = useState(false);
+  const [isStaffingModalOpen, setIsStaffingModalOpen] = useState(false);
+  const [isCivilModalOpen, setIsCivilModalOpen] = useState(false);
+
+  const handleAction = (action: FooterLink["action"]) => {
+    if (action === "it") setIsITModalOpen(true);
+    if (action === "staffing") setIsStaffingModalOpen(true);
+    if (action === "civil") setIsCivilModalOpen(true);
+  };
+
   return (
     <footer className="relative w-full overflow-hidden border-t border-[#353434]/20 bg-white">
       <FooterWave className="pointer-events-none absolute inset-0 z-20 h-full w-full" />
-      
-      <div className="relative z-10 mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[96px] max-md:px-[24px] pt-[64px] max-md:pt-[40px]">
-        <StaggerContainer className="grid grid-cols-2 max-md:grid-cols-1 gap-[48px] max-md:gap-[32px] md:grid-cols-4">
+
+      <div className="relative z-10 mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[64px] max-md:px-[24px] max-lg:px-[40px] pt-[64px] max-md:pt-[40px]">
+        <StaggerContainer className="flex w-full flex-col gap-[32px] md:flex-row md:items-start md:justify-between">
           {COLUMNS.map((col) => (
-            <StaggerItem key={col.title}>
-              <nav className="flex flex-col gap-[8px]">
-                <h2 className="font-display text-[16px] font-[400] leading-[24px] tracking-[0px] text-[#1E3A8A]">
+            <StaggerItem key={col.title} className="shrink-0">
+              <nav className="flex flex-col gap-[16px]">
+                <h2 className="min-h-[40px] font-display text-[15px] font-[590] leading-[20px] tracking-[0.04em] text-[#1E3A8A] uppercase">
                   {col.title}
                 </h2>
-                <ul className="flex flex-col gap-[8px]">
+                <ul className="flex flex-col gap-[10px]">
                   {col.links.map((link) => (
-                    <li key={link}>
-                      <a
-                        href="#"
-                        className="group/link relative inline-flex items-center gap-[6px] font-display text-[16px] font-[400] leading-[24px] tracking-[0px] text-[#1E3A8A] transition-all duration-300 hover:text-[#1A6CFF] hover:translate-x-[4px]"
-                      >
-                        <span className="relative">
-                          {link}
-                          <span className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-gradient-to-r from-[#1A6CFF] to-[#3AF900] transition-all duration-300 ease-out group-hover/link:w-full" />
+                    <li key={link.label}>
+                      {link.action ? (
+                        <button
+                          type="button"
+                          onClick={() => handleAction(link.action)}
+                          className="group/link relative inline-flex cursor-pointer items-center gap-[6px] bg-transparent p-0 text-left font-display text-[15px] font-[400] leading-[22px] tracking-[0px] text-[#1E3A8A]/85 transition-all duration-300 hover:text-[#1A6CFF] hover:translate-x-[4px]"
+                        >
+                          <span className="relative">
+                            {link.label}
+                            <span className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-gradient-to-r from-[#1A6CFF] to-[#3AF900] transition-all duration-300 ease-out group-hover/link:w-full" />
+                          </span>
+                        </button>
+                      ) : link.href ? (
+                        <a
+                          href={link.href}
+                          className="group/link relative inline-flex items-center gap-[6px] font-display text-[15px] font-[400] leading-[22px] tracking-[0px] text-[#1E3A8A]/85 transition-all duration-300 hover:text-[#1A6CFF] hover:translate-x-[4px]"
+                        >
+                          <span className="relative">
+                            {link.label}
+                            <span className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-gradient-to-r from-[#1A6CFF] to-[#3AF900] transition-all duration-300 ease-out group-hover/link:w-full" />
+                          </span>
+                        </a>
+                      ) : (
+                        <span className="font-display text-[15px] font-[400] leading-[22px] tracking-[0px] text-[#1E3A8A]/85">
+                          {link.label}
                         </span>
-                      </a>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -101,7 +143,7 @@ export function Footer() {
       </div>
 
       <div className="relative z-10 w-full bg-[#424549]">
-        <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[96px] max-md:px-[24px] py-[30px]">
+        <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[64px] max-md:px-[24px] max-lg:px-[40px] py-[30px]">
           <FadeIn delay={0.4}>
             <div className="relative flex flex-col items-start gap-[12px]">
               <Image
@@ -118,12 +160,16 @@ export function Footer() {
           </FadeIn>
 
           <FadeIn delay={0.5} className="flex w-full justify-center max-md:justify-start">
-            <p className="font-sans text-[10px] tracking-[2.4px] max-md:tracking-[1px] text-white/60 uppercase max-md:text-left max-md:leading-[16px]">
-              OPERATING AS PRINCIPAL AND AGENT WORLDWIDE.
+            <p className="font-sans text-[11px] tracking-[0.4px] text-white/60 max-md:text-left max-md:leading-[16px]">
+              © 2026 Hillary Step Solutions. Operating as Principal and Agent Worldwide. All Rights Reserved
             </p>
           </FadeIn>
         </div>
       </div>
+
+      <ITSolutionsModal isOpen={isITModalOpen} onClose={() => setIsITModalOpen(false)} />
+      <GlobalStaffingModal isOpen={isStaffingModalOpen} onClose={() => setIsStaffingModalOpen(false)} />
+      <CivilInfraModal isOpen={isCivilModalOpen} onClose={() => setIsCivilModalOpen(false)} />
     </footer>
   );
 }
