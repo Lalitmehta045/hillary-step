@@ -4,7 +4,11 @@ import {
   IsEnum,
   IsBoolean,
   IsInt,
+  IsArray,
   Min,
+  Max,
+  ValidateNested,
+  ArrayMaxSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -14,6 +18,27 @@ export enum JobStatus {
   PUBLISHED = 'PUBLISHED',
   CLOSED = 'CLOSED',
   ARCHIVED = 'ARCHIVED',
+}
+
+export class JobAttachmentDto {
+  @ApiProperty({ description: 'S3 object key from upload-document' })
+  @IsString()
+  key: string;
+
+  @ApiProperty()
+  @IsString()
+  fileName: string;
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(5 * 1024 * 1024)
+  fileSize: number;
+
+  @ApiProperty()
+  @IsString()
+  mimeType: string;
 }
 
 export class CreateJobDto {
@@ -85,6 +110,14 @@ export class CreateJobDto {
   @IsOptional()
   @IsString()
   countryCode?: string;
+
+  @ApiPropertyOptional({ type: [JobAttachmentDto] })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(5)
+  @ValidateNested({ each: true })
+  @Type(() => JobAttachmentDto)
+  documents?: JobAttachmentDto[];
 }
 
 export class AdminCreateJobDto extends CreateJobDto {

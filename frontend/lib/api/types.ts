@@ -20,6 +20,13 @@ export interface PaginatedResponse<T> {
 
 export type JobStatus = 'DRAFT' | 'PUBLISHED' | 'CLOSED' | 'ARCHIVED';
 
+export interface JobAttachment {
+  fileKey: string;
+  fileName: string;
+  fileSize: number;
+  mimeType: string;
+}
+
 export interface Job {
   id: string;
   jobTitle: string;
@@ -38,6 +45,7 @@ export interface Job {
   countryCode?: string;
   status: JobStatus;
   isPublic: boolean;
+  attachments?: JobAttachment[] | null;
   createdAt: string;
   updatedAt: string;
 }

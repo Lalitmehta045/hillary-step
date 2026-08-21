@@ -51,7 +51,7 @@ describe('JobsService', () => {
       expect(result).toEqual(expectedOutput);
       expect(mockPrismaService.job.create).toHaveBeenCalledWith({
         data: {
-          ...dto,
+          jobTitle: 'New Job',
           applicationDeadline: null,
           status: 'DRAFT',
           isPublic: false,
@@ -72,10 +72,43 @@ describe('JobsService', () => {
       expect(result).toEqual(expectedOutput);
       expect(mockPrismaService.job.create).toHaveBeenCalledWith({
         data: {
-          ...data,
-          applicationDeadline: new Date('2024-12-31T23:59:59.000Z'),
+          jobTitle: 'New Job',
           status: 'PUBLISHED',
+          applicationDeadline: new Date('2024-12-31T23:59:59.000Z'),
           isPublic: true,
+        },
+      });
+    });
+
+    it('should persist uploaded documents as attachments', async () => {
+      const dto = {
+        jobTitle: 'New Job',
+        documents: [
+          {
+            key: 'job-docs/abc.pdf',
+            fileName: 'spec.pdf',
+            fileSize: 1024,
+            mimeType: 'application/pdf',
+          },
+        ],
+      } as any;
+      mockPrismaService.job.create.mockResolvedValue({ id: '1' });
+
+      await service.create(dto);
+      expect(mockPrismaService.job.create).toHaveBeenCalledWith({
+        data: {
+          jobTitle: 'New Job',
+          applicationDeadline: null,
+          status: 'DRAFT',
+          isPublic: false,
+          attachments: [
+            {
+              fileKey: 'job-docs/abc.pdf',
+              fileName: 'spec.pdf',
+              fileSize: 1024,
+              mimeType: 'application/pdf',
+            },
+          ],
         },
       });
     });

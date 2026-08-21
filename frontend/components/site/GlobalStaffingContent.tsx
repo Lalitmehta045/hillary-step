@@ -2,8 +2,14 @@
 
 import { useState, useRef, useEffect } from "react";
 import { m, AnimatePresence } from "framer-motion";
+import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 import { CandidacySection } from "./Forms";
-import { jobsApi } from "@/lib/api/jobs";
+import { jobsApi, type JobDocumentMeta } from "@/lib/api/jobs";
+import { ApiError } from "@/lib/api-client";
+
+const MAX_DOCUMENTS = 5;
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const ALLOWED_EXTENSIONS = [".pdf", ".doc", ".docx"];
 
 const STEPS = [
   {
@@ -73,6 +79,11 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
   const [activeTab, setActiveTab] = useState<"post" | "find">("post");
   const [activeStep, setActiveStep] = useState(0);
   const stepRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const turnstileRef = useRef<TurnstileInstance>(null);
+  const turnstileTokenRef = useRef<string | null>(null);
+  const documentsRef = useRef<JobDocumentMeta[]>([]);
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
   const [formData, setFormData] = useState({
     title: "",
     organizationName: "",
@@ -85,9 +96,54 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
     description: "",
     requirements: "",
   });
+  const [documents, setDocuments] = useState<JobDocumentMeta[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploadingDoc, setIsUploadingDoc] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const syncDocuments = (next: JobDocumentMeta[]) => {
+    documentsRef.current = next;
+    setDocuments(next);
+  };
+
+  const assignTurnstileToken = (token: string) => {
+    turnstileTokenRef.current = token;
+  };
+
+  const clearTurnstileToken = () => {
+    turnstileTokenRef.current = null;
+  };
+
+  const refreshTurnstile = () => {
+    clearTurnstileToken();
+    turnstileRef.current?.reset();
+  };
+
+  const ensureTurnstileToken = async (timeoutMs = 15000): Promise<string | undefined> => {
+    if (!siteKey) return undefined;
+    const existing = turnstileTokenRef.current?.trim();
+    if (existing) return existing;
+
+    return new Promise((resolve, reject) => {
+      const started = Date.now();
+      const tick = () => {
+        const token = turnstileTokenRef.current?.trim();
+        if (token) {
+          resolve(token);
+          return;
+        }
+        if (Date.now() - started >= timeoutMs) {
+          reject(new Error("Turnstile token timed out"));
+          return;
+        }
+        requestAnimationFrame(tick);
+      };
+      tick();
+    });
+  };
 
   // Auto-scroll active step tab into view on mobile
   useEffect(() => {
@@ -106,6 +162,126 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
     if (errorMessage) setErrorMessage("");
   };
 
+  const uploadDocumentFile = async (file: File): Promise<boolean> => {
+    const fileExt = "." + (file.name.split(".").pop() || "").toLowerCase();
+    if (!ALLOWED_EXTENSIONS.includes(fileExt)) {
+      setUploadMessage("Invalid file type. Only PDF, DOC, and DOCX are allowed.");
+      setErrorMessage("Invalid file type. Only PDF, DOC, and DOCX are allowed.");
+      return false;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      setUploadMessage("File exceeds 5MB size limit.");
+      setErrorMessage("File too large (max 5MB).");
+      return false;
+    }
+    if (documentsRef.current.length >= MAX_DOCUMENTS) {
+      setUploadMessage(`You can upload up to ${MAX_DOCUMENTS} documents.`);
+      setErrorMessage(`You can upload up to ${MAX_DOCUMENTS} documents.`);
+      return false;
+    }
+
+    setIsUploadingDoc(true);
+    setUploadMessage("Uploading…");
+    setErrorMessage("");
+
+    try {
+      let token: string | undefined;
+      try {
+        token = await ensureTurnstileToken();
+      } catch {
+        setUploadMessage("Security verification failed. Please try again.");
+        setErrorMessage("Security verification failed. Please try again.");
+        refreshTurnstile();
+        return false;
+      }
+
+      if (siteKey && !token) {
+        setUploadMessage("Security verification failed. Please try again.");
+        setErrorMessage("Security verification failed. Please try again.");
+        refreshTurnstile();
+        return false;
+      }
+
+      const response = await jobsApi.uploadDocument(file, token);
+      refreshTurnstile();
+
+      if (documentsRef.current.length >= MAX_DOCUMENTS) {
+        setUploadMessage(`You can upload up to ${MAX_DOCUMENTS} documents.`);
+        setErrorMessage(`You can upload up to ${MAX_DOCUMENTS} documents.`);
+        return false;
+      }
+
+      syncDocuments([
+        ...documentsRef.current,
+        {
+          key: response.key,
+          fileName: response.fileName || file.name,
+          fileSize: response.fileSize || file.size,
+          mimeType: response.mimeType || file.type,
+        },
+      ]);
+      setUploadMessage("Document uploaded");
+      return true;
+    } catch (err: unknown) {
+      console.error("Failed to upload document", err);
+      const apiErr = err instanceof ApiError ? err : null;
+      const message = apiErr?.message || (err instanceof Error ? err.message : "");
+      const isTurnstileFailure =
+        apiErr?.status === 403 ||
+        /turnstile/i.test(message) ||
+        /security verification/i.test(message);
+
+      if (isTurnstileFailure) {
+        setUploadMessage("Security verification failed. Please try again.");
+        setErrorMessage("Security verification failed. Please try again.");
+        refreshTurnstile();
+      } else {
+        const msg = message || "Unable to upload document. Please try again.";
+        setUploadMessage(msg);
+        setErrorMessage(msg);
+      }
+      return false;
+    } finally {
+      setIsUploadingDoc(false);
+    }
+  };
+
+  const handleDocFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    e.target.value = "";
+    for (const file of files) {
+      const ok = await uploadDocumentFile(file);
+      if (!ok && documentsRef.current.length >= MAX_DOCUMENTS) break;
+    }
+  };
+
+  const handleDocDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDocDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDocDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const files = Array.from(e.dataTransfer.files || []);
+    for (const file of files) {
+      await uploadDocumentFile(file);
+    }
+  };
+
+  const removeDocument = (key: string) => {
+    syncDocuments(documentsRef.current.filter((d) => d.key !== key));
+    setUploadMessage("");
+  };
+
   const handleNext = async () => {
     if (activeStep === 0 && !formData.title.trim()) {
       setErrorMessage("Please enter a Job Title before proceeding.");
@@ -119,6 +295,11 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
       if (!formData.title.trim()) {
         setActiveStep(0);
         setErrorMessage("Please enter a Job Title.");
+        return;
+      }
+
+      if (isUploadingDoc) {
+        setErrorMessage("Please wait for document upload to finish.");
         return;
       }
 
@@ -155,6 +336,14 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
           country: countryMap[formData.country] || formData.country || undefined,
           city: formData.city.trim() || undefined,
           jobDescription: formData.description.trim() || undefined,
+          documents: documents.length
+            ? documents.map((d) => ({
+                key: d.key,
+                fileName: d.fileName,
+                fileSize: d.fileSize,
+                mimeType: d.mimeType,
+              }))
+            : undefined,
         });
         setSubmitSuccess(true);
       } catch (err: any) {
@@ -385,6 +574,8 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                       description: "",
                       requirements: "",
                     });
+                    syncDocuments([]);
+                    setUploadMessage("");
                     setActiveStep(0);
                     setSubmitSuccess(false);
                     setErrorMessage("");
@@ -542,15 +733,90 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
 
                       {/* Step 4: Documentation */}
                       {activeStep === 4 && (
-                        <div className="flex flex-col gap-[8px]">
+                        <div className="flex flex-col gap-[12px]">
                           <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
                             Upload Documents (Optional)
                           </label>
-                          <div className={`flex w-full flex-col items-center justify-center gap-[12px] rounded-[10px] border-2 border-dashed border-[#D1D5DB] bg-[#FAFBFC] px-[24px] transition-colors hover:border-[#1A6CFF]/40 hover:bg-[#1A6CFF]/[0.02] ${isModal ? "min-h-[180px] py-[32px]" : "min-h-[160px] py-[32px]"}`}>
+                          {siteKey && (
+                            <div className="mb-[4px]">
+                              <Turnstile
+                                ref={turnstileRef}
+                                siteKey={siteKey}
+                                onSuccess={(token) => assignTurnstileToken(token)}
+                                onError={() => clearTurnstileToken()}
+                                onExpire={() => clearTurnstileToken()}
+                                options={{
+                                  theme: "light",
+                                  appearance: "interaction-only",
+                                }}
+                              />
+                            </div>
+                          )}
+                          <div
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                if (!isUploadingDoc) fileInputRef.current?.click();
+                              }
+                            }}
+                            onDragOver={handleDocDragOver}
+                            onDragEnter={handleDocDragOver}
+                            onDragLeave={handleDocDragLeave}
+                            onDrop={handleDocDrop}
+                            onClick={() => {
+                              if (!isUploadingDoc) fileInputRef.current?.click();
+                            }}
+                            className={`flex w-full cursor-pointer flex-col items-center justify-center gap-[12px] rounded-[10px] border-2 border-dashed px-[24px] transition-colors ${
+                              isDragging
+                                ? "border-[#1A6CFF] bg-[#1A6CFF]/[0.04]"
+                                : "border-[#D1D5DB] bg-[#FAFBFC] hover:border-[#1A6CFF]/40 hover:bg-[#1A6CFF]/[0.02]"
+                            } ${isModal ? "min-h-[180px] py-[32px]" : "min-h-[160px] py-[32px]"} ${isUploadingDoc ? "pointer-events-none opacity-70" : ""}`}
+                          >
                             <p className={`font-display font-[500] text-[#374151] text-center ${isModal ? "text-[14px]" : "text-[13px]"}`}>
-                              Drag & drop files or specifications here
+                              {isUploadingDoc
+                                ? "Uploading…"
+                                : "Drag & drop files or specifications here"}
                             </p>
+                            <p className={`font-display font-[400] text-[#9CA3AF] text-center ${isModal ? "text-[13px]" : "text-[12px]"}`}>
+                              {uploadMessage || "or click to browse · PDF, DOC, DOCX · 5MB · max 5 files"}
+                            </p>
+                            <input
+                              ref={fileInputRef}
+                              type="file"
+                              className="hidden"
+                              accept=".pdf,.doc,.docx"
+                              multiple
+                              onChange={handleDocFileChange}
+                            />
                           </div>
+                          {documents.length > 0 && (
+                            <ul className="flex flex-col gap-[8px]">
+                              {documents.map((doc) => (
+                                <li
+                                  key={doc.key}
+                                  className="flex items-center justify-between gap-[12px] rounded-[8px] border border-[#E5E7EB] bg-white px-[12px] py-[10px]"
+                                >
+                                  <div className="min-w-0 flex flex-col">
+                                    <span className="truncate font-display text-[13px] font-[500] text-[#111111]">
+                                      {doc.fileName}
+                                    </span>
+                                    <span className="font-display text-[12px] text-[#9CA3AF]">
+                                      {(doc.fileSize / 1024 / 1024).toFixed(2)} MB
+                                    </span>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => removeDocument(doc.key)}
+                                    className="shrink-0 rounded-[6px] px-[10px] py-[6px] font-display text-[12px] font-[500] text-[#B91C1C] hover:bg-[#FEF2F2]"
+                                  >
+                                    Remove
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                         </div>
                       )}
                     </m.div>
@@ -570,11 +836,11 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                   )}
                   <button
                     type="button"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isUploadingDoc}
                     onClick={handleNext}
                     className={`flex items-center gap-[8px] rounded-[8px] bg-[#002868] font-display font-[510] text-white shadow-sm transition-all duration-200 hover:bg-[#002868]/90 h-[48px] px-[32px] text-[14px] disabled:opacity-50`}
                   >
-                    {isSubmitting ? "Submitting..." : activeStep === STEPS.length - 1 ? "Submit Job Posting" : "Next"}
+                    {isSubmitting ? "Submitting..." : isUploadingDoc ? "Uploading..." : activeStep === STEPS.length - 1 ? "Submit Job Posting" : "Next"}
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>

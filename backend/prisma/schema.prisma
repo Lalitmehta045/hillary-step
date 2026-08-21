@@ -75,6 +75,9 @@ model Job {
   countryCode       String?     @map("country_code")
   status            JobStatus   @default(DRAFT)
   isPublic          Boolean     @default(false) @map("is_public")
+  // Optional supporting docs from public "Post a Job" form:
+  // [{ fileKey, fileName, fileSize, mimeType }]
+  attachments       Json?
   createdAt         DateTime    @default(now()) @map("created_at")
   updatedAt         DateTime    @updatedAt @map("updated_at")
   deletedAt         DateTime?   @map("deleted_at")

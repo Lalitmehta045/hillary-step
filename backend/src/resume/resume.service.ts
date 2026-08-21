@@ -55,19 +55,12 @@ export class ResumeService {
     }
   }
 
-  async uploadResume(
+  private async scanAndStore(
     buffer: Buffer,
     mimetype: string,
-    originalName: string,
-    applicationId: string,
+    cleanKey: string,
+    auditContext: string,
   ): Promise<string> {
-    const ext =
-      path.extname(originalName).toLowerCase() ||
-      (mimetype === 'application/pdf' ? '.pdf' : '.docx');
-    const uuid = uuidv4();
-    const cleanKey = `resumes/${applicationId}/${uuid}${ext}`;
-
-    // 1. Malware Scan synchronously before any storage
     let isClean = false;
     try {
       isClean = await this.scannerService.scanBuffer(buffer);
@@ -80,19 +73,48 @@ export class ResumeService {
     }
 
     if (!isClean) {
-      // INFECTED: reject, prevent parsing, audit security event
       this.logger.warn(
-        `SECURITY EVENT: Malware detected in upload for application ${applicationId}`,
+        `SECURITY EVENT: Malware detected in upload for ${auditContext}`,
       );
       throw new BadRequestException(
         'Security violation: Malware detected in uploaded file',
       );
     }
 
-    // 2. CLEAN: upload to actual resumes directory
     await this.s3Service.upload(cleanKey, buffer, mimetype);
-
     return cleanKey;
+  }
+
+  async uploadResume(
+    buffer: Buffer,
+    mimetype: string,
+    originalName: string,
+    applicationId: string,
+  ): Promise<string> {
+    const ext =
+      path.extname(originalName).toLowerCase() ||
+      (mimetype === 'application/pdf' ? '.pdf' : '.docx');
+    const uuid = uuidv4();
+    const cleanKey = `resumes/${applicationId}/${uuid}${ext}`;
+    return this.scanAndStore(
+      buffer,
+      mimetype,
+      cleanKey,
+      `application ${applicationId}`,
+    );
+  }
+
+  async uploadJobDocument(
+    buffer: Buffer,
+    mimetype: string,
+    originalName: string,
+  ): Promise<string> {
+    const ext =
+      path.extname(originalName).toLowerCase() ||
+      (mimetype === 'application/pdf' ? '.pdf' : '.docx');
+    const uuid = uuidv4();
+    const cleanKey = `job-docs/${uuid}${ext}`;
+    return this.scanAndStore(buffer, mimetype, cleanKey, 'job document');
   }
 
   async getPresignedUrl(fileKey: string): Promise<string> {

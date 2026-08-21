@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JobsController } from './jobs.controller';
 import { JobsService } from './jobs.service';
+import { ResumeService } from '../resume/resume.service';
 import { AuthGuard } from '../common/guards/auth.guard';
+import { TurnstileGuard } from '../security/turnstile.guard';
 import { NotFoundException } from '@nestjs/common';
 
 describe('JobsController', () => {
@@ -17,12 +19,22 @@ describe('JobsController', () => {
     updateStatus: jest.fn(),
   };
 
+  const mockResumeService = {
+    validateFile: jest.fn(),
+    uploadJobDocument: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [JobsController],
-      providers: [{ provide: JobsService, useValue: mockJobsService }],
+      providers: [
+        { provide: JobsService, useValue: mockJobsService },
+        { provide: ResumeService, useValue: mockResumeService },
+      ],
     })
       .overrideGuard(AuthGuard)
+      .useValue({ canActivate: jest.fn(() => true) })
+      .overrideGuard(TurnstileGuard)
       .useValue({ canActivate: jest.fn(() => true) })
       .compile();
 

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import type { Prisma } from '@prisma/client';
 import { JobStatus } from '@prisma/client';
@@ -17,12 +21,31 @@ export class JobsService {
       deadlineDate = new Date(data.applicationDeadline);
     }
 
+    const { documents, applicationDeadline: _deadline, ...jobFields } = data;
+
+    if (documents?.length) {
+      for (const doc of documents) {
+        if (!doc.key.startsWith('job-docs/')) {
+          throw new BadRequestException('Invalid document key');
+        }
+      }
+    }
+
+    const attachments =
+      documents?.map((doc) => ({
+        fileKey: doc.key,
+        fileName: doc.fileName,
+        fileSize: doc.fileSize,
+        mimeType: doc.mimeType,
+      })) ?? undefined;
+
     return this.prisma.job.create({
       data: {
-        ...data,
+        ...jobFields,
         applicationDeadline: deadlineDate,
         status: data.status || 'DRAFT',
         isPublic: isPublic,
+        ...(attachments?.length ? { attachments } : {}),
       },
     });
   }
