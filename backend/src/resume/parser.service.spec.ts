@@ -85,6 +85,21 @@ describe('ParserService', () => {
       expect(result.phone).toBe('+1 555-123-4567');
     });
 
+    it('should normalize Indian 10-digit mobiles to +91', () => {
+      const result = service.parseStructuredData(
+        'Lalit Mehta\nPhone: 6232282806\nEmail: lalit@example.com',
+      );
+      expect(result.phone).toBe('+91 6232282806');
+    });
+
+    it('should not glue location into full name', () => {
+      const result = service.parseStructuredData(
+        'Lalit Mehta Location: Indore, Madhya Pradesh\nlalit@example.com\n6232282806',
+      );
+      expect(result.fullName).toBe('Lalit Mehta');
+      expect(result.preferredLocation).toBe('India');
+    });
+
     it('should extract LinkedIn', () => {
       const result = service.parseStructuredData(
         'Profile: https://www.linkedin.com/in/johndoe123/',

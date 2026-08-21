@@ -708,6 +708,11 @@ function PhoneField({ value, onChange }: { value?: string; onChange?: (v: string
       if (value.startsWith("+91")) setSelected(COUNTRY_CODES[1]);
       else if (value.startsWith("+61")) setSelected(COUNTRY_CODES[2]);
       else if (value.startsWith("+1")) setSelected(COUNTRY_CODES[0]);
+      else {
+        // Bare 10-digit Indian mobile from parser
+        const digits = value.replace(/\D/g, "");
+        if (/^[6-9]\d{9}$/.test(digits)) setSelected(COUNTRY_CODES[1]);
+      }
     }
   }, [value]);
 

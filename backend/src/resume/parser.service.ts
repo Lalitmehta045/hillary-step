@@ -99,22 +99,39 @@ export class ParserService {
       /(?:phone|mobile|tel|cell|contact(?:\s*no\.?)?)[:\s]+(\+?[\d\s().-]{7,25})/i,
     );
     if (labeledMatch) {
-      const cleaned = labeledMatch[1].trim().replace(/[,\s]+$/, '');
-      if (cleaned.replace(/\D/g, '').length >= 7) {
-        return cleaned;
-      }
+      const normalized = this.normalizePhone(labeledMatch[1]);
+      if (normalized) return normalized;
     }
 
     const phoneRegex =
       /(?:\+?\d{1,3}[\s-]?)?\(?\d{2,4}\)?[\s.-]?\d{3,4}[\s.-]?\d{3,4}/;
     const match = text.match(phoneRegex);
     if (match) {
-      const val = match[0].trim();
-      if (val.replace(/\D/g, '').length >= 7) {
-        return val;
-      }
+      return this.normalizePhone(match[0]);
     }
     return null;
+  }
+
+  /** Normalize to a form PhoneField can detect (+91 / +1 / +61). */
+  private normalizePhone(raw: string): string | null {
+    const cleaned = raw.trim().replace(/[,\s]+$/, '');
+    const digits = cleaned.replace(/\D/g, '');
+    if (digits.length < 7) return null;
+
+    // Indian mobile: 10 digits starting 6–9, or 91 + 10 digits
+    if (/^[6-9]\d{9}$/.test(digits)) {
+      return `+91 ${digits}`;
+    }
+    if (/^91[6-9]\d{9}$/.test(digits)) {
+      return `+91 ${digits.slice(2)}`;
+    }
+
+    // Already has +country style
+    if (cleaned.startsWith('+')) {
+      return cleaned.replace(/\s+/g, ' ').trim();
+    }
+
+    return cleaned;
   }
 
   private extractLinkedIn(text: string): string | null {
@@ -186,12 +203,13 @@ export class ParserService {
 
   private extractLocation(text: string): string | null {
     const lowerText = text.toLowerCase();
+    // Prefer specific countries/cities over ambiguous tokens like bare "us"
     if (
-      /\b(usa|united states|us|new york|california|texas|san francisco|austin|chicago|seattle)\b/i.test(
+      /\b(india|mumbai|delhi|bangalore|bengaluru|hyderabad|pune|chennai|noida|gurgaon|gurugram|indore|bhopal|kolkata|jaipur|ahmedabad|madhya\s*pradesh|maharashtra|karnataka)\b/i.test(
         lowerText,
       )
     )
-      return 'USA';
+      return 'India';
     if (
       /\b(australia|sydney|melbourne|brisbane|perth|adelaide)\b/i.test(
         lowerText,
@@ -199,16 +217,24 @@ export class ParserService {
     )
       return 'Australia';
     if (
-      /\b(india|mumbai|delhi|bangalore|bengaluru|hyderabad|pune|chennai|noida|gurgaon)\b/i.test(
+      /\b(united states|usa|u\.s\.a\.|new york|california|texas|san francisco|austin|chicago|seattle)\b/i.test(
         lowerText,
       )
     )
-      return 'India';
+      return 'USA';
     return null;
   }
 
   private extractFullName(text: string): string | null {
-    const lines = text
+    // PDF extractors often glue header fields onto one line — split on common labels.
+    const normalized = text
+      .replace(
+        /\b(location|address|email|e-mail|phone|mobile|tel|linkedin|github|portfolio)\s*[:|\-]/gi,
+        '\n$1: ',
+      )
+      .replace(/\s{2,}/g, ' ');
+
+    const lines = normalized
       .split(/\r?\n/)
       .map((l) => l.trim())
       .filter((l) => l.length > 0);
@@ -224,10 +250,16 @@ export class ParserService {
       'skills',
     ];
 
-    for (let i = 0; i < Math.min(10, lines.length); i++) {
+    for (let i = 0; i < Math.min(15, lines.length); i++) {
       let line = lines[i];
-      if (line.length < 3 || line.length > 60) continue;
       if (ignoreHeadings.includes(line.toLowerCase())) continue;
+
+      // Cut trailing contact/location fragments glued to the name
+      line = line
+        .split(
+          /\b(?:location|address|email|e-mail|phone|mobile|tel|linkedin|github)\b/i,
+        )[0]
+        .trim();
 
       // Remove label prefixes like "Name:", "Full Name:", "Candidate:"
       line = line
@@ -237,23 +269,27 @@ export class ParserService {
         )
         .trim();
 
-      if (this.extractEmail(line) || this.extractPhone(line)) continue;
-      if (
-        line.toLowerCase().includes('http') ||
-        line.toLowerCase().includes('www.')
-      )
-        continue;
+      if (line.length < 3 || line.length > 60) continue;
+      if (this.extractEmail(line)) continue;
+      if (/https?:\/\/|www\./i.test(line)) continue;
+      if (/@/.test(line)) continue;
+      if (/^\+?\d[\d\s().-]{6,}$/.test(line)) continue;
 
-      // Ignore lines that look like job titles or headings
+      // Ignore lines that look like job titles, headings, or locations
       if (
-        /^(?:software|engineer|developer|senior|junior|lead|manager|director|consultant|architect)\b/i.test(
+        /^(?:software|engineer|developer|senior|junior|lead|manager|director|consultant|architect|location|address)\b/i.test(
           line,
         )
       ) {
         continue;
       }
 
-      let name = line;
+      // Prefer 2–4 token person names (letters / . ' - only)
+      const words = line.split(/\s+/).filter(Boolean);
+      if (words.length < 1 || words.length > 4) continue;
+      if (!words.every((w) => /^[A-Za-z][A-Za-z.'’-]*$/.test(w))) continue;
+
+      let name = words.join(' ');
       if (name === name.toUpperCase()) {
         name = name.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
       }
