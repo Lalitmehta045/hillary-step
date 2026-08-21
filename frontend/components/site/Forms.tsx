@@ -5,11 +5,12 @@ import { ArrowRight } from "./Hero";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { GradientReveal } from "@/components/motion/GradientReveal";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
-import { m, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from "framer-motion";
+import { m, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
 import { contactApi } from "@/lib/api/contact";
 import { applicationsApi } from "@/lib/api/applications";
 import { ApiError } from "@/lib/api-client";
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
+import { FormSuccessPopup } from "./FormSuccessPanel";
 
 const PRACTICES = ["Engineering", "Data & AI", "Civil & Infrastructure", "Corporate"];
 const LOCATIONS = ["USA", "Australia", "India"];
@@ -257,10 +258,6 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
       }, token);
       
       setIsSuccess(true);
-      setFormData({
-        fullName: "", email: "", phone: "", linkedinUrl: "",
-        practice: PRACTICES[0], preferredLocation: LOCATIONS[0], coverLetter: ""
-      });
       setFile(null);
       setResumeData(null);
       setUploadStatus('idle');
@@ -282,6 +279,27 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const resetApplicationForm = () => {
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      linkedinUrl: "",
+      practice: PRACTICES[0],
+      preferredLocation: LOCATIONS[0],
+      coverLetter: "",
+    });
+    setFile(null);
+    setResumeData(null);
+    setUploadStatus("idle");
+    setUploadMessage("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    clearTurnstileToken();
+    setIsSuccess(false);
   };
 
   return (
@@ -344,7 +362,6 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                     onExpire={() => clearTurnstileToken()}
                     options={{
                       theme: 'light',
-                      // Always show the Turnstile widget so users can see verification.
                       appearance: 'always',
                     }}
                   />
@@ -411,10 +428,10 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
 
               <AnimatedButton
                 type="submit"
-                disabled={isSubmitting || isSuccess || isUploading}
+                disabled={isSubmitting || isUploading || isSuccess}
                 className="mt-[24px] flex h-[54px] w-full items-center justify-center gap-[8px] rounded-full bg-[#111111] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)] disabled:opacity-50"
               >
-                {isSubmitting ? "Submitting..." : isSuccess ? "Success!" : isUploading ? "Processing Résumé..." : "Submit Application"}
+                {isSubmitting ? "Submitting..." : isUploading ? "Processing Résumé..." : "Submit Application"}
                 <ArrowRight />
               </AnimatedButton>
 
@@ -426,6 +443,23 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
           </form>
         </FadeIn>
       </div>
+
+      <FormSuccessPopup
+        open={isSuccess}
+        eyebrow="Application received"
+        title={
+          <>
+            You&apos;re in.{" "}
+            <span className="bg-gradient-to-r from-[#86EFAC] via-[#14532D] to-[#86EFAC] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">
+              We&apos;ll take it from here.
+            </span>
+          </>
+        }
+        description="A principal in your practice will review your candidacy within ten business days."
+        actionLabel="Submit another application"
+        onAction={resetApplicationForm}
+        onClose={resetApplicationForm}
+      />
     </section>
   );
 }

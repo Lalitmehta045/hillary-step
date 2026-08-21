@@ -150,11 +150,16 @@ describe('ContactService', () => {
 
       const expectedWhere = {
         status: 'PENDING',
-        OR: [
-          { companyName: { contains: 'test', mode: 'insensitive' } },
-          { contactPerson: { contains: 'test', mode: 'insensitive' } },
-          { email: { contains: 'test', mode: 'insensitive' } },
-          { name: { contains: 'test', mode: 'insensitive' } },
+        AND: [
+          {
+            OR: [
+              { companyName: { contains: 'test', mode: 'insensitive' } },
+              { contactPerson: { contains: 'test', mode: 'insensitive' } },
+              { email: { contains: 'test', mode: 'insensitive' } },
+              { name: { contains: 'test', mode: 'insensitive' } },
+              { organization: { contains: 'test', mode: 'insensitive' } },
+            ],
+          },
         ],
       };
 

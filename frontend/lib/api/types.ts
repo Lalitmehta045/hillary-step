@@ -107,6 +107,7 @@ export interface Enquiry {
   contactPerson?: string;
   email: string;
   phone?: string;
+  countryCode?: string;
   organization?: string;
   industry?: string;
   serviceRequired?: string;

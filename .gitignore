@@ -1,0 +1,11 @@
+﻿# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor & Tooling
+.commandcode/
+.idea/
+.vscode/
+
+# Local test / temporary artifacts
+*.pdf

@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 import { CandidacySection } from "./Forms";
+import { FormSuccessPopup } from "./FormSuccessPanel";
 import { jobsApi, type JobDocumentMeta } from "@/lib/api/jobs";
 import { ApiError } from "@/lib/api-client";
 
@@ -555,47 +556,6 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
         {/* Right Form Card */}
         <div className={`${isModal ? "flex-1 min-w-0" : "flex-1 min-w-0 max-md:w-full"}`}>
           <div className={`${isModal ? "rounded-[16px] border border-[#E5E7EB] bg-white p-[32px] shadow-[0_2px_8px_0px_rgba(0,0,0,0.04)] flex flex-col min-h-[500px] h-full" : "rounded-[23px] border border-[#E5E7EB] bg-white p-[32px] max-md:p-[20px] shadow-[0_4px_20px_0px_rgba(0,0,0,0.04)] flex flex-col min-h-[560px] max-md:min-h-0"}`}>
-            {submitSuccess ? (
-              <div className="flex flex-col items-center justify-center text-center py-12 px-4 flex-1 my-auto">
-                <div className="w-16 h-16 rounded-full bg-green-50 text-green-600 flex items-center justify-center mb-6 shadow-sm">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 6L9 17l-5-5" />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-bold text-[#111111] mb-2 font-display">
-                  Job Submitted Successfully
-                </h2>
-                <p className="text-[#4B5563] max-w-[460px] text-sm leading-relaxed mb-8 font-sans">
-                  Your position for <span className="font-semibold text-[#111111]">{formData.title}</span> {formData.organizationName ? `at ${formData.organizationName}` : ''} has been submitted. Our recruitment team will review your specifications and get in touch shortly.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFormData({
-                      title: "",
-                      organizationName: "",
-                      type: "",
-                      experienceLevel: "",
-                      skills: "",
-                      country: "",
-                      city: "",
-                      workMode: "",
-                      description: "",
-                      requirements: "",
-                    });
-                    syncDocuments([]);
-                    setUploadMessage("");
-                    setActiveStep(0);
-                    setSubmitSuccess(false);
-                    setErrorMessage("");
-                  }}
-                  className="px-8 py-3 bg-[#002868] text-white rounded-lg text-sm font-semibold hover:bg-[#002868]/90 transition-colors shadow-sm"
-                >
-                  Post Another Position
-                </button>
-              </div>
-            ) : (
-              <>
                 <h2 className={`font-display font-[400] text-[#002868] ${isModal ? "text-[20px] leading-[28px] tracking-tight" : "text-[24px] leading-[32px] tracking-[-0.24px]"}`}>
                   {activeStep === 0 && "Post a New Position"}
                   {activeStep === 1 && "Role Specification"}
@@ -845,7 +805,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                   )}
                   <button
                     type="button"
-                    disabled={isSubmitting || isUploadingDoc}
+                    disabled={isSubmitting || isUploadingDoc || submitSuccess}
                     onClick={handleNext}
                     className={`flex items-center gap-[8px] rounded-[8px] bg-[#002868] font-display font-[510] text-white shadow-sm transition-all duration-200 hover:bg-[#002868]/90 h-[48px] px-[32px] text-[14px] disabled:opacity-50`}
                   >
@@ -855,11 +815,74 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                     </svg>
                   </button>
                 </div>
-              </>
-            )}
           </div>
         </div>
       </div>
+
+      <FormSuccessPopup
+        open={submitSuccess}
+        eyebrow="Job posting received"
+        title={
+          <>
+            You&apos;re set.{" "}
+            <span className="bg-gradient-to-r from-[#86EFAC] via-[#14532D] to-[#86EFAC] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">
+              We&apos;ll start matching.
+            </span>
+          </>
+        }
+        description={
+          <>
+            Your position for{" "}
+            <span className="font-[600] text-[#111111]">{formData.title || "this role"}</span>
+            {formData.organizationName ? (
+              <>
+                {" "}
+                at <span className="font-[600] text-[#111111]">{formData.organizationName}</span>
+              </>
+            ) : null}{" "}
+            is with our recruitment team. We&apos;ll be in touch shortly.
+          </>
+        }
+        actionLabel="Post another position"
+        onAction={() => {
+          setFormData({
+            title: "",
+            organizationName: "",
+            type: "",
+            experienceLevel: "",
+            skills: "",
+            country: "",
+            city: "",
+            workMode: "",
+            description: "",
+            requirements: "",
+          });
+          syncDocuments([]);
+          setUploadMessage("");
+          setActiveStep(0);
+          setSubmitSuccess(false);
+          setErrorMessage("");
+        }}
+        onClose={() => {
+          setFormData({
+            title: "",
+            organizationName: "",
+            type: "",
+            experienceLevel: "",
+            skills: "",
+            country: "",
+            city: "",
+            workMode: "",
+            description: "",
+            requirements: "",
+          });
+          syncDocuments([]);
+          setUploadMessage("");
+          setActiveStep(0);
+          setSubmitSuccess(false);
+          setErrorMessage("");
+        }}
+      />
 
       {/* Modal Specific Bottom Section */}
       {isModal && (

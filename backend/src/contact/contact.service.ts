@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../common/constants';
 import type { Prisma, EnquiryStatus, EnquiryPriority } from '@prisma/client';
-import { CreateEnquiryDto } from './dto/contact.dto';
+import { CreateEnquiryDto, EnquiryFilterDto } from './dto/contact.dto';
 
 @Injectable()
 export class ContactService {
@@ -36,29 +36,101 @@ export class ContactService {
     return enquiry;
   }
 
+  private datePresetToRange(preset: string): { gte: Date } | null {
+    const now = new Date();
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+    );
+    switch (preset) {
+      case 'today':
+        return { gte: startOfToday };
+      case '7d': {
+        const d = new Date(startOfToday);
+        d.setDate(d.getDate() - 7);
+        return { gte: d };
+      }
+      case '30d': {
+        const d = new Date(startOfToday);
+        d.setDate(d.getDate() - 30);
+        return { gte: d };
+      }
+      case '90d': {
+        const d = new Date(startOfToday);
+        d.setDate(d.getDate() - 90);
+        return { gte: d };
+      }
+      default:
+        return null;
+    }
+  }
+
+  private regionWhere(region: string): Prisma.EnquiryWhereInput | null {
+    switch (region.toUpperCase()) {
+      case 'USA':
+        return {
+          OR: [
+            { countryCode: { contains: 'USA', mode: 'insensitive' } },
+            { phone: { contains: '(USA)', mode: 'insensitive' } },
+            { phone: { startsWith: '+1 (' } },
+            { phone: { startsWith: '+1 ' } },
+          ],
+        };
+      case 'IND':
+        return {
+          OR: [
+            { countryCode: { contains: 'IND', mode: 'insensitive' } },
+            { phone: { contains: '(IND)', mode: 'insensitive' } },
+            { phone: { contains: '+91', mode: 'insensitive' } },
+          ],
+        };
+      case 'AUS':
+        return {
+          OR: [
+            { countryCode: { contains: 'AUS', mode: 'insensitive' } },
+            { phone: { contains: '(AUS)', mode: 'insensitive' } },
+            { phone: { contains: '+61', mode: 'insensitive' } },
+          ],
+        };
+      default:
+        return null;
+    }
+  }
+
   /** Find all enquiries with pagination and filters */
-  async findAll(filters: {
-    search?: string;
-    status?: string;
-    page?: number;
-    pageSize?: number;
-  }) {
+  async findAll(filters: EnquiryFilterDto) {
     const page = filters.page || DEFAULT_PAGE;
     const pageSize = filters.pageSize || DEFAULT_PAGE_SIZE;
     const skip = (page - 1) * pageSize;
 
     const where: Prisma.EnquiryWhereInput = {};
+    const and: Prisma.EnquiryWhereInput[] = [];
+
     if (filters.status) {
       where.status = filters.status as EnquiryStatus;
     }
-    if (filters.search) {
-      where.OR = [
-        { companyName: { contains: filters.search, mode: 'insensitive' } },
-        { contactPerson: { contains: filters.search, mode: 'insensitive' } },
-        { email: { contains: filters.search, mode: 'insensitive' } },
-        { name: { contains: filters.search, mode: 'insensitive' } },
-      ];
+    if (filters.search?.trim()) {
+      const q = filters.search.trim();
+      and.push({
+        OR: [
+          { companyName: { contains: q, mode: 'insensitive' } },
+          { contactPerson: { contains: q, mode: 'insensitive' } },
+          { email: { contains: q, mode: 'insensitive' } },
+          { name: { contains: q, mode: 'insensitive' } },
+          { organization: { contains: q, mode: 'insensitive' } },
+        ],
+      });
     }
+    if (filters.region) {
+      const regionFilter = this.regionWhere(filters.region);
+      if (regionFilter) and.push(regionFilter);
+    }
+    if (filters.date) {
+      const range = this.datePresetToRange(filters.date);
+      if (range) where.createdAt = range;
+    }
+    if (and.length > 0) where.AND = and;
 
     const [data, total] = await Promise.all([
       this.prisma.enquiry.findMany({

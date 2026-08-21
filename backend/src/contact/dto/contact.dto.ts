@@ -102,6 +102,18 @@ export class EnquiryFilterDto {
   @IsEnum(EnquiryStatus)
   status?: EnquiryStatus;
 
+  @ApiPropertyOptional({ description: 'Region: USA | IND | AUS' })
+  @IsOptional()
+  @IsString()
+  region?: string;
+
+  @ApiPropertyOptional({
+    description: 'Date preset: today | 7d | 30d | 90d',
+  })
+  @IsOptional()
+  @IsString()
+  date?: string;
+
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
