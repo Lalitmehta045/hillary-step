@@ -8,22 +8,36 @@ import { v4 as uuidv4 } from 'uuid';
 
 const execFileAsync = promisify(execFile);
 
+type ExecError = Error & {
+  code?: number | string;
+  stderr?: string;
+  stdout?: string;
+};
+
 @Injectable()
 export class ScannerService {
   private readonly logger = new Logger(ScannerService.name);
 
   /**
+   * When true, missing scanner binaries abort the upload (fail-closed).
+   * Default false so Render/Docker without ClamAV can still accept resumes.
+   */
+  private isScanRequired(): boolean {
+    return process.env.MALWARE_SCAN_REQUIRED === 'true';
+  }
+
+  /**
    * Scans a buffer for malware asynchronously.
    * Returns true if clean, false if infected.
-   * Throws an error if the scanner is unavailable or fails.
+   * Throws if the scanner fails while MALWARE_SCAN_REQUIRED=true,
+   * or if malware tooling errors for reasons other than "not installed".
    */
   async scanBuffer(buffer: Buffer): Promise<boolean> {
     const tempFilePath = path.join(os.tmpdir(), uuidv4() + '.tmp');
     await fs.writeFile(tempFilePath, buffer);
 
     try {
-      const isClean = await this.scanFile(tempFilePath);
-      return isClean;
+      return await this.scanFile(tempFilePath);
     } finally {
       await fs.unlink(tempFilePath).catch(() => {
         // Ignore unlink errors
@@ -32,7 +46,8 @@ export class ScannerService {
   }
 
   private async scanFile(filePath: string): Promise<boolean> {
-    const isWindows = os.platform() === 'win32';
+    // process.platform is easier to stub in tests than os.platform().
+    const isWindows = process.platform === 'win32';
 
     try {
       if (isWindows) {
@@ -47,20 +62,28 @@ export class ScannerService {
         ];
         await execFileAsync(cmd, args);
         return true; // Exit code 0 means clean
-      } else {
-        // Linux production: Use clamscan/clamdscan
+      }
+
+      // Linux production: prefer clamdscan (daemon), fall back to clamscan
+      try {
         await execFileAsync('clamdscan', [
           '--no-summary',
           '--fdpass',
           filePath,
         ]);
         return true;
+      } catch (clamdErr: unknown) {
+        if (this.isBinaryMissing(clamdErr)) {
+          await execFileAsync('clamscan', ['--no-summary', filePath]);
+          return true;
+        }
+        throw clamdErr;
       }
     } catch (e: unknown) {
-      const error = e as { code?: number; message?: string };
+      const error = e as ExecError;
       this.logger.error(
         `Scanner raw error:`,
-        JSON.stringify(e, Object.getOwnPropertyNames(e)),
+        JSON.stringify(e, Object.getOwnPropertyNames(e as object)),
       );
 
       // On Windows, MpCmdRun returns 2 for malware
@@ -77,10 +100,35 @@ export class ScannerService {
         return false;
       }
 
+      // Scanner not installed on this host (typical Render image without ClamAV)
+      if (this.isBinaryMissing(error)) {
+        if (this.isScanRequired()) {
+          this.logger.error(
+            'Malware scanner binary missing and MALWARE_SCAN_REQUIRED=true',
+          );
+          throw new Error('Malware scan failed or scanner unavailable');
+        }
+        this.logger.warn(
+          'Malware scanner not installed; allowing upload (set MALWARE_SCAN_REQUIRED=true to enforce).',
+        );
+        return true;
+      }
+
       this.logger.error(
         `Scanner failed or is unavailable: ${error.message || 'Unknown error'}`,
       );
       throw new Error('Malware scan failed or scanner unavailable');
     }
+  }
+
+  private isBinaryMissing(error: unknown): boolean {
+    const err = error as ExecError;
+    if (err?.code === 'ENOENT') return true;
+    const msg = `${err?.message || ''} ${err?.stderr || ''}`.toLowerCase();
+    return (
+      msg.includes('enoent') ||
+      msg.includes('not found') ||
+      msg.includes('no such file')
+    );
   }
 }

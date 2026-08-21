@@ -174,6 +174,8 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
       if (isTurnstileFailure) {
         setUploadMessage('Security verification failed. Please try again.');
         refreshTurnstile();
+      } else if (/malware scanner/i.test(message) || /scanner.*unavailable/i.test(message)) {
+        setUploadMessage('Upload temporarily unavailable. Please try again in a moment.');
       } else {
         setUploadMessage('Unable to parse resume. Please enter your details manually.');
       }
