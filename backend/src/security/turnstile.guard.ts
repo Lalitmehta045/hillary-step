@@ -47,15 +47,20 @@ export class TurnstileGuard implements CanActivate {
 
     // Prefer header: multipart body is not parsed before this guard runs on upload-resume.
     const token = extractTurnstileToken(request.headers, body);
-    const clientIp = request.clientIp || request.ip;
 
     if (!token) {
       throw new ForbiddenException('Turnstile token is required');
     }
 
-    const isValid = await this.turnstileService.verify(token, clientIp);
-    if (!isValid) {
-      throw new ForbiddenException('Turnstile verification failed');
+    // Do not pass request.ip / X-Forwarded-For here: Vercel→Render hops are often
+    // not the browser IP, and a wrong remoteip makes Cloudflare reject a valid token.
+    const result = await this.turnstileService.verifyDetailed(token);
+    if (!result.success) {
+      const detail =
+        result.errorCodes.length > 0
+          ? ` (${result.errorCodes.join(', ')})`
+          : '';
+      throw new ForbiddenException(`Turnstile verification failed${detail}`);
     }
 
     return true;

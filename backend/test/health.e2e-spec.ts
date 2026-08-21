@@ -15,7 +15,13 @@ describe('HealthController (e2e)', () => {
       imports: [AppModule],
     })
       .overrideProvider(TurnstileService)
-      .useValue({ verify: jest.fn().mockResolvedValue(true) })
+      .useValue({
+        verify: jest.fn().mockResolvedValue(true),
+        verifyDetailed: jest
+          .fn()
+          .mockResolvedValue({ success: true, errorCodes: [] }),
+        isConfigured: jest.fn().mockReturnValue(false),
+      })
       .compile();
 
     app = moduleFixture.createNestApplication<NestFastifyApplication>(

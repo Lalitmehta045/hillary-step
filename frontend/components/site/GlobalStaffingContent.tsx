@@ -124,24 +124,33 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
 
   const ensureTurnstileToken = async (timeoutMs = 15000): Promise<string | undefined> => {
     if (!siteKey) return undefined;
-    const existing = turnstileTokenRef.current?.trim();
-    if (existing) return existing;
+
+    const readToken = () =>
+      turnstileTokenRef.current?.trim() ||
+      turnstileRef.current?.getResponse()?.trim() ||
+      "";
+
+    const existing = readToken();
+    if (existing) {
+      assignTurnstileToken(existing);
+      return existing;
+    }
 
     return new Promise((resolve, reject) => {
-      const started = Date.now();
-      const tick = () => {
-        const token = turnstileTokenRef.current?.trim();
+      const deadline = Date.now() + timeoutMs;
+      const intervalId = window.setInterval(() => {
+        const token = readToken();
         if (token) {
+          window.clearInterval(intervalId);
+          assignTurnstileToken(token);
           resolve(token);
           return;
         }
-        if (Date.now() - started >= timeoutMs) {
+        if (Date.now() >= deadline) {
+          window.clearInterval(intervalId);
           reject(new Error("Turnstile token timed out"));
-          return;
         }
-        requestAnimationFrame(tick);
-      };
-      tick();
+      }, 100);
     });
   };
 

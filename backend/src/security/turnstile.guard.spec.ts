@@ -8,6 +8,7 @@ describe('TurnstileGuard', () => {
 
   const mockTurnstileService = {
     verify: jest.fn(),
+    verifyDetailed: jest.fn(),
     isConfigured: jest.fn().mockReturnValue(true),
   };
 
@@ -16,6 +17,11 @@ describe('TurnstileGuard', () => {
     guard = new TurnstileGuard(service);
     mockTurnstileService.isConfigured.mockReturnValue(true);
     mockTurnstileService.verify.mockReset();
+    mockTurnstileService.verifyDetailed.mockReset();
+    mockTurnstileService.verifyDetailed.mockResolvedValue({
+      success: true,
+      errorCodes: [],
+    });
   });
 
   const mockExecutionContext = (headers: any, body: any, clientIp: string) =>
@@ -30,11 +36,14 @@ describe('TurnstileGuard', () => {
     const ctx = mockExecutionContext({}, {}, '127.0.0.1');
     const result = await guard.canActivate(ctx);
     expect(result).toBe(true);
-    expect(service.verify).not.toHaveBeenCalled();
+    expect(service.verifyDetailed).not.toHaveBeenCalled();
   });
 
   it('Turnstile configured + valid token (header) → upload allowed', async () => {
-    mockTurnstileService.verify.mockResolvedValue(true);
+    mockTurnstileService.verifyDetailed.mockResolvedValue({
+      success: true,
+      errorCodes: [],
+    });
     const ctx = mockExecutionContext(
       { 'cf-turnstile-response': 'valid-token' },
       {},
@@ -43,11 +52,14 @@ describe('TurnstileGuard', () => {
 
     const result = await guard.canActivate(ctx);
     expect(result).toBe(true);
-    expect(service.verify).toHaveBeenCalledWith('valid-token', '127.0.0.1');
+    expect(service.verifyDetailed).toHaveBeenCalledWith('valid-token');
   });
 
   it('Turnstile configured + valid token (body) → allowed', async () => {
-    mockTurnstileService.verify.mockResolvedValue(true);
+    mockTurnstileService.verifyDetailed.mockResolvedValue({
+      success: true,
+      errorCodes: [],
+    });
     const ctx = mockExecutionContext(
       {},
       { 'cf-turnstile-response': 'valid-token' },
@@ -56,7 +68,7 @@ describe('TurnstileGuard', () => {
 
     const result = await guard.canActivate(ctx);
     expect(result).toBe(true);
-    expect(service.verify).toHaveBeenCalledWith('valid-token', '127.0.0.1');
+    expect(service.verifyDetailed).toHaveBeenCalledWith('valid-token');
   });
 
   it('Turnstile configured + missing token → 403 Turnstile token is required', async () => {
@@ -65,7 +77,7 @@ describe('TurnstileGuard', () => {
     await expect(guard.canActivate(ctx)).rejects.toThrow(
       'Turnstile token is required',
     );
-    expect(service.verify).not.toHaveBeenCalled();
+    expect(service.verifyDetailed).not.toHaveBeenCalled();
   });
 
   it('Turnstile configured + empty/whitespace token → 403', async () => {
@@ -80,7 +92,10 @@ describe('TurnstileGuard', () => {
   });
 
   it('Turnstile configured + invalid token → 403 Turnstile verification failed', async () => {
-    mockTurnstileService.verify.mockResolvedValue(false);
+    mockTurnstileService.verifyDetailed.mockResolvedValue({
+      success: false,
+      errorCodes: ['invalid-input-response'],
+    });
     const ctx = mockExecutionContext(
       { 'cf-turnstile-response': 'invalid' },
       {},
@@ -88,7 +103,7 @@ describe('TurnstileGuard', () => {
     );
     await expect(guard.canActivate(ctx)).rejects.toThrow(ForbiddenException);
     await expect(guard.canActivate(ctx)).rejects.toThrow(
-      'Turnstile verification failed',
+      'Turnstile verification failed (invalid-input-response)',
     );
   });
 });

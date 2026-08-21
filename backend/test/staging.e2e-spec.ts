@@ -45,6 +45,9 @@ describe('Staging Integration Gate (e2e)', () => {
   // Mock Turnstile to always pass (dev key behavior)
   const mockTurnstileService = {
     verify: jest.fn().mockResolvedValue(true),
+    verifyDetailed: jest
+      .fn()
+      .mockResolvedValue({ success: true, errorCodes: [] }),
     isConfigured: jest.fn().mockReturnValue(true),
   };
 
@@ -1322,7 +1325,10 @@ describe('Staging Integration Gate (e2e)', () => {
 
     it('should block resume upload with invalid/expired token', async () => {
       // Mock validation failure for this test
-      mockTurnstileService.verify.mockResolvedValueOnce(false);
+      mockTurnstileService.verifyDetailed.mockResolvedValueOnce({
+        success: false,
+        errorCodes: ['invalid-input-response'],
+      });
       
       const dummyBuffer = Buffer.from('dummy resume');
       await request(app.getHttpServer())
