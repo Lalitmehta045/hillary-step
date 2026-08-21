@@ -50,6 +50,8 @@ describe('ContactController', () => {
       const dto: CreateEnquiryDto = {
         name: 'John Doe',
         email: 'john@example.com',
+        phone: '+1 (USA) 5551234567',
+        companyName: 'Acme',
         message: 'Test message',
       };
       const ip = '127.0.0.1';
@@ -62,7 +64,13 @@ describe('ContactController', () => {
     });
 
     it('should handle rate limit scenario by expecting service to reject (mocked)', async () => {
-      const dto: CreateEnquiryDto = { name: 'Spammer' } as any;
+      const dto: CreateEnquiryDto = {
+        name: 'Spammer',
+        email: 'spam@example.com',
+        phone: '+1 (USA) 5550000000',
+        companyName: 'SpamCo',
+        message: 'Spam message body',
+      };
       const ip = '192.168.0.10';
       contactService.create.mockRejectedValue(new Error('Rate limit exceeded'));
 
@@ -72,7 +80,13 @@ describe('ContactController', () => {
     });
 
     it('should handle duplicate submission scenario by expecting service to reject (mocked)', async () => {
-      const dto: CreateEnquiryDto = { name: 'Duplicator' } as any;
+      const dto: CreateEnquiryDto = {
+        name: 'Duplicator',
+        email: 'dup@example.com',
+        phone: '+1 (USA) 5551111111',
+        companyName: 'DupCo',
+        message: 'Duplicate message body',
+      };
       const ip = '10.0.0.1';
       contactService.create.mockRejectedValue(
         new Error('Duplicate submission'),

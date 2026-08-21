@@ -1,20 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { m, useScroll, useTransform } from "framer-motion";
 import { StaggerContainer, StaggerItem, FadeIn } from "@/components/motion/FadeIn";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { Navbar } from "@/components/site/Navbar";
 
-const HERO_VIDEO_SRC =
-  "/hero-video/Aerial_drone_shot_Mount_Everest_202608211834.mp4";
+const HERO_VIDEO_SRC = "/hero-video/hero-everest.mp4";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { scrollY } = useScroll();
-
-  // Parallax for background
-  const y = useTransform(scrollY, [0, 1000], [0, 150]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -22,7 +16,7 @@ export function Hero() {
 
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    const syncPlayback = () => {
+    const tryPlay = () => {
       if (motionQuery.matches) {
         video.pause();
         return;
@@ -32,17 +26,34 @@ export function Hero() {
       });
     };
 
-    syncPlayback();
-    motionQuery.addEventListener("change", syncPlayback);
-    return () => motionQuery.removeEventListener("change", syncPlayback);
+    // Pause when scrolled away — decoding a full-bleed loop offscreen wastes CPU/GPU.
+    const visibility = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting || motionQuery.matches) {
+          video.pause();
+          return;
+        }
+        tryPlay();
+      },
+      { threshold: 0.15 },
+    );
+    visibility.observe(video);
+
+    const onMotionChange = () => {
+      if (motionQuery.matches) video.pause();
+      else tryPlay();
+    };
+    motionQuery.addEventListener("change", onMotionChange);
+
+    return () => {
+      visibility.disconnect();
+      motionQuery.removeEventListener("change", onMotionChange);
+    };
   }, []);
 
   return (
     <section className="relative min-h-[850px] max-md:min-h-[680px] max-lg:min-h-[750px] w-full overflow-hidden bg-[#0b1220]">
-      <m.div
-        style={{ y }}
-        className="absolute inset-0 h-[110%] w-full transform-gpu will-change-transform"
-      >
+      <div className="absolute inset-0 h-full w-full">
         <video
           ref={videoRef}
           src={HERO_VIDEO_SRC}
@@ -50,11 +61,13 @@ export function Hero() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
+          disablePictureInPicture
+          disableRemotePlayback
           aria-hidden="true"
           className="absolute inset-0 h-full w-full object-cover pointer-events-none"
         />
-      </m.div>
+      </div>
 
       {/* Readability overlays — keep copy legible over mountain footage */}
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,14,28,0.55)_0%,rgba(8,14,28,0.28)_42%,rgba(8,14,28,0.12)_100%)] pointer-events-none" />

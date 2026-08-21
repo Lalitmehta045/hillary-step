@@ -3,12 +3,16 @@ import { PrismaService } from '../database/prisma.service';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../common/constants';
 import type { Prisma, EnquiryStatus, EnquiryPriority } from '@prisma/client';
 import { CreateEnquiryDto, EnquiryFilterDto } from './dto/contact.dto';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class ContactService {
   private readonly logger = new Logger(ContactService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly emailService: EmailService,
+  ) {}
 
   /** Generate sequential enquiry number */
   private async generateEnquiryNumber(): Promise<string> {
@@ -22,17 +26,37 @@ export class ContactService {
     return `ENQ-${String(lastNum + 1).padStart(4, '0')}`;
   }
 
-  /** Create a new enquiry */
+  /** Create a new enquiry (DB first; email failure never fails the request) */
   async create(data: CreateEnquiryDto, ip?: string) {
     const enquiryNumber = await this.generateEnquiryNumber();
+    const organization =
+      data.organization?.trim() || data.companyName?.trim() || null;
+    const companyName =
+      data.companyName?.trim() || data.organization?.trim() || null;
+
     const enquiry = await this.prisma.enquiry.create({
       data: {
         ...data,
+        organization,
+        companyName,
         enquiryNumber,
         submissionIp: ip,
       },
     });
     this.logger.log(`Enquiry created: ${enquiryNumber}`);
+
+    try {
+      await this.emailService.sendEnquiryNotification(enquiry);
+      this.logger.log(
+        `Admin notification email succeeded for ${enquiryNumber}`,
+      );
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      this.logger.error(
+        `Admin notification email failed for ${enquiryNumber}: ${message}`,
+      );
+    }
+
     return enquiry;
   }
 

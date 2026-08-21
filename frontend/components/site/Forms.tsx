@@ -492,11 +492,24 @@ function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const resetContactForm = () => {
+    setIsSuccess(false);
+    setFormData({ name: "", email: "", phone: "", companyName: "", message: "" });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting || isSuccess) return;
     setIsSubmitting(true);
     try {
-      await contactApi.submitEnquiry(formData);
+      await contactApi.submitEnquiry({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        companyName: formData.companyName.trim(),
+        organization: formData.companyName.trim(),
+        message: formData.message.trim(),
+      });
       setIsSuccess(true);
       setFormData({ name: "", email: "", phone: "", companyName: "", message: "" });
     } catch (err) {
@@ -508,33 +521,52 @@ function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="h-full w-full rounded-[23px] bg-[#F3F3F4] px-[40px] max-md:px-[24px] py-[32px]">
-      <div className="grid grid-cols-1 gap-[16px] sm:grid-cols-2">
-        <Field label="Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
-        <Field label="Email" type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
-        <PhoneField value={formData.phone} onChange={(val: string) => setFormData({...formData, phone: val})} />
-        <Field label="Organization" value={formData.companyName} onChange={(e) => setFormData({...formData, companyName: e.target.value})} />
-      </div>
+    <>
+      <form onSubmit={handleSubmit} className="h-full w-full rounded-[23px] bg-[#F3F3F4] px-[40px] max-md:px-[24px] py-[32px]">
+        <div className="grid grid-cols-1 gap-[16px] sm:grid-cols-2">
+          <Field label="Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
+          <Field label="Email" type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
+          <PhoneField value={formData.phone} onChange={(val: string) => setFormData({...formData, phone: val})} required />
+          <Field label="Organization" value={formData.companyName} onChange={(e) => setFormData({...formData, companyName: e.target.value})} required />
+        </div>
 
-      <div className="mt-[16px]">
-        <Label>Message</Label>
-        <textarea 
-          required
-          value={formData.message}
-          onChange={(e) => setFormData({...formData, message: e.target.value})}
-          className="mt-[8px] w-full min-h-[100px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden" 
-        />
-      </div>
+        <div className="mt-[16px]">
+          <Label>Message</Label>
+          <textarea 
+            required
+            value={formData.message}
+            onChange={(e) => setFormData({...formData, message: e.target.value})}
+            className="mt-[8px] w-full min-h-[100px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden" 
+          />
+        </div>
 
-      <AnimatedButton
-        type="submit"
-        disabled={isSubmitting || isSuccess}
-        className="mt-[24px] flex h-[50px] w-fit items-center justify-center gap-[8px] rounded-full bg-[#111111] px-[32px] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)] disabled:opacity-50"
-      >
-        {isSubmitting ? "Sending..." : isSuccess ? "Sent!" : "Send Enquiry"}
-        <ArrowRight />
-      </AnimatedButton>
-    </form>
+        <AnimatedButton
+          type="submit"
+          disabled={isSubmitting || isSuccess}
+          className="mt-[24px] flex h-[50px] w-fit items-center justify-center gap-[8px] rounded-full bg-[#111111] px-[32px] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)] disabled:opacity-50"
+        >
+          {isSubmitting ? "Sending..." : isSuccess ? "Sent!" : "Send Enquiry"}
+          <ArrowRight />
+        </AnimatedButton>
+      </form>
+
+      <FormSuccessPopup
+        open={isSuccess}
+        eyebrow="Enquiry received"
+        title={
+          <>
+            Your enquiry has been{" "}
+            <span className="bg-gradient-to-r from-[#86EFAC] via-[#14532D] to-[#86EFAC] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">
+              submitted successfully.
+            </span>
+          </>
+        }
+        description="Our team will review your message and get back to you shortly."
+        actionLabel="Send another enquiry"
+        onAction={resetContactForm}
+        onClose={resetContactForm}
+      />
+    </>
   );
 }
 
@@ -734,7 +766,7 @@ function Select({ label, options, value, onChange }: { label: string; options: r
   );
 }
 
-function PhoneField({ value, onChange }: { value?: string; onChange?: (v: string) => void }) {
+function PhoneField({ value, onChange, required }: { value?: string; onChange?: (v: string) => void; required?: boolean }) {
   const COUNTRY_CODES = ["+1 (USA)", "+91 (IND)", "+61 (AUS)"];
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(COUNTRY_CODES[0]);
@@ -811,6 +843,7 @@ function PhoneField({ value, onChange }: { value?: string; onChange?: (v: string
         </div>
         <input
           type="tel"
+          required={required}
           value={displayValue}
           onChange={(e) => {
             if (onChange) onChange(`${selected} ${e.target.value}`);

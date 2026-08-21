@@ -5,6 +5,9 @@ import {
   IsEnum,
   IsInt,
   Min,
+  MinLength,
+  MaxLength,
+  ValidateIf,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -24,58 +27,71 @@ export enum EnquiryPriority {
 }
 
 export class CreateEnquiryDto {
-  @ApiPropertyOptional()
-  @IsOptional()
+  @ApiProperty({ example: 'Jane Doe' })
   @IsString()
-  name?: string;
+  @MinLength(2)
+  @MaxLength(120)
+  name: string;
 
   @ApiPropertyOptional()
-  @IsOptional()
+  @ValidateIf((o: CreateEnquiryDto) => !o.organization?.trim())
   @IsString()
+  @MinLength(1)
+  @MaxLength(200)
   companyName?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @MaxLength(120)
   contactPerson?: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'jane@example.com' })
   @IsEmail()
+  @MaxLength(254)
   email: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
+  @ApiProperty({ example: '+91 (IND) 9876543210' })
   @IsString()
-  phone?: string;
+  @MinLength(7)
+  @MaxLength(40)
+  phone: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @MaxLength(20)
   countryCode?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
+  @ApiPropertyOptional({ example: 'Acme Corp' })
+  @ValidateIf((o: CreateEnquiryDto) => !o.companyName?.trim())
   @IsString()
+  @MinLength(1)
+  @MaxLength(200)
   organization?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @MaxLength(120)
   industry?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @MaxLength(200)
   serviceRequired?: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
+  @ApiProperty({ example: 'Looking for staffing support.' })
   @IsString()
-  message?: string;
+  @MinLength(5)
+  @MaxLength(5000)
+  message: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  @MaxLength(5000)
   projectDetails?: string;
 }
 

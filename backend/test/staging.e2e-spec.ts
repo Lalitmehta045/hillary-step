@@ -417,6 +417,8 @@ describe('Staging Integration Gate (e2e)', () => {
         .send({
           email: 'contact@example.com',
           name: 'Jane Doe',
+          phone: '+1 (USA) 5559876543',
+          companyName: 'Example Org',
           message: 'Hello, I need staffing services',
         })
         .expect(201);
@@ -573,6 +575,7 @@ describe('Staging Integration Gate (e2e)', () => {
         .send({
           email: 'enquiry@test.com',
           name: 'Test Company',
+          phone: '+91 (IND) 9876543210',
           companyName: 'TestCorp',
           message: 'Need staffing support for our project',
           serviceRequired: 'Global Staffing',

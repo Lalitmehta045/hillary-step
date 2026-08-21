@@ -31,4 +31,14 @@ export const envValidationSchema = Joi.object({
   CORS_ORIGIN: Joi.string().required(),
   RATE_LIMIT_MAX: Joi.number().default(100),
   RATE_LIMIT_WINDOW_MS: Joi.number().default(60000),
+
+  // Transactional email (Resend) — optional so app boots; enquiry save still works without it
+  RESEND_API_KEY: Joi.string().allow('').optional(),
+  ADMIN_NOTIFICATION_EMAIL: Joi.string()
+    .email()
+    .default('info@hillarystepsolutions.com'),
+  EMAIL_FROM: Joi.string()
+    .allow('')
+    .optional()
+    .default('Hillary Step <onboarding@resend.dev>'),
 });

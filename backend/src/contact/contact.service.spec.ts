@@ -1,12 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ContactService } from './contact.service';
 import { PrismaService } from '../database/prisma.service';
+import { EmailService } from '../email/email.service';
 import { NotFoundException } from '@nestjs/common';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../common/constants';
 
 describe('ContactService', () => {
   let service: ContactService;
   let prisma: jest.Mocked<PrismaService>;
+  let emailService: { sendEnquiryNotification: jest.Mock };
+
+  const validDto = {
+    name: 'John Doe',
+    email: 'john@example.com',
+    phone: '+1 (USA) 5551234567',
+    companyName: 'Acme Inc',
+    message: 'Looking for executive search support.',
+  };
 
   beforeEach(async () => {
     const mockPrismaService = {
@@ -20,12 +30,20 @@ describe('ContactService', () => {
       },
     };
 
+    emailService = {
+      sendEnquiryNotification: jest.fn().mockResolvedValue({ id: 'email_1' }),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ContactService,
         {
           provide: PrismaService,
           useValue: mockPrismaService,
+        },
+        {
+          provide: EmailService,
+          useValue: emailService,
         },
       ],
     }).compile();
@@ -39,27 +57,91 @@ describe('ContactService', () => {
   });
 
   describe('create', () => {
-    it('should create a valid contact with generated enquiry number ENQ-0001 when no previous exist', async () => {
+    it('TEST 1: valid enquiry is saved and email service is called', async () => {
       (prisma.enquiry.findFirst as jest.Mock).mockResolvedValue(null);
-      (prisma.enquiry.create as jest.Mock).mockResolvedValue({
+      const saved = {
         id: '1',
         enquiryNumber: 'ENQ-0001',
-      } as any);
+        ...validDto,
+        organization: 'Acme Inc',
+        companyName: 'Acme Inc',
+        createdAt: new Date(),
+      };
+      (prisma.enquiry.create as jest.Mock).mockResolvedValue(saved as any);
 
-      const dto = { name: 'John Doe', email: 'john@example.com' };
-      const ip = '127.0.0.1';
+      const result = await service.create(validDto, '127.0.0.1');
 
-      const result = await service.create(dto, ip);
-
-      expect(prisma.enquiry.findFirst).toHaveBeenCalled();
       expect(prisma.enquiry.create).toHaveBeenCalledWith({
-        data: {
-          ...dto,
+        data: expect.objectContaining({
+          name: 'John Doe',
+          email: 'john@example.com',
+          phone: '+1 (USA) 5551234567',
+          organization: 'Acme Inc',
+          companyName: 'Acme Inc',
           enquiryNumber: 'ENQ-0001',
-          submissionIp: ip,
-        },
+          submissionIp: '127.0.0.1',
+        }),
       });
-      expect(result).toEqual({ id: '1', enquiryNumber: 'ENQ-0001' });
+      expect(emailService.sendEnquiryNotification).toHaveBeenCalledWith(saved);
+      expect(result).toEqual(saved);
+    });
+
+    it('TEST 2: email provider failure still saves enquiry and returns success', async () => {
+      (prisma.enquiry.findFirst as jest.Mock).mockResolvedValue(null);
+      const saved = {
+        id: '2',
+        enquiryNumber: 'ENQ-0002',
+        ...validDto,
+        organization: 'Acme Inc',
+        createdAt: new Date(),
+      };
+      (prisma.enquiry.create as jest.Mock).mockResolvedValue(saved as any);
+      emailService.sendEnquiryNotification.mockRejectedValue(
+        new Error('Resend unavailable'),
+      );
+
+      const result = await service.create(validDto, '127.0.0.1');
+
+      expect(prisma.enquiry.create).toHaveBeenCalled();
+      expect(emailService.sendEnquiryNotification).toHaveBeenCalled();
+      expect(result).toEqual(saved);
+    });
+
+    it('TEST 4: notification payload includes name, email, phone, organization, message', async () => {
+      (prisma.enquiry.findFirst as jest.Mock).mockResolvedValue(null);
+      const saved = {
+        id: '4',
+        enquiryNumber: 'ENQ-0004',
+        name: 'Jane Doe',
+        email: 'jane@example.com',
+        phone: '+91 (IND) 9876543210',
+        organization: 'Hillary Client',
+        companyName: 'Hillary Client',
+        message: 'Need contractors in Mumbai.',
+        createdAt: new Date('2026-08-21T12:00:00.000Z'),
+      };
+      (prisma.enquiry.create as jest.Mock).mockResolvedValue(saved as any);
+
+      await service.create(
+        {
+          name: 'Jane Doe',
+          email: 'jane@example.com',
+          phone: '+91 (IND) 9876543210',
+          organization: 'Hillary Client',
+          message: 'Need contractors in Mumbai.',
+        },
+        '10.0.0.1',
+      );
+
+      expect(emailService.sendEnquiryNotification).toHaveBeenCalledWith(
+        expect.objectContaining({
+          name: 'Jane Doe',
+          email: 'jane@example.com',
+          phone: '+91 (IND) 9876543210',
+          organization: 'Hillary Client',
+          message: 'Need contractors in Mumbai.',
+        }),
+      );
     });
 
     it('should create a valid contact with incremented enquiry number when previous exist', async () => {
@@ -71,17 +153,13 @@ describe('ContactService', () => {
         enquiryNumber: 'ENQ-0006',
       } as any);
 
-      const dto = { name: 'Jane Doe', email: 'jane@example.com' };
-      const ip = '192.168.1.1';
-
-      const result = await service.create(dto, ip);
+      const result = await service.create(validDto, '192.168.1.1');
 
       expect(prisma.enquiry.create).toHaveBeenCalledWith({
-        data: {
-          ...dto,
+        data: expect.objectContaining({
           enquiryNumber: 'ENQ-0006',
-          submissionIp: ip,
-        },
+          submissionIp: '192.168.1.1',
+        }),
       });
       expect(result).toEqual({ id: '2', enquiryNumber: 'ENQ-0006' });
     });
@@ -91,23 +169,10 @@ describe('ContactService', () => {
       const duplicateError = new Error('Unique constraint failed');
       (prisma.enquiry.create as jest.Mock).mockRejectedValue(duplicateError);
 
-      const dto = { email: 'duplicate@example.com' };
-      await expect(service.create(dto as any)).rejects.toThrow(
+      await expect(service.create(validDto)).rejects.toThrow(
         'Unique constraint failed',
       );
-    });
-
-    it('should handle missing fields if Prisma throws validation error (mocked)', async () => {
-      (prisma.enquiry.findFirst as jest.Mock).mockResolvedValue(null);
-      const validationError = new Error(
-        'Prisma validation error: missing fields',
-      );
-      (prisma.enquiry.create as jest.Mock).mockRejectedValue(validationError);
-
-      const dto = { email: 'missing' } as any; // Missing required fields
-      await expect(service.create(dto)).rejects.toThrow(
-        'Prisma validation error',
-      );
+      expect(emailService.sendEnquiryNotification).not.toHaveBeenCalled();
     });
   });
 
@@ -165,7 +230,7 @@ describe('ContactService', () => {
 
       expect(prisma.enquiry.findMany).toHaveBeenCalledWith({
         where: expectedWhere,
-        skip: 5, // (2 - 1) * 5
+        skip: 5,
         take: 5,
         orderBy: { createdAt: 'desc' },
       });
