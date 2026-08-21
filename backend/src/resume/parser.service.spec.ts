@@ -111,6 +111,26 @@ describe('ParserService', () => {
       expect(result.fullName).toBe('John Doe');
     });
 
+    it('should extract labeled phone (e.g. 555-0199)', () => {
+      const result = service.parseStructuredData('Phone: 555-0199');
+      expect(result.phone).toBe('555-0199');
+    });
+
+    it('should extract practice and location', () => {
+      const result = service.parseStructuredData(
+        'John Doe\nSenior Software Engineer\nLocation: New York, USA\nEmail: john@example.com',
+      );
+      expect(result.practice).toBe('Engineering');
+      expect(result.preferredLocation).toBe('USA');
+    });
+
+    it('should strip name label prefixes and normalize uppercase names', () => {
+      const result = service.parseStructuredData(
+        'Full Name: JOHN DOE\nSoftware Developer\nEmail: john@example.com',
+      );
+      expect(result.fullName).toBe('John Doe');
+    });
+
     it('should handle empty documents securely', () => {
       const result = service.parseStructuredData('');
       expect(result.fullName).toBeNull();

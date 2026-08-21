@@ -16,6 +16,13 @@ export class TurnstileService {
       this.configService.get<string>('cloudflare.turnstileSecretKey') || '';
   }
 
+  isConfigured(): boolean {
+    return (
+      !!this.secretKey &&
+      !this.secretKey.startsWith('1x0000000000000000000000000000000AA')
+    );
+  }
+
   async verify(token: string, remoteIp?: string): Promise<boolean> {
     if (!this.secretKey) {
       this.logger.warn(

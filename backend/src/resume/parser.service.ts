@@ -94,21 +94,35 @@ export class ParserService {
   }
 
   private extractPhone(text: string): string | null {
+    // Check for labeled phone first: Phone: ... or Tel: ... or Mobile: ...
+    const labeledMatch = text.match(
+      /(?:phone|mobile|tel|cell|contact(?:\s*no\.?)?)[:\s]+(\+?[\d\s().-]{7,25})/i,
+    );
+    if (labeledMatch) {
+      const cleaned = labeledMatch[1].trim().replace(/[,\s]+$/, '');
+      if (cleaned.replace(/\D/g, '').length >= 7) {
+        return cleaned;
+      }
+    }
+
     const phoneRegex =
-      /(?:\+?\d{1,3}[\s-]?)?\(?\d{2,4}\)?[\s-]?\d{3,4}[\s-]?\d{3,4}/;
+      /(?:\+?\d{1,3}[\s-]?)?\(?\d{2,4}\)?[\s.-]?\d{3,4}[\s.-]?\d{3,4}/;
     const match = text.match(phoneRegex);
     if (match) {
-      return match[0].trim();
+      const val = match[0].trim();
+      if (val.replace(/\D/g, '').length >= 7) {
+        return val;
+      }
     }
     return null;
   }
 
   private extractLinkedIn(text: string): string | null {
     const linkedInRegex =
-      /(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[A-Za-z0-9_-]+/i;
+      /(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/[A-Za-z0-9_.-]+/i;
     const match = text.match(linkedInRegex);
     if (match) {
-      let url = match[0].trim();
+      let url = match[0].trim().replace(/\/+$/, '');
       if (!url.startsWith('http')) {
         url = 'https://' + url;
       }
@@ -122,7 +136,7 @@ export class ParserService {
       /(?:https?:\/\/)?(?:www\.)?github\.com\/[A-Za-z0-9_-]+/i;
     const match = text.match(githubRegex);
     if (match) {
-      let url = match[0].trim();
+      let url = match[0].trim().replace(/\/+$/, '');
       if (!url.startsWith('http')) {
         url = 'https://' + url;
       }
@@ -136,20 +150,26 @@ export class ParserService {
     if (
       lowerText.includes('engineering') ||
       lowerText.includes('software engineer') ||
-      lowerText.includes('developer')
+      lowerText.includes('developer') ||
+      lowerText.includes('programmer') ||
+      lowerText.includes('full stack') ||
+      lowerText.includes('frontend') ||
+      lowerText.includes('backend')
     )
       return 'Engineering';
     if (
       lowerText.includes('data') ||
       lowerText.includes('ai') ||
       lowerText.includes('machine learning') ||
-      lowerText.includes('analytics')
+      lowerText.includes('analytics') ||
+      lowerText.includes('deep learning')
     )
       return 'Data & AI';
     if (
       lowerText.includes('civil') ||
       lowerText.includes('infrastructure') ||
-      lowerText.includes('construction')
+      lowerText.includes('construction') ||
+      lowerText.includes('structural')
     )
       return 'Civil & Infrastructure';
     if (
@@ -157,7 +177,8 @@ export class ParserService {
       lowerText.includes('finance') ||
       lowerText.includes('hr') ||
       lowerText.includes('marketing') ||
-      lowerText.includes('operations')
+      lowerText.includes('operations') ||
+      lowerText.includes('business analyst')
     )
       return 'Corporate';
     return null;
@@ -165,11 +186,23 @@ export class ParserService {
 
   private extractLocation(text: string): string | null {
     const lowerText = text.toLowerCase();
-    if (/\b(usa|united states|us|new york|california|texas)\b/i.test(lowerText))
+    if (
+      /\b(usa|united states|us|new york|california|texas|san francisco|austin|chicago|seattle)\b/i.test(
+        lowerText,
+      )
+    )
       return 'USA';
-    if (/\b(australia|sydney|melbourne|brisbane|perth)\b/i.test(lowerText))
+    if (
+      /\b(australia|sydney|melbourne|brisbane|perth|adelaide)\b/i.test(
+        lowerText,
+      )
+    )
       return 'Australia';
-    if (/\b(india|mumbai|delhi|bangalore|hyderabad|pune)\b/i.test(lowerText))
+    if (
+      /\b(india|mumbai|delhi|bangalore|bengaluru|hyderabad|pune|chennai|noida|gurgaon)\b/i.test(
+        lowerText,
+      )
+    )
       return 'India';
     return null;
   }
@@ -192,9 +225,17 @@ export class ParserService {
     ];
 
     for (let i = 0; i < Math.min(10, lines.length); i++) {
-      const line = lines[i];
+      let line = lines[i];
       if (line.length < 3 || line.length > 60) continue;
       if (ignoreHeadings.includes(line.toLowerCase())) continue;
+
+      // Remove label prefixes like "Name:", "Full Name:", "Candidate:"
+      line = line
+        .replace(
+          /^(?:full\s*name|name|candidate(?:\s*name)?|applicant(?:\s*name)?)\s*[:\-]\s*/i,
+          '',
+        )
+        .trim();
 
       if (this.extractEmail(line) || this.extractPhone(line)) continue;
       if (
@@ -202,6 +243,15 @@ export class ParserService {
         line.toLowerCase().includes('www.')
       )
         continue;
+
+      // Ignore lines that look like job titles or headings
+      if (
+        /^(?:software|engineer|developer|senior|junior|lead|manager|director|consultant|architect)\b/i.test(
+          line,
+        )
+      ) {
+        continue;
+      }
 
       let name = line;
       if (name === name.toUpperCase()) {

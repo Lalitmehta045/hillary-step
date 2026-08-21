@@ -35,61 +35,96 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
   const [file, setFile] = useState<File | null>(null);
   const [resumeData, setResumeData] = useState<{ key: string, fileName: string, fileSize: number, mimeType: string } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'parsing' | 'success' | 'error'>('idle');
+  const [uploadMessage, setUploadMessage] = useState<string>('');
+  const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string>('');
   const turnstileRef = useRef<TurnstileInstance>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    
-    if (f.size > 5 * 1024 * 1024) {
-      alert("File too large (max 5MB)");
+  const validateAndProcessFile = async (f: File) => {
+    const allowedExtensions = ['.pdf', '.doc', '.docx'];
+    const fileExt = '.' + (f.name.split('.').pop() || '').toLowerCase();
+
+    if (!allowedExtensions.includes(fileExt)) {
+      setUploadStatus('error');
+      setUploadMessage('Invalid file type. Only PDF, DOC, and DOCX files are allowed.');
+      alert('Invalid file type. Only PDF, DOC, and DOCX files are allowed.');
       return;
     }
-    
+
+    if (f.size > 5 * 1024 * 1024) {
+      setUploadStatus('error');
+      setUploadMessage('File exceeds 5MB size limit.');
+      alert('File too large (max 5MB)');
+      return;
+    }
+
     setFile(f);
     setIsUploading(true);
-    setResumeData(null);
-    
-    if (!turnstileToken) {
-      alert("Please complete the security check first");
-      return;
-    }
+    setUploadStatus('parsing');
+    setUploadMessage('Parsing résumé...');
 
     try {
       const response = await applicationsApi.uploadResume(f, turnstileToken);
       setResumeData({
         key: response.key,
-        fileName: response.fileName,
-        fileSize: response.fileSize,
-        mimeType: response.mimeType,
+        fileName: response.fileName || f.name,
+        fileSize: response.fileSize || f.size,
+        mimeType: response.mimeType || f.type,
       });
-      
+      setUploadStatus('success');
+      setUploadMessage('Resume parsed successfully');
+
       if (response.parsedData) {
+        const parsed = response.parsedData;
         setFormData(prev => ({
           ...prev,
-          fullName: prev.fullName || response.parsedData.fullName || "",
-          email: prev.email || response.parsedData.email || "",
-          phone: prev.phone || response.parsedData.phone || "",
-          linkedinUrl: prev.linkedinUrl || response.parsedData.linkedinUrl || "",
-          practice: response.parsedData.practice || prev.practice,
-          preferredLocation: response.parsedData.preferredLocation || prev.preferredLocation,
+          fullName: prev.fullName.trim() !== '' ? prev.fullName : (parsed.fullName || ''),
+          email: prev.email.trim() !== '' ? prev.email : (parsed.email || ''),
+          phone: prev.phone.trim() !== '' ? prev.phone : (parsed.phone || ''),
+          linkedinUrl: prev.linkedinUrl.trim() !== '' ? prev.linkedinUrl : (parsed.linkedinUrl || parsed.linkedin || parsed.linkedinProfile || ''),
+          practice: parsed.practice && PRACTICES.includes(parsed.practice) ? parsed.practice : prev.practice,
+          preferredLocation: parsed.preferredLocation && LOCATIONS.includes(parsed.preferredLocation) ? parsed.preferredLocation : prev.preferredLocation,
         }));
       }
-      setTurnstileToken('');
-      turnstileRef.current?.reset();
-    } catch (err) {
-      console.error("Failed to parse resume", err);
-      alert("Failed to process resume. Please try again or fill manually.");
-      setFile(null); // Reset if upload/scan fails
-      setTurnstileToken('');
-      turnstileRef.current?.reset();
+    } catch (err: any) {
+      console.error('Failed to parse resume', err);
+      setUploadStatus('error');
+      setUploadMessage('Unable to parse resume. Please enter your details manually.');
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    await validateAndProcessFile(f);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isDragging) setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const f = e.dataTransfer.files?.[0];
+    if (!f) return;
+    await validateAndProcessFile(f);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -101,7 +136,7 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
     
     setIsSubmitting(true);
     try {
-      // Submit application directly with existing key
+      // Submit application directly with existing uploaded resume key
       await applicationsApi.submitApplication({
         fullName: formData.fullName,
         email: formData.email,
@@ -123,6 +158,13 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
       });
       setFile(null);
       setResumeData(null);
+      setUploadStatus('idle');
+      setUploadMessage('');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      setTurnstileToken('');
+      turnstileRef.current?.reset();
     } catch (err) {
       console.error("Failed to submit application", err);
       alert("Failed to submit. Please try again.");
@@ -187,7 +229,6 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                     onSuccess={(token) => setTurnstileToken(token)}
                     onError={() => {
                       setTurnstileToken('');
-                      alert('Security check failed. Please try again.');
                     }}
                     onExpire={() => setTurnstileToken('')}
                     options={{ theme: 'light' }}
@@ -195,7 +236,16 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                 </div>
               )}
               <Label>Résumé · Required</Label>
-              <label className={`relative mt-[8px] flex h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-[24px] bg-white px-[24px] py-[64px] text-center transition-colors ${!turnstileToken || isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-black/[0.02]'}`}>
+              <div
+                onDragOver={handleDragOver}
+                onDragEnter={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className={`relative mt-[8px] flex h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-[24px] bg-white px-[24px] py-[64px] text-center transition-colors ${
+                  isDragging ? 'bg-black/[0.04]' : 'hover:bg-black/[0.02]'
+                }`}
+              >
                 <svg className="pointer-events-none absolute inset-0 h-full w-full rounded-[24px]">
                   <defs>
                     <linearGradient id="dashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -218,24 +268,35 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                 </svg>
                 <UploadIcon />
                 <span className="mt-[16px] font-sans text-[16px] font-[500] text-[#111111]">
-                  {file ? file.name : "Drop résumé here"}
+                  {isUploading
+                    ? "Parsing résumé..."
+                    : file
+                    ? file.name
+                    : "Drop résumé here"}
                 </span>
                 <span className="mt-[4px] font-sans text-[14px] text-[#4B5563]">
-                  {file ? `${(file.size / 1024 / 1024).toFixed(2)} MB` : "or click to browse · PDF, DOC, DOCX · 5MB"}
+                  {isUploading
+                    ? "Extracting information..."
+                    : uploadStatus === "success"
+                    ? "Resume parsed successfully"
+                    : uploadStatus === "error"
+                    ? uploadMessage || "Unable to parse resume. Please enter your details manually."
+                    : file
+                    ? `${(file.size / 1024 / 1024).toFixed(2)} MB`
+                    : "or click to browse · PDF, DOC, DOCX · 5MB"}
                 </span>
                 <input 
+                  ref={fileInputRef}
                   type="file" 
-                  className={`absolute inset-0 z-10 h-full w-full opacity-0 ${!turnstileToken || isUploading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                  className="hidden"
                   accept=".pdf,.doc,.docx"
                   onChange={handleFileChange}
-                  disabled={!turnstileToken || isUploading}
-                  required
                 />
-              </label>
+              </div>
 
               <AnimatedButton
                 type="submit"
-                disabled={isSubmitting || isSuccess || isUploading || !turnstileToken}
+                disabled={isSubmitting || isSuccess || isUploading}
                 className="mt-[24px] flex h-[54px] w-full items-center justify-center gap-[8px] rounded-full bg-[#111111] font-sans text-[14px] font-[500] leading-[20px] text-white hover:bg-black transition-colors shadow-[0px_1px_2px_rgba(0,0,0,0.05)] disabled:opacity-50"
               >
                 {isSubmitting ? "Submitting..." : isSuccess ? "Success!" : isUploading ? "Processing Résumé..." : "Submit Application"}
@@ -531,7 +592,15 @@ function PhoneField({ value, onChange }: { value?: string; onChange?: (v: string
   const dropdownRef = useRef<HTMLDivElement>(null);
   
   // Extract just the phone number part if value is structured
-  const displayValue = value ? value.replace(/^\+\d+\s\(\w+\)\s/, "") : "";
+  const displayValue = value ? value.replace(/^\+\d+\s*\(\w+\)\s*/, "") : "";
+
+  useEffect(() => {
+    if (value) {
+      if (value.startsWith("+91")) setSelected(COUNTRY_CODES[1]);
+      else if (value.startsWith("+61")) setSelected(COUNTRY_CODES[2]);
+      else if (value.startsWith("+1")) setSelected(COUNTRY_CODES[0]);
+    }
+  }, [value]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

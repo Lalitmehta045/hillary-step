@@ -8,11 +8,13 @@ describe('TurnstileGuard', () => {
 
   const mockTurnstileService = {
     verify: jest.fn(),
+    isConfigured: jest.fn().mockReturnValue(true),
   };
 
   beforeEach(() => {
     service = mockTurnstileService as any;
     guard = new TurnstileGuard(service);
+    mockTurnstileService.isConfigured.mockReturnValue(true);
   });
 
   const mockExecutionContext = (headers: any, body: any, clientIp: string) =>
@@ -21,6 +23,13 @@ describe('TurnstileGuard', () => {
         getRequest: () => ({ headers, body, clientIp }),
       }),
     }) as ExecutionContext;
+
+  it('should bypass verification if Turnstile is not configured', async () => {
+    mockTurnstileService.isConfigured.mockReturnValue(false);
+    const ctx = mockExecutionContext({}, {}, '127.0.0.1');
+    const result = await guard.canActivate(ctx);
+    expect(result).toBe(true);
+  });
 
   it('should pass if token is valid (header)', async () => {
     mockTurnstileService.verify.mockResolvedValue(true);

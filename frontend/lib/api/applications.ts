@@ -2,14 +2,21 @@ import { apiClient } from "../api-client";
 import { Application, PaginatedResponse, InternalNote, ActivityLog, Document } from "./types";
 
 export const applicationsApi = {
-  submitApplication: (data: any, turnstileToken: string) => apiClient.post<Application>("/applications", data, {
-    headers: { "cf-turnstile-response": turnstileToken }
-  }),
-  uploadResume: (file: File, turnstileToken: string) => {
+  submitApplication: (data: any, turnstileToken?: string) =>
+    apiClient.post<Application>("/applications", data, {
+      headers: turnstileToken ? { "cf-turnstile-response": turnstileToken } : {},
+    }),
+  uploadResume: (file: File, turnstileToken?: string) => {
     const formData = new FormData();
     formData.append("file", file);
-    return apiClient.post<{ key: string; parsedData: any; fileName: string; fileSize: number; mimeType: string }>("/applications/upload-resume", formData, {
-      headers: { "cf-turnstile-response": turnstileToken }
+    return apiClient.post<{
+      key: string;
+      parsedData: any;
+      fileName: string;
+      fileSize: number;
+      mimeType: string;
+    }>("/applications/upload-resume", formData, {
+      headers: turnstileToken ? { "cf-turnstile-response": turnstileToken } : {},
     });
   },
   getAdminApplications: (params?: Record<string, any>) => {

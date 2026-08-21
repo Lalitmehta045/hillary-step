@@ -12,6 +12,13 @@ export class TurnstileGuard implements CanActivate {
   constructor(private readonly turnstileService: TurnstileService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    if (
+      this.turnstileService.isConfigured &&
+      !this.turnstileService.isConfigured()
+    ) {
+      return true;
+    }
+
     const request = context
       .switchToHttp()
       .getRequest<FastifyRequest & { clientIp?: string }>();
