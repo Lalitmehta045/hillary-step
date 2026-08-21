@@ -87,6 +87,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Auto-scroll active step tab into view on mobile
   useEffect(() => {
@@ -102,27 +103,64 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errorMessage) setErrorMessage("");
   };
 
   const handleNext = async () => {
+    if (activeStep === 0 && !formData.title.trim()) {
+      setErrorMessage("Please enter a Job Title before proceeding.");
+      return;
+    }
+    setErrorMessage("");
+
     if (activeStep < STEPS.length - 1) {
       setActiveStep(activeStep + 1);
     } else {
+      if (!formData.title.trim()) {
+        setActiveStep(0);
+        setErrorMessage("Please enter a Job Title.");
+        return;
+      }
+
       setIsSubmitting(true);
+      setErrorMessage("");
+
+      const countryMap: Record<string, string> = {
+        us: "United States",
+        au: "Australia",
+        in: "India",
+        "United States": "United States",
+        "Australia": "Australia",
+        "India": "India",
+      };
+      const roleTypeMap: Record<string, string> = {
+        "full-time": "Full-Time",
+        "part-time": "Part-Time",
+        "contract": "Contract",
+        "internship": "Internship",
+      };
+      const expMap: Record<string, string> = {
+        entry: "Entry Level (0-2 years)",
+        mid: "Mid Level (3-5 years)",
+        senior: "Senior Level (5-8 years)",
+        lead: "Lead / Principal (8+ years)",
+      };
+
       try {
         await jobsApi.createPublicJob({
-          title: formData.title,
-          description: formData.description,
-          organizationName: formData.organizationName,
-          type: formData.type,
-          location: `${formData.city}, ${formData.country}`,
-          experienceYears: formData.experienceLevel, // might need better mapping
-          requirements: [formData.skills, formData.experienceLevel].filter(Boolean),
+          jobTitle: formData.title.trim(),
+          organizationName: formData.organizationName.trim() || undefined,
+          roleType: roleTypeMap[formData.type] || formData.type || undefined,
+          experienceLevel: expMap[formData.experienceLevel] || formData.experienceLevel || undefined,
+          country: countryMap[formData.country] || formData.country || undefined,
+          city: formData.city.trim() || undefined,
+          jobDescription: formData.description.trim() || undefined,
         });
         setSubmitSuccess(true);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Failed to post job", err);
-        alert("Failed to submit job posting.");
+        const msg = err?.message || "Failed to submit job posting. Please try again.";
+        setErrorMessage(msg);
       } finally {
         setIsSubmitting(false);
       }
@@ -130,6 +168,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
   };
 
   const handleBack = () => {
+    setErrorMessage("");
     if (activeStep > 0) {
       setActiveStep(activeStep - 1);
     }
@@ -318,183 +357,231 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
         {/* Right Form Card */}
         <div className={`${isModal ? "flex-1 min-w-0" : "flex-1 min-w-0 max-md:w-full"}`}>
           <div className={`${isModal ? "rounded-[16px] border border-[#E5E7EB] bg-white p-[32px] shadow-[0_2px_8px_0px_rgba(0,0,0,0.04)] flex flex-col min-h-[500px] h-full" : "rounded-[23px] border border-[#E5E7EB] bg-white p-[32px] max-md:p-[20px] shadow-[0_4px_20px_0px_rgba(0,0,0,0.04)] flex flex-col min-h-[560px] max-md:min-h-0"}`}>
-            <h2 className={`font-display font-[400] text-[#002868] ${isModal ? "text-[20px] leading-[28px] tracking-tight" : "text-[24px] leading-[32px] tracking-[-0.24px]"}`}>
-              {activeStep === 0 && "Post a New Position"}
-              {activeStep === 1 && "Role Specification"}
-              {activeStep === 2 && "Location Details"}
-              {activeStep === 3 && "Job Description"}
-              {activeStep === 4 && "Upload Documentation"}
-            </h2>
-
-            {isModal && <div className="h-[1px] w-full bg-[#E5E7EB] my-[16px]" />}
-
-            <div className={`flex flex-col flex-1 ${isModal ? "gap-[20px]" : "mt-[32px] gap-[24px]"}`}>
-              <AnimatePresence mode="wait">
-                <m.div
-                  key={activeStep}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  className={`flex flex-col w-full ${isModal ? "gap-[20px]" : "gap-[24px]"}`}
-                >
-                  {/* Step 0: Job Title */}
-                  {activeStep === 0 && (
-                    <>
-                      <div className="flex flex-col gap-[8px]">
-                        <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
-                          Job Title
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Senior Backend Engineer"
-                          value={formData.title}
-                          onChange={(e) => handleInputChange("title", e.target.value)}
-                          className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] placeholder-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-[8px]">
-                        <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
-                          Organization Name
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Company Inc."
-                          value={formData.organizationName}
-                          onChange={(e) => handleInputChange("organizationName", e.target.value)}
-                          className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] placeholder-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  {/* Step 1: Role Specification */}
-                  {activeStep === 1 && (
-                    <>
-                      <div className="flex flex-col gap-[8px]">
-                        <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
-                          Role Type
-                        </label>
-                        <select
-                          value={formData.type}
-                          onChange={(e) => handleInputChange("type", e.target.value)}
-                          className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
-                        >
-                          <option value="">Select role type</option>
-                          <option value="full-time">Full-Time</option>
-                          <option value="part-time">Part-Time</option>
-                          <option value="contract">Contract</option>
-                          <option value="internship">Internship</option>
-                        </select>
-                      </div>
-                      <div className="flex flex-col gap-[8px]">
-                        <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
-                          Experience Level
-                        </label>
-                        <select
-                          value={formData.experienceLevel}
-                          onChange={(e) => handleInputChange("experienceLevel", e.target.value)}
-                          className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
-                        >
-                          <option value="">Select experience level</option>
-                          <option value="entry">Entry Level (0-2 years)</option>
-                          <option value="mid">Mid Level (3-5 years)</option>
-                          <option value="senior">Senior Level (5-8 years)</option>
-                          <option value="lead">Lead / Principal (8+ years)</option>
-                        </select>
-                      </div>
-                    </>
-                  )}
-
-                  {/* Step 2: Location */}
-                  {activeStep === 2 && (
-                    <>
-                      <div className="flex flex-col gap-[8px]">
-                        <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
-                          Country
-                        </label>
-                        <select
-                          value={formData.country}
-                          onChange={(e) => handleInputChange("country", e.target.value)}
-                          className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
-                        >
-                          <option value="">Select country</option>
-                          <option value="us">United States</option>
-                          <option value="au">Australia</option>
-                          <option value="in">India</option>
-                        </select>
-                      </div>
-                      <div className="flex flex-col gap-[8px]">
-                        <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
-                          City
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. New York, Sydney, Mumbai"
-                          value={formData.city}
-                          onChange={(e) => handleInputChange("city", e.target.value)}
-                          className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] placeholder-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  {/* Step 3: Job Description */}
-                  {activeStep === 3 && (
-                    <div className="flex flex-col gap-[8px]">
-                      <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
-                        Job Description
-                      </label>
-                      <textarea
-                        placeholder="Describe the role..."
-                        value={formData.description}
-                        onChange={(e) => handleInputChange("description", e.target.value)}
-                        rows={isModal ? 6 : 5}
-                        className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] py-[16px] font-display font-[400] text-[#111111] placeholder-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 resize-none ${isModal ? "text-[14px] leading-[22px]" : "text-[13px] leading-[20px]"}`}
-                      />
-                    </div>
-                  )}
-
-                  {/* Step 4: Documentation */}
-                  {activeStep === 4 && (
-                    <div className="flex flex-col gap-[8px]">
-                      <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
-                        Upload Documents
-                      </label>
-                      <div className={`flex w-full flex-col items-center justify-center gap-[12px] rounded-[10px] border-2 border-dashed border-[#D1D5DB] bg-[#FAFBFC] px-[24px] transition-colors hover:border-[#1A6CFF]/40 hover:bg-[#1A6CFF]/[0.02] ${isModal ? "min-h-[180px] py-[32px]" : "min-h-[160px] py-[32px]"}`}>
-                        <p className={`font-display font-[500] text-[#374151] text-center ${isModal ? "text-[14px]" : "text-[13px]"}`}>
-                          Drag & drop files here
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </m.div>
-              </AnimatePresence>
-            </div>
-
-            {/* Navigation Buttons */}
-            <div className={`flex items-center justify-end gap-[12px] border-t border-[#E5E7EB] mt-auto pt-[24px]`}>
-              {activeStep > 0 && (
+            {submitSuccess ? (
+              <div className="flex flex-col items-center justify-center text-center py-12 px-4 flex-1 my-auto">
+                <div className="w-16 h-16 rounded-full bg-green-50 text-green-600 flex items-center justify-center mb-6 shadow-sm">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 6L9 17l-5-5" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-bold text-[#111111] mb-2 font-display">
+                  Job Submitted Successfully
+                </h2>
+                <p className="text-[#4B5563] max-w-[460px] text-sm leading-relaxed mb-8 font-sans">
+                  Your position for <span className="font-semibold text-[#111111]">{formData.title}</span> {formData.organizationName ? `at ${formData.organizationName}` : ''} has been submitted. Our recruitment team will review your specifications and get in touch shortly.
+                </p>
                 <button
                   type="button"
-                  onClick={handleBack}
-                  className={`flex items-center gap-[8px] rounded-[8px] border border-[#E5E7EB] bg-white font-display font-[510] text-[#374151] shadow-sm transition-all duration-200 hover:border-[#D1D5DB] hover:bg-[#F9FAFB] h-[48px] px-[24px] text-[14px]`}
+                  onClick={() => {
+                    setFormData({
+                      title: "",
+                      organizationName: "",
+                      type: "",
+                      experienceLevel: "",
+                      skills: "",
+                      country: "",
+                      city: "",
+                      workMode: "",
+                      description: "",
+                      requirements: "",
+                    });
+                    setActiveStep(0);
+                    setSubmitSuccess(false);
+                    setErrorMessage("");
+                  }}
+                  className="px-8 py-3 bg-[#002868] text-white rounded-lg text-sm font-semibold hover:bg-[#002868]/90 transition-colors shadow-sm"
                 >
-                  Back
+                  Post Another Position
                 </button>
-              )}
-              <button
-                type="button"
-                disabled={isSubmitting || submitSuccess}
-                onClick={activeStep === STEPS.length - 1 ? handleNext : handleNext}
-                className={`flex items-center gap-[8px] rounded-[8px] bg-[#002868] font-display font-[510] text-white shadow-sm transition-all duration-200 hover:bg-[#002868]/90 h-[48px] px-[32px] text-[14px] disabled:opacity-50`}
-              >
-                {isSubmitting ? "Submitting..." : submitSuccess ? "Success!" : activeStep === STEPS.length - 1 ? "Submit" : "Next"}
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+              </div>
+            ) : (
+              <>
+                <h2 className={`font-display font-[400] text-[#002868] ${isModal ? "text-[20px] leading-[28px] tracking-tight" : "text-[24px] leading-[32px] tracking-[-0.24px]"}`}>
+                  {activeStep === 0 && "Post a New Position"}
+                  {activeStep === 1 && "Role Specification"}
+                  {activeStep === 2 && "Location Details"}
+                  {activeStep === 3 && "Job Description"}
+                  {activeStep === 4 && "Upload Documentation"}
+                </h2>
+
+                {errorMessage && (
+                  <div className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 border border-red-200">
+                    {errorMessage}
+                  </div>
+                )}
+
+                {isModal && <div className="h-[1px] w-full bg-[#E5E7EB] my-[16px]" />}
+
+                <div className={`flex flex-col flex-1 ${isModal ? "gap-[20px]" : "mt-[32px] gap-[24px]"}`}>
+                  <AnimatePresence mode="wait">
+                    <m.div
+                      key={activeStep}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className={`flex flex-col w-full ${isModal ? "gap-[20px]" : "gap-[24px]"}`}
+                    >
+                      {/* Step 0: Job Title */}
+                      {activeStep === 0 && (
+                        <>
+                          <div className="flex flex-col gap-[8px]">
+                            <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
+                              Job Title <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              required
+                              placeholder="e.g. Senior Backend Engineer"
+                              value={formData.title}
+                              onChange={(e) => handleInputChange("title", e.target.value)}
+                              className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] placeholder-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
+                            />
+                          </div>
+                          <div className="flex flex-col gap-[8px]">
+                            <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
+                              Organization Name
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="e.g. Company Inc."
+                              value={formData.organizationName}
+                              onChange={(e) => handleInputChange("organizationName", e.target.value)}
+                              className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] placeholder-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
+                            />
+                          </div>
+                        </>
+                      )}
+
+                      {/* Step 1: Role Specification */}
+                      {activeStep === 1 && (
+                        <>
+                          <div className="flex flex-col gap-[8px]">
+                            <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
+                              Role Type
+                            </label>
+                            <select
+                              value={formData.type}
+                              onChange={(e) => handleInputChange("type", e.target.value)}
+                              className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
+                            >
+                              <option value="">Select role type</option>
+                              <option value="Full-Time">Full-Time</option>
+                              <option value="Part-Time">Part-Time</option>
+                              <option value="Contract">Contract</option>
+                              <option value="Internship">Internship</option>
+                            </select>
+                          </div>
+                          <div className="flex flex-col gap-[8px]">
+                            <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
+                              Experience Level
+                            </label>
+                            <select
+                              value={formData.experienceLevel}
+                              onChange={(e) => handleInputChange("experienceLevel", e.target.value)}
+                              className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
+                            >
+                              <option value="">Select experience level</option>
+                              <option value="Entry Level (0-2 years)">Entry Level (0-2 years)</option>
+                              <option value="Mid Level (3-5 years)">Mid Level (3-5 years)</option>
+                              <option value="Senior Level (5-8 years)">Senior Level (5-8 years)</option>
+                              <option value="Lead / Principal (8+ years)">Lead / Principal (8+ years)</option>
+                            </select>
+                          </div>
+                        </>
+                      )}
+
+                      {/* Step 2: Location */}
+                      {activeStep === 2 && (
+                        <>
+                          <div className="flex flex-col gap-[8px]">
+                            <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
+                              Country
+                            </label>
+                            <select
+                              value={formData.country}
+                              onChange={(e) => handleInputChange("country", e.target.value)}
+                              className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
+                            >
+                              <option value="">Select country</option>
+                              <option value="United States">United States</option>
+                              <option value="Australia">Australia</option>
+                              <option value="India">India</option>
+                            </select>
+                          </div>
+                          <div className="flex flex-col gap-[8px]">
+                            <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
+                              City
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="e.g. New York, Sydney, Mumbai"
+                              value={formData.city}
+                              onChange={(e) => handleInputChange("city", e.target.value)}
+                              className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] font-display font-[400] text-[#111111] placeholder-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 ${isModal ? "h-[48px] text-[14px]" : "h-[40px] text-[13px] py-[10px]"}`}
+                            />
+                          </div>
+                        </>
+                      )}
+
+                      {/* Step 3: Job Description */}
+                      {activeStep === 3 && (
+                        <div className="flex flex-col gap-[8px]">
+                          <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
+                            Job Description
+                          </label>
+                          <textarea
+                            placeholder="Describe the role..."
+                            value={formData.description}
+                            onChange={(e) => handleInputChange("description", e.target.value)}
+                            rows={isModal ? 6 : 5}
+                            className={`w-full rounded-[10px] border border-[#E5E7EB] bg-[#F8F9FB] px-[16px] py-[16px] font-display font-[400] text-[#111111] placeholder-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#1A6CFF] focus:bg-white focus:ring-2 focus:ring-[#1A6CFF]/10 resize-none ${isModal ? "text-[14px] leading-[22px]" : "text-[13px] leading-[20px]"}`}
+                          />
+                        </div>
+                      )}
+
+                      {/* Step 4: Documentation */}
+                      {activeStep === 4 && (
+                        <div className="flex flex-col gap-[8px]">
+                          <label className={`font-display font-[400] text-[#374151] ${isModal ? "text-[14px] leading-[18px]" : "text-[13px] leading-[16px]"}`}>
+                            Upload Documents (Optional)
+                          </label>
+                          <div className={`flex w-full flex-col items-center justify-center gap-[12px] rounded-[10px] border-2 border-dashed border-[#D1D5DB] bg-[#FAFBFC] px-[24px] transition-colors hover:border-[#1A6CFF]/40 hover:bg-[#1A6CFF]/[0.02] ${isModal ? "min-h-[180px] py-[32px]" : "min-h-[160px] py-[32px]"}`}>
+                            <p className={`font-display font-[500] text-[#374151] text-center ${isModal ? "text-[14px]" : "text-[13px]"}`}>
+                              Drag & drop files or specifications here
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </m.div>
+                  </AnimatePresence>
+                </div>
+
+                {/* Navigation Buttons */}
+                <div className={`flex items-center justify-end gap-[12px] border-t border-[#E5E7EB] mt-auto pt-[24px]`}>
+                  {activeStep > 0 && (
+                    <button
+                      type="button"
+                      onClick={handleBack}
+                      className={`flex items-center gap-[8px] rounded-[8px] border border-[#E5E7EB] bg-white font-display font-[510] text-[#374151] shadow-sm transition-all duration-200 hover:border-[#D1D5DB] hover:bg-[#F9FAFB] h-[48px] px-[24px] text-[14px]`}
+                    >
+                      Back
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    disabled={isSubmitting}
+                    onClick={handleNext}
+                    className={`flex items-center gap-[8px] rounded-[8px] bg-[#002868] font-display font-[510] text-white shadow-sm transition-all duration-200 hover:bg-[#002868]/90 h-[48px] px-[32px] text-[14px] disabled:opacity-50`}
+                  >
+                    {isSubmitting ? "Submitting..." : activeStep === STEPS.length - 1 ? "Submit Job Posting" : "Next"}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

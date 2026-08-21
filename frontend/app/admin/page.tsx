@@ -6,12 +6,14 @@ import {
   LuFileText, 
   LuBadgeCheck, 
   LuStar, 
-  LuMessageSquare 
+  LuMessageSquare,
+  LuBriefcase
 } from "react-icons/lu";
 import { m, Variants } from "framer-motion";
 import { useState, useEffect } from "react";
 import { applicationsApi } from "@/lib/api/applications";
 import { contactApi } from "@/lib/api/contact";
+import { jobsApi } from "@/lib/api/jobs";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -41,7 +43,8 @@ export default function AdminDashboardPage() {
     newApps: 0,
     shortlistedApps: 0,
     reviewedApps: 0,
-    enquiries: 0
+    enquiries: 0,
+    totalJobs: 0
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -53,13 +56,15 @@ export default function AdminDashboardPage() {
           newAppsRes,
           shortlistedAppsRes,
           reviewedAppsRes,
-          enquiriesRes
+          enquiriesRes,
+          jobsRes
         ] = await Promise.all([
           applicationsApi.getAdminApplications({ pageSize: 1 }),
           applicationsApi.getAdminApplications({ status: "NEW", pageSize: 1 }),
           applicationsApi.getAdminApplications({ status: "SHORTLISTED", pageSize: 1 }),
           applicationsApi.getAdminApplications({ status: "REVIEWING", pageSize: 1 }), // Map reviewing to reviewed
-          contactApi.getAdminEnquiries({ pageSize: 1 })
+          contactApi.getAdminEnquiries({ pageSize: 1 }),
+          jobsApi.getAdminJobs({ pageSize: 1 })
         ]);
 
         setKpiData({
@@ -67,7 +72,8 @@ export default function AdminDashboardPage() {
           newApps: newAppsRes.meta.total,
           shortlistedApps: shortlistedAppsRes.meta.total,
           reviewedApps: reviewedAppsRes.meta.total,
-          enquiries: enquiriesRes.meta.total
+          enquiries: enquiriesRes.meta.total,
+          totalJobs: jobsRes.meta.total
         });
       } catch (err) {
         console.error("Failed to load dashboard data", err);
@@ -120,15 +126,25 @@ export default function AdminDashboardPage() {
       <m.h1 variants={itemVariants} className="text-sm font-bold text-[#191c1e] mb-6 font-display">Dashboard</m.h1>
       
       {/* KPI Cards */}
-      <m.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <m.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         <m.div variants={itemVariants}>
           <KpiCard
             title="Total Applications"
             value={isLoading ? "..." : kpiData.totalApps.toLocaleString()}
-            percentageChange={0} // To be implemented with historical data
+            percentageChange={0}
             icon={LuFileText}
             iconBgClass="bg-blue-50"
             iconColorClass="text-blue-600"
+          />
+        </m.div>
+        <m.div variants={itemVariants}>
+          <KpiCard
+            title="Job Postings"
+            value={isLoading ? "..." : kpiData.totalJobs.toLocaleString()}
+            percentageChange={0}
+            icon={LuBriefcase}
+            iconBgClass="bg-indigo-50"
+            iconColorClass="text-indigo-600"
           />
         </m.div>
         <m.div variants={itemVariants}>
@@ -143,7 +159,7 @@ export default function AdminDashboardPage() {
         </m.div>
         <m.div variants={itemVariants}>
           <KpiCard
-            title="Shortlisted Candidates"
+            title="Shortlisted"
             value={isLoading ? "..." : kpiData.shortlistedApps.toLocaleString()}
             percentageChange={0}
             icon={LuStar}
@@ -153,7 +169,7 @@ export default function AdminDashboardPage() {
         </m.div>
         <m.div variants={itemVariants}>
           <KpiCard
-            title="Contact Enquiries"
+            title="Enquiries"
             value={isLoading ? "..." : kpiData.enquiries.toLocaleString()}
             percentageChange={0}
             icon={LuMessageSquare}

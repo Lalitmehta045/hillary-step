@@ -84,6 +84,16 @@ describe('JobsController', () => {
     });
   });
 
+  describe('getAdminJob', () => {
+    it('should return any job for admin', async () => {
+      const job = { id: '1', status: 'DRAFT' };
+      mockJobsService.findOne.mockResolvedValue(job);
+      const result = await controller.getAdminJob('1');
+      expect(result).toBe(job);
+      expect(mockJobsService.findOne).toHaveBeenCalledWith('1');
+    });
+  });
+
   describe('createAdminJob', () => {
     it('should create an admin job (default isPublic false)', async () => {
       const dto = { jobTitle: 'Test' } as any;

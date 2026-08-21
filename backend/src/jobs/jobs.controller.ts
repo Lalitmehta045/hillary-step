@@ -55,6 +55,13 @@ export class JobsController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('admin/jobs/:id')
+  @ApiOperation({ summary: 'Admin: Get job detail' })
+  async getAdminJob(@Param('id') id: string) {
+    return this.jobsService.findOne(id);
+  }
+
+  @UseGuards(AuthGuard)
   @Post('admin/jobs')
   @ApiOperation({ summary: 'Admin: Create a job' })
   async createAdminJob(@Body() dto: AdminCreateJobDto) {

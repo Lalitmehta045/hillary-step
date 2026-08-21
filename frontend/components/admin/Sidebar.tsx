@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { 
   LuLayoutDashboard, 
   LuFileText, 
+  LuBriefcase,
   LuMessageSquare, 
   LuSettings,
   LuMenu,
@@ -17,6 +18,7 @@ import {
 const navigation = [
   { name: "Dashboard", href: "/admin", icon: LuLayoutDashboard },
   { name: "Applications", href: "/admin/applications", icon: LuFileText },
+  { name: "Job Postings", href: "/admin/jobs", icon: LuBriefcase },
   { name: "Enquiries", href: "/admin/enquiries", icon: LuMessageSquare },
   { name: "Settings", href: "/admin/settings", icon: LuSettings },
 ];
