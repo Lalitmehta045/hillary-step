@@ -1,6 +1,5 @@
 import { Hero } from "@/components/site/Hero";
 import { Pillars } from "@/components/site/Pillars";
-import { InnovationLab } from "@/components/site/InnovationLab";
 import { About } from "@/components/site/About";
 import { Journey } from "@/components/site/Journey";
 import { Leadership } from "@/components/site/Leadership";
@@ -14,7 +13,6 @@ export default function Home() {
       <div id="home" className="absolute top-0" />
       <Hero />
       <Pillars />
-      <InnovationLab />
       <div id="about" />
       <About />
       <Journey />

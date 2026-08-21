@@ -1,33 +1,65 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { m, useScroll, useTransform } from "framer-motion";
 import { StaggerContainer, StaggerItem, FadeIn } from "@/components/motion/FadeIn";
-import Image from "next/image";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { Navbar } from "@/components/site/Navbar";
 
+const HERO_VIDEO_SRC =
+  "/hero-video/Aerial_drone_shot_Mount_Everest_202608211834.mp4";
+
 export function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { scrollY } = useScroll();
 
   // Parallax for background
   const y = useTransform(scrollY, [0, 1000], [0, 150]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const syncPlayback = () => {
+      if (motionQuery.matches) {
+        video.pause();
+        return;
+      }
+      void video.play().catch(() => {
+        // Autoplay can fail before user gesture; muted + playsInline covers most cases.
+      });
+    };
+
+    syncPlayback();
+    motionQuery.addEventListener("change", syncPlayback);
+    return () => motionQuery.removeEventListener("change", syncPlayback);
+  }, []);
+
   return (
-    <section className="relative min-h-[850px] max-md:min-h-[680px] max-lg:min-h-[750px] w-full overflow-hidden bg-white">
+    <section className="relative min-h-[850px] max-md:min-h-[680px] max-lg:min-h-[750px] w-full overflow-hidden bg-[#0b1220]">
       <m.div
         style={{ y }}
         className="absolute inset-0 h-[110%] w-full transform-gpu will-change-transform"
       >
-        <Image
-          src="/assets/hero-towers.png"
-          alt="Glass skyscrapers photographed from street level against an overcast sky"
-          priority
-          fill
-          sizes="100vw"
-          className="object-cover brightness-[1.55] contrast-[0.9] saturate-0"
+        <video
+          ref={videoRef}
+          src={HERO_VIDEO_SRC}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover pointer-events-none"
         />
       </m.div>
-      <div className="absolute inset-x-0 top-0 h-[120px] bg-linear-to-b from-white/80 to-transparent pointer-events-none" />
+
+      {/* Readability overlays — keep copy legible over mountain footage */}
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,14,28,0.55)_0%,rgba(8,14,28,0.28)_42%,rgba(8,14,28,0.12)_100%)] pointer-events-none" />
+      <div className="absolute inset-x-0 top-0 h-[140px] bg-linear-to-b from-black/45 to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-[180px] bg-linear-to-t from-black/35 to-transparent pointer-events-none" />
 
       {/* Navigation */}
       <Navbar />
@@ -36,13 +68,13 @@ export function Hero() {
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-[64px] max-md:px-[24px] max-lg:px-[40px] pt-[200px] max-md:pt-[120px] max-lg:pt-[140px]">
         <StaggerContainer animateOnMount={true}>
           <StaggerItem>
-            <h1 className="max-w-[690px] max-md:max-w-full font-display text-[88px] max-md:text-[44px] max-lg:text-[64px] font-[700] leading-[88px] max-md:leading-[48px] max-lg:leading-[68px] tracking-[-2.2px] max-md:tracking-[-1px] text-white [text-shadow:0px_4px_12px_rgba(0,0,0,0.15)] max-md:[text-shadow:0px_2px_12px_rgba(0,0,0,0.5)]">
+            <h1 className="max-w-[690px] max-md:max-w-full font-display text-[88px] max-md:text-[44px] max-lg:text-[64px] font-[700] leading-[88px] max-md:leading-[48px] max-lg:leading-[68px] tracking-[-2.2px] max-md:tracking-[-1px] text-white [text-shadow:0px_4px_12px_rgba(0,0,0,0.35)] max-md:[text-shadow:0px_2px_12px_rgba(0,0,0,0.5)]">
               Connecting Technology, Talent, and Global Growth.
             </h1>
           </StaggerItem>
 
           <StaggerItem>
-            <p className="mt-[38px] max-md:mt-[24px] max-w-[620px] max-md:max-w-full font-sans text-[18px] max-md:text-[16px] font-normal leading-[26px] max-md:leading-[23px] text-[#1B1B1C] max-md:text-white max-md:[text-shadow:0_1px_4px_rgba(0,0,0,0.4)]">
+            <p className="mt-[38px] max-md:mt-[24px] max-w-[620px] max-md:max-w-full font-sans text-[18px] max-md:text-[16px] font-normal leading-[26px] max-md:leading-[23px] text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.35)]">
               A global technology and workforce partner delivering AI, software engineering, digital
               transformation, and international staffing solutions.
             </p>
