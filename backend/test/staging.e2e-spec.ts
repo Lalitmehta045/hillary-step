@@ -45,6 +45,7 @@ describe('Staging Integration Gate (e2e)', () => {
   // Mock Turnstile to always pass (dev key behavior)
   const mockTurnstileService = {
     verify: jest.fn().mockResolvedValue(true),
+    isConfigured: jest.fn().mockReturnValue(true),
   };
 
   beforeAll(async () => {

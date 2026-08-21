@@ -1,10 +1,25 @@
 import { apiClient } from "../api-client";
 import { Application, PaginatedResponse, InternalNote, ActivityLog, Document } from "./types";
 
+/** Header name expected by backend TurnstileGuard (multipart body is not parsed yet). */
+export const TURNSTILE_HEADER = "cf-turnstile-response";
+
+/**
+ * Build Turnstile request headers. Never sends a fake/empty token —
+ * if Turnstile is not configured on the frontend, returns {}.
+ */
+export function buildTurnstileHeaders(
+  turnstileToken?: string | null,
+): Record<string, string> {
+  const token = turnstileToken?.trim();
+  if (!token) return {};
+  return { [TURNSTILE_HEADER]: token };
+}
+
 export const applicationsApi = {
   submitApplication: (data: any, turnstileToken?: string) =>
     apiClient.post<Application>("/applications", data, {
-      headers: turnstileToken ? { "cf-turnstile-response": turnstileToken } : {},
+      headers: buildTurnstileHeaders(turnstileToken),
     }),
   uploadResume: (file: File, turnstileToken?: string) => {
     const formData = new FormData();
@@ -16,7 +31,7 @@ export const applicationsApi = {
       fileSize: number;
       mimeType: string;
     }>("/applications/upload-resume", formData, {
-      headers: turnstileToken ? { "cf-turnstile-response": turnstileToken } : {},
+      headers: buildTurnstileHeaders(turnstileToken),
     });
   },
   getAdminApplications: (params?: Record<string, any>) => {

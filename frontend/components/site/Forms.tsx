@@ -8,6 +8,7 @@ import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { m, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { contactApi } from "@/lib/api/contact";
 import { applicationsApi } from "@/lib/api/applications";
+import { ApiError } from "@/lib/api-client";
 import { Turnstile, TurnstileInstance } from '@marsidev/react-turnstile';
 
 const PRACTICES = ["Engineering", "Data & AI", "Civil & Infrastructure", "Corporate"];
@@ -40,10 +41,59 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
   const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [turnstileToken, setTurnstileToken] = useState<string>('');
+  const turnstileTokenRef = useRef<string>('');
   const turnstileRef = useRef<TurnstileInstance>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+
+  const assignTurnstileToken = (token: string) => {
+    turnstileTokenRef.current = token;
+  };
+
+  const clearTurnstileToken = () => {
+    turnstileTokenRef.current = '';
+  };
+
+  const refreshTurnstile = () => {
+    clearTurnstileToken();
+    turnstileRef.current?.reset();
+  };
+
+  /**
+   * When Turnstile is configured, wait for an automatic token before upload.
+   * Users can drop a resume immediately — no separate manual security step.
+   */
+  const ensureTurnstileToken = async (timeoutMs = 15000): Promise<string | undefined> => {
+    if (!siteKey) return undefined;
+
+    const readToken = () =>
+      turnstileTokenRef.current.trim() ||
+      turnstileRef.current?.getResponse()?.trim() ||
+      '';
+
+    const existing = readToken();
+    if (existing) {
+      assignTurnstileToken(existing);
+      return existing;
+    }
+
+    return new Promise<string>((resolve, reject) => {
+      const deadline = Date.now() + timeoutMs;
+      const intervalId = window.setInterval(() => {
+        const token = readToken();
+        if (token) {
+          window.clearInterval(intervalId);
+          assignTurnstileToken(token);
+          resolve(token);
+          return;
+        }
+        if (Date.now() >= deadline) {
+          window.clearInterval(intervalId);
+          reject(new Error('Turnstile token timed out'));
+        }
+      }, 100);
+    });
+  };
 
   const validateAndProcessFile = async (f: File) => {
     const allowedExtensions = ['.pdf', '.doc', '.docx'];
@@ -69,7 +119,27 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
     setUploadMessage('Parsing résumé...');
 
     try {
-      const response = await applicationsApi.uploadResume(f, turnstileToken);
+      let token: string | undefined;
+      try {
+        token = await ensureTurnstileToken();
+      } catch {
+        setUploadStatus('error');
+        setUploadMessage('Security verification failed. Please try again.');
+        refreshTurnstile();
+        return;
+      }
+
+      if (siteKey && !token) {
+        setUploadStatus('error');
+        setUploadMessage('Security verification failed. Please try again.');
+        refreshTurnstile();
+        return;
+      }
+
+      const response = await applicationsApi.uploadResume(f, token);
+      // Tokens are single-use — refresh so submit can obtain a fresh one.
+      refreshTurnstile();
+
       setResumeData({
         key: response.key,
         fileName: response.fileName || f.name,
@@ -91,10 +161,22 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
           preferredLocation: parsed.preferredLocation && LOCATIONS.includes(parsed.preferredLocation) ? parsed.preferredLocation : prev.preferredLocation,
         }));
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to parse resume', err);
       setUploadStatus('error');
-      setUploadMessage('Unable to parse resume. Please enter your details manually.');
+      const apiErr = err instanceof ApiError ? err : null;
+      const message = apiErr?.message || (err instanceof Error ? err.message : '');
+      const isTurnstileFailure =
+        apiErr?.status === 403 ||
+        /turnstile/i.test(message) ||
+        /security verification/i.test(message);
+
+      if (isTurnstileFailure) {
+        setUploadMessage('Security verification failed. Please try again.');
+        refreshTurnstile();
+      } else {
+        setUploadMessage('Unable to parse resume. Please enter your details manually.');
+      }
     } finally {
       setIsUploading(false);
     }
@@ -136,6 +218,21 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
     
     setIsSubmitting(true);
     try {
+      let token: string | undefined;
+      try {
+        token = await ensureTurnstileToken();
+      } catch {
+        alert("Security verification failed. Please try again.");
+        refreshTurnstile();
+        return;
+      }
+
+      if (siteKey && !token) {
+        alert("Security verification failed. Please try again.");
+        refreshTurnstile();
+        return;
+      }
+
       // Submit application directly with existing uploaded resume key
       await applicationsApi.submitApplication({
         fullName: formData.fullName,
@@ -149,7 +246,7 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
         resumeFileName: resumeData.fileName,
         resumeFileSize: resumeData.fileSize,
         resumeMimeType: resumeData.mimeType,
-      }, turnstileToken);
+      }, token);
       
       setIsSuccess(true);
       setFormData({
@@ -163,11 +260,17 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-      setTurnstileToken('');
-      turnstileRef.current?.reset();
+      refreshTurnstile();
     } catch (err) {
       console.error("Failed to submit application", err);
-      alert("Failed to submit. Please try again.");
+      const apiErr = err instanceof ApiError ? err : null;
+      const message = apiErr?.message || (err instanceof Error ? err.message : '');
+      if (apiErr?.status === 403 || /turnstile/i.test(message)) {
+        alert("Security verification failed. Please try again.");
+        refreshTurnstile();
+      } else {
+        alert("Failed to submit. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -226,12 +329,16 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                   <Turnstile
                     ref={turnstileRef}
                     siteKey={siteKey}
-                    onSuccess={(token) => setTurnstileToken(token)}
+                    onSuccess={(token) => assignTurnstileToken(token)}
                     onError={() => {
-                      setTurnstileToken('');
+                      clearTurnstileToken();
                     }}
-                    onExpire={() => setTurnstileToken('')}
-                    options={{ theme: 'light' }}
+                    onExpire={() => clearTurnstileToken()}
+                    options={{
+                      theme: 'light',
+                      // Auto-solves when possible; only shows a challenge if needed.
+                      appearance: 'interaction-only',
+                    }}
                   />
                 </div>
               )}

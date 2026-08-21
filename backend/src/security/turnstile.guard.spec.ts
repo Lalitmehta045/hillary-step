@@ -15,6 +15,7 @@ describe('TurnstileGuard', () => {
     service = mockTurnstileService as any;
     guard = new TurnstileGuard(service);
     mockTurnstileService.isConfigured.mockReturnValue(true);
+    mockTurnstileService.verify.mockReset();
   });
 
   const mockExecutionContext = (headers: any, body: any, clientIp: string) =>
@@ -24,45 +25,61 @@ describe('TurnstileGuard', () => {
       }),
     }) as ExecutionContext;
 
-  it('should bypass verification if Turnstile is not configured', async () => {
+  it('Turnstile not configured → upload allowed (bypass)', async () => {
     mockTurnstileService.isConfigured.mockReturnValue(false);
     const ctx = mockExecutionContext({}, {}, '127.0.0.1');
     const result = await guard.canActivate(ctx);
     expect(result).toBe(true);
+    expect(service.verify).not.toHaveBeenCalled();
   });
 
-  it('should pass if token is valid (header)', async () => {
+  it('Turnstile configured + valid token (header) → upload allowed', async () => {
     mockTurnstileService.verify.mockResolvedValue(true);
     const ctx = mockExecutionContext(
-      { 'cf-turnstile-response': 'token' },
+      { 'cf-turnstile-response': 'valid-token' },
       {},
       '127.0.0.1',
     );
 
     const result = await guard.canActivate(ctx);
     expect(result).toBe(true);
-    expect(service.verify).toHaveBeenCalledWith('token', '127.0.0.1');
+    expect(service.verify).toHaveBeenCalledWith('valid-token', '127.0.0.1');
   });
 
-  it('should pass if token is valid (body)', async () => {
+  it('Turnstile configured + valid token (body) → allowed', async () => {
     mockTurnstileService.verify.mockResolvedValue(true);
     const ctx = mockExecutionContext(
       {},
-      { 'cf-turnstile-response': 'token' },
+      { 'cf-turnstile-response': 'valid-token' },
       '127.0.0.1',
     );
 
     const result = await guard.canActivate(ctx);
     expect(result).toBe(true);
-    expect(service.verify).toHaveBeenCalledWith('token', '127.0.0.1');
+    expect(service.verify).toHaveBeenCalledWith('valid-token', '127.0.0.1');
   });
 
-  it('should throw ForbiddenException if token is missing', async () => {
+  it('Turnstile configured + missing token → 403 Turnstile token is required', async () => {
     const ctx = mockExecutionContext({}, {}, '127.0.0.1');
     await expect(guard.canActivate(ctx)).rejects.toThrow(ForbiddenException);
+    await expect(guard.canActivate(ctx)).rejects.toThrow(
+      'Turnstile token is required',
+    );
+    expect(service.verify).not.toHaveBeenCalled();
   });
 
-  it('should throw ForbiddenException if verification fails', async () => {
+  it('Turnstile configured + empty/whitespace token → 403', async () => {
+    const ctx = mockExecutionContext(
+      { 'cf-turnstile-response': '   ' },
+      {},
+      '127.0.0.1',
+    );
+    await expect(guard.canActivate(ctx)).rejects.toThrow(
+      'Turnstile token is required',
+    );
+  });
+
+  it('Turnstile configured + invalid token → 403 Turnstile verification failed', async () => {
     mockTurnstileService.verify.mockResolvedValue(false);
     const ctx = mockExecutionContext(
       { 'cf-turnstile-response': 'invalid' },
@@ -70,5 +87,8 @@ describe('TurnstileGuard', () => {
       '127.0.0.1',
     );
     await expect(guard.canActivate(ctx)).rejects.toThrow(ForbiddenException);
+    await expect(guard.canActivate(ctx)).rejects.toThrow(
+      'Turnstile verification failed',
+    );
   });
 });

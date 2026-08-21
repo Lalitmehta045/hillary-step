@@ -30,6 +30,44 @@ describe('TurnstileService', () => {
     jest.clearAllMocks();
   });
 
+  it('should report isConfigured=false when secret is absent', async () => {
+    mockConfigService.get.mockReturnValue('');
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        TurnstileService,
+        { provide: ConfigService, useValue: mockConfigService },
+      ],
+    }).compile();
+    service = module.get<TurnstileService>(TurnstileService);
+    expect(service.isConfigured()).toBe(false);
+  });
+
+  it('should report isConfigured=false for Cloudflare always-pass test secret', async () => {
+    mockConfigService.get.mockReturnValue(
+      '1x0000000000000000000000000000000AA',
+    );
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        TurnstileService,
+        { provide: ConfigService, useValue: mockConfigService },
+      ],
+    }).compile();
+    service = module.get<TurnstileService>(TurnstileService);
+    expect(service.isConfigured()).toBe(false);
+  });
+
+  it('should report isConfigured=true when a real secret is present', async () => {
+    mockConfigService.get.mockReturnValue('0x4AAAAAAreal-secret-key');
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        TurnstileService,
+        { provide: ConfigService, useValue: mockConfigService },
+      ],
+    }).compile();
+    service = module.get<TurnstileService>(TurnstileService);
+    expect(service.isConfigured()).toBe(true);
+  });
+
   it('should skip verification if no secret key', async () => {
     mockConfigService.get.mockReturnValue('');
     const module: TestingModule = await Test.createTestingModule({

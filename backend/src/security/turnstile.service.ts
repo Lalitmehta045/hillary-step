@@ -12,10 +12,15 @@ export class TurnstileService {
   private readonly secretKey: string;
 
   constructor(private readonly configService: ConfigService) {
-    this.secretKey =
-      this.configService.get<string>('cloudflare.turnstileSecretKey') || '';
+    this.secretKey = (
+      this.configService.get<string>('cloudflare.turnstileSecretKey') || ''
+    ).trim();
   }
 
+  /**
+   * True only when a real Cloudflare secret is present.
+   * Empty/missing secrets and Cloudflare's always-pass test secret are not "configured".
+   */
   isConfigured(): boolean {
     return (
       !!this.secretKey &&
