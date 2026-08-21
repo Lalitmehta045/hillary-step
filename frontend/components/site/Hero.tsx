@@ -69,25 +69,20 @@ export function Hero() {
         />
       </div>
 
-      {/* Readability overlays — keep copy legible over mountain footage */}
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,14,28,0.55)_0%,rgba(8,14,28,0.28)_42%,rgba(8,14,28,0.12)_100%)] pointer-events-none" />
-      <div className="absolute inset-x-0 top-0 h-[140px] bg-linear-to-b from-black/45 to-transparent pointer-events-none" />
-      <div className="absolute inset-x-0 bottom-0 h-[180px] bg-linear-to-t from-black/35 to-transparent pointer-events-none" />
-
       {/* Navigation */}
       <Navbar />
 
-      {/* Hero copy */}
+      {/* Hero copy — text-shadow only, video stays natural */}
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-[64px] max-md:px-[24px] max-lg:px-[40px] pt-[200px] max-md:pt-[120px] max-lg:pt-[140px]">
         <StaggerContainer animateOnMount={true}>
           <StaggerItem>
-            <h1 className="max-w-[690px] max-md:max-w-full font-display text-[88px] max-md:text-[44px] max-lg:text-[64px] font-[700] leading-[88px] max-md:leading-[48px] max-lg:leading-[68px] tracking-[-2.2px] max-md:tracking-[-1px] text-white [text-shadow:0px_4px_12px_rgba(0,0,0,0.35)] max-md:[text-shadow:0px_2px_12px_rgba(0,0,0,0.5)]">
+            <h1 className="max-w-[690px] max-md:max-w-full font-display text-[88px] max-md:text-[44px] max-lg:text-[64px] font-[700] leading-[88px] max-md:leading-[48px] max-lg:leading-[68px] tracking-[-2.2px] max-md:tracking-[-1px] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.55),0_1px_4px_rgba(0,0,0,0.4)]">
               Connecting Technology, Talent, and Global Growth.
             </h1>
           </StaggerItem>
 
           <StaggerItem>
-            <p className="mt-[38px] max-md:mt-[24px] max-w-[620px] max-md:max-w-full font-sans text-[18px] max-md:text-[16px] font-normal leading-[26px] max-md:leading-[23px] text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.35)]">
+            <p className="mt-[38px] max-md:mt-[24px] max-w-[620px] max-md:max-w-full font-sans text-[18px] max-md:text-[16px] font-normal leading-[26px] max-md:leading-[23px] text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.5),0_1px_3px_rgba(0,0,0,0.35)]">
               A global technology and workforce partner delivering AI, software engineering, digital
               transformation, and international staffing solutions.
             </p>

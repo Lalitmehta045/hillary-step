@@ -173,6 +173,7 @@ export function Globe({ active = "India" }: { active?: string }) {
   const targetSpinRef = useRef(targetSpin);
   const focusRef = useRef(targetSpin);
   const lastTime = useRef(performance.now());
+  const pausedRef = useRef(false);
 
   useEffect(() => {
     targetSpinRef.current = -targetLon * (Math.PI / 180);
@@ -184,6 +185,15 @@ export function Globe({ active = "India" }: { active?: string }) {
     if (!el || !cv) return;
     const ctx = cv.getContext("2d");
     if (!ctx) return;
+
+    const onEnter = () => {
+      pausedRef.current = true;
+    };
+    const onLeave = () => {
+      pausedRef.current = false;
+    };
+    el.addEventListener("pointerenter", onEnter);
+    el.addEventListener("pointerleave", onLeave);
 
     const dots = landPoints(60000);
     // per-dot drift parameters (floating petal motion)
@@ -242,9 +252,9 @@ export function Globe({ active = "India" }: { active?: string }) {
       lastTime.current = now;
       const t = (now - start) / 1000 + 15;
 
-      // Continuously spin the target, but slower so the map stays visible longer
-      if (!reduce) {
-        targetSpinRef.current += dt * 0.015;
+      // Continuously spin; pause while the pointer is over the globe
+      if (!reduce && !pausedRef.current) {
+        targetSpinRef.current += dt * 0.055;
       }
 
       let diff = targetSpinRef.current - focusRef.current;
@@ -479,6 +489,8 @@ export function Globe({ active = "India" }: { active?: string }) {
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
+      el.removeEventListener("pointerenter", onEnter);
+      el.removeEventListener("pointerleave", onLeave);
     };
   }, []);
 
