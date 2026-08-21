@@ -9,11 +9,34 @@ export class ApiError extends Error {
   }
 }
 
-let API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1";
+function normalizeApiBase(url: string): string {
+  if (url && !url.endsWith("/api/v1")) {
+    return url.replace(/\/$/, "") + "/api/v1";
+  }
+  return url;
+}
 
-// Auto-append /api/v1 to fix production 404s if the Vercel env var is missing it
-if (API_BASE_URL && !API_BASE_URL.endsWith("/api/v1")) {
-  API_BASE_URL = API_BASE_URL.replace(/\/$/, "") + "/api/v1";
+/**
+ * Resolve API base URL.
+ *
+ * In the browser on a deployed host (e.g. Vercel), prefer same-origin `/api/v1`
+ * so Next.js rewrites proxy to Render and `hs_session` is a first-party cookie.
+ * Localhost keeps the configured backend URL (usually http://localhost:3001).
+ */
+function resolveApiBaseUrl(): string {
+  const configured = normalizeApiBase(
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1"
+  );
+
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    const isLocal = host === "localhost" || host === "127.0.0.1";
+    if (!isLocal) {
+      return "/api/v1";
+    }
+  }
+
+  return configured;
 }
 
 async function handleResponse<T>(response: Response): Promise<T> {
@@ -40,7 +63,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 export const apiClient = {
   async get<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const url = `${API_BASE_URL}${endpoint}`;
+    const url = `${resolveApiBaseUrl()}${endpoint}`;
     const response = await fetch(url, {
       ...options,
       headers: {
@@ -52,7 +75,7 @@ export const apiClient = {
   },
 
   async post<T>(endpoint: string, body?: any, options: RequestInit = {}): Promise<T> {
-    const url = `${API_BASE_URL}${endpoint}`;
+    const url = `${resolveApiBaseUrl()}${endpoint}`;
     const response = await fetch(url, {
       method: "POST",
       ...options,
@@ -67,7 +90,7 @@ export const apiClient = {
   },
 
   async patch<T>(endpoint: string, body?: any, options: RequestInit = {}): Promise<T> {
-    const url = `${API_BASE_URL}${endpoint}`;
+    const url = `${resolveApiBaseUrl()}${endpoint}`;
     const response = await fetch(url, {
       method: "PATCH",
       ...options,
@@ -82,7 +105,7 @@ export const apiClient = {
   },
 
   async delete<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const url = `${API_BASE_URL}${endpoint}`;
+    const url = `${resolveApiBaseUrl()}${endpoint}`;
     const response = await fetch(url, {
       method: "DELETE",
       ...options,

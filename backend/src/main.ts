@@ -71,17 +71,25 @@ async function bootstrap() {
     },
   });
 
+  // With credentials:true, browsers reject ACAO "*". Reflect origin when unset/"*",
+  // otherwise use the explicit allowlist (required in production for Vercel).
+  const corsOriginOption =
+    !corsOrigin || corsOrigin.trim() === '*'
+      ? true
+      : corsOrigin.split(',').map((o) => o.trim()).filter(Boolean);
+
   await fastifyInstance.register(fastifyCors, {
-    origin: corsOrigin === '*' ? '*' : corsOrigin?.split(','),
+    origin: corsOriginOption,
     credentials: true,
   });
 
+  // Production uses SameSite=None so the Vercel SPA can send cookies to Render.
   await fastifyInstance.register(fastifyCookie, {
     secret: configService.get<string>('auth.sessionSecret', 'fallback-secret-key-at-least-32-chars-long'),
     parseOptions: {
       httpOnly: true,
       secure: nodeEnv === 'production',
-      sameSite: 'strict',
+      sameSite: nodeEnv === 'production' ? 'none' : 'lax',
     },
   });
 

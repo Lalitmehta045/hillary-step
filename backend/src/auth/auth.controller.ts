@@ -19,8 +19,14 @@ import {
 import { ClientIp } from '../common/decorators/client-ip.decorator';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentAdmin } from '../common/decorators/current-admin.decorator';
+import {
+  getClearSessionCookieOptions,
+  getSessionCookieOptions,
+} from '../common/utils/session-cookie.util';
 import type { Admin } from '@prisma/client';
 import type { FastifyRequest, FastifyReply } from 'fastify';
+
+const SESSION_COOKIE = 'hs_session';
 
 @Controller('auth')
 export class AuthController {
@@ -45,13 +51,7 @@ export class AuthController {
       return { requiresMfa: true, mfaToken: result.mfaToken };
     }
 
-    res.setCookie('hs_session', result.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60, // 24 hours
-    });
+    res.setCookie(SESSION_COOKIE, result.token, getSessionCookieOptions());
 
     const { passwordHash: _, mfaSecret: __, ...adminData } = result.admin;
     void _;
@@ -75,13 +75,7 @@ export class AuthController {
       userAgent,
     );
 
-    res.setCookie('hs_session', result.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60,
-    });
+    res.setCookie(SESSION_COOKIE, result.token, getSessionCookieOptions());
 
     const { passwordHash: _, mfaSecret: __, ...adminData } = result.admin;
     void _;
@@ -105,13 +99,7 @@ export class AuthController {
       userAgent,
     );
 
-    res.setCookie('hs_session', result.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60,
-    });
+    res.setCookie(SESSION_COOKIE, result.token, getSessionCookieOptions());
 
     const { passwordHash: _, mfaSecret: __, ...adminData } = result.admin;
     void _;
@@ -163,13 +151,13 @@ export class AuthController {
     @ClientIp() ip: string,
     @Res({ passthrough: true }) res: FastifyReply,
   ) {
-    const token = req.cookies['hs_session'];
+    const token = req.cookies[SESSION_COOKIE];
     const uaHeader = req.headers['user-agent'];
     const userAgent = Array.isArray(uaHeader) ? uaHeader[0] : (uaHeader || 'Unknown');
 
     if (token) {
       await this.authService.logout(token, ip, userAgent);
-      res.clearCookie('hs_session', { path: '/' });
+      res.clearCookie(SESSION_COOKIE, getClearSessionCookieOptions());
     }
 
     return { message: 'Logout successful' };
