@@ -254,7 +254,7 @@ export function Globe({ active = "India" }: { active?: string }) {
 
       // Continuously spin; pause while the pointer is over the globe
       if (!reduce && !pausedRef.current) {
-        targetSpinRef.current += dt * 0.055;
+        targetSpinRef.current += dt * 0.1;
       }
 
       let diff = targetSpinRef.current - focusRef.current;
