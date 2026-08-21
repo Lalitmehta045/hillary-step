@@ -344,8 +344,8 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                     onExpire={() => clearTurnstileToken()}
                     options={{
                       theme: 'light',
-                      // Auto-solves when possible; only shows a challenge if needed.
-                      appearance: 'interaction-only',
+                      // Always show the Turnstile widget so users can see verification.
+                      appearance: 'always',
                     }}
                   />
                 </div>

@@ -747,7 +747,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                                 onExpire={() => clearTurnstileToken()}
                                 options={{
                                   theme: "light",
-                                  appearance: "interaction-only",
+                                  appearance: "always",
                                 }}
                               />
                             </div>

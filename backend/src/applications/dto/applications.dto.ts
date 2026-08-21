@@ -121,6 +121,30 @@ export class ApplicationFilterDto {
   @IsEnum(ApplicationStatus)
   status?: ApplicationStatus;
 
+  @ApiPropertyOptional({ description: 'Practice area filter' })
+  @IsOptional()
+  @IsString()
+  practice?: string;
+
+  @ApiPropertyOptional({ description: 'Preferred location filter' })
+  @IsOptional()
+  @IsString()
+  location?: string;
+
+  @ApiPropertyOptional({
+    description: 'Experience range: 0-2 | 3-5 | 6-10 | 10+',
+  })
+  @IsOptional()
+  @IsString()
+  experience?: string;
+
+  @ApiPropertyOptional({
+    description: 'Date preset: today | 7d | 30d | 90d',
+  })
+  @IsOptional()
+  @IsString()
+  date?: string;
+
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)

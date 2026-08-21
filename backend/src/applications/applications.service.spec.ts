@@ -108,9 +108,12 @@ describe('ApplicationsService', () => {
       const result = await service.findAll({
         search: 'John',
         status: 'NEW' as any,
+        practice: 'Engineering',
+        location: 'India',
       });
       expect(result.data).toBeDefined();
       expect(result.meta.total).toBe(1);
+      expect(mockPrismaService.application.findMany).toHaveBeenCalled();
     });
   });
 

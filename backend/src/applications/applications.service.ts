@@ -60,19 +60,120 @@ export class ApplicationsService {
     return app;
   }
 
+  private parseExperienceYears(value?: string | null): number | null {
+    if (!value?.trim()) return null;
+    const match = value.match(/(\d+(?:\.\d+)?)/);
+    if (!match) return null;
+    const years = Number(match[1]);
+    return Number.isFinite(years) ? years : null;
+  }
+
+  private experienceInRange(
+    years: number | null,
+    range: string,
+  ): boolean {
+    if (years === null) return false;
+    switch (range) {
+      case '0-2':
+        return years >= 0 && years <= 2;
+      case '3-5':
+        return years >= 3 && years <= 5;
+      case '6-10':
+        return years >= 6 && years <= 10;
+      case '10+':
+        return years >= 10;
+      default:
+        return false;
+    }
+  }
+
+  private datePresetToRange(preset: string): { gte: Date } | null {
+    const now = new Date();
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+    );
+    switch (preset) {
+      case 'today':
+        return { gte: startOfToday };
+      case '7d': {
+        const d = new Date(startOfToday);
+        d.setDate(d.getDate() - 7);
+        return { gte: d };
+      }
+      case '30d': {
+        const d = new Date(startOfToday);
+        d.setDate(d.getDate() - 30);
+        return { gte: d };
+      }
+      case '90d': {
+        const d = new Date(startOfToday);
+        d.setDate(d.getDate() - 90);
+        return { gte: d };
+      }
+      default:
+        return null;
+    }
+  }
+
   async findAll(filters: ApplicationFilterDto) {
     const page = filters.page || DEFAULT_PAGE;
     const pageSize = filters.pageSize || DEFAULT_PAGE_SIZE;
     const skip = (page - 1) * pageSize;
 
     const where: Prisma.ApplicationWhereInput = { deletedAt: null };
+    const and: Prisma.ApplicationWhereInput[] = [];
+
     if (filters.status) where.status = filters.status;
-    if (filters.search) {
-      where.OR = [
-        { fullName: { contains: filters.search, mode: 'insensitive' } },
-        { email: { contains: filters.search, mode: 'insensitive' } },
-      ];
+    if (filters.practice) {
+      where.practice = { equals: filters.practice, mode: 'insensitive' };
     }
+    if (filters.location) {
+      where.preferredLocation = {
+        equals: filters.location,
+        mode: 'insensitive',
+      };
+    }
+    if (filters.search?.trim()) {
+      const q = filters.search.trim();
+      and.push({
+        OR: [
+          { fullName: { contains: q, mode: 'insensitive' } },
+          { email: { contains: q, mode: 'insensitive' } },
+        ],
+      });
+    }
+    if (filters.date) {
+      const range = this.datePresetToRange(filters.date);
+      if (range) where.createdAt = range;
+    }
+
+    // Experience is stored as free-form text; resolve matching IDs first.
+    if (filters.experience) {
+      const candidates = await this.prisma.application.findMany({
+        where: { deletedAt: null, experienceYears: { not: null } },
+        select: { id: true, experienceYears: true },
+      });
+      const matchingIds = candidates
+        .filter((c) =>
+          this.experienceInRange(
+            this.parseExperienceYears(c.experienceYears),
+            filters.experience!,
+          ),
+        )
+        .map((c) => c.id);
+
+      if (matchingIds.length === 0) {
+        return {
+          data: [],
+          meta: { total: 0, page, pageSize, totalPages: 0 },
+        };
+      }
+      and.push({ id: { in: matchingIds } });
+    }
+
+    if (and.length > 0) where.AND = and;
 
     const [data, total] = await Promise.all([
       this.prisma.application.findMany({
