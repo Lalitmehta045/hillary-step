@@ -24,6 +24,11 @@ export function Navbar() {
   const [selectedRegion, setSelectedRegion] = useState("USA");
 
   const REGIONS = ["USA", "IND", "AUS"];
+  const REGION_FLAGS: Record<string, string> = {
+    USA: "https://flagcdn.com/us.svg",
+    IND: "https://flagcdn.com/in.svg",
+    AUS: "https://flagcdn.com/au.svg"
+  };
 
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isOverNavbarRef = useRef(false);
@@ -182,21 +187,25 @@ export function Navbar() {
                 className="flex items-center gap-[7px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] cursor-pointer py-[10px]"
               >
                 <GlobeIcon />
-                {selectedRegion}
+                <span className="flex items-center gap-[6px]">
+                  <img src={REGION_FLAGS[selectedRegion]} alt={`${selectedRegion} flag`} className="w-[16px] h-[12px] object-cover rounded-[2px]" />
+                  {selectedRegion}
+                </span>
                 <ChevronIcon />
               </button>
-              
+
               {/* Invisible bridge for hover continuity */}
               <div className="absolute top-full left-0 right-0 h-[10px]" />
-              
+
               {/* Dropdown Menu */}
               <div className="absolute top-[100%] right-0 mt-[4px] w-[140px] rounded-[12px] bg-white border border-[#E5E7EB] shadow-[0_8px_30px_rgb(0,0,0,0.08)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-[8px] z-50 translate-y-[-10px] group-hover:translate-y-0">
                 {REGIONS.filter(r => r !== selectedRegion).map(region => (
-                  <button 
+                  <button
                     key={region}
                     onClick={() => setSelectedRegion(region)}
-                    className="flex w-full items-center px-[16px] py-[10px] text-left font-display text-[14px] font-[510] text-[#111111] hover:bg-[#F8F9FB] hover:text-[#1A6CFF] transition-colors"
+                    className="flex w-full items-center gap-[8px] px-[16px] py-[10px] text-left font-display text-[14px] font-[510] text-[#111111] hover:bg-[#F8F9FB] hover:text-[#1A6CFF] transition-colors"
                   >
+                    <img src={REGION_FLAGS[region]} alt={`${region} flag`} className="w-[16px] h-[12px] object-cover rounded-[2px]" />
                     {region}
                   </button>
                 ))}

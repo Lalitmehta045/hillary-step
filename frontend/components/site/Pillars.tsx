@@ -20,20 +20,20 @@ type Pillar = {
 const PILLARS: Pillar[] = [
   {
     eyebrow: "PILLAR ONE",
-    title: "IT Solutions",
+    title: "Cognitive Digital – Platforms",
     image: "/assets/pillar-it.png",
     alt: "Wireframe cloud and laptop illustration in blue",
   },
   {
     eyebrow: "PILLAR TWO",
-    title: "Global Staffing",
+    title: "Global Talent – People",
     image: "/assets/pillar-staffing.png",
     alt: "Dotted world map with connection arcs in green",
     id: "global-staffing",
   },
   {
     eyebrow: "PILLAR THREE",
-    title: "Civil & Infrastructure",
+    title: "Eco Smart Infra – Projects",
     image: "/assets/pillar-civil.png",
     alt: "Wireframe skyline and bridge illustration in orange",
   },
@@ -82,9 +82,9 @@ export function Pillars() {
                 onClick={
                   p.id === "global-staffing" 
                     ? () => setIsModalOpen(true) 
-                    : p.title === "IT Solutions" 
+                    : p.title === "Cognitive Digital – Platforms" 
                       ? () => setIsITModalOpen(true) 
-                      : p.title === "Civil & Infrastructure"
+                      : p.title === "Eco Smart Infra – Projects"
                         ? () => setIsCivilModalOpen(true)
                         : undefined
                 }

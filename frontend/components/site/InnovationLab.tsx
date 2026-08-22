@@ -256,7 +256,7 @@ export function InnovationLab() {
                   <div className="w-8 h-8 rounded-lg bg-[#1A6CFF]/10 flex items-center justify-center border border-[#1A6CFF]/20">
                     <Monitor className="w-4 h-4 text-[#1A6CFF]" />
                   </div>
-                  <h4 className="font-display text-[#1A6CFF] font-bold tracking-[0.05em] text-[13px] xl:text-[15px] uppercase">IT SOLUTIONS</h4>
+                  <h4 className="font-display text-[#1A6CFF] font-bold tracking-[0.05em] text-[13px] xl:text-[15px] uppercase">COGNITIVE DIGITAL – PLATFORMS</h4>
                 </div>
                 <ul className="flex flex-col gap-3 xl:gap-4">
                   {["Custom Software Development", "AI & Machine Learning", "Cloud Solutions", "Web & Mobile Applications", "Data Engineering & Analytics", "Cybersecurity"].map((item, i) => (
@@ -283,7 +283,7 @@ export function InnovationLab() {
                   <div className="w-8 h-8 rounded-lg bg-[#22c55e]/10 flex items-center justify-center border border-[#22c55e]/20">
                     <Briefcase className="w-4 h-4 text-[#22c55e]" />
                   </div>
-                  <h4 className="font-display text-[#22c55e] font-bold tracking-[0.05em] text-[13px] xl:text-[15px] uppercase">GLOBAL STAFFING</h4>
+                  <h4 className="font-display text-[#22c55e] font-bold tracking-[0.05em] text-[13px] xl:text-[15px] uppercase">GLOBAL TALENT – PEOPLE</h4>
                 </div>
                 <ul className="flex flex-col gap-3 xl:gap-4">
                   {["International Recruitment", "Contract Staffing", "Permanent Hiring", "RPO Services", "Staff Augmentation", "Offshore Development Teams"].map((item, i) => (
@@ -310,7 +310,7 @@ export function InnovationLab() {
                   <div className="w-8 h-8 rounded-lg bg-[#FF9500]/10 flex items-center justify-center border border-[#FF9500]/20">
                     <Building2 className="w-4 h-4 text-[#FF9500]" />
                   </div>
-                  <h4 className="font-display text-[#FF9500] font-bold tracking-[0.05em] text-[13px] xl:text-[15px] uppercase">CIVIL & INFRASTRUCTURE</h4>
+                  <h4 className="font-display text-[#FF9500] font-bold tracking-[0.05em] text-[13px] xl:text-[15px] uppercase">ECO SMART INFRA – PROJECTS</h4>
                 </div>
                 <ul className="grid grid-cols-2 gap-x-6 xl:gap-x-8 gap-y-3 xl:gap-y-4">
                   {["Engineering Consultancy", "EPC Services", "Project Management", "Smart Cities", "Infrastructure Development", "Sustainable Infrastructure"].map((item, i) => (
@@ -365,7 +365,7 @@ export function InnovationLab() {
                     <div className="w-7 h-7 rounded-lg bg-[#1A6CFF]/10 flex items-center justify-center border border-[#1A6CFF]/20">
                       <Monitor className="w-3.5 h-3.5 text-[#1A6CFF]" />
                     </div>
-                    <h4 className="font-display text-[#1A6CFF] font-bold tracking-[0.05em] text-[14px] uppercase">IT SOLUTIONS</h4>
+                    <h4 className="font-display text-[#1A6CFF] font-bold tracking-[0.05em] text-[14px] uppercase">COGNITIVE DIGITAL – PLATFORMS</h4>
                   </div>
                   <ul className="flex flex-col gap-3">
                     {["Custom Software Development", "AI & Machine Learning", "Cloud Solutions", "Web & Mobile Applications", "Data Engineering & Analytics", "Cybersecurity"].map((item, i) => (
@@ -402,7 +402,7 @@ export function InnovationLab() {
                     <div className="w-7 h-7 rounded-lg bg-[#22c55e]/10 flex items-center justify-center border border-[#22c55e]/20">
                       <Briefcase className="w-3.5 h-3.5 text-[#22c55e]" />
                     </div>
-                    <h4 className="font-display text-[#22c55e] font-bold tracking-[0.05em] text-[14px] uppercase">GLOBAL STAFFING</h4>
+                    <h4 className="font-display text-[#22c55e] font-bold tracking-[0.05em] text-[14px] uppercase">GLOBAL TALENT – PEOPLE</h4>
                   </div>
                   <ul className="flex flex-col gap-3">
                     {["International Recruitment", "Contract Staffing", "Permanent Hiring", "RPO Services", "Staff Augmentation", "Offshore Development Teams"].map((item, i) => (
@@ -439,7 +439,7 @@ export function InnovationLab() {
                     <div className="w-7 h-7 rounded-lg bg-[#FF9500]/10 flex items-center justify-center border border-[#FF9500]/20">
                       <Building2 className="w-3.5 h-3.5 text-[#FF9500]" />
                     </div>
-                    <h4 className="font-display text-[#FF9500] font-bold tracking-[0.05em] text-[14px] uppercase">CIVIL & INFRASTRUCTURE</h4>
+                    <h4 className="font-display text-[#FF9500] font-bold tracking-[0.05em] text-[14px] uppercase">ECO SMART INFRA – PROJECTS</h4>
                   </div>
                   <ul className="grid grid-cols-2 gap-3">
                     {["Engineering Consultancy", "EPC Services", "Project Management", "Smart Cities", "Infrastructure Development", "Sustainable Infrastructure"].map((item, i) => (

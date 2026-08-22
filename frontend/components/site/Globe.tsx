@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { landPoints, slerp, toVec, type Vec3 } from "./geo";
+import { Sun, Moon } from "lucide-react";
 
 type Rt = { lat: number; lon: number };
 
@@ -167,6 +168,12 @@ export function Globe({ active = "India" }: { active?: string }) {
   const wrap = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [labels, setLabels] = useState<Label[]>([]);
+  const [isNight, setIsNight] = useState(false);
+  const isNightRef = useRef(isNight);
+
+  useEffect(() => {
+    isNightRef.current = isNight;
+  }, [isNight]);
   // target longitude for each region
   const targetLon = active === "United States" ? -95 : active === "Australia" ? 135 : 80;
   const targetSpin = -targetLon * (Math.PI / 180);
@@ -299,15 +306,22 @@ export function Globe({ active = "India" }: { active?: string }) {
         R * 1.05,
       );
       // Soft translucent sphere to give volume without being a solid white block
-      body.addColorStop(0, "rgba(255,255,255,0.9)");
-      body.addColorStop(0.72, "rgba(222,235,255,0.85)");
-      body.addColorStop(1, "rgba(222,235,255,0.35)");
+      if (isNightRef.current) {
+        body.addColorStop(0, "rgba(30,30,40,0.9)");
+        body.addColorStop(0.72, "rgba(15,15,25,0.85)");
+        body.addColorStop(1, "rgba(5,5,15,0.6)");
+        ctx.strokeStyle = "rgba(124,92,246,0.2)";
+      } else {
+        body.addColorStop(0, "rgba(255,255,255,0.9)");
+        body.addColorStop(0.72, "rgba(222,235,255,0.85)");
+        body.addColorStop(1, "rgba(222,235,255,0.35)");
+        ctx.strokeStyle = "rgba(124,92,246,0.08)";
+      }
       ctx.beginPath();
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.fillStyle = body;
       ctx.fill();
       ctx.lineWidth = 1;
-      ctx.strokeStyle = "rgba(124,92,246,0.08)";
       ctx.stroke();
 
       // dots — floating / drifting like petals
@@ -495,13 +509,24 @@ export function Globe({ active = "India" }: { active?: string }) {
   }, []);
 
   return (
-    <div ref={wrap} className="relative h-full w-full overflow-hidden">
+    <div ref={wrap} className={`relative h-full w-full overflow-hidden transition-colors duration-700 ${isNight ? "bg-slate-950" : "bg-transparent"}`}>
+      <button
+        onClick={() => setIsNight(!isNight)}
+        className={`absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur transition-all duration-300 ${isNight
+            ? "bg-white/10 text-yellow-300 hover:bg-white/20 ring-1 ring-white/20"
+            : "bg-black/5 text-slate-700 hover:bg-black/10 ring-1 ring-black/10"
+          }`}
+        aria-label="Toggle day/night mode"
+      >
+        {isNight ? <Moon size={20} /> : <Sun size={20} />}
+      </button>
       <canvas ref={canvas} className="block h-full w-full" aria-hidden />
       <div className="pointer-events-none absolute inset-0">
         {labels.map((l) => (
           <div
             key={l.id}
-            className="absolute flex -translate-y-1/2 items-center gap-2 rounded-lg bg-card/95 px-2 py-1.5 shadow-[0_8px_24px_-8px_rgba(38,20,90,0.35)] ring-1 ring-border backdrop-blur"
+            className={`absolute flex -translate-y-1/2 items-center gap-2 rounded-lg px-2 py-1.5 shadow-[0_8px_24px_-8px_rgba(38,20,90,0.35)] ring-1 backdrop-blur transition-colors ${isNight ? "bg-slate-900/95 ring-white/10" : "bg-card/95 ring-border"
+              }`}
             style={{ left: l.x + 14, top: l.y - 22, opacity: l.o }}
           >
             <span
@@ -510,11 +535,11 @@ export function Globe({ active = "India" }: { active?: string }) {
             >
               {l.def.glyph}
             </span>
-            <span className="text-[13px] font-semibold text-foreground">
+            <span className={`text-[13px] font-semibold ${isNight ? "text-slate-100" : "text-foreground"}`}>
               {l.def.city}{l.def.country ? "," : ""}
             </span>
             {l.def.country && (
-              <span className="text-[13px] text-muted-foreground">{l.def.country}</span>
+              <span className={`text-[13px] ${isNight ? "text-slate-400" : "text-muted-foreground"}`}>{l.def.country}</span>
             )}
           </div>
         ))}

@@ -379,7 +379,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
       {isModal && (
         <div className="mb-[64px]">
           <p className="text-[14px] font-[600] tracking-wide text-[#3AF900] uppercase mb-[12px]">
-            Global Staffing
+            Global Talent – People
           </p>
           <h2 className="font-display text-[48px] font-[700] leading-[1.1] tracking-[-1px] text-[#111111] mb-[20px]">
             <span className="bg-gradient-to-r from-[#86EFAC] via-[#14532D] to-[#86EFAC] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Global Talent.</span> Local<br />Understanding.

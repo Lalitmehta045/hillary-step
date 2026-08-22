@@ -151,7 +151,7 @@ export function ITSolutionsContent() {
       {/* Header */}
       <div className="mb-[64px] max-md:mb-[48px]">
         <p className="text-[14px] font-[600] tracking-wide text-[#1A6CFF] uppercase mb-[16px]">
-          IT Solutions
+          Cognitive Digital – Platforms
         </p>
         <h2 className="font-display text-[48px] max-md:text-[36px] font-[700] leading-[1.1] tracking-[-1px] text-[#111111] mb-[20px]">
           <span className="bg-gradient-to-r from-[#60A5FA] via-[#1E3A8A] to-[#60A5FA] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Technology</span> that powers<br className="max-md:hidden" /> your business forward.
@@ -164,7 +164,7 @@ export function ITSolutionsContent() {
       {/* Grid Section */}
       <div className="flex flex-col items-center w-full">
         <p className="text-[14px] font-[700] tracking-[1px] text-[#1A6CFF] uppercase mb-[12px] text-center">
-          OUR IT SOLUTIONS
+          OUR COGNITIVE DIGITAL PLATFORMS
         </p>
         <h3 className="font-display text-[28px] max-md:text-[24px] font-[700] text-[#111111] mb-[48px] text-center">
           Comprehensive Solutions for Every Need

@@ -155,8 +155,8 @@ export function CivilInfraContent() {
       
       {/* Header */}
       <div className="mb-[64px] max-md:mb-[48px]">
-        <p className="text-[14px] font-[600] tracking-wide text-[#EA580C] uppercase mb-[16px]">
-          Civil & Infrastructure
+        <p className="text-[14px] font-[600] tracking-wide text-[#FF9500] uppercase mb-[16px]">
+          Eco Smart Infra – Projects
         </p>
         <h2 className="font-display text-[48px] max-md:text-[36px] font-[700] leading-[1.1] tracking-[-1px] text-[#111111] mb-[20px]">
           <span className="bg-gradient-to-r from-[#FDBA74] via-[#7C2D12] to-[#FDBA74] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Building durable</span> foundations<br className="max-md:hidden" /> for tomorrow&apos;s world.

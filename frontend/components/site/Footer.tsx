@@ -8,7 +8,7 @@ import { GlobalStaffingModal } from "@/components/site/GlobalStaffingModal";
 import { ITSolutionsModal } from "@/components/site/ITSolutionsModal";
 import { CivilInfraModal } from "@/components/site/CivilInfraModal";
 import Image from "next/image";
-import { FaInstagram, FaXTwitter, FaLinkedinIn, FaFacebookF } from "react-icons/fa6";
+import { FaLinkedinIn, FaYoutube, FaLocationDot } from "react-icons/fa6";
 
 type FooterLink = {
   label: string;
@@ -23,9 +23,9 @@ const COLUMNS: {
   {
     title: "OPERATIONAL PILLARS",
     links: [
-      { label: "IT Solutions - Platform", action: "it" },
-      { label: "Global Staffing - People", action: "staffing" },
-      { label: "Civil & Infrastructure - Projects", action: "civil" },
+      { label: "Cognitive Digital – Platforms", action: "it" },
+      { label: "Global Talent – People", action: "staffing" },
+      { label: "Eco Smart Infra – Projects", action: "civil" },
     ],
   },
   {
@@ -54,10 +54,9 @@ const COLUMNS: {
 ];
 
 const SOCIALS = [
-  { icon: FaInstagram, alt: "Instagram" },
-  { icon: FaXTwitter, alt: "X" },
-  { icon: FaLinkedinIn, alt: "LinkedIn" },
-  { icon: FaFacebookF, alt: "Facebook" },
+  { icon: FaLinkedinIn, alt: "LinkedIn", bg: "bg-[#0077B5]", hoverBg: "hover:bg-[#005E93]" },
+  { icon: FaYoutube, alt: "YouTube", bg: "bg-[#FF0000]", hoverBg: "hover:bg-[#CC0000]" },
+  { icon: FaLocationDot, alt: "Google Map", bg: "bg-[#34A853]", hoverBg: "hover:bg-[#2B8A44]" },
 ];
 
 export function Footer() {
@@ -79,8 +78,8 @@ export function Footer() {
         <StaggerContainer className="flex w-full flex-col gap-[32px] md:flex-row md:items-start md:justify-between">
           {COLUMNS.map((col) => (
             <StaggerItem key={col.title} className="shrink-0">
-              <nav className="flex flex-col gap-[16px]">
-                <h2 className="min-h-[40px] font-display text-[15px] font-[590] leading-[20px] tracking-[0.04em] text-[#1E3A8A] uppercase">
+              <nav className="flex flex-col gap-[12px]">
+                <h2 className="font-display text-[15px] font-[500] leading-[20px] tracking-[0.04em] text-[#1E3A8A] uppercase">
                   {col.title}
                 </h2>
                 <ul className="flex flex-col gap-[10px]">
@@ -129,9 +128,9 @@ export function Footer() {
                 variant="socialIcon"
                 href="#"
                 aria-label={s.alt}
-                className="group flex h-[45px] w-[45px] items-center justify-center rounded-[10px] overflow-hidden transition-colors bg-[#616161] hover:bg-[#4a4a4a]"
+                className={`group flex h-[45px] w-[45px] items-center justify-center rounded-[10px] overflow-hidden transition-colors ${s.bg} ${s.hoverBg}`}
               >
-                <Icon className="h-[24px] w-[24px] text-white transition-colors" />
+                <Icon className="h-[22px] w-[22px] text-white transition-transform duration-300 group-hover:scale-110" />
               </AnimatedButton>
             );
           })}

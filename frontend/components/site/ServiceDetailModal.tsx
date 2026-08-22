@@ -114,7 +114,7 @@ export function ServiceDetailModal({ isOpen, onClose, service }: ServiceDetailMo
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-[700] tracking-[1px] uppercase mb-4"
                     style={{ backgroundColor: `${accent}30`, color: 'white', border: `1px solid ${accent}50` }}
                   >
-                    {service.category === "it-solutions" ? "IT Solutions" : "Civil & Infrastructure"}
+                    {service.category === "it-solutions" ? "Cognitive Digital – Platforms" : "Eco Smart Infra – Projects"}
                   </div>
                   <h1 className="font-display text-[40px] max-md:text-[28px] font-[700] leading-[1.1] text-white mb-[12px] tracking-[-0.5px]">
                     {service.title}
