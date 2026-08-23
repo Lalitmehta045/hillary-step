@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const LEADERS = [
   {
-    image: "/assets/founder-images/priyadarshi.jpeg",
+    image: "/assets/founder-images/kunal-priyadarshi.jpeg",
     role: "Director (HSS) & CEO",
     name: "Kunal Priyadarshi",
     quote: '"Infrastructure is a promise a nation makes to itself."',

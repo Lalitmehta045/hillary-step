@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { landPoints, slerp, toVec, type Vec3 } from "./geo";
-import { Sun, Moon } from "lucide-react";
+
 
 type Rt = { lat: number; lon: number };
 
@@ -168,12 +168,7 @@ export function Globe({ active = "India" }: { active?: string }) {
   const wrap = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [labels, setLabels] = useState<Label[]>([]);
-  const [isNight, setIsNight] = useState(false);
-  const isNightRef = useRef(isNight);
 
-  useEffect(() => {
-    isNightRef.current = isNight;
-  }, [isNight]);
   // target longitude for each region
   const targetLon = active === "United States" ? -95 : active === "Australia" ? 135 : 80;
   const targetSpin = -targetLon * (Math.PI / 180);
@@ -264,6 +259,11 @@ export function Globe({ active = "India" }: { active?: string }) {
         targetSpinRef.current += dt * 0.1;
       }
 
+      const nowD = new Date();
+      const utcHours = nowD.getUTCHours() + nowD.getUTCMinutes() / 60 + nowD.getUTCSeconds() / 3600;
+      const sunLon = (12 - utcHours) * 15;
+      const sunVecGeo = toVec(0, sunLon);
+
       let diff = targetSpinRef.current - focusRef.current;
       while (diff > Math.PI) diff -= Math.PI * 2;
       while (diff < -Math.PI) diff += Math.PI * 2;
@@ -297,26 +297,39 @@ export function Globe({ active = "India" }: { active?: string }) {
       ctx.clearRect(0, 0, w, h);
 
       // soft sphere body
+      const sunScreen = project(sunVecGeo);
+      const dx = sunScreen.x - cx;
+      const dy = sunScreen.y - cy;
+      const mag = Math.sqrt(dx * dx + dy * dy) || 1;
+      
+      const gradX = cx + (dx / mag) * R * 0.5;
+      const gradY = cy + (dy / mag) * R * 0.5;
+
       const body = ctx.createRadialGradient(
-        cx - R * 0.35,
-        cy - R * 0.45,
+        gradX,
+        gradY,
         R * 0.1,
         cx,
         cy,
         R * 1.05,
       );
-      // Soft translucent sphere to give volume without being a solid white block
-      if (isNightRef.current) {
-        body.addColorStop(0, "rgba(30,30,40,0.9)");
-        body.addColorStop(0.72, "rgba(15,15,25,0.85)");
-        body.addColorStop(1, "rgba(5,5,15,0.6)");
-        ctx.strokeStyle = "rgba(124,92,246,0.2)";
-      } else {
-        body.addColorStop(0, "rgba(255,255,255,0.9)");
-        body.addColorStop(0.72, "rgba(222,235,255,0.85)");
-        body.addColorStop(1, "rgba(222,235,255,0.35)");
-        ctx.strokeStyle = "rgba(124,92,246,0.08)";
-      }
+      
+      // Interpolate sphere highlight based on whether sun is in front
+      const sunZ = Math.max(-1, Math.min(1, sunScreen.z));
+      const sunIntensityBg = (sunZ + 1) / 2;
+      
+      const r0 = 20 + 20 * sunIntensityBg;
+      const g0 = 20 + 30 * sunIntensityBg;
+      const b0 = 30 + 40 * sunIntensityBg;
+      
+      const r1 = 10 + 5 * sunIntensityBg;
+      const g1 = 10 + 5 * sunIntensityBg;
+      const b1 = 15 + 10 * sunIntensityBg;
+
+      body.addColorStop(0, `rgba(${r0 | 0},${g0 | 0},${b0 | 0},0.9)`);
+      body.addColorStop(0.72, `rgba(${r1 | 0},${g1 | 0},${b1 | 0},0.85)`);
+      body.addColorStop(1, "rgba(5,5,15,0.6)");
+      ctx.strokeStyle = "rgba(124,92,246,0.2)";
       ctx.beginPath();
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.fillStyle = body;
@@ -358,6 +371,10 @@ export function Globe({ active = "India" }: { active?: string }) {
           // Back dots are faint
           opacity = 0.05;
         }
+
+        const sunDot = drifted.x * sunVecGeo.x + drifted.y * sunVecGeo.y + drifted.z * sunVecGeo.z;
+        const sunIntensity = Math.max(0.15, Math.min(1.0, (sunDot + 0.2) / 0.4));
+        opacity *= sunIntensity;
 
         ctx.fillStyle = `rgba(${rCol | 0},${gCol | 0},${bCol | 0},${opacity.toFixed(3)})`;
         const r = Math.max(0.45, (isFront ? 0.8 : 0.6) * p.s * (R / 620));
@@ -509,24 +526,18 @@ export function Globe({ active = "India" }: { active?: string }) {
   }, []);
 
   return (
-    <div ref={wrap} className={`relative h-full w-full overflow-hidden transition-colors duration-700 ${isNight ? "bg-slate-950" : "bg-transparent"}`}>
-      <button
-        onClick={() => setIsNight(!isNight)}
-        className={`absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur transition-all duration-300 ${isNight
-            ? "bg-white/10 text-yellow-300 hover:bg-white/20 ring-1 ring-white/20"
-            : "bg-black/5 text-slate-700 hover:bg-black/10 ring-1 ring-black/10"
-          }`}
-        aria-label="Toggle day/night mode"
-      >
-        {isNight ? <Moon size={20} /> : <Sun size={20} />}
-      </button>
-      <canvas ref={canvas} className="block h-full w-full" aria-hidden />
-      <div className="pointer-events-none absolute inset-0">
+    <div ref={wrap} className={`relative h-full w-full overflow-hidden transition-colors duration-700 bg-slate-950`}>
+      {/* Aesthetic warm sun-light leak on the left */}
+      <div className="absolute left-[-25%] top-[10%] w-[70%] h-[80%] rounded-full bg-[radial-gradient(circle,rgba(255,160,60,0.08)_0%,rgba(255,160,60,0)_60%)] blur-3xl pointer-events-none z-0" />
+      <div className="absolute left-[-15%] top-[25%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(circle,rgba(255,200,100,0.12)_0%,rgba(255,200,100,0)_60%)] blur-3xl pointer-events-none z-0" />
+      <div className="absolute left-[-5%] top-[40%] w-[25%] h-[25%] rounded-full bg-[radial-gradient(circle,rgba(255,240,150,0.15)_0%,rgba(255,240,150,0)_60%)] blur-2xl pointer-events-none z-0" />
+      
+      <canvas ref={canvas} className="block h-full w-full relative z-10" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 z-20">
         {labels.map((l) => (
           <div
             key={l.id}
-            className={`absolute flex -translate-y-1/2 items-center gap-2 rounded-lg px-2 py-1.5 shadow-[0_8px_24px_-8px_rgba(38,20,90,0.35)] ring-1 backdrop-blur transition-colors ${isNight ? "bg-slate-900/95 ring-white/10" : "bg-card/95 ring-border"
-              }`}
+            className="absolute flex -translate-y-1/2 items-center gap-2 rounded-lg px-2 py-1.5 shadow-[0_8px_24px_-8px_rgba(38,20,90,0.35)] ring-1 backdrop-blur transition-colors bg-slate-900/95 ring-white/10"
             style={{ left: l.x + 14, top: l.y - 22, opacity: l.o }}
           >
             <span
@@ -535,11 +546,11 @@ export function Globe({ active = "India" }: { active?: string }) {
             >
               {l.def.glyph}
             </span>
-            <span className={`text-[13px] font-semibold ${isNight ? "text-slate-100" : "text-foreground"}`}>
+            <span className="text-[13px] font-semibold text-slate-100">
               {l.def.city}{l.def.country ? "," : ""}
             </span>
             {l.def.country && (
-              <span className={`text-[13px] ${isNight ? "text-slate-400" : "text-muted-foreground"}`}>{l.def.country}</span>
+              <span className="text-[13px] text-slate-400">{l.def.country}</span>
             )}
           </div>
         ))}
