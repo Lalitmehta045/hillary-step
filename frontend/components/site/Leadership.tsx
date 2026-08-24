@@ -7,14 +7,14 @@ const LEADERS = [
     image: "/assets/founder-images/kunal-priyadarshi.jpeg",
     role: "Director (HSS) & CEO",
     name: "Kunal Priyadarshi",
-    quote: '"Computer Science Engineer & Operational Sherpa, bringing two decades of climbing from base to summit."',
+    quote: '"Computer Science Engineer & Operational Sherpa, bringing two decades of experience scaling operations from base to summit."',
     alt: "Portrait of Kunal Priyadarshi, Director (HSS) & CEO",
   },
   {
     image: "/assets/founder-images/Kantesh Prasad Singh.png",
     role: "Director (IND) & CFO",
     name: "Kantesh Prasad Singh",
-    quote: '"BA graduate channeling forty years of Central Government financial and Defence Accounts CFO expertise."',
+    quote: '"BA graduate channeling forty years of distinguished Central Government financial and Defence Accounts CFO leadership."',
     alt: "Portrait of Kantesh Prasad Singh, Director (IND) & CFO",
   },
   {
