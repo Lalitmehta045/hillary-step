@@ -185,7 +185,6 @@ export function Navbar() {
                 type="button"
                 className="flex items-center gap-[7px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] cursor-pointer py-[10px]"
               >
-                <GlobeIcon />
                 <span className="flex items-center gap-[6px]">
                   <img src={REGION_FLAGS[selectedRegion]} alt={`${selectedRegion} flag`} className="w-[16px] h-[12px] object-cover rounded-[2px]" />
                   {selectedRegion}

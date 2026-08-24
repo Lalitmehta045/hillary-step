@@ -633,8 +633,8 @@ function MobileContact() {
           </div>
 
           <div className="pt-[40px] w-full flex flex-col gap-[32px]">
-            <Address label="Global Headquarters" lines={["Four World Trade Center, 78F", "New York, NY 10007 · United States"]} />
-            <Address label="Pacific" lines={["1 Bligh Street, Level 32", "Sydney NSW 2000 · Australia"]} />
+            <Address label="Head Office" lines={["E-842, 8th Floor, Gaur Global Village", "GH Plot No. 4, Crossings Republik", "Ghaziabad, Uttar Pradesh – 201016", "GSTIN: 09AAFCH2272R1ZZ"]} />
+            <Address label="Branch Office" lines={["49/A, Near Sai Palace Barat Ghar", "Pawan Bhoomi, Shaktinagar", "Jabalpur, Madhya Pradesh – 482001", "GSTIN: 23AAFCH2272R1Z9"]} />
             <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
             <Address label="General Enquiries" lines={["info@hillarystepsolutions.com"]} />
           </div>
@@ -655,23 +655,23 @@ function AddressScrub({ scrollYProgress }: { scrollYProgress: any }) {
   const a0_y = useTransform(scrollYProgress, scrollRange, [0, 0, 0, 0]);
 
   const a1_x = useTransform(scrollYProgress, scrollRange, [328, 328, 0, 0]);
-  const a1_y = useTransform(scrollYProgress, scrollRange, [0, 0, 96, 96]);
+  const a1_y = useTransform(scrollYProgress, scrollRange, [0, 0, 136, 136]);
 
   const a2_x = useTransform(scrollYProgress, scrollRange, [656, 656, 0, 0]);
-  const a2_y = useTransform(scrollYProgress, scrollRange, [0, 0, 192, 192]);
+  const a2_y = useTransform(scrollYProgress, scrollRange, [0, 0, 272, 272]);
 
   const a3_x = useTransform(scrollYProgress, scrollRange, [984, 984, 0, 0]);
-  const a3_y = useTransform(scrollYProgress, scrollRange, [0, 0, 288, 288]);
+  const a3_y = useTransform(scrollYProgress, scrollRange, [0, 0, 352, 352]);
 
   const width = useTransform(scrollYProgress, scrollRange, ["296px", "296px", "560px", "560px"]);
 
   return (
-    <div className="relative w-full h-[360px]">
+    <div className="relative w-full h-[420px]">
       <m.div style={{ x: a0_x, y: a0_y, z: 0, width }} className="absolute top-0 left-0">
-        <Address label="Global Headquarters" lines={["Four World Trade Center, 78F", "New York, NY 10007 · United States"]} />
+        <Address label="Head Office" lines={["E-842, 8th Floor, Gaur Global Village", "GH Plot No. 4, Crossings Republik", "Ghaziabad, Uttar Pradesh – 201016", "GSTIN: 09AAFCH2272R1ZZ"]} />
       </m.div>
       <m.div style={{ x: a1_x, y: a1_y, z: 0, width }} className="absolute top-0 left-0">
-        <Address label="Pacific" lines={["1 Bligh Street, Level 32", "Sydney NSW 2000 · Australia"]} />
+        <Address label="Branch Office" lines={["49/A, Near Sai Palace Barat Ghar", "Pawan Bhoomi, Shaktinagar", "Jabalpur, Madhya Pradesh – 482001", "GSTIN: 23AAFCH2272R1Z9"]} />
       </m.div>
       <m.div style={{ x: a2_x, y: a2_y, z: 0, width }} className="absolute top-0 left-0">
         <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
