@@ -74,7 +74,7 @@ export function Footer() {
     <footer className="relative w-full overflow-hidden border-t border-[#353434]/20 bg-white">
       <FooterWave className="pointer-events-none absolute inset-0 z-20 h-full w-full" />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[64px] max-md:px-[24px] max-lg:px-[40px] pt-[64px] max-md:pt-[40px]">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[64px] max-md:px-[24px] max-lg:px-[40px] pt-[32px] max-md:pt-[24px]">
         <StaggerContainer className="flex w-full flex-col gap-[32px] md:flex-row md:items-start md:justify-between">
           {COLUMNS.map((col) => (
             <StaggerItem key={col.title} className="shrink-0">

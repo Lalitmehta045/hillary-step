@@ -8,8 +8,7 @@ const NAV = [
   { name: "Home", href: "/#home" },
   { name: "About", href: "/#about" },
   { name: "Global Presence", href: "/#global-presence" },
-  { name: "Careers", href: "/#careers" },
-  { name: "Post a Job", href: "/post-a-job" },
+  { name: "Our Capabilities", href: "/#capabilities" },
   { name: "Contact", href: "/#contact" }
 ];
 const TOP_TRIGGER_ZONE = 75; // px from top of viewport

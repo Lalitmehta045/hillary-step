@@ -80,10 +80,10 @@ export function Pillars() {
                 eyebrow={p.eyebrow}
                 href={p.href}
                 onClick={
-                  p.id === "global-staffing" 
-                    ? () => setIsModalOpen(true) 
-                    : p.title === "Cognitive Digital – Platforms" 
-                      ? () => setIsITModalOpen(true) 
+                  p.id === "global-staffing"
+                    ? () => setIsModalOpen(true)
+                    : p.title === "Cognitive Digital – Platforms"
+                      ? () => setIsITModalOpen(true)
                       : p.title === "Eco Smart Infra – Projects"
                         ? () => setIsCivilModalOpen(true)
                         : undefined

@@ -57,20 +57,23 @@ const HoverCard = ({ service, index, onExplore }: { service: ServiceData, index:
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="group relative w-full h-[500px] max-md:h-[480px] hover:z-50"
     >
-      <div className="w-full h-full relative cursor-pointer overflow-visible">
-        
+      <div 
+        className="w-full h-full relative cursor-pointer overflow-visible"
+        onClick={onExplore}
+      >
+
         {/* Left side: Entire card scales down as one unit */}
-        <div 
+        <div
           className="absolute inset-0 w-full h-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-[0.72] z-10"
           style={{ transformOrigin: 'left center' }}
         >
           <div className="w-full h-full flex flex-col overflow-hidden bg-white rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.12)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-gray-100/50 transition-shadow duration-700">
             {/* Image */}
             <div className="w-full h-[220px] max-md:h-[180px] relative overflow-hidden">
-              <img 
-                src={service.image} 
-                alt={service.title} 
-                className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-110" 
+              <img
+                src={service.image}
+                alt={service.title}
+                className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/80 via-[#111111]/30 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
               <div className="absolute bottom-4 left-5 right-5 text-white flex items-center gap-3">
@@ -116,8 +119,8 @@ const HoverCard = ({ service, index, onExplore }: { service: ServiceData, index:
               </h4>
               <ul className="flex flex-col gap-[14px]">
                 {service.points.map((pt: string, i: number) => (
-                  <li 
-                    key={i} 
+                  <li
+                    key={i}
                     className="flex items-start gap-[12px] transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] translate-x-6 opacity-0 group-hover:translate-x-0 group-hover:opacity-100"
                     style={{ transitionDelay: `${150 + i * 60}ms` }}
                   >
@@ -147,7 +150,7 @@ export function ITSolutionsContent() {
 
   return (
     <div className="w-full font-display px-[80px] pt-[80px] pb-[80px] max-md:px-[24px]">
-      
+
       {/* Header */}
       <div className="mb-[64px] max-md:mb-[48px]">
         <p className="text-[14px] font-[600] tracking-wide text-[#1A6CFF] uppercase mb-[16px]">
@@ -169,13 +172,13 @@ export function ITSolutionsContent() {
         <h3 className="font-display text-[28px] max-md:text-[24px] font-[700] text-[#111111] mb-[48px] text-center">
           Comprehensive Solutions for Every Need
         </h3>
-        
+
         <div className="grid grid-cols-2 max-md:grid-cols-1 gap-x-[32px] gap-y-[48px] w-full max-w-[900px] mx-auto">
           {itServices.map((service, idx) => (
-            <HoverCard 
-              key={idx} 
-              service={service} 
-              index={idx} 
+            <HoverCard
+              key={idx}
+              service={service}
+              index={idx}
               onExplore={() => setDetailService(service)}
             />
           ))}

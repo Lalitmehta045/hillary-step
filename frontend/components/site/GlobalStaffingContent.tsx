@@ -452,7 +452,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
             <div className={`flex ${isModal ? "flex-row max-md:flex-col gap-[48px] items-stretch" : "gap-[48px] max-md:flex-col max-md:gap-[24px] items-start"}`}>
 
         {/* Left Sidebar - Steps */}
-        <div className={`${isModal ? "w-[320px] max-md:w-full shrink-0 flex flex-col max-md:flex-row gap-[12px] max-md:overflow-x-auto max-md:snap-x [&::-webkit-scrollbar]:hidden" : "w-[400px] max-md:w-[100vw] max-md:-mx-[16px] max-md:px-[16px] shrink-0 self-start flex flex-col max-md:flex-row gap-[8px] max-md:overflow-x-auto max-md:snap-x [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"}`}>
+        <div className={`${isModal ? "w-[320px] max-md:w-full shrink-0 flex flex-col max-md:flex-row gap-[12px] max-md:justify-between" : "w-[400px] max-md:w-full shrink-0 self-start flex flex-col max-md:flex-row gap-[8px] max-md:justify-between max-md:mb-[24px]"}`}>
           {STEPS.map((step, index) => {
             const isActive = index === activeStep;
 
@@ -461,13 +461,17 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 <button
                   key={step.id}
                   onClick={() => setActiveStep(index)}
-                  className={`flex flex-col items-start gap-[12px] p-[24px] max-md:px-[20px] max-md:py-[12px] rounded-[12px] text-left transition-colors relative overflow-hidden ${isActive ? "bg-[#E1EFFA] text-[#111111]" : "text-[#4B5563] hover:text-[#111111] hover:bg-black/5"
+                  className={`flex flex-col items-start max-md:items-center max-md:justify-center gap-[12px] max-md:gap-0 p-[24px] max-md:p-[12px] max-md:flex-1 rounded-[12px] text-left transition-colors relative overflow-hidden ${isActive ? "bg-[#E1EFFA] text-[#111111]" : "text-[#4B5563] hover:text-[#111111] hover:bg-black/5"
                     }`}
                   title={step.label}
                 >
-                  <div className="flex items-center gap-[16px]">
-                    <span className="shrink-0">{step.icon}</span>
-                    <span className={`text-[18px] font-[600] leading-tight ${isActive ? "text-[#111111]" : ""}`}>{step.label}</span>
+                  <div className="flex items-center gap-[16px] max-md:gap-0">
+                    <span className={`shrink-0 ${isActive ? "text-[#1A6CFF]" : ""}`}>
+                      <svg width="24" height="24" viewBox={step.icon.props.viewBox} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        {step.icon.props.children}
+                      </svg>
+                    </span>
+                    <span className={`text-[18px] font-[600] leading-tight max-md:hidden ${isActive ? "text-[#111111]" : ""}`}>{step.label}</span>
                   </div>
                   {isActive && (
                     <m.p
@@ -501,22 +505,21 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 ref={(el) => { stepRefs.current[index] = el; }}
                 type="button"
                 onClick={() => setActiveStep(index)}
-                className={`relative overflow-hidden flex w-full max-md:w-auto max-md:shrink-0 max-md:snap-start items-start max-md:items-center text-left transition-all duration-500 ease-out ${isActive
-                  ? "gap-[16px] max-md:gap-[8px] p-[24px] pb-[28px] max-md:py-[12px] max-md:px-[20px] rounded-[16px] max-md:rounded-full bg-[#E1EFFA]"
-                  : "gap-[12px] max-md:gap-[8px] px-[24px] py-[20px] max-md:py-[12px] max-md:px-[20px] rounded-[12px] max-md:rounded-full hover:bg-gray-50/50 max-md:bg-[#FAFBFC] max-md:border max-md:border-[#E5E7EB]"
+                className={`relative overflow-hidden flex w-full max-md:flex-1 items-start max-md:items-center max-md:justify-center text-left transition-all duration-500 ease-out ${isActive
+                  ? "gap-[16px] max-md:gap-0 p-[24px] pb-[28px] max-md:p-[16px] rounded-[16px] max-md:rounded-[12px] bg-[#E1EFFA]"
+                  : "gap-[12px] max-md:gap-0 px-[24px] py-[20px] max-md:p-[16px] rounded-[12px] max-md:rounded-[12px] hover:bg-gray-50/50 max-md:bg-transparent"
                   }`}
               >
-                <m.span layout="position" className={`shrink-0 text-[#111111] ${isActive ? "mt-[2px] max-md:mt-0" : ""}`}>
-                  {/* Keep icon large for non-modal */}
-                  <svg width="20" height="20" viewBox={step.icon.props.viewBox} fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <m.span layout="position" className={`shrink-0 ${isActive ? "mt-[2px] max-md:mt-0 text-[#1A6CFF]" : "text-[#6B7280]"}`}>
+                  <svg width="24" height="24" viewBox={step.icon.props.viewBox} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     {step.icon.props.children}
                   </svg>
                 </m.span>
 
-                <div className={`min-w-0 flex-1 flex flex-col justify-start max-md:justify-center ${isActive ? "min-h-[104px] max-md:min-h-0" : ""}`}>
-                  <m.p layout="position" className={`font-display font-[600] text-[#111111] max-md:whitespace-nowrap transition-all duration-300 ${isActive
-                    ? "text-[20px] max-md:text-[15px] leading-[28px] max-md:leading-tight"
-                    : "text-[17px] max-md:text-[15px] leading-[22px] max-md:leading-tight"
+                <div className={`min-w-0 flex-1 flex flex-col justify-start max-md:hidden ${isActive ? "min-h-[104px]" : ""}`}>
+                  <m.p layout="position" className={`font-display font-[600] text-[#111111] transition-all duration-300 ${isActive
+                    ? "text-[20px] leading-[28px]"
+                    : "text-[17px] leading-[22px]"
                     }`}>
                     {step.label}
                   </m.p>
@@ -528,7 +531,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                         animate={{ opacity: 1, height: "auto", marginTop: 8 }}
                         exit={{ opacity: 0, height: 0, marginTop: 0 }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="font-display text-[15px] font-[400] leading-[24px] text-[#4B5563] max-md:hidden max-w-[240px] overflow-hidden"
+                        className="font-display text-[15px] font-[400] leading-[24px] text-[#4B5563] max-w-[240px] overflow-hidden"
                       >
                         {step.description}
                       </m.p>
@@ -540,7 +543,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 {isActive && (
                   <m.div
                     layoutId="active-gradient-border"
-                    className="absolute bottom-0 left-0 right-0 h-[4px] max-md:hidden"
+                    className="absolute bottom-0 left-0 right-0 h-[4px]"
                     style={{
                       background: "linear-gradient(90deg, #1A6CFF, #3AF900, #FF9500)",
                       borderRadius: "0 0 16px 16px",

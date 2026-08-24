@@ -18,9 +18,9 @@ const LEADERS = [
     alt: "Portrait of Kantesh Prasad Singh, Director (IND) & CFO",
   },
   {
-    image: "/assets/leader-4.png",
-    role: "Director (USA) & CTO",
-    name: "Alex Carter",
+    image: "/assets/founder-images/WhatsApp Image 2026-08-24 at 12.18.00 PM.jpeg",
+    role: "Honorary Pillar (Global) & CCO",
+    name: "Kanti Singh",
     quote: '"Technology is the ultimate lever for global infrastructure."',
     alt: "Portrait of Alex Carter, Director (USA) & CTO",
   },

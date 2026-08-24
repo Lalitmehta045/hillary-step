@@ -46,7 +46,7 @@ export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title,
       </m.div>
       <div className="relative flex items-start justify-between p-[32px]">
         <div>
-          <p className="font-display text-[12px] font-[600] tracking-widest text-white/85 uppercase">
+          <p className="font-sans text-[12px] font-medium leading-[16px] tracking-[1.2px] text-white uppercase">
             {eyebrow}
           </p>
           <h3 className="mt-[12px] font-display text-[30px] font-[510] leading-[37.5px] tracking-[0px] text-white">

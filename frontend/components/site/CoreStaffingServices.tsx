@@ -59,11 +59,11 @@ const BOTTOM_CARDS = [
 
 export function CoreStaffingServices() {
   return (
-    <section className="bg-[#DDF4E4] py-[100px] max-md:py-[60px] w-full font-display rounded-t-[40px] mt-[-40px] relative z-10">
-      <div className="mx-auto w-full max-w-[1210px] px-[32px] max-md:px-[16px]">
+    <section className="py-[100px] max-md:py-[60px] w-full font-display flex justify-center px-[16px] relative z-10">
+      <div className="w-full max-w-[993px] bg-[rgba(74,222,128,0.28)] border border-[rgba(229,231,235,0.5)] rounded-[32px] pt-[48px] pr-[16px] pb-[32px] pl-[32px] flex flex-col gap-[24px] mx-auto">
         
         {/* Header */}
-        <div className="mb-[64px]">
+        <div>
           <p className="text-[13px] font-[700] tracking-[1.5px] text-[#15803D] uppercase mb-[16px]">
             THE COGNITIVE ENGINE
           </p>
@@ -75,20 +75,18 @@ export function CoreStaffingServices() {
           </p>
         </div>
 
-        {/* Grid Container */}
-        <div className="flex flex-col gap-[24px]">
-          
-          {/* Top Row: Two Cards */}
-          <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-[24px]">
-            {CARDS.map((card, idx) => (
-              <div 
-                key={idx}
-                className="bg-[#F2FCF5] rounded-[24px] p-[40px] max-md:p-[28px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-white flex flex-col"
-              >
-                <h3 className="text-[26px] font-[700] text-[#064E3B] leading-[32px] mb-[28px] max-w-[90%]">
+        {/* Top Row: Two Cards */}
+        <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-[24px]">
+          {CARDS.map((card, idx) => (
+            <div 
+              key={idx}
+              className="bg-gradient-to-b from-[rgba(255,255,255,0.9)] via-[rgba(255,255,255,0.7)] to-[rgba(255,255,255,0.4)] rounded-[24px] p-[32px] border border-white flex flex-col justify-between"
+            >
+              <div>
+                <h3 className="font-sans text-[20px] font-[700] leading-[28px] text-[#006D39] mb-[24px]">
                   {card.title}
                 </h3>
-                <ul className="space-y-[12px] mb-[40px] flex-1">
+                <ul className="space-y-[12px] mb-[32px]">
                   {card.items.map((item, i) => (
                     <li key={i} className="flex items-start gap-[12px]">
                       <span className="mt-[8px] w-[5px] h-[5px] rounded-full bg-[#6B7280] shrink-0" />
@@ -96,31 +94,9 @@ export function CoreStaffingServices() {
                     </li>
                   ))}
                 </ul>
-                <div className="flex flex-wrap gap-[12px]">
-                  {card.tags.map((tag, i) => (
-                    <span 
-                      key={i} 
-                      className="bg-[#D1F4D9] text-[#166534] text-[13px] font-[600] px-[16px] py-[6px] rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
               </div>
-            ))}
-          </div>
-
-          {/* Middle Row: Full Width Card */}
-          <div className="bg-[#F2FCF5] rounded-[24px] p-[48px] max-md:p-[28px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-white flex gap-[64px] max-lg:flex-col items-center">
-            <div className="flex-1 w-full">
-              <h3 className="text-[26px] font-[700] text-[#064E3B] leading-[32px] mb-[24px]">
-                Global Compliance & Sovereign Human Welfare
-              </h3>
-              <p className="text-[16px] text-[#4B5563] leading-[28px] mb-[40px]">
-                We take absolute fiduciary responsibility for your deployed workforce. Our frameworks manage complete international insurance, risk mitigation, and localized statutory employee benefits, including PF, ESI, and regional labor funds, across all global jurisdictions, ensuring zero legal friction for the client.
-              </p>
               <div className="flex flex-wrap gap-[12px]">
-                {["Campus Connect", "Training Partnerships", "Future Workforce"].map((tag, i) => (
+                {card.tags.map((tag, i) => (
                   <span 
                     key={i} 
                     className="bg-[#D1F4D9] text-[#166534] text-[13px] font-[600] px-[16px] py-[6px] rounded-full"
@@ -130,72 +106,52 @@ export function CoreStaffingServices() {
                 ))}
               </div>
             </div>
-            
-            {/* CSS Diagram representing the pipeline */}
-            <div className="flex-1 w-full bg-[#E5F7EC] rounded-[16px] p-[32px] max-md:p-[20px] border border-white shadow-inner flex flex-col items-center">
-              <h4 className="text-[13px] font-[700] text-[#064E3B] uppercase mb-[24px] text-center tracking-wide">
-                Academy & Talent Pipeline: Building a Future Workforce
-              </h4>
-              
-              <div className="flex flex-col gap-[16px] w-full max-w-[400px]">
-                {/* Phase 1 */}
-                <div className="flex items-center gap-[16px] bg-white rounded-[12px] p-[16px] shadow-sm relative z-10 border border-[#DDF4E4]">
-                  <div className="w-[40px] h-[40px] rounded-full bg-[#D1F4D9] flex items-center justify-center shrink-0">
-                    <span className="text-[#166534] font-[700] text-[14px]">01</span>
-                  </div>
-                  <div>
-                    <h5 className="text-[14px] font-[700] text-[#111111]">Foundational Academy</h5>
-                    <p className="text-[12px] text-[#6B7280]">K-12 Education & STEM Programs</p>
-                  </div>
-                </div>
+          ))}
+        </div>
 
-                {/* Phase 2 */}
-                <div className="flex items-center gap-[16px] bg-white rounded-[12px] p-[16px] shadow-sm relative z-10 border border-[#DDF4E4]">
-                  <div className="w-[40px] h-[40px] rounded-full bg-[#BBEBCA] flex items-center justify-center shrink-0">
-                    <span className="text-[#166534] font-[700] text-[14px]">02</span>
-                  </div>
-                  <div>
-                    <h5 className="text-[14px] font-[700] text-[#111111]">Higher Education & Skills</h5>
-                    <p className="text-[12px] text-[#6B7280]">University Partnerships & Curricula</p>
-                  </div>
-                </div>
-
-                {/* Phase 3 */}
-                <div className="flex items-center gap-[16px] bg-white rounded-[12px] p-[16px] shadow-sm relative z-10 border border-[#DDF4E4]">
-                  <div className="w-[40px] h-[40px] rounded-full bg-[#95DCAE] flex items-center justify-center shrink-0">
-                    <span className="text-[#166534] font-[700] text-[14px]">03</span>
-                  </div>
-                  <div>
-                    <h5 className="text-[14px] font-[700] text-[#111111]">Early Talent Development</h5>
-                    <p className="text-[12px] text-[#6B7280]">Apprenticeships & Internships</p>
-                  </div>
-                </div>
-
-                {/* Phase 4 */}
-                <div className="flex items-center gap-[16px] bg-white rounded-[12px] p-[16px] shadow-sm relative z-10 border border-[#DDF4E4]">
-                  <div className="w-[40px] h-[40px] rounded-full bg-[#71CB92] flex items-center justify-center shrink-0">
-                    <span className="text-[#166534] font-[700] text-[14px]">04</span>
-                  </div>
-                  <div>
-                    <h5 className="text-[14px] font-[700] text-[#111111]">Talent Pipeline</h5>
-                    <p className="text-[12px] text-[#6B7280]">Pre-vetted Resource Pools</p>
-                  </div>
-                </div>
-              </div>
+        {/* Middle Row: Full Width Card */}
+        <div className="bg-gradient-to-b from-[rgba(255,255,255,0.9)] via-[rgba(255,255,255,0.7)] to-[rgba(255,255,255,0.4)] rounded-[24px] p-[32px] border border-white flex gap-[64px] max-lg:flex-col items-center">
+          <div className="flex-1 w-full">
+            <h3 className="font-sans text-[20px] font-[700] leading-[28px] text-[#006D39] mb-[24px]">
+              Global Compliance & Sovereign Human Welfare
+            </h3>
+            <p className="text-[16px] text-[#4B5563] leading-[28px] mb-[32px]">
+              We take absolute fiduciary responsibility for your deployed workforce. Our frameworks manage complete international insurance, risk mitigation, and localized statutory employee benefits, including PF, ESI, and regional labor funds, across all global jurisdictions, ensuring zero legal friction for the client.
+            </p>
+            <div className="flex flex-wrap gap-[12px]">
+              {["Campus Connect", "Training Partnerships", "Future Workforce"].map((tag, i) => (
+                <span 
+                  key={i} 
+                  className="bg-[#D1F4D9] text-[#166534] text-[13px] font-[600] px-[16px] py-[6px] rounded-full"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
+          
+          {/* Image representing the pipeline */}
+          <div className="flex-1 w-full flex items-center justify-center">
+            <img 
+              src="/academy-talent-pipeline.png" 
+              alt="Academy & Talent Pipeline: Building a Future Workforce" 
+              className="w-full max-w-[542px] h-auto object-contain mix-blend-multiply"
+            />
+          </div>
+        </div>
 
-          {/* Bottom Row: Two Cards */}
-          <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-[24px]">
-            {BOTTOM_CARDS.map((card, idx) => (
-              <div 
-                key={idx}
-                className="bg-[#F2FCF5] rounded-[24px] p-[40px] max-md:p-[28px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-white flex flex-col"
-              >
-                <h3 className="text-[26px] font-[700] text-[#064E3B] leading-[32px] mb-[28px] max-w-[90%]">
+        {/* Bottom Row: Two Cards */}
+        <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-[24px]">
+          {BOTTOM_CARDS.map((card, idx) => (
+            <div 
+              key={idx}
+              className="bg-gradient-to-b from-[rgba(255,255,255,0.9)] via-[rgba(255,255,255,0.7)] to-[rgba(255,255,255,0.4)] rounded-[24px] p-[32px] border border-white flex flex-col justify-between"
+            >
+              <div>
+                <h3 className="font-sans text-[20px] font-[700] leading-[28px] text-[#006D39] mb-[24px]">
                   {card.title}
                 </h3>
-                <ul className="space-y-[12px] mb-[40px] flex-1">
+                <ul className="space-y-[12px] mb-[32px]">
                   {card.items.map((item, i) => (
                     <li key={i} className="flex items-start gap-[12px]">
                       <span className="mt-[8px] w-[5px] h-[5px] rounded-full bg-[#6B7280] shrink-0" />
@@ -203,21 +159,21 @@ export function CoreStaffingServices() {
                     </li>
                   ))}
                 </ul>
-                <div className="flex flex-wrap gap-[12px]">
-                  {card.tags.map((tag, i) => (
-                    <span 
-                      key={i} 
-                      className="bg-[#D1F4D9] text-[#166534] text-[13px] font-[600] px-[16px] py-[6px] rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
               </div>
-            ))}
-          </div>
-
+              <div className="flex flex-wrap gap-[12px]">
+                {card.tags.map((tag, i) => (
+                  <span 
+                    key={i} 
+                    className="bg-[#D1F4D9] text-[#166534] text-[13px] font-[600] px-[16px] py-[6px] rounded-full"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
+
       </div>
     </section>
   );
