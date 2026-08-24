@@ -7,8 +7,8 @@ import { AnimatedButton } from "@/components/ui/AnimatedButton";
 const NAV = [
   { name: "Home", href: "/#home" },
   { name: "About", href: "/#about" },
-  { name: "Global Presence", href: "/#global-presence" },
   { name: "Our Capabilities", href: "/#capabilities" },
+  { name: "Global Presence", href: "/#global-presence" },
   { name: "Contact", href: "/#contact" }
 ];
 const TOP_TRIGGER_ZONE = 75; // px from top of viewport
@@ -186,7 +186,7 @@ export function Navbar() {
                 className="flex items-center gap-[7px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] cursor-pointer py-[10px]"
               >
                 <span className="flex items-center gap-[6px]">
-                  <img src={REGION_FLAGS[selectedRegion]} alt={`${selectedRegion} flag`} className="w-[16px] h-[12px] object-cover rounded-[2px]" />
+                  <img src={REGION_FLAGS[selectedRegion]} alt={`${selectedRegion} flag`} className="w-[24px] h-[18px] object-contain rounded-[2px]" />
                   {selectedRegion}
                 </span>
                 <ChevronIcon />
@@ -203,7 +203,7 @@ export function Navbar() {
                     onClick={() => setSelectedRegion(region)}
                     className="flex w-full items-center gap-[8px] px-[16px] py-[10px] text-left font-display text-[14px] font-[510] text-[#111111] hover:bg-[#F8F9FB] hover:text-[#1A6CFF] transition-colors"
                   >
-                    <img src={REGION_FLAGS[region]} alt={`${region} flag`} className="w-[16px] h-[12px] object-cover rounded-[2px]" />
+                    <img src={REGION_FLAGS[region]} alt={`${region} flag`} className="w-[24px] h-[18px] object-contain rounded-[2px]" />
                     {region}
                   </button>
                 ))}
