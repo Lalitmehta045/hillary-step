@@ -116,6 +116,23 @@ export function Navbar() {
   // When scrolled down on desktop, visible only when revealed by hover.
   const isVisible = !isDesktop || isAtTop || isRevealed;
 
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('/#') && window.location.pathname === '/') {
+      e.preventDefault();
+      const targetId = href.replace('/#', '');
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        window.history.pushState(null, '', `#${targetId}`);
+      } else if (targetId === 'home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.history.pushState(null, '', '#home');
+      } else {
+        window.location.href = href;
+      }
+    }
+  };
+
   return (
     <>
       {/* Invisible desktop top hover trigger zone (active only when scrolled down) */}
@@ -172,14 +189,17 @@ export function Navbar() {
               <a
                 key={item.name}
                 href={item.href}
-                className="font-display text-[14px] font-[510] leading-[20px] text-[#111111] transition-opacity hover:opacity-70"
+                onClick={(e) => handleSmoothScroll(e, item.href)}
+                className="group relative font-display text-[14px] font-[510] leading-[20px] text-[#111111]"
               >
-                {item.name}
+                <span className="relative pb-[4px] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-right after:scale-x-0 after:bg-brand-blue after:transition-transform after:duration-300 group-hover:after:origin-left group-hover:after:scale-x-100">
+                  {item.name}
+                </span>
               </a>
             ))}
           </nav>
 
-          <div className="flex items-center gap-[24px] max-lg:hidden">
+          <div className="flex items-center gap-[16px] max-lg:hidden">
             <div className="relative group">
               <button
                 type="button"
@@ -209,10 +229,11 @@ export function Navbar() {
                 ))}
               </div>
             </div>
+
             <AnimatedButton
               href="/admin/login"
               variant="subtleShadow"
-              className="flex h-[44px] items-center gap-[9px] rounded-full border border-[#111111]/10 bg-white/50 px-[22px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] backdrop-blur-sm"
+              className="flex h-[44px] items-center gap-[9px] rounded-full border border-[#111111]/10 bg-white/50 px-[22px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] backdrop-blur-sm hover:bg-black/5 transition-colors"
             >
               Admin Portal
               <ArrowUpRight />
@@ -255,7 +276,10 @@ export function Navbar() {
               <a
                 key={item.name}
                 href={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => {
+                  handleSmoothScroll(e, item.href);
+                  setIsMobileMenuOpen(false);
+                }}
                 className="font-display text-[32px] font-[600] leading-[36px] text-[#111111]"
               >
                 {item.name}

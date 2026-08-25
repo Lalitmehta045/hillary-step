@@ -81,6 +81,8 @@ async function bootstrap() {
   await fastifyInstance.register(fastifyCors, {
     origin: corsOriginOption,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   });
 
   // Production uses SameSite=None so the Vercel SPA can send cookies to Render.

@@ -1,9 +1,9 @@
 "use client";
 
-import { LuSearch, LuFilterX, LuEye } from "react-icons/lu";
-import { useEffect, useState } from "react";
+import { LuSearch, LuFilterX, LuEye, LuX } from "react-icons/lu";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { contactApi } from "@/lib/api/contact";
-import { Enquiry, EnquiryStatus } from "@/lib/api/types";
+import { Enquiry, EnquiryStatus, EnquiryPriority } from "@/lib/api/types";
 
 const REGIONS = [
   { value: "", label: "Region: All" },
@@ -35,7 +35,7 @@ const filterSelectClass =
 const selectChevron =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E\")";
 
-function resolveRegion(enq: Enquiry): string {
+export function resolveRegion(enq: Enquiry): string {
   const src = `${enq.countryCode || ""} ${enq.phone || ""}`;
   if (/\(IND\)|\+91|\bIND\b/i.test(src)) return "IND";
   if (/\(AUS\)|\+61|\bAUS\b/i.test(src)) return "AUS";
@@ -77,6 +77,286 @@ const StatusBadge = ({ status }: { status: string }) => {
   );
 };
 
+const PriorityBadge = ({ priority }: { priority: string }) => {
+  let bg = "bg-gray-100";
+  let text = "text-gray-600";
+
+  switch (priority?.toUpperCase()) {
+    case "HIGH":
+      bg = "bg-red-50";
+      text = "text-red-600";
+      break;
+    case "MEDIUM":
+      bg = "bg-amber-50";
+      text = "text-amber-700";
+      break;
+    case "LOW":
+      bg = "bg-green-50";
+      text = "text-green-600";
+      break;
+  }
+
+  return (
+    <span className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-wide ${bg} ${text}`}>
+      {priority || "—"}
+    </span>
+  );
+};
+
+/* ─── Enquiry Detail Modal ─── */
+function EnquiryDetailModal({
+  enquiryId,
+  onClose,
+  onUpdated,
+}: {
+  enquiryId: string;
+  onClose: () => void;
+  onUpdated: () => void;
+}) {
+  const [enquiry, setEnquiry] = useState<Enquiry | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [statusUpdating, setStatusUpdating] = useState(false);
+  const [priorityUpdating, setPriorityUpdating] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  const fetchDetail = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await contactApi.getEnquiryDetail(enquiryId);
+      setEnquiry(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load enquiry details.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [enquiryId]);
+
+  useEffect(() => {
+    fetchDetail();
+  }, [fetchDetail]);
+
+  // Close on Escape + lock scroll (Lenis + body)
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKey);
+
+    // Stop Lenis smooth scroll
+    const lenis = (window as any).lenis;
+    if (lenis) lenis.stop();
+
+    // Lock body overflow
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    // Block wheel events from reaching Lenis on window (stopPropagation
+    // prevents bubbling past the overlay, so Lenis never sees them and
+    // the modal's native overflow-y scroll works).
+    const overlay = overlayRef.current;
+    const blockWheel = (e: WheelEvent) => {
+      e.stopPropagation();
+    };
+    overlay?.addEventListener("wheel", blockWheel, { passive: true });
+
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      if (lenis) lenis.start();
+      document.body.style.overflow = prevOverflow;
+      overlay?.removeEventListener("wheel", blockWheel);
+    };
+  }, [onClose]);
+
+  const handleStatusChange = async (newStatus: string) => {
+    if (!enquiry || statusUpdating) return;
+    setStatusUpdating(true);
+    try {
+      const updated = await contactApi.updateStatus(enquiry.id, newStatus);
+      setEnquiry(updated);
+      onUpdated();
+    } catch (err) {
+      console.error("Failed to update status", err);
+    } finally {
+      setStatusUpdating(false);
+    }
+  };
+
+  const handlePriorityChange = async (newPriority: string) => {
+    if (!enquiry || priorityUpdating) return;
+    setPriorityUpdating(true);
+    try {
+      const updated = await contactApi.updatePriority(enquiry.id, newPriority);
+      setEnquiry(updated);
+      onUpdated();
+    } catch (err) {
+      console.error("Failed to update priority", err);
+    } finally {
+      setPriorityUpdating(false);
+    }
+  };
+
+  const DetailRow = ({ label, value }: { label: string; value?: string | null }) => (
+    <div className="py-3 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-0">
+      <span className="text-xs font-bold text-gray-400 uppercase tracking-wider sm:w-[140px] shrink-0">
+        {label}
+      </span>
+      <span className="text-sm text-gray-800 break-words flex-1">
+        {value || "—"}
+      </span>
+    </div>
+  );
+
+  return (
+    <div
+      ref={overlayRef}
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      onClick={onClose}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+
+      {/* Modal */}
+      <div
+        className="relative bg-white rounded-lg shadow-2xl w-full max-w-[640px] max-h-[90vh] flex flex-col mx-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+          <div>
+            <h2 className="text-lg font-bold text-[#061a3d]">Enquiry Details</h2>
+            {enquiry && (
+              <p className="text-xs text-gray-400 mt-0.5">{enquiry.enquiryNumber}</p>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            aria-label="Close modal"
+          >
+            <LuX className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="px-6 py-5 flex-1 min-h-0 overflow-y-auto" style={{ overscrollBehavior: "contain" }}>
+          {isLoading ? (
+            <div className="py-12 text-center text-sm text-gray-500">
+              Loading enquiry details...
+            </div>
+          ) : error ? (
+            <div className="py-12 text-center">
+              <p className="text-sm text-red-500 mb-3">{error}</p>
+              <button
+                onClick={fetchDetail}
+                className="text-xs font-semibold text-blue-600 hover:text-blue-800"
+              >
+                Try again
+              </button>
+            </div>
+          ) : enquiry ? (
+            <>
+              {/* Contact Information */}
+              <div className="mb-6">
+                <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2">
+                  Contact Information
+                </h3>
+                <div className="divide-y divide-gray-50">
+                  <DetailRow label="Name" value={enquiry.name || enquiry.contactPerson} />
+                  <DetailRow label="Email" value={enquiry.email} />
+                  <DetailRow label="Phone" value={enquiry.phone} />
+                  <DetailRow label="Organization" value={enquiry.organization || enquiry.companyName} />
+                  <DetailRow label="Region" value={resolveRegion(enquiry)} />
+                </div>
+              </div>
+
+              {/* Enquiry Details */}
+              <div className="mb-6">
+                <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2">
+                  Enquiry Details
+                </h3>
+                <div className="divide-y divide-gray-50">
+                  <DetailRow label="Industry" value={enquiry.industry} />
+                  <DetailRow label="Service Required" value={enquiry.serviceRequired} />
+                  <DetailRow
+                    label="Date Received"
+                    value={new Date(enquiry.createdAt).toLocaleDateString("en-US", {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  />
+                </div>
+              </div>
+
+              {/* Message */}
+              <div className="mb-6">
+                <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2">
+                  Message
+                </h3>
+                <div className="bg-gray-50 rounded-md p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                  {enquiry.message || "No message provided."}
+                </div>
+              </div>
+
+              {/* Status & Priority */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
+                  <label className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2 block">
+                    Status
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <StatusBadge status={enquiry.status} />
+                    <select
+                      value={enquiry.status}
+                      onChange={(e) => handleStatusChange(e.target.value)}
+                      disabled={statusUpdating}
+                      className={`${filterSelectClass} flex-1 ${statusUpdating ? "opacity-50" : ""}`}
+                      style={{ backgroundImage: selectChevron }}
+                      aria-label="Change status"
+                    >
+                      {STATUS_OPTIONS.filter((o) => o.value !== "").map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex-1">
+                  <label className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-2 block">
+                    Priority
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <PriorityBadge priority={enquiry.priority} />
+                    <select
+                      value={enquiry.priority || ""}
+                      onChange={(e) => handlePriorityChange(e.target.value)}
+                      disabled={priorityUpdating}
+                      className={`${filterSelectClass} flex-1 ${priorityUpdating ? "opacity-50" : ""}`}
+                      style={{ backgroundImage: selectChevron }}
+                      aria-label="Change priority"
+                    >
+                      <option value="HIGH">High</option>
+                      <option value="MEDIUM">Medium</option>
+                      <option value="LOW">Low</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Main Table ─── */
 export function EnquiriesTable() {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,6 +367,7 @@ export function EnquiriesTable() {
   const [region, setRegion] = useState("");
   const [status, setStatus] = useState("");
   const [date, setDate] = useState("");
+  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(null);
   const pageSize = 10;
 
   const hasActiveFilters =
@@ -105,27 +386,28 @@ export function EnquiriesTable() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  useEffect(() => {
-    const fetchEnquiries = async () => {
-      setIsLoading(true);
-      try {
-        const params: Record<string, string | number> = { page, pageSize };
-        if (debouncedSearch.trim()) params.search = debouncedSearch.trim();
-        if (region) params.region = region;
-        if (status) params.status = status;
-        if (date) params.date = date;
+  const fetchEnquiries = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const params: Record<string, string | number> = { page, pageSize };
+      if (debouncedSearch.trim()) params.search = debouncedSearch.trim();
+      if (region) params.region = region;
+      if (status) params.status = status;
+      if (date) params.date = date;
 
-        const res = await contactApi.getAdminEnquiries(params);
-        setEnquiries(res.data);
-        setTotal(res.meta.total);
-      } catch (err) {
-        console.error("Failed to fetch enquiries", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchEnquiries();
+      const res = await contactApi.getAdminEnquiries(params);
+      setEnquiries(res.data);
+      setTotal(res.meta.total);
+    } catch (err) {
+      console.error("Failed to fetch enquiries", err);
+    } finally {
+      setIsLoading(false);
+    }
   }, [page, debouncedSearch, region, status, date]);
+
+  useEffect(() => {
+    fetchEnquiries();
+  }, [fetchEnquiries]);
 
   const handleFilterChange = (setter: (v: string) => void) => (value: string) => {
     setter(value);
@@ -282,6 +564,7 @@ export function EnquiriesTable() {
                   <td className="py-5 pl-6 pr-8 text-right whitespace-nowrap">
                     <button
                       type="button"
+                      onClick={() => setSelectedEnquiryId(enq.id)}
                       className="text-gray-400 hover:text-blue-600 transition-colors p-1.5 rounded-md hover:bg-blue-50 inline-flex items-center justify-center"
                       aria-label="View enquiry"
                     >
@@ -321,6 +604,15 @@ export function EnquiriesTable() {
           </button>
         </div>
       </div>
+
+      {/* Enquiry Detail Modal */}
+      {selectedEnquiryId && (
+        <EnquiryDetailModal
+          enquiryId={selectedEnquiryId}
+          onClose={() => setSelectedEnquiryId(null)}
+          onUpdated={fetchEnquiries}
+        />
+      )}
     </div>
   );
 }

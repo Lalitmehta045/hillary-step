@@ -224,7 +224,7 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
       alert("Please upload your résumé and wait for it to process");
       return;
     }
-    
+
     setIsSubmitting(true);
     try {
       let token: string | undefined;
@@ -256,7 +256,7 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
         resumeFileSize: resumeData.fileSize,
         resumeMimeType: resumeData.mimeType,
       }, token);
-      
+
       setIsSuccess(true);
       setFile(null);
       setResumeData(null);
@@ -330,19 +330,19 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
           <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-[48px] max-md:gap-[32px] rounded-[23px] bg-[#F3F3F4] px-[48px] max-md:px-[24px] py-[48px] max-md:py-[32px] lg:grid-cols-[1fr_341px]">
             <div className="flex flex-col gap-[24px]">
               <div className="grid grid-cols-1 gap-[24px] sm:grid-cols-2">
-                <Field label="Full name" value={formData.fullName} onChange={(e) => setFormData({...formData, fullName: e.target.value})} required />
-                <Field label="Email" type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
-                <PhoneField value={formData.phone} onChange={(val: string) => setFormData({...formData, phone: val})} />
-                <Field label="LinkedIn Profile" value={formData.linkedinUrl} onChange={(e) => setFormData({...formData, linkedinUrl: e.target.value})} />
-                <Select label="Practice" options={PRACTICES} value={formData.practice} onChange={(val: string) => setFormData({...formData, practice: val})} />
-                <Select label="Preferred Location" options={LOCATIONS} value={formData.preferredLocation} onChange={(val: string) => setFormData({...formData, preferredLocation: val})} />
+                <Field label="Full name" value={formData.fullName} onChange={(e) => setFormData({ ...formData, fullName: e.target.value })} required />
+                <Field label="Email" type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
+                <PhoneField value={formData.phone} onChange={(val: string) => setFormData({ ...formData, phone: val })} />
+                <Field label="LinkedIn Profile" value={formData.linkedinUrl} onChange={(e) => setFormData({ ...formData, linkedinUrl: e.target.value })} />
+                <Select label="Practice" options={PRACTICES} value={formData.practice} onChange={(val: string) => setFormData({ ...formData, practice: val })} />
+                <Select label="Preferred Location" options={LOCATIONS} value={formData.preferredLocation} onChange={(val: string) => setFormData({ ...formData, preferredLocation: val })} />
               </div>
 
               <div>
                 <Label>Cover Note</Label>
                 <textarea
                   value={formData.coverLetter}
-                  onChange={(e) => setFormData({...formData, coverLetter: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
                   placeholder="Add a cover note."
                   className="mt-[8px] w-full min-h-[170px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] placeholder:text-[#9a9a9a] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden"
                 />
@@ -374,9 +374,8 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`relative mt-[8px] flex h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-[24px] bg-white px-[24px] py-[64px] text-center transition-colors ${
-                  isDragging ? 'bg-black/[0.04]' : 'hover:bg-black/[0.02]'
-                }`}
+                className={`relative mt-[8px] flex h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-[24px] bg-white px-[24px] py-[64px] text-center transition-colors ${isDragging ? 'bg-black/[0.04]' : 'hover:bg-black/[0.02]'
+                  }`}
               >
                 <svg className="pointer-events-none absolute inset-0 h-full w-full rounded-[24px]">
                   <defs>
@@ -403,23 +402,23 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                   {isUploading
                     ? "Parsing résumé..."
                     : file
-                    ? file.name
-                    : "Drop résumé here"}
+                      ? file.name
+                      : "Drop résumé here"}
                 </span>
                 <span className="mt-[4px] font-sans text-[14px] text-[#4B5563]">
                   {isUploading
                     ? "Extracting information..."
                     : uploadStatus === "success"
-                    ? "Resume parsed successfully"
-                    : uploadStatus === "error"
-                    ? uploadMessage || "Unable to parse resume. Please enter your details manually."
-                    : file
-                    ? `${(file.size / 1024 / 1024).toFixed(2)} MB`
-                    : "or click to browse · PDF, DOC, DOCX · 5MB"}
+                      ? "Resume parsed successfully"
+                      : uploadStatus === "error"
+                        ? uploadMessage || "Unable to parse resume. Please enter your details manually."
+                        : file
+                          ? `${(file.size / 1024 / 1024).toFixed(2)} MB`
+                          : "or click to browse · PDF, DOC, DOCX · 5MB"}
                 </span>
-                <input 
+                <input
                   ref={fileInputRef}
-                  type="file" 
+                  type="file"
                   className="hidden"
                   accept=".pdf,.doc,.docx"
                   onChange={handleFileChange}
@@ -524,19 +523,19 @@ function ContactForm() {
     <>
       <form onSubmit={handleSubmit} className="h-full w-full rounded-[23px] bg-[#F3F3F4] px-[40px] max-md:px-[24px] py-[32px]">
         <div className="grid grid-cols-1 gap-[16px] sm:grid-cols-2">
-          <Field label="Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
-          <Field label="Email" type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
-          <PhoneField value={formData.phone} onChange={(val: string) => setFormData({...formData, phone: val})} required />
-          <Field label="Organization" value={formData.companyName} onChange={(e) => setFormData({...formData, companyName: e.target.value})} required />
+          <Field label="Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+          <Field label="Email" type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
+          <PhoneField value={formData.phone} onChange={(val: string) => setFormData({ ...formData, phone: val })} required />
+          <Field label="Organization" value={formData.companyName} onChange={(e) => setFormData({ ...formData, companyName: e.target.value })} required />
         </div>
 
         <div className="mt-[16px]">
           <Label>Message</Label>
-          <textarea 
+          <textarea
             required
             value={formData.message}
-            onChange={(e) => setFormData({...formData, message: e.target.value})}
-            className="mt-[8px] w-full min-h-[100px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden" 
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            className="mt-[8px] w-full min-h-[100px] resize-none rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] py-[12px] font-sans text-[16px] text-[#111111] shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden"
           />
         </div>
 
@@ -587,16 +586,16 @@ function DesktopContact() {
   return (
     <section ref={containerRef} id="contact" className="relative w-full bg-white h-[200vh]">
       <div className="sticky top-0 flex h-screen items-center">
-        
+
         <div className="relative mx-auto flex w-full max-w-[1280px] px-[32px]">
-          
+
           <div className="flex w-full flex-col">
             <m.div style={{ left: itemLeft, x: itemX, position: "relative" }} className="flex flex-col w-fit items-start">
               <m.p style={{ left: itemLeft, x: itemX, position: "relative" }} className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase text-left">
                 CONTACT
               </m.p>
-              <h2 className="mt-[24px] max-w-[560px] font-display text-[56px] font-[590] leading-[60px] tracking-[-1.5px] text-[#000000] text-left">
-                Speak with us.
+              <h2 className="mt-[12px] max-w-[560px] font-display text-[56px] font-[590] leading-[60px] tracking-[-1.5px] text-[#000000] text-left">
+                <GradientReveal className="grad-text">Speak</GradientReveal> with us.
               </h2>
             </m.div>
 
@@ -627,16 +626,17 @@ function MobileContact() {
             <p className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase text-center">
               CONTACT
             </p>
-            <h2 className="mt-[24px] font-display text-[36px] leading-[40px] font-[590] tracking-[-1px] text-[#000000] text-center">
-              Speak with us.
+            <h2 className="mt-[12px] font-display text-[36px] leading-[40px] font-[590] tracking-[-1px] text-[#000000] text-center">
+              <GradientReveal className="grad-text">Speak</GradientReveal> with us.
             </h2>
           </div>
 
           <div className="pt-[40px] w-full flex flex-col gap-[32px]">
-            <Address label="Head Office" lines={["E-842, 8th Floor, Gaur Global Village", "GH Plot No. 4, Crossings Republik", "Ghaziabad, Uttar Pradesh – 201016", "GSTIN: 09AAFCH2272R1ZZ"]} />
-            <Address label="Branch Office" lines={["49/A, Near Sai Palace Barat Ghar", "Pawan Bhoomi, Shaktinagar", "Jabalpur, Madhya Pradesh – 482001", "GSTIN: 23AAFCH2272R1Z9"]} />
-            <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
-            <Address label="General Enquiries" lines={["info@hillarystepsolutions.com"]} />
+            <Address label="ASIA HEAD OFFICE" lines={["E-842 Gaur Global Village, Crossings Republik", "GZB (U.P) 201016"]} />
+            <Address label="BRANCH OFFICE" lines={["49/A Near Sai-Palace, Shaktinagar", "Jabalpur (M.P) 482001"]} />
+            <Address label="NORTH AMERICA" lines={["30 N Gould St Ste N, Sheridan", "Sheridan County (WY) 82801"]} />
+            <Address label="AUSTRALIA" lines={["6/213 Targo Road, Girraween", "Sydney (NSW) 2145"]} />
+            <Address label="GENERAL ENQUIRIES" lines={["info@hillarystepsolutions.com"]} />
           </div>
         </div>
 
@@ -652,32 +652,35 @@ function AddressScrub({ scrollYProgress }: { scrollYProgress: any }) {
   const scrollRange = [0, 0.05, 0.4, 1];
 
   const a0_x = useTransform(scrollYProgress, scrollRange, [0, 0, 0, 0]);
+  const a1_x = useTransform(scrollYProgress, scrollRange, [240, 240, 0, 0]);
+  const a2_x = useTransform(scrollYProgress, scrollRange, [480, 480, 0, 0]);
+  const a3_x = useTransform(scrollYProgress, scrollRange, [720, 720, 0, 0]);
+  const a4_x = useTransform(scrollYProgress, scrollRange, [960, 960, 0, 0]);
+
   const a0_y = useTransform(scrollYProgress, scrollRange, [0, 0, 0, 0]);
+  const a1_y = useTransform(scrollYProgress, scrollRange, [0, 0, 92, 92]);
+  const a2_y = useTransform(scrollYProgress, scrollRange, [0, 0, 184, 184]);
+  const a3_y = useTransform(scrollYProgress, scrollRange, [0, 0, 276, 276]);
+  const a4_y = useTransform(scrollYProgress, scrollRange, [0, 0, 368, 368]);
 
-  const a1_x = useTransform(scrollYProgress, scrollRange, [328, 328, 0, 0]);
-  const a1_y = useTransform(scrollYProgress, scrollRange, [0, 0, 136, 136]);
-
-  const a2_x = useTransform(scrollYProgress, scrollRange, [656, 656, 0, 0]);
-  const a2_y = useTransform(scrollYProgress, scrollRange, [0, 0, 272, 272]);
-
-  const a3_x = useTransform(scrollYProgress, scrollRange, [984, 984, 0, 0]);
-  const a3_y = useTransform(scrollYProgress, scrollRange, [0, 0, 352, 352]);
-
-  const width = useTransform(scrollYProgress, scrollRange, ["296px", "296px", "560px", "560px"]);
+  const width = useTransform(scrollYProgress, scrollRange, ["240px", "240px", "560px", "560px"]);
 
   return (
-    <div className="relative w-full h-[420px]">
+    <div className="relative w-full h-[450px]">
       <m.div style={{ x: a0_x, y: a0_y, z: 0, width }} className="absolute top-0 left-0">
-        <Address label="Head Office" lines={["E-842, 8th Floor, Gaur Global Village", "GH Plot No. 4, Crossings Republik", "Ghaziabad, Uttar Pradesh – 201016", "GSTIN: 09AAFCH2272R1ZZ"]} />
+        <Address label="ASIA HEAD OFFICE" lines={["E-842 Gaur Global Village, Crossings Republik", "GZB (U.P) 201016"]} />
       </m.div>
       <m.div style={{ x: a1_x, y: a1_y, z: 0, width }} className="absolute top-0 left-0">
-        <Address label="Branch Office" lines={["49/A, Near Sai Palace Barat Ghar", "Pawan Bhoomi, Shaktinagar", "Jabalpur, Madhya Pradesh – 482001", "GSTIN: 23AAFCH2272R1Z9"]} />
+        <Address label="BRANCH OFFICE" lines={["49/A Near Sai-Palace, Shaktinagar", "Jabalpur (M.P) 482001"]} />
       </m.div>
       <m.div style={{ x: a2_x, y: a2_y, z: 0, width }} className="absolute top-0 left-0">
-        <Address label="South Asia" lines={["Maker Maxity, BKC", "Mumbai 400051 · India"]} />
+        <Address label="NORTH AMERICA" lines={["30 N Gould St Ste N, Sheridan", "Sheridan County (WY) 82801"]} />
       </m.div>
       <m.div style={{ x: a3_x, y: a3_y, z: 0, width }} className="absolute top-0 left-0">
-        <Address label="General Enquiries" lines={["info@hillarystepsolutions.com"]} />
+        <Address label="AUSTRALIA" lines={["6/213 Targo Road, Girraween", "Sydney (NSW) 2145"]} />
+      </m.div>
+      <m.div style={{ x: a4_x, y: a4_y, z: 0, width }} className="absolute top-0 left-0">
+        <Address label="GENERAL ENQUIRIES" lines={["info@hillarystepsolutions.com"]} />
       </m.div>
     </div>
   );
@@ -771,7 +774,7 @@ function PhoneField({ value, onChange, required }: { value?: string; onChange?: 
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(COUNTRY_CODES[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  
+
   // Extract just the phone number part if value is structured
   const displayValue = value ? value.replace(/^\+\d+\s*\(\w+\)\s*/, "") : "";
 

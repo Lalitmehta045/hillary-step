@@ -24,19 +24,17 @@ function normalizeApiBase(url: string): string {
  * Localhost keeps the configured backend URL (usually http://localhost:3001).
  */
 function resolveApiBaseUrl(): string {
-  const configured = normalizeApiBase(
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1"
-  );
-
+  // In the browser, always use the Next.js rewrite proxy (/api/v1).
+  // next.config.ts rewrites /api/v1/* → backend on both localhost and production,
+  // keeping requests same-origin and avoiding CORS preflight issues.
   if (typeof window !== "undefined") {
-    const host = window.location.hostname;
-    const isLocal = host === "localhost" || host === "127.0.0.1";
-    if (!isLocal) {
-      return "/api/v1";
-    }
+    return "/api/v1";
   }
 
-  return configured;
+  // Server-side (SSR/API routes): use the configured backend URL directly.
+  return normalizeApiBase(
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1"
+  );
 }
 
 async function handleResponse<T>(response: Response): Promise<T> {
