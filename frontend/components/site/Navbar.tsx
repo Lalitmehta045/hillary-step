@@ -192,8 +192,11 @@ export function Navbar() {
                 onClick={(e) => handleSmoothScroll(e, item.href)}
                 className="group relative font-display text-[14px] font-[510] leading-[20px] text-[#111111]"
               >
-                <span className="relative pb-[4px] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-right after:scale-x-0 after:bg-brand-blue after:transition-transform after:duration-300 group-hover:after:origin-left group-hover:after:scale-x-100">
-                  {item.name}
+                <span className="relative block">
+                  <span className="block group-hover:opacity-0 transition-opacity duration-300">{item.name}</span>
+                  <span className="absolute inset-0 grad-text opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+                    {item.name}
+                  </span>
                 </span>
               </a>
             ))}

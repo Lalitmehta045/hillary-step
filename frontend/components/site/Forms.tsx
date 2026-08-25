@@ -633,7 +633,7 @@ function MobileContact() {
 
           <div className="pt-[40px] w-full flex flex-col gap-[32px]">
             <Address label="ASIA HEAD OFFICE" lines={["E-842 Gaur Global Village, Crossings Republik", "GZB (U.P) 201016"]} />
-            <Address label="BRANCH OFFICE" lines={["49/A Near Sai-Palace, Shaktinagar", "Jabalpur (M.P) 482001"]} />
+            <Address label="ASIA HEAD OFFICE 2" lines={["49/A Near Sai-Palace, Shaktinagar", "Jabalpur (M.P) 482001"]} />
             <Address label="NORTH AMERICA" lines={["30 N Gould St Ste N, Sheridan", "Sheridan County (WY) 82801"]} />
             <Address label="AUSTRALIA" lines={["6/213 Targo Road, Girraween", "Sydney (NSW) 2145"]} />
             <Address label="GENERAL ENQUIRIES" lines={["info@hillarystepsolutions.com"]} />
@@ -671,7 +671,7 @@ function AddressScrub({ scrollYProgress }: { scrollYProgress: any }) {
         <Address label="ASIA HEAD OFFICE" lines={["E-842 Gaur Global Village, Crossings Republik", "GZB (U.P) 201016"]} />
       </m.div>
       <m.div style={{ x: a1_x, y: a1_y, z: 0, width }} className="absolute top-0 left-0">
-        <Address label="BRANCH OFFICE" lines={["49/A Near Sai-Palace, Shaktinagar", "Jabalpur (M.P) 482001"]} />
+        <Address label="ASIA HEAD OFFICE 2" lines={["49/A Near Sai-Palace, Shaktinagar", "Jabalpur (M.P) 482001"]} />
       </m.div>
       <m.div style={{ x: a2_x, y: a2_y, z: 0, width }} className="absolute top-0 left-0">
         <Address label="NORTH AMERICA" lines={["30 N Gould St Ste N, Sheridan", "Sheridan County (WY) 82801"]} />

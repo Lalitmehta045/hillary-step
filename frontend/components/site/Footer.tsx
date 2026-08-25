@@ -7,13 +7,15 @@ import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { GlobalStaffingModal } from "@/components/site/GlobalStaffingModal";
 import { ITSolutionsModal } from "@/components/site/ITSolutionsModal";
 import { CivilInfraModal } from "@/components/site/CivilInfraModal";
+import { StatutoryModal } from "@/components/site/StatutoryModal";
+import type { StatutoryType } from "@/components/site/StatutoryContent";
 import Image from "next/image";
 import { FaLinkedinIn, FaYoutube, FaLocationDot } from "react-icons/fa6";
 
 type FooterLink = {
   label: string;
   href?: string;
-  action?: "it" | "staffing" | "civil";
+  action?: "it" | "staffing" | "civil" | "mca" | "asic" | "labor";
 };
 
 const COLUMNS: {
@@ -31,9 +33,9 @@ const COLUMNS: {
   {
     title: "STATUTORY COMPLIANCE",
     links: [
-      { label: "MCA Parameters" },
-      { label: "ASIC Standards" },
-      { label: "US Corporate Labor Codes" },
+      { label: "MCA Parameters", action: "mca" },
+      { label: "ASIC Standards", action: "asic" },
+      { label: "US Corporate Labor Codes", action: "labor" },
     ],
   },
   {
@@ -63,11 +65,15 @@ export function Footer() {
   const [isITModalOpen, setIsITModalOpen] = useState(false);
   const [isStaffingModalOpen, setIsStaffingModalOpen] = useState(false);
   const [isCivilModalOpen, setIsCivilModalOpen] = useState(false);
+  const [statutoryType, setStatutoryType] = useState<StatutoryType>(null);
 
   const handleAction = (action: FooterLink["action"]) => {
     if (action === "it") setIsITModalOpen(true);
     if (action === "staffing") setIsStaffingModalOpen(true);
     if (action === "civil") setIsCivilModalOpen(true);
+    if (action === "mca" || action === "asic" || action === "labor") {
+      setStatutoryType(action);
+    }
   };
 
   return (
@@ -169,6 +175,11 @@ export function Footer() {
       <ITSolutionsModal isOpen={isITModalOpen} onClose={() => setIsITModalOpen(false)} />
       <GlobalStaffingModal isOpen={isStaffingModalOpen} onClose={() => setIsStaffingModalOpen(false)} />
       <CivilInfraModal isOpen={isCivilModalOpen} onClose={() => setIsCivilModalOpen(false)} />
+      <StatutoryModal 
+        isOpen={statutoryType !== null} 
+        type={statutoryType} 
+        onClose={() => setStatutoryType(null)} 
+      />
     </footer>
   );
 }
