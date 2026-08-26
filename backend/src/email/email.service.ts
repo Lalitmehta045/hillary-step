@@ -5,6 +5,8 @@ import type { Enquiry } from '@prisma/client';
 
 export type EnquiryNotificationPayload = Pick<
   Enquiry,
+  | 'firstName'
+  | 'lastName'
   | 'name'
   | 'email'
   | 'phone'
@@ -14,6 +16,8 @@ export type EnquiryNotificationPayload = Pick<
   | 'message'
   | 'createdAt'
   | 'enquiryNumber'
+  | 'topic'
+  | 'entityType'
 >;
 
 @Injectable()
@@ -60,13 +64,18 @@ export class EmailService {
         : new Date(enquiry.createdAt)
     ).toISOString();
 
-    const subject = `New Website Enquiry — ${visitorName}`;
+    const topic = enquiry.topic || 'General Inquiry';
+    const entityType = enquiry.entityType || '—';
+
+    const subject = `New Website Enquiry [${topic}] — ${visitorName}`;
     const text = [
       'New enquiry received from the Hillary Step website.',
       '',
+      `Topic: ${topic}`,
       `Name: ${visitorName}`,
       `Email: ${enquiry.email}`,
       `Phone: ${phone}`,
+      `Entity Type: ${entityType}`,
       `Organization: ${organization}`,
       'Message:',
       message,
@@ -81,9 +90,11 @@ export class EmailService {
     const html = `
       <p>New enquiry received from the Hillary Step website.</p>
       <p>
+        <strong>Topic:</strong> ${escapeHtml(topic)}<br />
         <strong>Name:</strong> ${escapeHtml(visitorName)}<br />
         <strong>Email:</strong> ${escapeHtml(enquiry.email)}<br />
         <strong>Phone:</strong> ${escapeHtml(phone)}<br />
+        <strong>Entity Type:</strong> ${escapeHtml(entityType)}<br />
         <strong>Organization:</strong> ${escapeHtml(organization)}
       </p>
       <p><strong>Message:</strong></p>
@@ -118,9 +129,17 @@ export class EmailService {
     const { subject, text, html } =
       this.buildEnquiryNotificationContent(enquiry);
 
+    const topic = enquiry.topic || 'General Inquiry';
+    let recipientEmail = this.adminEmail;
+    if (['Information Technology', 'Talent Acquisition', 'Civil & Infrastructure'].includes(topic)) {
+      recipientEmail = 'growth@hillarystepsolutions.com';
+    } else if (['Feedback & Suggestions', 'Grievance Redressal', 'General Inquiry'].includes(topic)) {
+      recipientEmail = 'info@hillarystepsolutions.com';
+    }
+
     const { data, error } = await this.resend.emails.send({
       from: this.fromEmail,
-      to: [this.adminEmail],
+      to: [recipientEmail],
       subject,
       text,
       html,
@@ -136,7 +155,7 @@ export class EmailService {
     }
 
     this.logger.log(
-      `Enquiry notification email sent to ${this.adminEmail}` +
+      `Enquiry notification email sent to ${recipientEmail}` +
         (data?.id ? ` (id=${data.id})` : ''),
     );
     return { id: data?.id };

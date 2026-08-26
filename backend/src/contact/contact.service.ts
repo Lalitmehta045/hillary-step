@@ -30,15 +30,19 @@ export class ContactService {
   async create(data: CreateEnquiryDto, ip?: string) {
     const enquiryNumber = await this.generateEnquiryNumber();
     const organization =
-      data.organization?.trim() || data.companyName?.trim() || null;
+      data.organizationName?.trim() || data.organization?.trim() || data.companyName?.trim() || null;
     const companyName =
-      data.companyName?.trim() || data.organization?.trim() || null;
+      data.companyName?.trim() || data.organizationName?.trim() || data.organization?.trim() || null;
+    const name = data.name?.trim() || [data.firstName, data.lastName].filter(Boolean).join(' ');
+
+    const { organizationName: _orgName, ...restData } = data;
 
     const enquiry = await this.prisma.enquiry.create({
       data: {
-        ...data,
+        ...restData,
         organization,
         companyName,
+        name,
         enquiryNumber,
         submissionIp: ip,
       },

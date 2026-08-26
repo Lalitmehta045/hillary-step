@@ -27,16 +27,27 @@ export enum EnquiryPriority {
 }
 
 export class CreateEnquiryDto {
-  @ApiProperty({ example: 'Jane Doe' })
-  @IsString()
-  @MinLength(2)
-  @MaxLength(120)
-  name: string;
-
-  @ApiPropertyOptional()
-  @ValidateIf((o: CreateEnquiryDto) => !o.organization?.trim())
+  @ApiProperty({ example: 'Jane' })
   @IsString()
   @MinLength(1)
+  @MaxLength(120)
+  firstName: string;
+
+  @ApiPropertyOptional({ example: 'Doe' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  lastName?: string;
+
+  @ApiProperty({ example: 'Jane Doe' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  name?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
   @MaxLength(200)
   companyName?: string;
 
@@ -51,11 +62,11 @@ export class CreateEnquiryDto {
   @MaxLength(254)
   email: string;
 
-  @ApiProperty({ example: '+91 (IND) 9876543210' })
+  @ApiPropertyOptional({ example: '+91 (IND) 9876543210' })
+  @IsOptional()
   @IsString()
-  @MinLength(7)
   @MaxLength(40)
-  phone: string;
+  phone?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -63,12 +74,28 @@ export class CreateEnquiryDto {
   @MaxLength(20)
   countryCode?: string;
 
+  @ApiProperty({ example: 'Individual' })
+  @IsString()
+  @MaxLength(100)
+  entityType: string;
+
   @ApiPropertyOptional({ example: 'Acme Corp' })
-  @ValidateIf((o: CreateEnquiryDto) => !o.companyName?.trim())
+  @ValidateIf((o: CreateEnquiryDto) => o.entityType === 'Private Enterprise' || o.entityType === 'Public Sector Organisation')
   @IsString()
   @MinLength(1)
   @MaxLength(200)
+  organizationName?: string;
+
+  @ApiPropertyOptional({ example: 'Acme Corp' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
   organization?: string;
+
+  @ApiProperty({ example: 'Information Technology' })
+  @IsString()
+  @MaxLength(200)
+  topic: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -85,7 +112,7 @@ export class CreateEnquiryDto {
   @ApiProperty({ example: 'Looking for staffing support.' })
   @IsString()
   @MinLength(5)
-  @MaxLength(5000)
+  @MaxLength(1000)
   message: string;
 
   @ApiPropertyOptional()

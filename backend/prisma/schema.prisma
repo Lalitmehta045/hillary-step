@@ -167,6 +167,8 @@ model Enquiry {
   id             String        @id @default(uuid()) @db.Uuid
   enquiryNumber  String        @unique @map("enquiry_number") // e.g. ENQ-001
   // Contact form fields
+  firstName      String?       @map("first_name")
+  lastName       String?       @map("last_name")
   name           String?
   companyName    String?       @map("company_name")
   contactPerson  String?       @map("contact_person")
@@ -174,6 +176,8 @@ model Enquiry {
   phone          String?
   countryCode    String?       @map("country_code")
   organization   String?
+  entityType     String?       @map("entity_type")
+  topic          String?       @map("topic")
   industry       String?
   serviceRequired String?      @map("service_required")
   message        String?       @db.Text
