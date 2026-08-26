@@ -630,28 +630,28 @@ function DesktopContact() {
 
   return (
     <section ref={containerRef} id="contact" className="relative w-full bg-white h-[200vh]">
-      <div className="sticky top-0 flex h-screen items-center justify-center">
+      <div className="sticky top-0 flex h-screen items-center">
 
-        <div className="relative mx-auto flex w-full max-w-[1280px] px-[32px] items-center">
+        <div className="relative mx-auto flex w-full max-w-[1280px] px-[32px]">
 
           <div className="flex w-full flex-col">
             <m.div style={{ left: itemLeft, x: itemX, position: "relative" }} className="flex flex-col w-fit items-start">
               <m.p style={{ left: itemLeft, x: itemX, position: "relative" }} className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase text-left">
                 CONTACT
               </m.p>
-              <h2 className="mt-[8px] max-w-[560px] font-display text-[52px] font-[590] leading-[56px] tracking-[-1.5px] text-[#000000] text-left">
+              <h2 className="mt-[12px] max-w-[560px] font-display text-[56px] font-[590] leading-[60px] tracking-[-1.5px] text-[#000000] text-left">
                 <GradientReveal className="grad-text">Speak</GradientReveal> with us.
               </h2>
             </m.div>
 
-            <div className="pt-[24px] w-full">
+            <div className="pt-[40px] w-full">
               <AddressScrub scrollYProgress={scrollYProgress} />
             </div>
           </div>
 
           <m.div
             style={{ x: formX, opacity: formOpacity, z: 0, pointerEvents: formPointer as any }}
-            className="w-[540px] max-w-[48vw] shrink-0 rounded-[24px] overflow-visible bg-gradient-to-br from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1.5px] shadow-sm absolute right-[32px] top-1/2 -translate-y-1/2"
+            className="w-[560px] max-w-[48vw] shrink-0 rounded-[24px] overflow-visible bg-gradient-to-br from-[#007BFF] via-[#00FF11] to-[#FF6200] p-[1.5px] shadow-sm absolute right-[32px] top-1/2 -translate-y-1/2"
           >
             <ContactForm />
           </m.div>
@@ -697,21 +697,21 @@ function AddressScrub({ scrollYProgress }: { scrollYProgress: any }) {
   const scrollRange = [0, 0.05, 0.4, 1];
 
   const a0_x = useTransform(scrollYProgress, scrollRange, [0, 0, 0, 0]);
-  const a1_x = useTransform(scrollYProgress, scrollRange, [220, 220, 0, 0]);
-  const a2_x = useTransform(scrollYProgress, scrollRange, [440, 440, 0, 0]);
-  const a3_x = useTransform(scrollYProgress, scrollRange, [660, 660, 0, 0]);
-  const a4_x = useTransform(scrollYProgress, scrollRange, [880, 880, 0, 0]);
+  const a1_x = useTransform(scrollYProgress, scrollRange, [240, 240, 0, 0]);
+  const a2_x = useTransform(scrollYProgress, scrollRange, [480, 480, 0, 0]);
+  const a3_x = useTransform(scrollYProgress, scrollRange, [720, 720, 0, 0]);
+  const a4_x = useTransform(scrollYProgress, scrollRange, [960, 960, 0, 0]);
 
   const a0_y = useTransform(scrollYProgress, scrollRange, [0, 0, 0, 0]);
-  const a1_y = useTransform(scrollYProgress, scrollRange, [0, 0, 68, 68]);
-  const a2_y = useTransform(scrollYProgress, scrollRange, [0, 0, 136, 136]);
-  const a3_y = useTransform(scrollYProgress, scrollRange, [0, 0, 204, 204]);
-  const a4_y = useTransform(scrollYProgress, scrollRange, [0, 0, 272, 272]);
+  const a1_y = useTransform(scrollYProgress, scrollRange, [0, 0, 92, 92]);
+  const a2_y = useTransform(scrollYProgress, scrollRange, [0, 0, 184, 184]);
+  const a3_y = useTransform(scrollYProgress, scrollRange, [0, 0, 276, 276]);
+  const a4_y = useTransform(scrollYProgress, scrollRange, [0, 0, 368, 368]);
 
-  const width = useTransform(scrollYProgress, scrollRange, ["220px", "220px", "540px", "540px"]);
+  const width = useTransform(scrollYProgress, scrollRange, ["240px", "240px", "560px", "560px"]);
 
   return (
-    <div className="relative w-full h-[340px]">
+    <div className="relative w-full h-[450px]">
       <m.div style={{ x: a0_x, y: a0_y, z: 0, width }} className="absolute top-0 left-0">
         <Address label="ASIA OFFICE 1" lines={["E-842 Gaur Global Village, Crossings Republik", "GZB (U.P) 201016"]} />
       </m.div>
@@ -733,7 +733,7 @@ function AddressScrub({ scrollYProgress }: { scrollYProgress: any }) {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <span className="block font-sans text-[11px] font-[600] uppercase tracking-[1.1px] text-[#8B8B8B]">
+    <span className="block font-sans text-[12px] font-[600] uppercase tracking-[1.2px] text-[#8B8B8B]">
       {children}
     </span>
   );
@@ -749,7 +749,7 @@ function Field({ label, type = "text", value, onChange, required, placeholder }:
         onChange={onChange}
         required={required}
         placeholder={placeholder}
-        className="mt-[4px] h-[42px] w-full rounded-[12px] border border-[#E5E7EB] bg-white px-[12px] font-sans text-[14px] text-[#111111] placeholder:text-gray-400/70 shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden"
+        className="mt-[6px] h-[48px] w-full rounded-[16px] border border-[#E5E7EB] bg-white px-[16px] font-sans text-[15px] text-[#111111] placeholder:text-gray-400/70 shadow-sm focus:border-[#007BFF] focus:ring-1 focus:ring-[#007BFF] focus:outline-hidden"
       />
     </div>
   );
@@ -773,17 +773,17 @@ function Select({ label, options, value, onChange }: { label: string; options: r
   return (
     <div className="min-w-0" ref={dropdownRef}>
       <Label>{label}</Label>
-      <div className="relative mt-[4px]">
+      <div className="relative mt-[6px]">
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className={`flex h-[42px] w-full items-center justify-between rounded-[12px] border bg-white px-[12px] font-sans text-[14px] text-[#111111] shadow-sm transition-all focus:outline-hidden ${isOpen ? "border-[#007BFF] ring-1 ring-[#007BFF]" : "border-[#E5E7EB] hover:border-[#d1d5db]"}`}
+          className={`flex h-[48px] w-full items-center justify-between rounded-[16px] border bg-white px-[16px] font-sans text-[15px] text-[#111111] shadow-sm transition-all focus:outline-hidden ${isOpen ? "border-[#007BFF] ring-1 ring-[#007BFF]" : "border-[#E5E7EB] hover:border-[#d1d5db]"}`}
         >
           <span className="truncate">{selected}</span>
           <svg
             className={`shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-            width="14"
-            height="14"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
             stroke="#4a4a4a"
@@ -794,7 +794,7 @@ function Select({ label, options, value, onChange }: { label: string; options: r
         </button>
 
         {isOpen && (
-          <div className="absolute left-0 top-[calc(100%+6px)] z-50 w-full overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white py-[6px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] transform-gpu animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="absolute left-0 top-[calc(100%+8px)] z-50 w-full overflow-hidden rounded-[16px] border border-[#E5E7EB] bg-white py-[8px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] transform-gpu animate-in fade-in slide-in-from-top-2 duration-200">
             {options.map((o) => (
               <button
                 key={o}
@@ -803,7 +803,7 @@ function Select({ label, options, value, onChange }: { label: string; options: r
                   if (onChange) onChange(o);
                   setIsOpen(false);
                 }}
-                className={`flex w-full items-center px-[14px] py-[8px] text-left font-sans text-[14px] transition-colors ${selected === o ? "bg-[#F8F9FB] text-[#007BFF] font-[500]" : "text-[#111111] hover:bg-[#F8F9FB] hover:text-[#007BFF]"}`}
+                className={`flex w-full items-center px-[16px] py-[10px] text-left font-sans text-[15px] transition-colors ${selected === o ? "bg-[#F8F9FB] text-[#007BFF] font-[500]" : "text-[#111111] hover:bg-[#F8F9FB] hover:text-[#007BFF]"}`}
               >
                 {o}
               </button>
@@ -855,18 +855,18 @@ function PhoneField({ value, onChange, required }: { value?: string; onChange?: 
   return (
     <div className="min-w-0">
       <Label>Phone</Label>
-      <div className="mt-[4px] flex h-[42px] w-full rounded-[12px] border border-[#E5E7EB] bg-white shadow-sm focus-within:border-[#007BFF] focus-within:ring-1 focus-within:ring-[#007BFF]">
-        <div className="relative flex items-center border-r border-[#E5E7EB] bg-[#F8F9FB] rounded-l-[12px]" ref={dropdownRef}>
+      <div className="mt-[6px] flex h-[48px] w-full rounded-[16px] border border-[#E5E7EB] bg-white shadow-sm focus-within:border-[#007BFF] focus-within:ring-1 focus-within:ring-[#007BFF]">
+        <div className="relative flex items-center border-r border-[#E5E7EB] bg-[#F8F9FB] rounded-l-[16px]" ref={dropdownRef}>
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="flex h-full items-center justify-between gap-[4px] pl-[8px] pr-[8px] font-sans text-[13px] text-[#111111] focus:outline-hidden whitespace-nowrap"
+            className="flex h-full items-center justify-between gap-[6px] pl-[10px] pr-[10px] font-sans text-[14px] text-[#111111] focus:outline-hidden whitespace-nowrap"
           >
             <span>{selected}</span>
             <svg
               className={`shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-              width="12"
-              height="12"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
               fill="none"
               stroke="#4a4a4a"
@@ -877,7 +877,7 @@ function PhoneField({ value, onChange, required }: { value?: string; onChange?: 
           </button>
 
           {isOpen && (
-            <div className="absolute left-0 top-[calc(100%+6px)] z-50 w-[130px] overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white py-[6px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] transform-gpu animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="absolute left-0 top-[calc(100%+8px)] z-50 w-[140px] overflow-hidden rounded-[16px] border border-[#E5E7EB] bg-white py-[8px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] transform-gpu animate-in fade-in slide-in-from-top-2 duration-200">
               {COUNTRY_CODES.map((code) => (
                 <button
                   key={code}
@@ -887,7 +887,7 @@ function PhoneField({ value, onChange, required }: { value?: string; onChange?: 
                     if (onChange) onChange(displayValue ? `${code} ${displayValue}` : "");
                     setIsOpen(false);
                   }}
-                  className={`flex w-full items-center px-[12px] py-[8px] text-left font-sans text-[13px] transition-colors ${selected === code ? "bg-[#F8F9FB] text-[#007BFF] font-[500]" : "text-[#111111] hover:bg-[#F8F9FB] hover:text-[#007BFF]"}`}
+                  className={`flex w-full items-center px-[16px] py-[10px] text-left font-sans text-[14px] transition-colors ${selected === code ? "bg-[#F8F9FB] text-[#007BFF] font-[500]" : "text-[#111111] hover:bg-[#F8F9FB] hover:text-[#007BFF]"}`}
                 >
                   {code}
                 </button>
@@ -903,7 +903,7 @@ function PhoneField({ value, onChange, required }: { value?: string; onChange?: 
           onChange={(e) => {
             if (onChange) onChange(e.target.value ? `${selected} ${e.target.value}` : "");
           }}
-          className="h-full min-w-0 flex-1 bg-transparent px-[10px] font-sans text-[14px] text-[#111111] placeholder:text-gray-400/70 focus:outline-hidden rounded-r-[12px]"
+          className="h-full min-w-0 flex-1 bg-transparent px-[14px] font-sans text-[15px] text-[#111111] placeholder:text-gray-400/70 focus:outline-hidden rounded-r-[16px]"
         />
       </div>
     </div>
@@ -912,11 +912,11 @@ function PhoneField({ value, onChange, required }: { value?: string; onChange?: 
 
 function Address({ label, lines, layout, transition }: { label: string; lines: string[]; layout?: boolean; transition?: any }) {
   return (
-    <m.div layout={layout} transition={transition} className="flex flex-col gap-[4px]">
+    <m.div layout={layout} transition={transition} className="flex flex-col gap-[8px]">
       <Label>{label}</Label>
       <div className="flex flex-col">
         {lines.map((l) => (
-          <p key={l} className="font-sans text-[14px] leading-[20px] text-[#111111]">
+          <p key={l} className="font-sans text-[16px] leading-[24px] text-[#111111]">
             {l}
           </p>
         ))}
