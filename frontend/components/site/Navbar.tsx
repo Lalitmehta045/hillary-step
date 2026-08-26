@@ -7,9 +7,9 @@ import { AnimatedButton } from "@/components/ui/AnimatedButton";
 const NAV = [
   { name: "Home", href: "/#home" },
   { name: "About", href: "/#about" },
-  { name: "Our Capabilities", href: "/#capabilities" },
-  { name: "Global Presence", href: "/#global-presence" },
-  { name: "Contact", href: "/#contact" }
+  { name: "Pillars", href: "/#pillars" },
+  { name: "Capabilities", href: "/#capabilities" },
+  { name: "Global Presence", href: "/#global-presence" }
 ];
 const TOP_TRIGGER_ZONE = 75; // px from top of viewport
 const HIDE_DELAY_MS = 250; // ms to wait before hiding on mouse leave
@@ -234,6 +234,14 @@ export function Navbar() {
             </div>
 
             <AnimatedButton
+              href="/#contact"
+              variant="subtleShadow"
+              onClick={(e: any) => handleSmoothScroll(e, "/#contact")}
+              className="flex h-[44px] items-center gap-[9px] rounded-full bg-[#1A6CFF] px-[22px] font-display text-[14px] font-[510] leading-[20px] text-white hover:bg-[#1556cc] transition-colors"
+            >
+              Contact Us
+            </AnimatedButton>
+            <AnimatedButton
               href="/admin/login"
               variant="subtleShadow"
               className="flex h-[44px] items-center gap-[9px] rounded-full border border-[#111111]/10 bg-white/50 px-[22px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] backdrop-blur-sm hover:bg-black/5 transition-colors"
@@ -290,8 +298,18 @@ export function Navbar() {
             ))}
             <div className="mt-[40px] flex flex-col gap-[16px] border-t border-black/10 pt-[40px]">
               <a
+                href="/#contact"
+                onClick={(e) => {
+                  handleSmoothScroll(e, "/#contact");
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex h-[54px] w-full items-center justify-center gap-[9px] rounded-full bg-[#1A6CFF] px-[22px] font-sans text-[16px] font-semibold text-white"
+              >
+                Contact Us
+              </a>
+              <a
                 href="/admin/login"
-                className="flex h-[54px] w-full items-center justify-center gap-[9px] rounded-full bg-brand-blue px-[22px] font-sans text-[16px] font-semibold text-white"
+                className="flex h-[54px] w-full items-center justify-center gap-[9px] rounded-full bg-white border border-black/10 px-[22px] font-sans text-[16px] font-semibold text-[#111111]"
               >
                 Admin Portal
                 <ArrowUpRight />

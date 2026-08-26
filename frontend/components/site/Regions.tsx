@@ -11,26 +11,29 @@ const REGIONS = {
   "United States": {
     marker: { left: "30%", top: "47%" },
     offices: "Los Angeles · San Jose · New York · Dallas · Boston · Chicago",
-    principal: "Kunal Priyadarshi, Founder, MD & CEO",
-    capabilities: "Civil EPC · AI · Executive Search",
-    registrations: "SEC · GSA · SAM Registered",
-    projects: "JFK T-9 Modernization · DoE Grid AI",
+    principal: "Kunal Priyadarshi, Founder & Global CEO",
+    capabilities: "Digital Transformation · Staff Augmentation",
+    operatingStandard: "Unified global delivery compliance",
+    registrations: "US Labor Code compliant",
+    projects: "Scaling cross-border engineering teams",
   },
   Australia: {
     marker: { left: "77%", top: "74%" },
     offices: "Sydney · Melbourne · Brisbane · Perth",
-    principal: "Mrinal Priyadarshi, Director (AUS) & COO",
-    capabilities: "Smart Terminals · Rail · Workforce",
-    registrations: "ASIC · AusTender Registered",
-    projects: "Sydney Smart Terminal · NSW Grid",
+    principal: "Mrinal Priyadarshi, Regional COO",
+    capabilities: "IT Consulting · Workforce Architecture",
+    operatingStandard: "Standardised agile framework deployment",
+    registrations: "ASIC standards aligned delivery",
+    projects: "Oceania enterprise systems architecture",
   },
   India: {
     marker: { left: "65%", top: "54%" },
     offices: "Delhi NCR · Bengaluru · Mumbai · Hydrabad · Chennai",
-    principal: "Kantesh Prasad Singh, Director (IND) & CFO",
-    capabilities: "Digital Public Infrastructure · EPC",
-    registrations: "MCA · GeM Registered",
-    projects: "DPI Mandate · Metro Line Expansion",
+    principal: "Kantesh Prasad Singh, Regional CFO",
+    capabilities: "SaaS · Global IT Delivery · EPC · RPO",
+    operatingStandard: "Cost-optimised development pipelines",
+    registrations: "Certified MSME Hub",
+    projects: "Product Development · Government EPC Tenders",
   },
 } as const;
 
@@ -94,9 +97,10 @@ export function Regions() {
 
               <dl className="flex flex-col gap-[24px]">
                 <Row label="Managing Principal" value={region.principal} />
-                <Row label="Capabilities" value={region.capabilities} />
+                <Row label="Core Capabilities" value={region.capabilities} />
+                <Row label="Operating Standard" value={region.operatingStandard} />
                 <Row label="Registrations" value={region.registrations} />
-                <Row label="Signature Projects" value={region.projects} />
+                <Row label="Signature Focus" value={region.projects} />
               </dl>
             </div>
           </div>
