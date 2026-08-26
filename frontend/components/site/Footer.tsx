@@ -165,7 +165,7 @@ export function Footer() {
           </FadeIn>
 
           <FadeIn delay={0.5} className="flex w-full justify-center max-md:justify-start">
-            <p className="font-sans text-[11px] tracking-[0.4px] text-white/60 max-md:text-left max-md:leading-[16px]">
+            <p className="font-sans text-[14px] max-md:text-[13px] font-[400] leading-[22px] tracking-[0.2px] text-white/80 max-md:text-left">
               © 2026 Hillary Step Solutions. Operating as Principal and Agent Worldwide. All Rights Reserved
             </p>
           </FadeIn>
