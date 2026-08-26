@@ -11,7 +11,7 @@ interface AnimatedButtonProps {
   children: ReactNode;
   className?: string;
   href?: string;
-  onClick?: () => void;
+  onClick?: (e?: any) => void;
   type?: "button" | "submit" | "reset";
   variant?: keyof typeof hoverVariants;
   "aria-label"?: string;
