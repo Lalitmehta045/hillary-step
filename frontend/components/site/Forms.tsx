@@ -368,9 +368,8 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`relative mt-[8px] flex h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-[24px] bg-white px-[24px] py-[64px] text-center transition-colors ${
-                  isDragging ? "bg-black/[0.04]" : "hover:bg-black/[0.02]"
-                }`}
+                className={`relative mt-[8px] flex h-[220px] w-full cursor-pointer flex-col items-center justify-center rounded-[24px] bg-white px-[24px] py-[64px] text-center transition-colors ${isDragging ? "bg-black/[0.04]" : "hover:bg-black/[0.02]"
+                  }`}
               >
                 <svg className="pointer-events-none absolute inset-0 h-full w-full rounded-[24px]">
                   <defs>
@@ -400,12 +399,12 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                   {isUploading
                     ? "Extracting information..."
                     : uploadStatus === "success"
-                    ? "Resume parsed successfully"
-                    : uploadStatus === "error"
-                    ? uploadMessage || "Unable to parse resume. Please enter your details manually."
-                    : file
-                    ? `${(file.size / 1024 / 1024).toFixed(2)} MB`
-                    : "or click to browse · PDF, DOC, DOCX · 5MB"}
+                      ? "Resume parsed successfully"
+                      : uploadStatus === "error"
+                        ? uploadMessage || "Unable to parse resume. Please enter your details manually."
+                        : file
+                          ? `${(file.size / 1024 / 1024).toFixed(2)} MB`
+                          : "or click to browse · PDF, DOC, DOCX · 5MB"}
                 </span>
                 <input ref={fileInputRef} type="file" className="hidden" accept=".pdf,.doc,.docx" onChange={handleFileChange} />
               </div>
@@ -507,7 +506,7 @@ function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting || isSuccess) return;
-    
+
     if (formData.message.length > 1000) {
       alert("Message cannot exceed 1000 characters.");
       return;
@@ -545,9 +544,9 @@ function ContactForm() {
           <Field label="Last Name" value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} />
           <Field label="Email *" type="email" placeholder="name@company.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
           <PhoneField value={formData.phone} onChange={(val: string) => setFormData({ ...formData, phone: val })} />
-          
+
           <Select label="Entity Type *" options={ENTITY_TYPES} value={formData.entityType} onChange={(val: string) => setFormData({ ...formData, entityType: val, organizationName: (val === "Individual") ? "" : formData.organizationName })} />
-          
+
           <Select label="Topic of Inquiry *" options={TOPICS} value={formData.topic} onChange={(val: string) => setFormData({ ...formData, topic: val })} />
         </div>
 
@@ -621,7 +620,7 @@ function DesktopContact() {
     offset: ["start start", "end end"],
   });
 
-  const scrollRange = [0, 0.05, 0.4, 1];
+  const scrollRange = [0, 0.0, 0.08, 1];
   const itemLeft = useTransform(scrollYProgress, scrollRange, ["50%", "50%", "0%", "0%"]);
   const itemX = useTransform(scrollYProgress, scrollRange, ["-50%", "-50%", "0%", "0%"]);
   const formX = useTransform(scrollYProgress, scrollRange, [150, 150, 0, 0]);
@@ -629,11 +628,10 @@ function DesktopContact() {
   const formPointer = useTransform(formOpacity, (v) => (v > 0.1 ? "auto" : "none"));
 
   return (
-    <section ref={containerRef} id="contact" className="relative w-full bg-white h-[200vh]">
+    <section ref={containerRef} id="contact" className="relative w-full bg-white h-[150vh]">
       <div className="sticky top-0 flex h-screen items-center pt-8 md:pt-12">
-
         <div className="relative mx-auto flex w-full max-w-[1280px] px-[32px]">
-
+          
           <div className="flex w-full flex-col">
             <m.div style={{ left: itemLeft, x: itemX, position: "relative" }} className="flex flex-col w-fit items-start">
               <m.p style={{ left: itemLeft, x: itemX, position: "relative" }} className="font-sans text-[12px] font-[600] leading-[16px] tracking-[1.2px] text-[#0070F3] uppercase text-left">
@@ -693,8 +691,10 @@ function MobileContact() {
   );
 }
 
+
+
 function AddressScrub({ scrollYProgress }: { scrollYProgress: any }) {
-  const scrollRange = [0, 0.05, 0.4, 1];
+  const scrollRange = [0, 0.0, 0.08, 1];
 
   const a0_x = useTransform(scrollYProgress, scrollRange, [0, 0, 0, 0]);
   const a1_x = useTransform(scrollYProgress, scrollRange, [240, 240, 0, 0]);
