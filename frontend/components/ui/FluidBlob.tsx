@@ -15,7 +15,7 @@ const createDotTexture = (): THREE.CanvasTexture | null => {
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
 
-  const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 30);
   gradient.addColorStop(0, "rgba(255,255,255,1)");
   gradient.addColorStop(0.4, "rgba(255,255,255,0.5)");
   gradient.addColorStop(1, "rgba(255,255,255,0)");
@@ -43,12 +43,14 @@ export function FluidBlob({
   particleCount = DEFAULT_COUNT,
   interactive = true,
 }: FluidBlobProps) {
+  const parentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const shatterTriggerRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
+    const parent = parentRef.current;
     const container = containerRef.current;
-    if (!container) return;
+    if (!parent || !container) return;
 
     // Dimensions
     let width = container.clientWidth || 600;
@@ -57,7 +59,8 @@ export function FluidBlob({
     // Scene & Camera
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 6.4);
+    // Move camera back by 2.5x to compensate for the 250% container size, preventing clipping
+    camera.position.set(0, 0, 16.0);
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -66,7 +69,7 @@ export function FluidBlob({
       powerPreference: "high-performance",
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     container.appendChild(renderer.domElement);
 
     // Particles Data
@@ -154,9 +157,9 @@ export function FluidBlob({
     };
 
     if (interactive) {
-      container.addEventListener("pointermove", handlePointerMove, { passive: true });
-      container.addEventListener("pointerleave", handlePointerLeave, { passive: true });
-      container.addEventListener("pointerdown", handlePointerDown, { passive: true });
+      parent.addEventListener("pointermove", handlePointerMove, { passive: true });
+      parent.addEventListener("pointerleave", handlePointerLeave, { passive: true });
+      parent.addEventListener("pointerdown", handlePointerDown, { passive: true });
     }
 
     // Resize Observer
@@ -206,7 +209,7 @@ export function FluidBlob({
             homes[ix + 1] + (Math.random() - 0.5) * 1.4,
             homes[ix + 2] + (Math.random() - 0.5) * 1.4
           ).normalize();
-          const mag = 3.4 + Math.random() * 4.6;
+          const mag = 1.5 + Math.random() * 2.5;
           scatters.set(
             [
               homes[ix] + dir.x * mag,
@@ -297,9 +300,9 @@ export function FluidBlob({
       shatterTriggerRef.current = null;
 
       if (interactive) {
-        container.removeEventListener("pointermove", handlePointerMove);
-        container.removeEventListener("pointerleave", handlePointerLeave);
-        container.removeEventListener("pointerdown", handlePointerDown);
+        parent.removeEventListener("pointermove", handlePointerMove);
+        parent.removeEventListener("pointerleave", handlePointerLeave);
+        parent.removeEventListener("pointerdown", handlePointerDown);
       }
 
       geometry.dispose();
@@ -314,9 +317,15 @@ export function FluidBlob({
 
   return (
     <div
-      ref={containerRef}
+      ref={parentRef}
       className={`relative cursor-crosshair select-none touch-none ${className}`}
       aria-label="Interactive 3D Fluid Particle Blob Animation"
-    />
+    >
+      <div
+        ref={containerRef}
+        className="absolute pointer-events-none"
+        style={{ inset: "-75%" }}
+      />
+    </div>
   );
 }
