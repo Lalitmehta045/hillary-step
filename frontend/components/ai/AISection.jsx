@@ -10,10 +10,7 @@ import Hero from "./Hero";
 import Statement from "./Statement";
 import CoreArchitecture from "./CoreArchitecture";
 import DataPipeline from "./DataPipeline";
-import IntelligenceLoop from "./IntelligenceLoop";
 import HumanMachine from "./HumanMachine";
-import Marquee from "./Marquee";
-import GlobalNetwork from "./GlobalNetwork";
 import Summit from "./Summit";
 import "./ai.css";
 
@@ -164,10 +161,7 @@ export default function AISection() {
         {/* from here on, sections sit on solid ground above the faded core */}
         <div className="relative bg-[#050505]">
           <DataPipeline />
-          <IntelligenceLoop />
           <HumanMachine />
-          <Marquee />
-          <GlobalNetwork />
           <Summit />
         </div>
       </main>
