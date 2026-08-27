@@ -10,7 +10,8 @@ import { CivilInfraModal } from "@/components/site/CivilInfraModal";
 import { StatutoryModal } from "@/components/site/StatutoryModal";
 import type { StatutoryType } from "@/components/site/StatutoryContent";
 import Image from "next/image";
-import { FaLinkedinIn, FaYoutube, FaLocationDot, FaWhatsapp } from "react-icons/fa6";
+import { FaLinkedinIn, FaYoutube, FaLocationDot } from "react-icons/fa6";
+import { WhatsappBusinessIcon } from "@/components/ui/WhatsappBusinessIcon";
 
 type FooterLink = {
   label: string;
@@ -50,7 +51,7 @@ const COLUMNS: {
     title: "VALIDATIONS",
     links: [
       { label: "MSME Certified" },
-      { label: "DPIIT Recognition" },
+      { label: "Privacy & Security" },
     ],
   },
 ];
@@ -58,7 +59,7 @@ const COLUMNS: {
 const SOCIALS = [
   { icon: FaLinkedinIn, alt: "LinkedIn", bg: "bg-[#0077B5]", hoverBg: "hover:bg-[#005E93]" },
   { icon: FaYoutube, alt: "YouTube", bg: "bg-[#FF0000]", hoverBg: "hover:bg-[#CC0000]" },
-  { icon: FaWhatsapp, alt: "WhatsApp Business", bg: "bg-[#25D366]", hoverBg: "hover:bg-[#1EBE5D]" },
+  { icon: WhatsappBusinessIcon, alt: "WhatsApp Business", bg: "bg-[#25D366]", hoverBg: "hover:bg-[#1EBE5D]" },
   { icon: FaLocationDot, alt: "Google Map", bg: "bg-[#34A853]", hoverBg: "hover:bg-[#2B8A44]" },
 ];
 

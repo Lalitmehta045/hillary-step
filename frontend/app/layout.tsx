@@ -3,6 +3,7 @@ import { Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { CookieConsent } from "@/components/site/CookieConsent";
+import { BackToTop } from "@/components/ui/BackToTop";
 
 const hankenGrotesk = Hanken_Grotesk({
   subsets: ["latin"],
@@ -43,6 +44,7 @@ export default function RootLayout({
       <body className="antialiased font-sans">
         <SmoothScroll>{children}</SmoothScroll>
         <CookieConsent />
+        <BackToTop />
       </body>
     </html>
   );
