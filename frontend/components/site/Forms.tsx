@@ -630,7 +630,7 @@ function DesktopContact() {
 
   return (
     <section ref={containerRef} id="contact" className="relative w-full bg-white h-[200vh]">
-      <div className="sticky top-0 flex h-screen items-center">
+      <div className="sticky top-0 flex h-screen items-center pt-8 md:pt-12">
 
         <div className="relative mx-auto flex w-full max-w-[1280px] px-[32px]">
 
@@ -663,7 +663,7 @@ function DesktopContact() {
 
 function MobileContact() {
   return (
-    <section id="contact" className="relative w-full bg-white pt-[60px] pb-[80px]">
+    <section id="contact" className="relative w-full bg-white pt-[100px] pb-[80px]">
       <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[48px] px-[24px]">
 
         <div className="flex w-full flex-col">

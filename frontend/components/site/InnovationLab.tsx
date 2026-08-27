@@ -11,8 +11,8 @@ import { GlobalStaffingModal } from "@/components/site/GlobalStaffingModal";
 import { ITSolutionsModal } from "@/components/site/ITSolutionsModal";
 import { CivilInfraModal } from "@/components/site/CivilInfraModal";
 
-// Load IridescentLiquid canvas dynamically to disable SSR rendering
-const IridescentLiquid = dynamic(() => import("../ui/IridescentLiquid"), {
+// Load FluidBlob canvas dynamically to disable SSR rendering
+const FluidBlob = dynamic(() => import("../ui/FluidBlob").then((mod) => mod.FluidBlob), {
   ssr: false,
 });
 
@@ -42,7 +42,7 @@ export function InnovationLab() {
   // Use activeIndex for timing instead of static delays
 
   return (
-    <section id="ai-core" className="relative w-full overflow-hidden bg-white pt-[100px] pb-10 max-md:pt-[60px]">
+    <section id="capabilities" className="relative w-full overflow-hidden bg-white pt-[100px] pb-10 max-md:pt-[60px]">
       <div className="relative mx-auto w-full max-w-[1280px] px-[64px] max-md:px-[24px]">
         {/* Section Header */}
         <div className="max-w-[800px] mb-[40px]">
@@ -232,14 +232,12 @@ export function InnovationLab() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0 }}
-              className="absolute left-1/2 top-[30%] -translate-x-1/2 -translate-y-1/2 w-[240px] h-[240px] xl:w-[300px] xl:h-[300px] z-10 flex items-center justify-center pointer-events-auto"
+              className="absolute left-1/2 top-[30%] -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] xl:w-[340px] xl:h-[340px] z-10 flex items-center justify-center pointer-events-auto"
             >
-              {/* Iridescent Blob Background (The original animation) */}
-              <div className="absolute inset-0 flex items-center justify-center z-0 opacity-90 scale-105 mix-blend-screen">
-                <IridescentLiquid size="100%" intensity={1.15} interactive={true} />
+              {/* Interactive 3D Fluid Particle Blob */}
+              <div className="absolute inset-0 flex items-center justify-center z-0 w-full h-full">
+                <FluidBlob className="w-full h-full" interactive={true} />
               </div>
-
-
             </m.div>
 
             {/* 01 TECHNOLOGY Card */}
@@ -333,12 +331,11 @@ export function InnovationLab() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0 }}
-              className="relative w-[300px] h-[300px] flex items-center justify-center pointer-events-auto"
+              className="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] flex items-center justify-center pointer-events-auto"
             >
-              <div className="absolute inset-0 flex items-center justify-center z-0 opacity-90 scale-105 mix-blend-screen">
-                <IridescentLiquid size="100%" intensity={1.1} interactive={true} />
+              <div className="absolute inset-0 flex items-center justify-center z-0 w-full h-full">
+                <FluidBlob className="w-full h-full" interactive={true} />
               </div>
-
             </m.div>
 
             {/* SVG Mobile Connectors and Labels */}
