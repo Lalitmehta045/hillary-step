@@ -43,7 +43,7 @@ export default function RootLayout({
     <html lang="en" className={hankenGrotesk.variable}>
       <body className="antialiased font-sans">
         <SmoothScroll>{children}</SmoothScroll>
-        <CookieConsent />
+        {/* <CookieConsent /> */}
         <BackToTop />
       </body>
     </html>
