@@ -16,7 +16,7 @@ import { WhatsappBusinessIcon } from "@/components/ui/WhatsappBusinessIcon";
 type FooterLink = {
   label: string;
   href?: string;
-  action?: "it" | "staffing" | "civil" | "mca" | "asic" | "labor";
+  action?: "it" | "staffing" | "civil" | "mca" | "asic" | "labor" | "msme" | "privacy";
 };
 
 const COLUMNS: {
@@ -50,8 +50,8 @@ const COLUMNS: {
   {
     title: "VALIDATIONS",
     links: [
-      { label: "MSME Certified" },
-      { label: "Privacy & Security" },
+      { label: "MSME Certified", action: "msme" },
+      { label: "Privacy & Security", action: "privacy" },
     ],
   },
 ];
@@ -73,7 +73,7 @@ export function Footer() {
     if (action === "it") setIsITModalOpen(true);
     if (action === "staffing") setIsStaffingModalOpen(true);
     if (action === "civil") setIsCivilModalOpen(true);
-    if (action === "mca" || action === "asic" || action === "labor") {
+    if (action === "mca" || action === "asic" || action === "labor" || action === "msme" || action === "privacy") {
       setStatutoryType(action);
     }
   };

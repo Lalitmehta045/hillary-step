@@ -4,7 +4,7 @@ import { m } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { FaScaleBalanced, FaShieldHalved, FaFileContract, FaBuildingUser } from "react-icons/fa6";
 
-export type StatutoryType = "mca" | "asic" | "labor" | null;
+export type StatutoryType = "mca" | "asic" | "labor" | "msme" | "privacy" | null;
 
 interface StatutoryContentProps {
   type: StatutoryType;
@@ -68,12 +68,56 @@ const contentData = {
       {
         icon: FaShieldHalved,
         title: "Workplace Safety",
-        desc: "Commitment to OSHA standards ensuring a hazard-free environment."
+        desc: "Compliance with OSHA standards ensuring a safe environment."
       },
       {
         icon: FaFileContract,
         title: "Equal Opportunity",
-        desc: "Upholding EEOC policies to foster an inclusive and diverse workplace."
+        desc: "Enforcing EEOC guidelines to promote a diverse and inclusive workplace."
+      }
+    ]
+  },
+  msme: {
+    title: "MSME Certified",
+    subtitle: "Ministry of Micro, Small & Medium Enterprises",
+    description: "We are proudly certified as an MSME, reflecting our commitment to contributing to economic growth, employment generation, and entrepreneurial innovation in the industry.",
+    highlights: [
+      {
+        icon: FaBuildingUser,
+        title: "Recognized Enterprise",
+        desc: "Officially registered under the Government of India's MSME framework."
+      },
+      {
+        icon: FaScaleBalanced,
+        title: "Compliance & Standards",
+        desc: "Adherence to regulatory quality benchmarks and operational excellence."
+      },
+      {
+        icon: FaShieldHalved,
+        title: "Economic Contribution",
+        desc: "Actively fostering local business development and technological innovation."
+      }
+    ]
+  },
+  privacy: {
+    title: "Privacy & Security",
+    subtitle: "Data Protection and Infrastructure Security",
+    description: "We maintain the highest standards of data privacy and security. Our infrastructure is designed to protect sensitive information and ensure compliance with global data protection regulations.",
+    highlights: [
+      {
+        icon: FaShieldHalved,
+        title: "Data Protection",
+        desc: "Robust encryption and access controls to safeguard sensitive information."
+      },
+      {
+        icon: FaScaleBalanced,
+        title: "Global Compliance",
+        desc: "Alignment with international privacy laws and data handling standards."
+      },
+      {
+        icon: FaFileContract,
+        title: "Secure Infrastructure",
+        desc: "Continuous monitoring and threat mitigation for maximum reliability."
       }
     ]
   }
