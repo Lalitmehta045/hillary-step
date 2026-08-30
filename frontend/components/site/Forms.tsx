@@ -212,6 +212,28 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+
+    if (formData.phone) {
+      const displayValue = formData.phone.replace(/^\+\d+\s*(\([A-Za-z]+\))?\s*/, "");
+      const digits = displayValue.replace(/\D/g, "");
+
+      if (formData.phone.startsWith("+91") && digits.length !== 10) {
+        alert("Please enter a valid 10-digit mobile number for India.");
+        return;
+      }
+
+      if (formData.phone.startsWith("+1") && digits.length !== 10) {
+        alert("Please enter a valid 10-digit mobile number for USA.");
+        return;
+      }
+
+      if (formData.phone.startsWith("+61") && (digits.length < 9 || digits.length > 10)) {
+        alert("Please enter a valid 9 or 10-digit mobile number for Australia.");
+        return;
+      }
+    }
+
     if (!file || !resumeData) {
       alert("Please upload your résumé and wait for it to process");
       return;
@@ -329,7 +351,7 @@ export function CandidacySection({ isModal = false }: { isModal?: boolean }) {
                 <Field label="Full name" value={formData.fullName} onChange={(e) => setFormData({ ...formData, fullName: e.target.value })} required />
                 <Field label="Email" type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
                 <PhoneField value={formData.phone} onChange={(val: string) => setFormData({ ...formData, phone: val })} />
-                <Field label="LinkedIn Profile" value={formData.linkedinUrl} onChange={(e) => setFormData({ ...formData, linkedinUrl: e.target.value })} />
+                <Field label="LinkedIn Profile" value={formData.linkedinUrl} onChange={(e) => setFormData({ ...formData, linkedinUrl: e.target.value })} required />
                 <Select label="Practice" options={PRACTICES} value={formData.practice} onChange={(val: string) => setFormData({ ...formData, practice: val })} />
                 <Select label="Preferred Location" options={LOCATIONS} value={formData.preferredLocation} onChange={(val: string) => setFormData({ ...formData, preferredLocation: val })} />
               </div>

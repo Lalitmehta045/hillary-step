@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RegionsGradientAnimation } from "@/components/site/RegionsGradientAnimation";
 import { WorldMapCanvas } from "@/components/site/WorldMapCanvas";
 import { Globe } from "@/components/site/Globe";
@@ -11,29 +11,35 @@ const REGIONS = {
   "United States": {
     marker: { left: "30%", top: "47%" },
     offices: "Los Angeles · San Jose · New York · Dallas · Boston · Chicago",
-    principal: "Kunal Priyadarshi, Founder & Global CEO",
-    capabilities: "Digital Transformation · Staff Augmentation",
-    operatingStandard: "Unified global delivery compliance",
-    registrations: "US Labor Code compliant",
-    projects: "Scaling cross-border engineering teams",
+    entity: "Hillary Step Solutions LLC",
+    principal: "Kunal Priyadarshi, Founder & Group CEO",
+    capabilities: "Digital Transformation · Talent Acquisition · Strategic AI Consulting",
+    jurisdiction: "North America (Federal & Cross-State Delivery), Canada & Mexico",
+    operatingModel: "Onshore Client Management with Seamless Cross-Border Delivery.",
+    timezone: "EST (UTC-5)",
+    iana: "America/New_York",
   },
   Australia: {
     marker: { left: "77%", top: "74%" },
     offices: "Sydney · Melbourne · Brisbane · Perth",
+    entity: "Hillary Step Solutions Pty Ltd",
     principal: "Mrinal Priyadarshi, Regional COO",
-    capabilities: "IT Consulting · Workforce Architecture",
-    operatingStandard: "Standardised agile framework deployment",
-    registrations: "ASIC standards aligned delivery",
-    projects: "Oceania enterprise systems architecture",
+    capabilities: "Digital Infrastructure & Cloud · Trans-Tasman Talent Acquisition · Workforce Capability & Scaling",
+    jurisdiction: "Australia, New Zealand, and APAC Corporate Networks.",
+    operatingModel: "Hybrid Managed Services & Agile Workforce Scaling",
+    timezone: "AEST (UTC+10)",
+    iana: "Australia/Sydney",
   },
   India: {
     marker: { left: "65%", top: "54%" },
     offices: "Delhi NCR · Bengaluru · Mumbai · Hydrabad · Chennai",
+    entity: "Hillary Step Solutions Private Limited",
     principal: "Kantesh Prasad Singh, Regional CFO",
-    capabilities: "SaaS · Global IT Delivery · EPC · RPO",
-    operatingStandard: "Cost-optimised development pipelines",
-    registrations: "Certified MSME Hub",
-    projects: "Product Development · Government EPC Tenders",
+    capabilities: "SaaS Product R&D · Eco-Smart Infra Projects · Global IT Delivery Hubs · RPO",
+    jurisdiction: "Pan-India Distribution & International Offshore Integration.",
+    operatingModel: "Centralized Engineering Command & Offshore Development Center (ODC).",
+    timezone: "IST (UTC+05:30)",
+    iana: "Asia/Kolkata",
   },
 } as const;
 
@@ -43,6 +49,25 @@ const NAMES = Object.keys(REGIONS) as RegionName[];
 export function Regions() {
   const [active, setActive] = useState<RegionName>("India");
   const region = REGIONS[active];
+  const [currentTime, setCurrentTime] = useState("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const iana = REGIONS[active].iana;
+      const formatter = new Intl.DateTimeFormat("en-US", {
+        timeZone: iana,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      });
+      setCurrentTime(formatter.format(new Date()));
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, [active]);
 
   return (
     <section className="relative w-full overflow-hidden bg-white pt-[64px] pb-[64px] max-md:pt-[40px] max-md:pb-[40px]">
@@ -66,8 +91,15 @@ export function Regions() {
         <FadeIn delay={0.2} className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
           {/* Map card */}
           <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-tr from-[#00FF11] via-[#007BFF] to-[#FF6200] p-[1px] shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] lg:w-[691px]">
-            <div className="h-full w-full overflow-hidden rounded-[23px] bg-white">
+            <div className="relative h-full w-full overflow-hidden rounded-[23px] bg-white">
               <Globe active={active} />
+
+              <div className="absolute bottom-[24px] left-[32px] z-30 flex flex-col gap-[2px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" style={{ fontFamily: '"SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif' }}>
+                <span className="text-[11px] font-[600] text-white/70 uppercase tracking-[1px]">Timezone</span>
+                <span className="text-[14px] font-[500] text-white">
+                  {region.timezone} {currentTime ? `• ${currentTime}` : ""}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -96,11 +128,11 @@ export function Regions() {
               </h3>
 
               <dl className="flex flex-col gap-[24px]">
+                <Row label="Entity" value={region.entity} />
                 <Row label="Managing Principal" value={region.principal} />
                 <Row label="Core Capabilities" value={region.capabilities} />
-                <Row label="Operating Standard" value={region.operatingStandard} />
-                <Row label="Registrations" value={region.registrations} />
-                <Row label="Signature Focus" value={region.projects} />
+                <Row label="Jurisdiction & Reach" value={region.jurisdiction} />
+                <Row label="Operating Model" value={region.operatingModel} />
               </dl>
             </div>
           </div>
