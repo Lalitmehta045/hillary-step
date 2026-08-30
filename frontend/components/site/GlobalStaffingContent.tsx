@@ -7,6 +7,10 @@ import { CandidacySection } from "./Forms";
 import { FormSuccessPopup } from "./FormSuccessPanel";
 import { jobsApi, type JobDocumentMeta } from "@/lib/api/jobs";
 import { ApiError } from "@/lib/api-client";
+import Link from "next/link";
+import { Check, ArrowRight, ArrowUpRight } from "lucide-react";
+// @ts-ignore
+import { pillars } from "@/app/new-one/mock";
 
 const MAX_DOCUMENTS = 5;
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -374,7 +378,8 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
   };
 
   return (
-    <div className={`w-full font-display ${isModal ? "px-[80px] pt-[80px] pb-[80px] max-md:px-[24px]" : "pt-[100px] max-md:pt-[110px]"}`}>
+    <div className="w-full font-display">
+      <div className={`${isModal ? "px-[80px] pt-[80px] pb-[80px] max-md:px-[24px]" : "pt-[100px] max-md:pt-[110px]"}`}>
       {/* Modal Specific Top Header */}
       {isModal && (
         <div className="mb-[64px]">
@@ -976,6 +981,96 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
         </m.div>
       )}
       </AnimatePresence>
+      </div>
+
+      {/* Added Sections from PillarPage */}
+      {(() => {
+        const pillar = pillars.find((p: any) => p.slug === "global-talent");
+        const c = pillar?.color || "#4bb543";
+        if (!pillar) return null;
+        return (
+          <div className="bg-[#0a0e1a] text-white font-sans">
+            {/* OVERVIEW */}
+            <section className="py-24 lg:py-32">
+              <div className="max-w-[1400px] mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-14 items-center">
+                <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}>
+                  <p className="font-mono text-[11px] mb-6 uppercase tracking-wider" style={{ color: pillar.colorSoft }}>Overview</p>
+                  <h2 className="hs-heading text-[32px] sm:text-[46px] leading-tight font-display font-bold">
+                    Where ambition meets execution.
+                  </h2>
+                  <p className="mt-7 text-white/60 text-lg leading-relaxed">{pillar.intro}</p>
+                  <div className="mt-9 flex flex-wrap gap-4">
+                    <Link
+                      href="/#contact"
+                      className="group inline-flex items-center gap-2.5 text-white font-semibold px-7 py-3.5 rounded-full transition-transform hover:scale-[1.03]"
+                      style={{ backgroundColor: c }}
+                    >
+                      Start a conversation
+                      <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                </m.div>
+                <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5, delay: 0.1 }}>
+                  <div className="relative rounded-[24px] overflow-hidden border border-white/8">
+                    <img src={pillar.altImage} alt={pillar.title} className="w-full h-[420px] object-cover" />
+                    <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, transparent 40%, ${c}22 100%)` }} />
+                  </div>
+                </m.div>
+              </div>
+            </section>
+
+            {/* OUTCOMES */}
+            <section className="py-24 bg-[#0f1526]">
+              <div className="max-w-[1400px] mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-14 items-center">
+                <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}>
+                  <div className="relative rounded-[24px] overflow-hidden border border-white/8">
+                    <img src={pillar.heroImage} alt={pillar.title} className="w-full h-[400px] object-cover" />
+                    <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${c}44, transparent)` }} />
+                  </div>
+                </m.div>
+                <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5, delay: 0.1 }}>
+                  <p className="font-mono text-[11px] mb-6 uppercase tracking-wider" style={{ color: pillar.colorSoft }}>What we deliver</p>
+                  <h2 className="hs-heading text-[32px] sm:text-[46px] mb-8 font-display font-bold">Outcomes that speak.</h2>
+                  <ul className="space-y-4">
+                    {pillar.outcomes.map((o: string) => (
+                      <li key={o} className="flex items-start gap-3.5">
+                        <span className="shrink-0 mt-0.5 w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: `${c}22`, color: pillar.colorSoft }}>
+                          <Check size={14} />
+                        </span>
+                        <span className="text-white/75 leading-relaxed">{o}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </m.div>
+              </div>
+            </section>
+
+            {/* CTA */}
+            <section className="pb-28 pt-24">
+              <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+                <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}>
+                  <div className="relative rounded-[28px] overflow-hidden border border-white/8 p-12 lg:p-16 text-center" style={{ background: `linear-gradient(135deg, ${c}22, #0f1526 60%)` }}>
+                    <div className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full blur-[120px] opacity-30" style={{ backgroundColor: c }} />
+                    <div className="relative z-10">
+                      <h2 className="hs-heading text-[34px] sm:text-[56px] max-w-[18ch] mx-auto font-display font-bold">
+                        The next ascent starts with {pillar.title}.
+                      </h2>
+                      <Link
+                        href="/#contact"
+                        className="group mt-10 inline-flex items-center gap-2.5 text-white font-semibold px-8 py-4 rounded-full transition-transform hover:scale-[1.03]"
+                        style={{ backgroundColor: c }}
+                      >
+                        Partner with us
+                        <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </Link>
+                    </div>
+                  </div>
+                </m.div>
+              </div>
+            </section>
+          </div>
+        );
+      })()}
     </div>
   );
 }
