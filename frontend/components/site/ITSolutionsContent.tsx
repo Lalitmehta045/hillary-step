@@ -153,29 +153,67 @@ export function ITSolutionsContent() {
   const c = pillar?.color || "#2563eb";
 
   return (
-    <div className="w-full font-display">
-      <div className="px-[80px] pt-[80px] pb-[80px] max-md:px-[24px]">
+    <div className="w-full font-display bg-[#f8f6f3]">
+      
+      {/* 1. NEW HERO SECTION */}
+      <m.div 
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="px-6 md:px-12 pt-10 pb-8"
+      >
+        <div className="relative w-full h-[600px] rounded-[32px] overflow-hidden">
+          <img src="/images/hero_bg.jpg" alt="Hero Background" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/30"></div>
+          
+          <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 lg:p-24 text-white">
+             <h1 className="text-[36px] md:text-[56px] lg:text-[72px] font-bold leading-[1.1] max-w-[800px] mb-6 md:mb-8 drop-shadow-lg">
+               Turning Technology Challenges<br />Into Digital Progress
+             </h1>
+             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-[1200px] w-full">
+                <p className="text-base md:text-lg lg:text-xl font-medium max-w-[500px] drop-shadow-md">
+                  Hillary Step Solutions helps businesses navigate complex technology challenges with reliable, scalable, and purpose-built digital solutions.
+                </p>
+                <button className="bg-white text-black font-semibold px-6 py-4 md:px-8 md:py-4 rounded-full hover:bg-gray-100 transition-colors w-full md:w-fit text-center shadow-lg">
+                  Start Your Digital Journey
+                </button>
+             </div>
+          </div>
+        </div>
+      </m.div>
+
+      <div className="px-[80px] pt-[40px] pb-[40px] max-md:px-[24px]">
 
       {/* Header */}
-      <div className="mb-[64px] max-md:mb-[48px]">
+      <m.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="mb-[64px] max-md:mb-[48px]"
+      >
         <p className="text-[14px] font-[600] tracking-wide text-[#1A6CFF] uppercase mb-[16px]">
-          Cognitive Digital – Platforms
+          IT Solutions
         </p>
         <h2 className="font-display text-[48px] max-md:text-[36px] font-[700] leading-[1.1] tracking-[-1px] text-[#111111] mb-[20px]">
-          <span className="bg-gradient-to-r from-[#60A5FA] via-[#1E3A8A] to-[#60A5FA] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Technology</span> that powers<br className="max-md:hidden" /> your business forward.
+          Technology that powers<br className="max-md:hidden" /> your business forward.
         </h2>
         <p className="text-[18px] max-md:text-[16px] leading-[28px] text-[#6B7280] max-w-[700px]">
           From strategy to deployment, we build secure, scalable, and future-ready solutions to help your business adapt, innovate, and grow.
         </p>
-      </div>
+        <button className="text-[#1A6CFF] font-bold uppercase tracking-wide text-sm mt-8 hover:underline">
+           OUT IT SOLUTIONS
+        </button>
+      </m.div>
 
       {/* Grid Section */}
       <div className="flex flex-col items-center w-full">
         <p className="text-[14px] font-[700] tracking-[1px] text-[#1A6CFF] uppercase mb-[12px] text-center">
-          OUR COGNITIVE DIGITAL PLATFORMS
+          SERVICES
         </p>
         <h3 className="font-display text-[28px] max-md:text-[24px] font-[700] text-[#111111] mb-[48px] text-center">
-          Comprehensive Solutions for Every Need
+          Our Technology Solutions
         </h3>
 
         <div className="grid grid-cols-2 max-md:grid-cols-1 gap-x-[32px] gap-y-[48px] w-full max-w-[900px] mx-auto">
@@ -198,89 +236,191 @@ export function ITSolutionsContent() {
       />
       </div>
 
-      {/* Added Sections from PillarPage */}
-      {pillar && (
-        <div className="bg-[#0a0e1a] text-white font-sans">
-          {/* OVERVIEW */}
-          <section className="py-24 lg:py-32">
-            <div className="max-w-[1400px] mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-14 items-center">
-              <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}>
-                <p className="font-mono text-[11px] mb-6 uppercase tracking-wider" style={{ color: pillar.colorSoft }}>Overview</p>
-                <h2 className="hs-heading text-[32px] sm:text-[46px] leading-tight font-display font-bold">
-                  Where ambition meets execution.
-                </h2>
-                <p className="mt-7 text-white/60 text-lg leading-relaxed">{pillar.intro}</p>
-                <div className="mt-9 flex flex-wrap gap-4">
-                  <Link
-                    href="/#contact"
-                    className="group inline-flex items-center gap-2.5 text-white font-semibold px-7 py-3.5 rounded-full transition-transform hover:scale-[1.03]"
-                    style={{ backgroundColor: c }}
-                  >
-                    Start a conversation
-                    <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </m.div>
-              <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5, delay: 0.1 }}>
-                <div className="relative rounded-[24px] overflow-hidden border border-white/8">
-                  <img src={pillar.altImage} alt={pillar.title} className="w-full h-[420px] object-cover" />
-                  <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, transparent 40%, ${c}22 100%)` }} />
-                </div>
-              </m.div>
-            </div>
-          </section>
+      {/* 3. NEW STATS & WHO WE ARE */}
+      <div className="px-6 md:px-12 py-12 overflow-hidden">
+        <div className="grid lg:grid-cols-2 gap-6 w-full max-w-[1400px] mx-auto">
+           {/* Stats Block */}
+           <m.div 
+             initial={{ opacity: 0, x: -50 }}
+             whileInView={{ opacity: 1, x: 0 }}
+             viewport={{ once: true, margin: "-100px" }}
+             transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
+             className="bg-[#b39b7d] rounded-[24px] p-8 md:p-10 flex flex-col justify-between text-white relative overflow-hidden min-h-[250px] md:min-h-[300px]"
+           >
+              <div className="flex justify-between items-start">
+                 <h3 className="font-bold tracking-widest text-sm uppercase opacity-90">Stats / Small Card</h3>
+                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="opacity-70">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                 </svg>
+              </div>
+              <div className="flex gap-10 md:gap-12 items-end mt-8 md:mt-0">
+                 <div>
+                    <div className="text-[48px] md:text-[64px] font-bold leading-none">01</div>
+                    <div className="text-sm mt-2 opacity-90">Technology Partner</div>
+                 </div>
+                 <div>
+                    <div className="text-[48px] md:text-[64px] font-bold leading-none">02</div>
+                    <div className="text-sm mt-2 opacity-90">Digital Solutions</div>
+                 </div>
+              </div>
+           </m.div>
 
-          {/* OUTCOMES */}
-          <section className="py-24 bg-[#0f1526]">
-            <div className="max-w-[1400px] mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-14 items-center">
-              <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}>
-                <div className="relative rounded-[24px] overflow-hidden border border-white/8">
-                  <img src={pillar.heroImage} alt={pillar.title} className="w-full h-[400px] object-cover" />
-                  <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${c}44, transparent)` }} />
-                </div>
-              </m.div>
-              <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5, delay: 0.1 }}>
-                <p className="font-mono text-[11px] mb-6 uppercase tracking-wider" style={{ color: pillar.colorSoft }}>What we deliver</p>
-                <h2 className="hs-heading text-[32px] sm:text-[46px] mb-8 font-display font-bold">Outcomes that speak.</h2>
-                <ul className="space-y-4">
-                  {pillar.outcomes.map((o: string) => (
-                    <li key={o} className="flex items-start gap-3.5">
-                      <span className="shrink-0 mt-0.5 w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: `${c}22`, color: pillar.colorSoft }}>
-                        <Check size={14} />
-                      </span>
-                      <span className="text-white/75 leading-relaxed">{o}</span>
-                    </li>
-                  ))}
-                </ul>
-              </m.div>
-            </div>
-          </section>
-
-          {/* CTA */}
-          <section className="pb-28 pt-24">
-            <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-              <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}>
-                <div className="relative rounded-[28px] overflow-hidden border border-white/8 p-12 lg:p-16 text-center" style={{ background: `linear-gradient(135deg, ${c}22, #0f1526 60%)` }}>
-                  <div className="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full blur-[120px] opacity-30" style={{ backgroundColor: c }} />
-                  <div className="relative z-10">
-                    <h2 className="hs-heading text-[34px] sm:text-[56px] max-w-[18ch] mx-auto font-display font-bold">
-                      The next ascent starts with {pillar.title}.
-                    </h2>
-                    <Link
-                      href="/#contact"
-                      className="group mt-10 inline-flex items-center gap-2.5 text-white font-semibold px-8 py-4 rounded-full transition-transform hover:scale-[1.03]"
-                      style={{ backgroundColor: c }}
-                    >
-                      Partner with us
-                      <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </Link>
-                  </div>
-                </div>
-              </m.div>
-            </div>
-          </section>
+           {/* Who We Are Block */}
+           <m.div 
+             initial={{ opacity: 0, x: 50 }}
+             whileInView={{ opacity: 1, x: 0 }}
+             viewport={{ once: true, margin: "-100px" }}
+             transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1], delay: 0.2 }}
+             className="bg-[#f4efe8] rounded-[24px] p-8 md:p-10 flex flex-col lg:flex-row items-center gap-8 shadow-sm"
+           >
+              <div className="flex-1 text-center lg:text-left">
+                 <h3 className="text-[24px] md:text-[28px] font-bold text-[#3d3832] mb-4">Technology Built Around Your Goals</h3>
+                 <p className="text-[#6c6760] text-sm md:text-base leading-relaxed mb-4">
+                    At Hillary Step Solutions, we believe technology should make progress simpler — not more complicated.
+                 </p>
+                 <p className="text-[#6c6760] text-sm md:text-base leading-relaxed">
+                    We combine strategic thinking, modern technology, and practical execution to help businesses build, improve, and scale their digital operations.
+                 </p>
+              </div>
+              <div className="w-[140px] h-[140px] md:w-[180px] md:h-[180px] rounded-full overflow-hidden shrink-0 border-4 border-[#f8f6f3] shadow-lg">
+                 <img src="/images/who_we_are.jpg" alt="Who We Are" className="w-full h-full object-cover" />
+              </div>
+           </m.div>
         </div>
-      )}
+      </div>
+
+      {/* 4. NEW HOW WE SIMPLIFY */}
+      <div className="px-6 md:px-12 py-12 overflow-hidden">
+        <div className="max-w-[1400px] mx-auto">
+          <m.h2 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-[32px] md:text-[40px] font-bold text-[#111111] mb-8"
+          >
+            How We Simplify Your<br />Technology Journey
+          </m.h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+             {[
+               { num: "01", title: "Understand Your Challenge", desc: "We begin by understanding your business, your objectives, and the technology challenges standing in your way." },
+               { num: "02", title: "Build With Purpose", desc: "We transform requirements into practical digital solutions designed around how your business actually works." },
+               { num: "03", title: "Connect Your Ecosystem", desc: "We bring applications, infrastructure, data, and digital experiences together to create a connected technology environment." },
+               { num: "04", title: "Scale With Confidence", desc: "Our solutions are built with scalability, performance, security, and future growth in mind." },
+               { num: "05", title: "Support Your Next Step", desc: "Technology doesn't stop at deployment. We continue to support, improve, and evolve your digital ecosystem as your needs change." }
+             ].map((step, i) => (
+                <m.div 
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.95, y: 40 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1], delay: i * 0.1 }}
+                  className="bg-white rounded-[32px] p-8 lg:p-10 shadow-sm border border-gray-100 relative overflow-hidden"
+                >
+                   <div className="text-[80px] md:text-[120px] font-bold text-[#f8f6f3] leading-none absolute -top-4 -left-4 z-0 pointer-events-none select-none tracking-tighter">
+                     {step.num}
+                   </div>
+                   <div className="relative z-10 pt-4">
+                      <h3 className="text-[22px] font-bold text-[#111111] mb-4 leading-tight">
+                        {step.title}
+                      </h3>
+                      <p className="text-[#49454F] leading-relaxed text-[15px]">
+                        {step.desc}
+                      </p>
+                   </div>
+                </m.div>
+             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 5. NEW WHY CHOOSE */}
+      <div className="px-6 md:px-12 py-12 mb-20 overflow-hidden">
+        <div className="max-w-[1400px] mx-auto">
+          <m.h2 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-[32px] md:text-[40px] font-bold text-[#111111] mb-8"
+          >
+            Why Choose Hillary Step
+          </m.h2>
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Left & Middle (2/3 width) */}
+            <div className="lg:col-span-2 flex flex-col gap-6">
+               {/* Top Row: Two blocks */}
+               <div className="grid md:grid-cols-2 gap-6 flex-1">
+                  <m.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    className="bg-[#f4efe8] rounded-[24px] p-8 py-12 flex flex-col items-center justify-center text-center shadow-sm"
+                  >
+                      <h3 className="font-bold text-[#3d3832] mb-3 text-lg">Business-First Technology</h3>
+                      <p className="text-sm text-[#6c6760] leading-relaxed px-4">We start with your business challenge — not the technology.</p>
+                      <div className="mt-8 text-[#b39b7d]">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                      </div>
+                  </m.div>
+                  <m.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="bg-[#f4efe8] rounded-[24px] p-8 py-12 flex flex-col items-center justify-center text-center shadow-sm"
+                  >
+                      <h3 className="font-bold text-[#3d3832] mb-3 text-lg">Built For Your Needs</h3>
+                      <p className="text-sm text-[#6c6760] leading-relaxed px-4">Every solution is designed around your objectives, users, and operational requirements.</p>
+                  </m.div>
+               </div>
+               {/* Bottom Row: One wide block */}
+               <m.div 
+                 initial={{ opacity: 0, y: 30 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true, margin: "-50px" }}
+                 transition={{ duration: 0.6, delay: 0.3 }}
+                 className="rounded-[24px] p-8 md:p-12 flex-1 flex flex-col items-center justify-center text-center relative overflow-hidden text-white shadow-sm"
+               >
+                  <img src="/images/hero_bg.jpg" className="absolute inset-0 w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/50"></div>
+                  <div className="relative z-10 max-w-[800px]">
+                    <h3 className="font-bold text-2xl md:text-3xl mb-4">Technology That Moves You Forward</h3>
+                    <p className="text-[15px] opacity-90 leading-relaxed mb-4">The right technology can turn a difficult step into a defining advantage.</p>
+                    <p className="text-[15px] opacity-90 leading-relaxed mb-6">From your first idea to your next stage of growth, Hillary Step Solutions helps you navigate the technical challenges along the way.</p>
+                    <p className="font-bold tracking-widest uppercase text-sm">Build. Scale. Move Forward.</p>
+                  </div>
+               </m.div>
+            </div>
+            {/* Right Column (1/3 width) */}
+            <m.div 
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1], delay: 0.4 }}
+              className="bg-[#4a3c31] rounded-[24px] p-8 md:p-12 flex flex-col justify-center text-white text-center gap-12 shadow-md h-full"
+            >
+                <div>
+                   <h3 className="font-bold text-xl mb-3">Scalable By Design</h3>
+                   <p className="text-sm opacity-90 leading-relaxed">We build technology that can evolve as your business grows.</p>
+                </div>
+                <div>
+                   <h3 className="font-bold text-xl mb-3">End-to-End Expertise</h3>
+                   <p className="text-sm opacity-90 leading-relaxed">From strategy and design to development, deployment, and support.</p>
+                </div>
+                <div>
+                   <h3 className="font-bold text-xl mb-3">Long-Term Technology Partner</h3>
+                   <p className="text-sm opacity-90 leading-relaxed">We don't just deliver a project. We help you keep moving forward.</p>
+                </div>
+            </m.div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

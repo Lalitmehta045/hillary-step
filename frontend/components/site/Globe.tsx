@@ -197,6 +197,17 @@ export function Globe({ active = "India" }: { active?: string }) {
     el.addEventListener("pointerenter", onEnter);
     el.addEventListener("pointerleave", onLeave);
 
+    const bgStars: {x: number, y: number, s: number, a: number, speed: number}[] = [];
+    for (let i = 0; i < 250; i++) {
+       bgStars.push({
+          x: Math.random(),
+          y: Math.random(),
+          s: Math.random() * 1.5 + 0.5,
+          a: Math.random() * Math.PI * 2,
+          speed: 0.5 + Math.random() * 2
+       });
+    }
+
     const dots = landPoints(60000);
     // per-dot drift parameters (floating petal motion)
     const n = dots.length;
@@ -296,12 +307,34 @@ export function Globe({ active = "India" }: { active?: string }) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
+      // Render background stars if the current view is looking at the night side
+      const currentLon = -focusRef.current * (180 / Math.PI);
+      let diffLon = Math.abs(currentLon - sunLon) % 360;
+      if (diffLon > 180) diffLon = 360 - diffLon;
+      
+      let nightFactor = (diffLon - 70) / 30; // 0 at 70 deg diff, 1 at 100 deg diff
+      nightFactor = Math.max(0, Math.min(1, nightFactor));
+      
+      if (nightFactor > 0) {
+         for (const s of bgStars) {
+            const sx = s.x * w;
+            const sy = s.y * h;
+            const twinkle = 0.3 + 0.7 * Math.sin(t * s.speed + s.a);
+            if (twinkle > 0) {
+              ctx.fillStyle = `rgba(255, 255, 255, ${(0.5 * twinkle * nightFactor).toFixed(3)})`;
+              ctx.beginPath();
+              ctx.arc(sx, sy, s.s, 0, Math.PI * 2);
+              ctx.fill();
+            }
+         }
+      }
+
       // soft sphere body
       const sunScreen = project(sunVecGeo);
       const dx = sunScreen.x - cx;
       const dy = sunScreen.y - cy;
       const mag = Math.sqrt(dx * dx + dy * dy) || 1;
-      
+
       const gradX = cx + (dx / mag) * R * 0.5;
       const gradY = cy + (dy / mag) * R * 0.5;
 
@@ -313,15 +346,15 @@ export function Globe({ active = "India" }: { active?: string }) {
         cy,
         R * 1.05,
       );
-      
+
       // Interpolate sphere highlight based on whether sun is in front
       const sunZ = Math.max(-1, Math.min(1, sunScreen.z));
       const sunIntensityBg = (sunZ + 1) / 2;
-      
+
       const r0 = 20 + 20 * sunIntensityBg;
       const g0 = 20 + 30 * sunIntensityBg;
       const b0 = 30 + 40 * sunIntensityBg;
-      
+
       const r1 = 10 + 5 * sunIntensityBg;
       const g1 = 10 + 5 * sunIntensityBg;
       const b1 = 15 + 10 * sunIntensityBg;
@@ -357,9 +390,9 @@ export function Globe({ active = "India" }: { active?: string }) {
         const g = 0.5 + ((p.x - cx) / R) * 0.5 - ((p.y - cy) / R) * 0.5;
         const k = Math.min(1, Math.max(0, g));
 
-        const rCol = k < 0.5 ? BLUE[0]! + (GREEN[0]! - BLUE[0]!) * (k / 0.5) : GREEN[0]! + (ORANGE[0]! - GREEN[0]!) * ((k - 0.5) / 0.5);
-        const gCol = k < 0.5 ? BLUE[1]! + (GREEN[1]! - BLUE[1]!) * (k / 0.5) : GREEN[1]! + (ORANGE[1]! - GREEN[1]!) * ((k - 0.5) / 0.5);
-        const bCol = k < 0.5 ? BLUE[2]! + (GREEN[2]! - BLUE[2]!) * (k / 0.5) : GREEN[2]! + (ORANGE[2]! - GREEN[2]!) * ((k - 0.5) / 0.5);
+        let rCol = k < 0.5 ? BLUE[0]! + (GREEN[0]! - BLUE[0]!) * (k / 0.5) : GREEN[0]! + (ORANGE[0]! - GREEN[0]!) * ((k - 0.5) / 0.5);
+        let gCol = k < 0.5 ? BLUE[1]! + (GREEN[1]! - BLUE[1]!) * (k / 0.5) : GREEN[1]! + (ORANGE[1]! - GREEN[1]!) * ((k - 0.5) / 0.5);
+        let bCol = k < 0.5 ? BLUE[2]! + (GREEN[2]! - BLUE[2]!) * (k / 0.5) : GREEN[2]! + (ORANGE[2]! - GREEN[2]!) * ((k - 0.5) / 0.5);
 
         const twinkle = 0.78 + 0.22 * f2;
 
@@ -373,12 +406,33 @@ export function Globe({ active = "India" }: { active?: string }) {
         }
 
         const sunDot = drifted.x * sunVecGeo.x + drifted.y * sunVecGeo.y + drifted.z * sunVecGeo.z;
-        const sunIntensity = Math.max(0.15, Math.min(1.0, (sunDot + 0.2) / 0.4));
-        opacity *= sunIntensity;
+        const sunIntensity = Math.max(0.0, Math.min(1.0, (sunDot + 0.2) / 0.4));
+        
+        let rSize = Math.max(0.45, (isFront ? 0.8 : 0.6) * p.s * (R / 620));
+
+        // Night time star/city lights effect
+        if (sunDot < -0.1 && i % 5 === 0) {
+           const starTwinkle = 0.1 + 0.9 * Math.max(0, Math.sin(t * sp * 4 + ph0[i]!));
+           // Transition gradually from day colors to star colors based on how deep into the night we are
+           const nightDepth = Math.min(1, (-0.1 - sunDot) * 2);
+           rCol = rCol * (1 - nightDepth) + 255 * nightDepth;
+           gCol = gCol * (1 - nightDepth) + 245 * nightDepth;
+           bCol = bCol * (1 - nightDepth) + 210 * nightDepth;
+           
+           if (isFront) {
+              opacity = Math.max(opacity * sunIntensity, starTwinkle * nightDepth);
+              if (starTwinkle > 0.7 && nightDepth > 0.5) {
+                  rSize *= 1.5; // Occasional brighter/larger stars
+              }
+           } else {
+              opacity = 0.02;
+           }
+        } else {
+           opacity *= Math.max(0.15, sunIntensity); // normal dots get dark
+        }
 
         ctx.fillStyle = `rgba(${rCol | 0},${gCol | 0},${bCol | 0},${opacity.toFixed(3)})`;
-        const r = Math.max(0.45, (isFront ? 0.8 : 0.6) * p.s * (R / 620));
-        ctx.fillRect(p.x - r, p.y - r, r * 2, r * 2);
+        ctx.fillRect(p.x - rSize, p.y - rSize, rSize * 2, rSize * 2);
       }
 
 
@@ -531,7 +585,7 @@ export function Globe({ active = "India" }: { active?: string }) {
       <div className="absolute left-[-25%] top-[10%] w-[70%] h-[80%] rounded-full bg-[radial-gradient(circle,rgba(255,160,60,0.08)_0%,rgba(255,160,60,0)_60%)] blur-3xl pointer-events-none z-0" />
       <div className="absolute left-[-15%] top-[25%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(circle,rgba(255,200,100,0.12)_0%,rgba(255,200,100,0)_60%)] blur-3xl pointer-events-none z-0" />
       <div className="absolute left-[-5%] top-[40%] w-[25%] h-[25%] rounded-full bg-[radial-gradient(circle,rgba(255,240,150,0.15)_0%,rgba(255,240,150,0)_60%)] blur-2xl pointer-events-none z-0" />
-      
+
       <canvas ref={canvas} className="block h-full w-full relative z-10" aria-hidden />
       <div className="pointer-events-none absolute inset-0 z-20">
         {labels.map((l) => (

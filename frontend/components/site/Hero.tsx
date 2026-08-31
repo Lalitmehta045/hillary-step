@@ -74,7 +74,7 @@ export function Hero() {
 
       {/* Hero copy — text-shadow only, video stays natural */}
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-[64px] max-md:px-[24px] max-lg:px-[40px] pt-[200px] max-md:pt-[120px] max-lg:pt-[140px]">
-        <StaggerContainer animateOnMount={true}>
+        <StaggerContainer animateOnMount={true} delay={1.5}>
           <StaggerItem>
             <h1 className="max-w-[690px] max-md:max-w-full font-display text-[88px] max-md:text-[44px] max-lg:text-[64px] font-[700] leading-[88px] max-md:leading-[48px] max-lg:leading-[68px] tracking-[-2.2px] max-md:tracking-[-1px] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.55),0_1px_4px_rgba(0,0,0,0.4)]">
               Connecting Technology, Talent, and Global Growth.
@@ -113,7 +113,7 @@ export function Hero() {
 
       {/* Bottom row */}
       <div className="absolute inset-x-0 bottom-[38px] max-md:bottom-[24px] z-10 pointer-events-none">
-        <FadeIn delay={0.6}>
+        <FadeIn delay={2.5}>
           <div className="mx-auto flex w-full max-w-[1440px] h-[48px] items-center justify-center px-[64px] max-md:px-[24px] max-lg:px-[40px]">
             <span className="font-display text-[14px] tracking-[0.22em] text-white/60">
               SCROLL

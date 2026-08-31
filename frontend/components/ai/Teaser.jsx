@@ -30,6 +30,8 @@ export default function Teaser() {
   const progRef = useRef(0);
   const [locked, setLocked] = useState(false);
   const [holding, setHolding] = useState(false);
+  const [tapped, setTapped] = useState(false);
+  const tappedRef = useRef(false);
   const reduced = useReducedMotion();
 
   // progress engine + canvas
@@ -74,9 +76,9 @@ export default function Teaser() {
     const loop = () => {
       tick++;
       // charge / decay
-      if (holdRef.current && progRef.current < 1) {
-        progRef.current = Math.min(1, progRef.current + 0.008);
-      } else if (!holdRef.current && progRef.current > 0 && progRef.current < 1) {
+      if ((holdRef.current || tappedRef.current) && progRef.current < 1) {
+        progRef.current = Math.min(1, progRef.current + 0.015);
+      } else if (!holdRef.current && !tappedRef.current && progRef.current > 0 && progRef.current < 1) {
         progRef.current = Math.max(0, progRef.current - 0.02);
       }
       const p = progRef.current;
@@ -159,11 +161,12 @@ export default function Teaser() {
       setLocked(true);
       return;
     }
-    holdRef.current = true;
+    tappedRef.current = true;
+    setTapped(true);
     setHolding(true);
+    // Remove the requirement to hold down
   };
   const endHold = () => {
-    holdRef.current = false;
     setHolding(false);
   };
 
@@ -212,7 +215,15 @@ export default function Teaser() {
               }`}
             >
               <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 128 128" aria-hidden="true">
-                <circle cx="64" cy="64" r={RING_R} fill="none" stroke="rgba(245,245,245,0.12)" strokeWidth="1" />
+                <defs>
+                  <linearGradient id="teaserGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#1a6cff" />
+                    <stop offset="33%" stopColor="#40f600" />
+                    <stop offset="66%" stopColor="#ff9500" />
+                    <stop offset="100%" stopColor="#1a6cff" />
+                  </linearGradient>
+                </defs>
+                <circle cx="64" cy="64" r={RING_R} fill="none" stroke="url(#teaserGrad)" strokeWidth="1.5" />
                 <circle
                   ref={ringRef}
                   cx="64"
@@ -220,18 +231,18 @@ export default function Teaser() {
                   r={RING_R}
                   fill="none"
                   stroke="#F5F5F5"
-                  strokeWidth="1.5"
+                  strokeWidth="2"
                   strokeDasharray={RING_C}
                   strokeDashoffset={RING_C}
                   strokeLinecap="round"
                 />
               </svg>
-              <span className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#F5F5F5]">
-                {holding ? "Hold" : "Hold"}
+              <span className="text-[13px] font-bold uppercase tracking-[0.35em] text-[#F5F5F5]">
+                {holding || tapped ? "TAPPED" : "TAP"}
               </span>
             </button>
             <p className="text-[10px] font-light uppercase tracking-[0.3em] text-[#555]" data-testid="teaser-instruction">
-              Press and hold to lock the signal
+              Tap to lock the signal
             </p>
           </>
         ) : (

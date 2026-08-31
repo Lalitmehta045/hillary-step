@@ -58,15 +58,24 @@ export const FadeIn = memo(function FadeIn({ children, delay = 0, className = ""
 // Viewport config for stagger containers
 const staggerViewport = { once: true, amount: 0.1 as const };
 
-export const StaggerContainer = memo(function StaggerContainer({ children, className = "", animateOnMount = false }: { children: ReactNode; className?: string; animateOnMount?: boolean }) {
+export const StaggerContainer = memo(function StaggerContainer({ children, className = "", animateOnMount = false, delay = 0 }: { children: ReactNode; className?: string; animateOnMount?: boolean; delay?: number }) {
   const animationProps = animateOnMount ? { animate: "visible" as const } : { whileInView: "visible" as const };
+  
+  const variants = delay > 0 ? {
+    visible: {
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: delay,
+      },
+    },
+  } : staggerContainerVariants;
 
   return (
     <m.div
       initial="hidden"
       {...animationProps}
       viewport={staggerViewport}
-      variants={staggerContainerVariants}
+      variants={variants}
       className={className}
     >
       {children}
