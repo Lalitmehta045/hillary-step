@@ -62,7 +62,7 @@ export function ITSolutionsModal({ isOpen, onClose }: ITSolutionsModalProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: "100%", scale: 0.95 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex flex-col w-full max-w-[1140px] max-md:max-w-[calc(100vw-24px)] h-full max-h-[calc(100vh-24px)] overflow-y-auto overflow-x-hidden overscroll-contain bg-white rounded-t-[16px] rounded-b-none shadow-2xl z-10 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full"
+            className="relative flex flex-col w-full max-w-[1140px] max-md:max-w-[calc(100vw-24px)] h-full max-h-[calc(100vh-24px)] overflow-y-auto overflow-x-hidden overscroll-contain bg-[#f8f6f3] rounded-t-[16px] rounded-b-none shadow-2xl z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Sticky Close Button Header */}

@@ -197,15 +197,15 @@ export function Globe({ active = "India" }: { active?: string }) {
     el.addEventListener("pointerenter", onEnter);
     el.addEventListener("pointerleave", onLeave);
 
-    const bgStars: {x: number, y: number, s: number, a: number, speed: number}[] = [];
+    const bgStars: { x: number, y: number, s: number, a: number, speed: number }[] = [];
     for (let i = 0; i < 250; i++) {
-       bgStars.push({
-          x: Math.random(),
-          y: Math.random(),
-          s: Math.random() * 1.5 + 0.5,
-          a: Math.random() * Math.PI * 2,
-          speed: 0.5 + Math.random() * 2
-       });
+      bgStars.push({
+        x: Math.random(),
+        y: Math.random(),
+        s: Math.random() * 1.5 + 0.5,
+        a: Math.random() * Math.PI * 2,
+        speed: 0.5 + Math.random() * 2
+      });
     }
 
     const dots = landPoints(60000);
@@ -311,22 +311,22 @@ export function Globe({ active = "India" }: { active?: string }) {
       const currentLon = -focusRef.current * (180 / Math.PI);
       let diffLon = Math.abs(currentLon - sunLon) % 360;
       if (diffLon > 180) diffLon = 360 - diffLon;
-      
+
       let nightFactor = (diffLon - 70) / 30; // 0 at 70 deg diff, 1 at 100 deg diff
       nightFactor = Math.max(0, Math.min(1, nightFactor));
-      
+
       if (nightFactor > 0) {
-         for (const s of bgStars) {
-            const sx = s.x * w;
-            const sy = s.y * h;
-            const twinkle = 0.3 + 0.7 * Math.sin(t * s.speed + s.a);
-            if (twinkle > 0) {
-              ctx.fillStyle = `rgba(255, 255, 255, ${(0.5 * twinkle * nightFactor).toFixed(3)})`;
-              ctx.beginPath();
-              ctx.arc(sx, sy, s.s, 0, Math.PI * 2);
-              ctx.fill();
-            }
-         }
+        for (const s of bgStars) {
+          const sx = s.x * w;
+          const sy = s.y * h;
+          const twinkle = 0.3 + 0.7 * Math.sin(t * s.speed + s.a);
+          if (twinkle > 0) {
+            ctx.fillStyle = `rgba(255, 255, 255, ${(0.5 * twinkle * nightFactor).toFixed(3)})`;
+            ctx.beginPath();
+            ctx.arc(sx, sy, s.s, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
       }
 
       // soft sphere body
@@ -407,28 +407,28 @@ export function Globe({ active = "India" }: { active?: string }) {
 
         const sunDot = drifted.x * sunVecGeo.x + drifted.y * sunVecGeo.y + drifted.z * sunVecGeo.z;
         const sunIntensity = Math.max(0.0, Math.min(1.0, (sunDot + 0.2) / 0.4));
-        
+
         let rSize = Math.max(0.45, (isFront ? 0.8 : 0.6) * p.s * (R / 620));
 
         // Night time star/city lights effect
         if (sunDot < -0.1 && i % 5 === 0) {
-           const starTwinkle = 0.1 + 0.9 * Math.max(0, Math.sin(t * sp * 4 + ph0[i]!));
-           // Transition gradually from day colors to star colors based on how deep into the night we are
-           const nightDepth = Math.min(1, (-0.1 - sunDot) * 2);
-           rCol = rCol * (1 - nightDepth) + 255 * nightDepth;
-           gCol = gCol * (1 - nightDepth) + 245 * nightDepth;
-           bCol = bCol * (1 - nightDepth) + 210 * nightDepth;
-           
-           if (isFront) {
-              opacity = Math.max(opacity * sunIntensity, starTwinkle * nightDepth);
-              if (starTwinkle > 0.7 && nightDepth > 0.5) {
-                  rSize *= 1.5; // Occasional brighter/larger stars
-              }
-           } else {
-              opacity = 0.02;
-           }
+          const starTwinkle = 0.1 + 0.9 * Math.max(0, Math.sin(t * sp * 4 + ph0[i]!));
+          // Transition gradually from day colors to star colors based on how deep into the night we are
+          const nightDepth = Math.min(1, (-0.1 - sunDot) * 2);
+          rCol = rCol * (1 - nightDepth) + 255 * nightDepth;
+          gCol = gCol * (1 - nightDepth) + 245 * nightDepth;
+          bCol = bCol * (1 - nightDepth) + 210 * nightDepth;
+
+          if (isFront) {
+            opacity = Math.max(opacity * sunIntensity, starTwinkle * nightDepth);
+            if (starTwinkle > 0.7 && nightDepth > 0.5) {
+              rSize *= 1.5; // Occasional brighter/larger stars
+            }
+          } else {
+            opacity = 0.02;
+          }
         } else {
-           opacity *= Math.max(0.15, sunIntensity); // normal dots get dark
+          opacity *= Math.max(0.15, sunIntensity); // normal dots get dark
         }
 
         ctx.fillStyle = `rgba(${rCol | 0},${gCol | 0},${bCol | 0},${opacity.toFixed(3)})`;
