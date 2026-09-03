@@ -9,6 +9,7 @@ import { jobsApi, type JobDocumentMeta } from "@/lib/api/jobs";
 import { ApiError } from "@/lib/api-client";
 import Link from "next/link";
 import { Check, ArrowRight, ArrowUpRight } from "lucide-react";
+import { GlobalTalentShowcase } from "./GlobalTalentShowcase";
 // @ts-ignore
 import { pillars } from "@/app/new-one/mock";
 
@@ -396,7 +397,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
       )}
 
       {/* Toggle Buttons */}
-      <div className="flex justify-center mb-[48px] max-md:mb-[32px]">
+      <div id="staffing-toggle-section" className="flex justify-center mb-[48px] max-md:mb-[32px]">
         <div className="relative flex w-[320px] rounded-full bg-[#F3F3F4] p-[4px]">
           {/* Animated Background */}
           <m.div
@@ -982,6 +983,17 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
       )}
       </AnimatePresence>
       </div>
+
+      {/* Brand-New 3D Globe & Global Talent Showcase Section */}
+      <GlobalTalentShowcase
+        onSelectTab={(tab) => {
+          setActiveTab(tab);
+          const el = document.getElementById("staffing-toggle-section");
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }}
+      />
 
       {/* Added Sections from PillarPage */}
       {(() => {
