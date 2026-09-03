@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { isLand } from "./geo";
 
 export function GlobalTalentGlobe3D() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -14,13 +15,13 @@ export function GlobalTalentGlobe3D() {
     const width = container.clientWidth || 480;
     const height = container.clientHeight || 480;
 
-    // Scene
+    // --- Scene Setup ---
     const scene = new THREE.Scene();
 
     // Camera
     const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 0.8, 6.2);
-    camera.lookAt(0, -0.1, 0);
+    camera.position.set(0, 0.7, 6.0);
+    camera.lookAt(0, -0.08, 0);
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -31,12 +32,12 @@ export function GlobalTalentGlobe3D() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(width, height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.15;
     container.appendChild(renderer.domElement);
 
-    // Group for globe and rings
+    // Main Rotating Globe Group
     const globeGroup = new THREE.Group();
-    globeGroup.position.set(0, 0.2, 0);
+    globeGroup.position.set(0, 0.22, 0);
     scene.add(globeGroup);
 
     // Base Pedestal Group (stationary, doesn't rotate with globe)
@@ -44,68 +45,68 @@ export function GlobalTalentGlobe3D() {
     baseGroup.position.set(0, -1.5, 0);
     scene.add(baseGroup);
 
-    // --- Pedestal Discs ---
-    const pedestalMaterial = new THREE.MeshStandardMaterial({
+    // --- Multi-Tiered Pedestal Discs (Matching Reference Luxury Base) ---
+    const pedestalMatDark = new THREE.MeshStandardMaterial({
       color: 0xF3F4F6,
-      roughness: 0.25,
-      metalness: 0.1,
+      roughness: 0.3,
+      metalness: 0.08,
     });
-    const pedestalRingMaterial = new THREE.MeshStandardMaterial({
+    const pedestalMatLight = new THREE.MeshStandardMaterial({
       color: 0xFFFFFF,
-      roughness: 0.15,
-      metalness: 0.05,
+      roughness: 0.2,
+      metalness: 0.04,
     });
 
     // Lower wide ring
     const baseDisk1 = new THREE.Mesh(
-      new THREE.CylinderGeometry(2.3, 2.38, 0.12, 64),
-      pedestalMaterial
+      new THREE.CylinderGeometry(2.32, 2.4, 0.14, 64),
+      pedestalMatDark
     );
     baseGroup.add(baseDisk1);
 
     // Middle stepped ring
     const baseDisk2 = new THREE.Mesh(
-      new THREE.CylinderGeometry(1.85, 1.95, 0.15, 64),
-      pedestalRingMaterial
+      new THREE.CylinderGeometry(1.88, 1.98, 0.16, 64),
+      pedestalMatLight
     );
-    baseDisk2.position.y = 0.12;
+    baseDisk2.position.y = 0.14;
     baseGroup.add(baseDisk2);
 
-    // Inner support ring
+    // Upper support ring
     const baseDisk3 = new THREE.Mesh(
-      new THREE.CylinderGeometry(1.4, 1.45, 0.12, 64),
-      pedestalMaterial
+      new THREE.CylinderGeometry(1.42, 1.48, 0.14, 64),
+      pedestalMatDark
     );
-    baseDisk3.position.y = 0.24;
+    baseDisk3.position.y = 0.28;
     baseGroup.add(baseDisk3);
 
-    // Soft green accent glow on base
+    // Soft green pedestal glow ring
     const glowRing = new THREE.Mesh(
-      new THREE.RingGeometry(1.45, 1.8, 64),
+      new THREE.RingGeometry(1.48, 1.84, 64),
       new THREE.MeshBasicMaterial({
         color: 0x22C55E,
         transparent: true,
-        opacity: 0.25,
+        opacity: 0.28,
         side: THREE.DoubleSide,
       })
     );
     glowRing.rotation.x = -Math.PI / 2;
-    glowRing.position.y = 0.26;
+    glowRing.position.y = 0.36;
     baseGroup.add(glowRing);
 
-    // --- Main Sphere (Globe Inner Core) ---
+    // --- Core White Sphere (Earth Body) ---
     const sphereRadius = 1.48;
-    const coreGeometry = new THREE.SphereGeometry(sphereRadius * 0.99, 64, 64);
+    const coreGeometry = new THREE.SphereGeometry(sphereRadius * 0.995, 64, 64);
     const coreMaterial = new THREE.MeshStandardMaterial({
-      color: 0xFFFFFF,
-      roughness: 0.35,
-      metalness: 0.05,
+      color: 0xFDFDFD,
+      roughness: 0.42,
+      metalness: 0.04,
     });
     const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
     globeGroup.add(coreMesh);
 
     // Soft atmosphere glow shell
-    const atmosphereGeometry = new THREE.SphereGeometry(sphereRadius * 1.01, 48, 48);
+    const atmosphereGeometry = new THREE.SphereGeometry(sphereRadius * 1.015, 48, 48);
     const atmosphereMaterial = new THREE.MeshBasicMaterial({
       color: 0x86EFAC,
       transparent: true,
@@ -115,67 +116,99 @@ export function GlobalTalentGlobe3D() {
     const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
     globeGroup.add(atmosphereMesh);
 
-    // --- Continents Particle Landmass Generation ---
-    // Approximate land coordinates (lat, lon ranges)
-    const landmassBounds = [
-      // North America
-      { minLat: 15, maxLat: 68, minLon: -140, maxLon: -55 },
-      // Central & South America
-      { minLat: -54, maxLat: 12, minLon: -80, maxLon: -35 },
-      // Europe
-      { minLat: 36, maxLat: 68, minLon: -10, maxLon: 45 },
-      // Africa
-      { minLat: -34, maxLat: 36, minLon: -16, maxLon: 50 },
-      // Asia / Middle East / Russia
-      { minLat: 10, maxLat: 72, minLon: 40, maxLon: 145 },
-      // India & South Asia
-      { minLat: 8, maxLat: 35, minLon: 68, maxLon: 92 },
-      // East Asia / Japan
-      { minLat: 20, maxLat: 46, minLon: 100, maxLon: 145 },
-      // Australia & NZ
-      { minLat: -42, maxLat: -12, minLon: 112, maxLon: 154 },
-      // UK & Ireland
-      { minLat: 50, maxLat: 59, minLon: -10, maxLon: 2 },
-    ];
+    // Subtle latitude circles (Parallels)
+    [-30, 0, 30, 60].forEach((lat) => {
+      const p = (lat * Math.PI) / 180;
+      const ringRadius = sphereRadius * Math.cos(p) * 1.004;
+      const ringY = sphereRadius * Math.sin(p) * 1.004;
+      const ringGeo = new THREE.BufferGeometry();
+      const ringPts: THREE.Vector3[] = [];
+      for (let i = 0; i <= 64; i++) {
+        const theta = (i / 64) * Math.PI * 2;
+        ringPts.push(
+          new THREE.Vector3(
+            Math.sin(theta) * ringRadius,
+            ringY,
+            Math.cos(theta) * ringRadius
+          )
+        );
+      }
+      ringGeo.setFromPoints(ringPts);
+      const ringLine = new THREE.Line(
+        ringGeo,
+        new THREE.LineBasicMaterial({
+          color: 0x86EFAC,
+          transparent: true,
+          opacity: 0.18,
+        })
+      );
+      globeGroup.add(ringLine);
+    });
 
-    const isLand = (lat: number, lon: number) => {
-      // General land check based on clustered bounds
-      return landmassBounds.some(
-        (b) => lat >= b.minLat && lat <= b.maxLat && lon >= b.minLon && lon <= b.maxLon
+    // --- Helper function: Map (lat, lon) to 3D Sphere Coordinates ---
+    const latLonToVector3 = (lat: number, lon: number, radius: number) => {
+      const p = (lat * Math.PI) / 180;
+      const l = (lon * Math.PI) / 180;
+      return new THREE.Vector3(
+        radius * Math.cos(p) * Math.sin(l),
+        radius * Math.sin(p),
+        radius * Math.cos(p) * Math.cos(l)
       );
     };
 
-    const latLonToVector3 = (lat: number, lon: number, radius: number) => {
-      const phi = (90 - lat) * (Math.PI / 180);
-      const theta = (lon + 180) * (Math.PI / 180);
-      const x = -(radius * Math.sin(phi) * Math.cos(theta));
-      const z = radius * Math.sin(phi) * Math.sin(theta);
-      const y = radius * Math.cos(phi);
-      return new THREE.Vector3(x, y, z);
+    // --- Circular Dot Canvas Texture Generator ---
+    const createCircleDotTexture = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 64;
+      canvas.height = 64;
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.clearRect(0, 0, 64, 64);
+        const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 30);
+        grad.addColorStop(0, "rgba(255, 255, 255, 1)");
+        grad.addColorStop(0.75, "rgba(255, 255, 255, 0.95)");
+        grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(32, 32, 30, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      return new THREE.CanvasTexture(canvas);
     };
 
-    // Create dotted landmass points
+    // --- REAL WORLD MAP GENERATION USING NASA BITMASK (isLand) ---
+    // Samples real geographical coastlines across North America, South America,
+    // Europe, Africa, India, Asia, Australia, and islands.
     const points: number[] = [];
     const colors: number[] = [];
+    const r = sphereRadius * 1.008;
 
-    // Dense grid of points
-    for (let lat = -80; lat <= 80; lat += 2.2) {
-      const circumferenceAtLat = Math.cos((lat * Math.PI) / 180);
-      const lonStep = circumferenceAtLat > 0.05 ? 2.4 / circumferenceAtLat : 10;
+    // Step across latitude lines from -58° to 74°
+    const latStep = 1.5;
+    for (let lat = -58; lat <= 74; lat += latStep) {
+      const p = (lat * Math.PI) / 180;
+      const cosLat = Math.cos(p);
+      const sinLat = Math.sin(p);
+
+      // Keep dot spacing uniform along longitude
+      const lonStep = latStep / Math.max(0.12, cosLat);
       for (let lon = -180; lon < 180; lon += lonStep) {
         if (isLand(lat, lon)) {
-          // Add slight jitter for organic look
-          const jitterLat = lat + (Math.random() - 0.5) * 0.5;
-          const jitterLon = lon + (Math.random() - 0.5) * 0.5;
-          const v = latLonToVector3(jitterLat, jitterLon, sphereRadius * 1.006);
-          points.push(v.x, v.y, v.z);
+          const l = (lon * Math.PI) / 180;
+          const x = r * cosLat * Math.sin(l);
+          const y = r * sinLat;
+          const z = r * cosLat * Math.cos(l);
 
-          // Emerald green variations
-          const isHighlight = Math.random() > 0.8;
-          if (isHighlight) {
-            colors.push(0.13, 0.77, 0.36); // Bright emerald (#22c55e)
+          points.push(x, y, z);
+
+          // Vivid emerald & forest green shades matching reference design
+          const rand = Math.random();
+          if (rand > 0.8) {
+            colors.push(0.13, 0.77, 0.36); // #22c55e (bright emerald)
+          } else if (rand > 0.35) {
+            colors.push(0.09, 0.64, 0.28); // #16a34a (forest green)
           } else {
-            colors.push(0.08, 0.55, 0.24); // Deep forest green (#15803d)
+            colors.push(0.28, 0.85, 0.48); // #4ade80 (light emerald)
           }
         }
       }
@@ -191,17 +224,21 @@ export function GlobalTalentGlobe3D() {
       new THREE.Float32BufferAttribute(colors, 3)
     );
 
+    const dotTexture = createCircleDotTexture();
     const pointsMaterial = new THREE.PointsMaterial({
-      size: 0.038,
+      size: 0.042,
+      map: dotTexture,
       vertexColors: true,
       transparent: true,
+      alphaTest: 0.02,
       opacity: 0.95,
+      sizeAttenuation: true,
     });
 
-    const landPoints = new THREE.Points(pointsGeometry, pointsMaterial);
-    globeGroup.add(landPoints);
+    const landPointsMesh = new THREE.Points(pointsGeometry, pointsMaterial);
+    globeGroup.add(landPointsMesh);
 
-    // --- Key Talent Hub Markers (Pulsing Pins) ---
+    // --- Key Talent Hub Markers (Pulsing Pins on Real Continents) ---
     const talentHubs = [
       { name: "New York", lat: 40.71, lon: -74.0 },
       { name: "San Francisco", lat: 37.77, lon: -122.41 },
@@ -214,55 +251,73 @@ export function GlobalTalentGlobe3D() {
     ];
 
     const hubGroup = new THREE.Group();
-    talentHubs.forEach((hub) => {
+    const pulseRings: { mesh: THREE.Mesh; baseScale: number; phase: number }[] = [];
+
+    talentHubs.forEach((hub, idx) => {
       const pos = latLonToVector3(hub.lat, hub.lon, sphereRadius * 1.02);
-      // Small glowing sphere at hub
+
+      // Core Glowing Pin Sphere
       const pin = new THREE.Mesh(
-        new THREE.SphereGeometry(0.042, 16, 16),
-        new THREE.MeshBasicMaterial({ color: 0x22C55E })
+        new THREE.SphereGeometry(0.045, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x16A34A })
       );
       pin.position.copy(pos);
       hubGroup.add(pin);
 
-      // Pulse ring
+      // Inner Bright Dot
+      const innerDot = new THREE.Mesh(
+        new THREE.SphereGeometry(0.02, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0xFFFFFF })
+      );
+      innerDot.position.copy(pos);
+      hubGroup.add(innerDot);
+
+      // Concentric Radar Pulse Ring
       const ring = new THREE.Mesh(
-        new THREE.RingGeometry(0.05, 0.085, 24),
+        new THREE.RingGeometry(0.04, 0.075, 32),
         new THREE.MeshBasicMaterial({
-          color: 0x4ADE80,
+          color: 0x22C55E,
           side: THREE.DoubleSide,
           transparent: true,
-          opacity: 0.8,
+          opacity: 0.75,
         })
       );
       ring.position.copy(pos);
       ring.lookAt(new THREE.Vector3(0, 0, 0));
       hubGroup.add(ring);
+
+      pulseRings.push({
+        mesh: ring,
+        baseScale: 1,
+        phase: (idx / talentHubs.length) * Math.PI * 2,
+      });
     });
     globeGroup.add(hubGroup);
 
-    // --- Great Circle Arcs Connecting Key Hubs ---
+    // --- Great Circle Arcs Connecting Key International Hubs ---
     const connections = [
       { from: talentHubs[0], to: talentHubs[2] }, // NY -> London
       { from: talentHubs[1], to: talentHubs[6] }, // SF -> Singapore
       { from: talentHubs[2], to: talentHubs[4] }, // London -> Bangalore
       { from: talentHubs[4], to: talentHubs[7] }, // Bangalore -> Sydney
       { from: talentHubs[2], to: talentHubs[3] }, // London -> Frankfurt
+      { from: talentHubs[5], to: talentHubs[6] }, // Mumbai -> Singapore
     ];
 
     connections.forEach(({ from, to }) => {
       const vFrom = latLonToVector3(from.lat, from.lon, sphereRadius * 1.02);
       const vTo = latLonToVector3(to.lat, to.lon, sphereRadius * 1.02);
 
-      // Compute midpoint and lift outward
+      // Compute midpoint and lift outward for 3D arch
       const mid = new THREE.Vector3()
         .addVectors(vFrom, vTo)
         .multiplyScalar(0.5);
       const dist = vFrom.distanceTo(vTo);
-      const lift = Math.min(1.4, 1.08 + dist * 0.18);
+      const lift = Math.min(1.38, 1.08 + dist * 0.16);
       mid.normalize().multiplyScalar(sphereRadius * lift);
 
       const curve = new THREE.QuadraticBezierCurve3(vFrom, mid, vTo);
-      const curvePoints = curve.getPoints(40);
+      const curvePoints = curve.getPoints(50);
       const arcGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
       const arcMaterial = new THREE.LineBasicMaterial({
         color: 0x22C55E,
@@ -274,29 +329,31 @@ export function GlobalTalentGlobe3D() {
       globeGroup.add(arc);
     });
 
-    // --- Lights ---
-    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1.2);
+    // --- Lights Setup ---
+    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1.25);
     scene.add(ambientLight);
 
-    const mainLight = new THREE.DirectionalLight(0xFFFFFF, 1.5);
+    const mainLight = new THREE.DirectionalLight(0xFFFFFF, 1.6);
     mainLight.position.set(4, 5, 5);
     scene.add(mainLight);
 
-    const rimLight = new THREE.DirectionalLight(0x86EFAC, 0.9);
-    rimLight.position.set(-4, -2, -3);
-    scene.add(rimLight);
+    const softFillLight = new THREE.DirectionalLight(0xF0FDF4, 0.8);
+    softFillLight.position.set(-4, 3, 2);
+    scene.add(softFillLight);
 
-    // Initial globe tilt
-    globeGroup.rotation.x = 0.22;
-    globeGroup.rotation.y = 0.45;
+    const greenRimLight = new THREE.DirectionalLight(0x86EFAC, 0.85);
+    greenRimLight.position.set(-4, -2, -3);
+    scene.add(greenRimLight);
 
-    // --- Interactive Drag & Mouse Tracking ---
+    // Initial globe orientation to show Europe, Asia & Americas nicely
+    globeGroup.rotation.x = 0.2;
+    globeGroup.rotation.y = 0.6;
+
+    // --- Interactive Drag Controls with Smooth Inertia ---
     let isDragging = false;
     let previousMousePosition = { x: 0, y: 0 };
-    let targetRotationX = 0.22;
-    let targetRotationY = 0.45;
-    let rotationVelocityX = 0;
-    let rotationVelocityY = 0;
+    let targetRotationX = 0.2;
+    let targetRotationY = 0.6;
 
     const handleMouseDown = (e: MouseEvent) => {
       isDragging = true;
@@ -310,8 +367,7 @@ export function GlobalTalentGlobe3D() {
 
         targetRotationY += deltaX * 0.006;
         targetRotationX += deltaY * 0.006;
-
-        targetRotationX = Math.max(-0.6, Math.min(0.6, targetRotationX));
+        targetRotationX = Math.max(-0.65, Math.min(0.65, targetRotationX));
 
         previousMousePosition = { x: e.clientX, y: e.clientY };
       }
@@ -326,7 +382,7 @@ export function GlobalTalentGlobe3D() {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
 
-    // Touch support
+    // Touch events for mobile/tablet
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length === 1) {
         isDragging = true;
@@ -344,7 +400,7 @@ export function GlobalTalentGlobe3D() {
 
         targetRotationY += deltaX * 0.008;
         targetRotationX += deltaY * 0.008;
-        targetRotationX = Math.max(-0.6, Math.min(0.6, targetRotationX));
+        targetRotationX = Math.max(-0.65, Math.min(0.65, targetRotationX));
 
         previousMousePosition = {
           x: e.touches[0].clientX,
@@ -367,23 +423,30 @@ export function GlobalTalentGlobe3D() {
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      const delta = clock.getDelta();
       const time = clock.getElapsedTime();
 
-      // Continuous ambient rotation when not dragging
+      // Continuous ambient rotation when user is not dragging
       if (!isDragging) {
-        targetRotationY += 0.0035;
+        targetRotationY += 0.0032;
       }
 
-      // Smooth interpolation (lerp)
+      // Smooth camera / rotation interpolation
       globeGroup.rotation.y += (targetRotationY - globeGroup.rotation.y) * 0.06;
       globeGroup.rotation.x += (targetRotationX - globeGroup.rotation.x) * 0.06;
 
-      // Pulse glow ring on pedestal
-      glowRing.scale.setScalar(1 + Math.sin(time * 2.5) * 0.04);
+      // Animate pulsing radar rings on talent hubs
+      pulseRings.forEach((p) => {
+        const scale = 1 + (Math.sin(time * 3 + p.phase) + 1) * 0.6;
+        p.mesh.scale.set(scale, scale, 1);
+        (p.mesh.material as THREE.MeshBasicMaterial).opacity =
+          Math.max(0.1, 0.8 - (scale - 1) * 0.6);
+      });
 
-      // Subtle float
-      globeGroup.position.y = 0.2 + Math.sin(time * 1.5) * 0.035;
+      // Pulse glow on pedestal
+      glowRing.scale.setScalar(1 + Math.sin(time * 2.2) * 0.035);
+
+      // Soft ambient levitation
+      globeGroup.position.y = 0.22 + Math.sin(time * 1.4) * 0.03;
 
       renderer.render(scene, camera);
     };
