@@ -82,12 +82,12 @@ export function MCAParametersContent({
   return (
     <div
       ref={contentContainerRef}
-      className="relative w-full bg-white text-[#191C1E] font-sans antialiased"
+      className="relative w-full bg-white text-[#191C1E] font-display antialiased"
     >
       {/* Top Container */}
       <div className="mx-auto w-full max-w-[1140px] px-6 md:px-12 pt-14 md:pt-16 pb-12">
         {/* Category Header */}
-        <p className="font-sans text-[12px] md:text-[13px] font-[600] tracking-[0.16em] text-[#1A6CFF] uppercase mb-4">
+        <p className="font-display text-[12px] md:text-[13px] font-[600] tracking-[0.16em] text-[#1A6CFF] uppercase mb-4">
           LEGAL / COMPLIANCE &amp; GOVERNANCE
         </p>
 
@@ -116,7 +116,7 @@ export function MCAParametersContent({
               >
                 {/* Orange checkpoint dot */}
                 <span className="w-[10px] h-[10px] rounded-full bg-[#FF6A00] ring-4 ring-white shadow-xs transition-transform duration-300 group-hover:scale-125" />
-                <span className="font-sans text-[10px] md:text-[11px] font-[600] tracking-[0.16em] text-[#333333] mt-3 group-hover:text-[#1A6CFF] transition-colors">
+                <span className="font-display text-[10px] md:text-[11px] font-[600] tracking-[0.16em] text-[#333333] mt-3 group-hover:text-[#1A6CFF] transition-colors">
                   {step.label}
                 </span>
               </button>
@@ -129,7 +129,7 @@ export function MCAParametersContent({
           {/* Left Column: Sticky Table of Contents */}
           <aside className="relative">
             <div className="lg:sticky lg:top-8 flex flex-col">
-              <h2 className="font-sans text-[11px] font-[700] tracking-[0.18em] text-[#9CA3AF] uppercase mb-4">
+              <h2 className="font-display text-[11px] font-[700] tracking-[0.18em] text-[#9CA3AF] uppercase mb-4">
                 CONTENTS
               </h2>
 
@@ -174,7 +174,7 @@ export function MCAParametersContent({
                 <span className="text-[#1A6CFF] font-[700]">01.</span>
                 <span>Introduction</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 Hillary Step Solutions is committed to full compliance with the
                 provisions of the Companies Act, 2013 and the regulations, rules,
                 circulars, and notifications issued by the Ministry of Corporate
@@ -188,7 +188,7 @@ export function MCAParametersContent({
                 <span className="text-[#1A6CFF] font-[700]">02.</span>
                 <span>Applicability</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This policy applies to the company, its directors, officers,
                 employees, and all stakeholders to ensure compliance with all
                 applicable MCA requirements.
@@ -210,7 +210,7 @@ export function MCAParametersContent({
                 ].map((obj, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
+                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
                   >
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
@@ -227,7 +227,7 @@ export function MCAParametersContent({
                 <span className="text-[#1A6CFF] font-[700]">04.</span>
                 <span>Legal Framework</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 Our compliance is governed by the following:
               </p>
 
@@ -241,7 +241,7 @@ export function MCAParametersContent({
                   <h4 className="font-display text-[13.5px] font-[700] text-[#111827] leading-snug">
                     Companies Act, 2013
                   </h4>
-                  <p className="font-sans text-[12px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12px] leading-[1.5] text-[#64748B]">
                     Primary legislation governing companies in India.
                   </p>
                 </div>
@@ -254,7 +254,7 @@ export function MCAParametersContent({
                   <h4 className="font-display text-[13.5px] font-[700] text-[#111827] leading-snug">
                     MCA Rules &amp; Notifications
                   </h4>
-                  <p className="font-sans text-[12px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12px] leading-[1.5] text-[#64748B]">
                     Rules framed under the Companies Act.
                   </p>
                 </div>
@@ -267,7 +267,7 @@ export function MCAParametersContent({
                   <h4 className="font-display text-[13.5px] font-[700] text-[#111827] leading-snug">
                     Secretarial Standards (SS-1 &amp; SS-2)
                   </h4>
-                  <p className="font-sans text-[12px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12px] leading-[1.5] text-[#64748B]">
                     Board meetings and General Meetings.
                   </p>
                 </div>
@@ -280,7 +280,7 @@ export function MCAParametersContent({
                   <h4 className="font-display text-[13.5px] font-[700] text-[#111827] leading-snug">
                     MCA Circulars
                   </h4>
-                  <p className="font-sans text-[12px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12px] leading-[1.5] text-[#64748B]">
                     Guidance and directions issued from time to time.
                   </p>
                 </div>
@@ -322,7 +322,7 @@ export function MCAParametersContent({
                 ].map((req, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
+                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
                   >
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
@@ -355,7 +355,7 @@ export function MCAParametersContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Board of Directors
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Overall responsibility for compliance and governance oversight.
                   </p>
                 </div>
@@ -368,7 +368,7 @@ export function MCAParametersContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Company Secretary / Compliance Officer
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Ensure timely compliance, filings, and maintenance of records.
                   </p>
                 </div>
@@ -381,7 +381,7 @@ export function MCAParametersContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Employees
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Cooperate and support in maintaining compliance and documentation.
                   </p>
                 </div>
@@ -403,7 +403,7 @@ export function MCAParametersContent({
                 ].map((item, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
+                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
                   >
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
@@ -420,7 +420,7 @@ export function MCAParametersContent({
                 <span className="text-[#1A6CFF] font-[700]">08.</span>
                 <span>Filings &amp; Disclosures</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We ensure timely and accurate filing of all forms and returns on the
                 MCA portal, including but not limited to:
               </p>
@@ -428,19 +428,19 @@ export function MCAParametersContent({
               {/* 2-Column Filings Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 pt-1">
                 <div className="flex flex-col gap-2">
-                  <div className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
+                  <div className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
                     </span>
                     <span>Annual Return (MGT-7 / MGT-7A)</span>
                   </div>
-                  <div className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
+                  <div className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
                     </span>
                     <span>Financial Statements (AOC-4)</span>
                   </div>
-                  <div className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
+                  <div className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
                     </span>
@@ -449,13 +449,13 @@ export function MCAParametersContent({
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <div className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
+                  <div className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
                     </span>
                     <span>Appointment &amp; Resignation (DIR-12)</span>
                   </div>
-                  <div className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
+                  <div className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
                     </span>
@@ -471,7 +471,7 @@ export function MCAParametersContent({
                 <span className="text-[#1A6CFF] font-[700]">09.</span>
                 <span>Records &amp; Maintenance</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 All statutory registers, records, and documents are maintained at
                 the registered office in accordance with the Companies Act, 2013
                 and MCA rules.
@@ -484,7 +484,7 @@ export function MCAParametersContent({
                 <span className="text-[#1A6CFF] font-[700]">10.</span>
                 <span>Non-Compliance</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 Any non-compliance may result in penalties, fines, or legal action.
                 Disciplinary action will be taken against individuals responsible
                 for non-compliance.
@@ -497,7 +497,7 @@ export function MCAParametersContent({
                 <span className="text-[#1A6CFF] font-[700]">11.</span>
                 <span>Continuous Improvement</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We regularly review and enhance our compliance framework to ensure
                 alignment with regulatory changes and best governance practices.
               </p>
@@ -509,7 +509,7 @@ export function MCAParametersContent({
                 <span className="text-[#1A6CFF] font-[700]">12.</span>
                 <span>References</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This policy is aligned with:
               </p>
               <ul className="flex flex-col gap-2 pt-1">
@@ -521,7 +521,7 @@ export function MCAParametersContent({
                 ].map((refItem, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
+                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
                   >
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
@@ -534,11 +534,11 @@ export function MCAParametersContent({
 
             {/* Important Notice Box */}
             <div className="bg-[#FFFDF7] rounded-[12px] p-4.5 sm:p-5 border border-[#FDE68A] flex flex-col gap-1.5 mt-2">
-              <div className="flex items-center gap-2 text-[#D97706] font-sans text-[12px] font-[700] tracking-[0.14em] uppercase">
+              <div className="flex items-center gap-2 text-[#D97706] font-display text-[12px] font-[700] tracking-[0.14em] uppercase">
                 <FaTriangleExclamation className="text-[13px] text-[#F59E0B]" />
                 <span>IMPORTANT NOTICE</span>
               </div>
-              <p className="font-sans text-[12.5px] md:text-[13px] leading-[1.6] text-[#4B5563]">
+              <p className="font-display text-[12.5px] md:text-[13px] leading-[1.6] text-[#4B5563]">
                 This document is intended for informational purposes only and does
                 not constitute legal advice. For specific concerns, please
                 consult our Compliance Officer at{" "}
@@ -558,12 +558,12 @@ export function MCAParametersContent({
                 <span className="font-display text-[13px] font-[700] tracking-[0.06em] text-[#111827] uppercase">
                   HILLARY STEP SOLUTIONS
                 </span>
-                <span className="font-sans text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
+                <span className="font-display text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
                   © 2024 HILLARY STEP SOLUTIONS. ARCHITECTING ASCENT.
                 </span>
               </div>
 
-              <div className="flex items-center gap-4 text-[12px] font-sans">
+              <div className="flex items-center gap-4 text-[12px] font-display">
                 <button
                   type="button"
                   onClick={() => onNavigateType?.("privacy")}

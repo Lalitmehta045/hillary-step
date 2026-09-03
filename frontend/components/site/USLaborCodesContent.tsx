@@ -81,12 +81,12 @@ export function USLaborCodesContent({
   return (
     <div
       ref={contentContainerRef}
-      className="relative w-full bg-white text-[#191C1E] font-sans antialiased"
+      className="relative w-full bg-white text-[#191C1E] font-display antialiased"
     >
       {/* Main Document Wrapper */}
       <div className="mx-auto w-full max-w-[1140px] px-6 md:px-12 pt-14 md:pt-16 pb-12">
         {/* Category Header */}
-        <p className="font-sans text-[12px] md:text-[13px] font-[600] tracking-[0.16em] text-[#1A6CFF] uppercase mb-4">
+        <p className="font-display text-[12px] md:text-[13px] font-[600] tracking-[0.16em] text-[#1A6CFF] uppercase mb-4">
           LEGAL / COMPLIANCE &amp; GOVERNANCE
         </p>
 
@@ -125,7 +125,7 @@ export function USLaborCodesContent({
               >
                 {/* Orange checkpoint dot */}
                 <span className="w-[10px] h-[10px] rounded-full bg-[#FF6A00] ring-4 ring-white shadow-xs transition-transform duration-300 group-hover:scale-125" />
-                <span className="font-sans text-[10px] md:text-[11px] font-[600] tracking-[0.16em] text-[#333333] mt-3 group-hover:text-[#1A6CFF] transition-colors">
+                <span className="font-display text-[10px] md:text-[11px] font-[600] tracking-[0.16em] text-[#333333] mt-3 group-hover:text-[#1A6CFF] transition-colors">
                   {step.label}
                 </span>
               </button>
@@ -138,7 +138,7 @@ export function USLaborCodesContent({
           {/* Left Column: Sticky Table of Contents */}
           <aside className="relative">
             <div className="lg:sticky lg:top-8 flex flex-col">
-              <h2 className="font-sans text-[11px] font-[700] tracking-[0.18em] text-[#9CA3AF] uppercase mb-4">
+              <h2 className="font-display text-[11px] font-[700] tracking-[0.18em] text-[#9CA3AF] uppercase mb-4">
                 CONTENTS
               </h2>
 
@@ -183,7 +183,7 @@ export function USLaborCodesContent({
                 <span className="text-[#1A6CFF] font-[700]">01.</span>
                 <span>Introduction</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 Hillary Step Solutions is committed to full compliance with all
                 applicable United States labor laws and regulations. This
                 framework outlines our approach to fair labor practices, employee
@@ -197,7 +197,7 @@ export function USLaborCodesContent({
                 <span className="text-[#1A6CFF] font-[700]">02.</span>
                 <span>Purpose</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 To ensure adherence to US federal and state labor laws, promote
                 ethical employment practices, and foster a safe, inclusive, and
                 equitable workplace.
@@ -210,7 +210,7 @@ export function USLaborCodesContent({
                 <span className="text-[#1A6CFF] font-[700]">03.</span>
                 <span>Scope</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This policy applies to all employees, contractors, consultants,
                 and third-party partners engaged by Hillary Step Solutions across
                 all US operations and jurisdictions.
@@ -223,7 +223,7 @@ export function USLaborCodesContent({
                 <span className="text-[#1A6CFF] font-[700]">04.</span>
                 <span>Legal Framework</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We comply with applicable federal, state, and local labor laws,
                 including but not limited to:
               </p>
@@ -238,7 +238,7 @@ export function USLaborCodesContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     FLSA
                   </h4>
-                  <p className="font-sans text-[11.5px] leading-[1.4] text-[#64748B]">
+                  <p className="font-display text-[11.5px] leading-[1.4] text-[#64748B]">
                     Fair Labor Standards Act (Wage, Hours, Overtime)
                   </p>
                 </div>
@@ -251,7 +251,7 @@ export function USLaborCodesContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     NLRA
                   </h4>
-                  <p className="font-sans text-[11.5px] leading-[1.4] text-[#64748B]">
+                  <p className="font-display text-[11.5px] leading-[1.4] text-[#64748B]">
                     National Labor Relations Act
                   </p>
                 </div>
@@ -264,7 +264,7 @@ export function USLaborCodesContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Title VII
                   </h4>
-                  <p className="font-sans text-[11.5px] leading-[1.4] text-[#64748B]">
+                  <p className="font-display text-[11.5px] leading-[1.4] text-[#64748B]">
                     Civil Rights Act (Non-Discrimination)
                   </p>
                 </div>
@@ -277,7 +277,7 @@ export function USLaborCodesContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     ADA
                   </h4>
-                  <p className="font-sans text-[11.5px] leading-[1.4] text-[#64748B]">
+                  <p className="font-display text-[11.5px] leading-[1.4] text-[#64748B]">
                     Americans with Disabilities Act
                   </p>
                 </div>
@@ -290,7 +290,7 @@ export function USLaborCodesContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     OSHA
                   </h4>
-                  <p className="font-sans text-[11.5px] leading-[1.4] text-[#64748B]">
+                  <p className="font-display text-[11.5px] leading-[1.4] text-[#64748B]">
                     Occupational Safety and Health Act
                   </p>
                 </div>
@@ -328,7 +328,7 @@ export function USLaborCodesContent({
                 ].map((std, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
+                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
                   >
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
@@ -361,7 +361,7 @@ export function USLaborCodesContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Fair Employment
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Recruit, hire, and promote based on merit and business need.
                   </p>
                 </div>
@@ -374,7 +374,7 @@ export function USLaborCodesContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Safe Workplace
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Provide a safe, healthy, and compliant work environment.
                   </p>
                 </div>
@@ -387,7 +387,7 @@ export function USLaborCodesContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Accurate Records
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Maintain accurate records of wages, hours, and employment
                     data.
                   </p>
@@ -410,7 +410,7 @@ export function USLaborCodesContent({
                 ].map((right, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
+                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
                   >
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
@@ -427,7 +427,7 @@ export function USLaborCodesContent({
                 <span className="text-[#1A6CFF] font-[700]">08.</span>
                 <span>Workplace Policies</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We maintain internal policies aligned with US labor laws,
                 covering:
               </p>
@@ -435,19 +435,19 @@ export function USLaborCodesContent({
               {/* 2-Column Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 pt-1">
                 <div className="flex flex-col gap-2">
-                  <div className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
+                  <div className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
                     </span>
                     <span>Code of Conduct</span>
                   </div>
-                  <div className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
+                  <div className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
                     </span>
                     <span>Anti-Harassment Policy</span>
                   </div>
-                  <div className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
+                  <div className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
                     </span>
@@ -456,13 +456,13 @@ export function USLaborCodesContent({
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <div className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
+                  <div className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
                     </span>
                     <span>Workplace Safety Policy</span>
                   </div>
-                  <div className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
+                  <div className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]">
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
                     </span>
@@ -478,7 +478,7 @@ export function USLaborCodesContent({
                 <span className="text-[#1A6CFF] font-[700]">09.</span>
                 <span>Compliance &amp; Reporting</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We conduct regular internal audits and reviews to ensure ongoing
                 compliance with labor laws. Employees and stakeholders can report
                 concerns via our confidential reporting channel.
@@ -491,7 +491,7 @@ export function USLaborCodesContent({
                 <span className="text-[#1A6CFF] font-[700]">10.</span>
                 <span>Enforcement</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 Violations of this policy or applicable labor laws may result in
                 disciplinary action, up to and including termination, and may be
                 reported to the appropriate authorities.
@@ -504,7 +504,7 @@ export function USLaborCodesContent({
                 <span className="text-[#1A6CFF] font-[700]">11.</span>
                 <span>Continuous Improvement</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We regularly assess and update our practices to reflect changes in
                 laws, industry standards, and best practices in labor relations.
               </p>
@@ -516,7 +516,7 @@ export function USLaborCodesContent({
                 <span className="text-[#1A6CFF] font-[700]">12.</span>
                 <span>References</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This policy is aligned with current US labor laws and
                 regulations, including:
               </p>
@@ -530,7 +530,7 @@ export function USLaborCodesContent({
                 ].map((refItem, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
+                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
                   >
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
@@ -543,11 +543,11 @@ export function USLaborCodesContent({
 
             {/* Important Notice Box */}
             <div className="bg-[#FFFDF7] rounded-[12px] p-4.5 sm:p-5 border border-[#FDE68A] flex flex-col gap-1.5 mt-2">
-              <div className="flex items-center gap-2 text-[#D97706] font-sans text-[12px] font-[700] tracking-[0.14em] uppercase">
+              <div className="flex items-center gap-2 text-[#D97706] font-display text-[12px] font-[700] tracking-[0.14em] uppercase">
                 <FaTriangleExclamation className="text-[13px] text-[#F59E0B]" />
                 <span>IMPORTANT NOTICE</span>
               </div>
-              <p className="font-sans text-[12.5px] md:text-[13px] leading-[1.6] text-[#4B5563]">
+              <p className="font-display text-[12.5px] md:text-[13px] leading-[1.6] text-[#4B5563]">
                 This document is for informational purposes and does not
                 constitute legal advice. For specific concerns, please consult
                 our Compliance Officer at{" "}
@@ -567,12 +567,12 @@ export function USLaborCodesContent({
                 <span className="font-display text-[13px] font-[700] tracking-[0.06em] text-[#111827] uppercase">
                   HILLARY STEP SOLUTIONS
                 </span>
-                <span className="font-sans text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
+                <span className="font-display text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
                   © 2024 HILLARY STEP SOLUTIONS. ARCHITECTING ASCENT.
                 </span>
               </div>
 
-              <div className="flex items-center gap-4 text-[12px] font-sans">
+              <div className="flex items-center gap-4 text-[12px] font-display">
                 <button
                   type="button"
                   onClick={() => onNavigateType?.("privacy")}

@@ -74,12 +74,12 @@ export function PrivacySecurityContent({
   return (
     <div
       ref={contentContainerRef}
-      className="relative w-full bg-white text-[#191C1E] font-sans antialiased"
+      className="relative w-full bg-white text-[#191C1E] font-display antialiased"
     >
       {/* Main Document Wrapper */}
       <div className="mx-auto w-full max-w-[1140px] px-6 md:px-12 pt-14 md:pt-16 pb-12">
         {/* Category Header */}
-        <p className="font-sans text-[12px] md:text-[13px] font-[600] tracking-[0.16em] text-[#1A6CFF] uppercase mb-4">
+        <p className="font-display text-[12px] md:text-[13px] font-[600] tracking-[0.16em] text-[#1A6CFF] uppercase mb-4">
           LEGAL / PRIVACY &amp; SECURITY
         </p>
 
@@ -111,7 +111,7 @@ export function PrivacySecurityContent({
               >
                 {/* Orange checkpoint dot */}
                 <span className="w-[10px] h-[10px] rounded-full bg-[#FF6A00] ring-4 ring-white shadow-xs transition-transform duration-300 group-hover:scale-125" />
-                <span className="font-sans text-[10px] md:text-[11px] font-[600] tracking-[0.16em] text-[#333333] mt-3 group-hover:text-[#1A6CFF] transition-colors">
+                <span className="font-display text-[10px] md:text-[11px] font-[600] tracking-[0.16em] text-[#333333] mt-3 group-hover:text-[#1A6CFF] transition-colors">
                   {step.label}
                 </span>
               </button>
@@ -124,7 +124,7 @@ export function PrivacySecurityContent({
           {/* Left Column: Sticky Table of Contents */}
           <aside className="relative">
             <div className="lg:sticky lg:top-8 flex flex-col">
-              <h2 className="font-sans text-[11px] font-[700] tracking-[0.18em] text-[#9CA3AF] uppercase mb-4">
+              <h2 className="font-display text-[11px] font-[700] tracking-[0.18em] text-[#9CA3AF] uppercase mb-4">
                 CONTENTS
               </h2>
 
@@ -169,14 +169,14 @@ export function PrivacySecurityContent({
                 <span className="text-[#1A6CFF] font-[700]">01.</span>
                 <span>Introduction</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 Hillary Step Solutions (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to
                 architectural precision in protecting your privacy. This Privacy
                 Policy describes how we collect, use, process, and govern your
                 personal information across our global infrastructure and
                 AI-driven platforms.
               </p>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 By accessing or using our services, you acknowledge that you have
                 read and understood this Privacy Policy. We maintain strict
                 operational rigor in ensuring that data is handled with the
@@ -201,7 +201,7 @@ export function PrivacySecurityContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Provided Data
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Information you directly supply through forms, account
                     creation, and direct communication.
                   </p>
@@ -215,7 +215,7 @@ export function PrivacySecurityContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Automated
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Telemetry, usage metrics, and IP data collected automatically
                     via our operational infrastructure.
                   </p>
@@ -229,7 +229,7 @@ export function PrivacySecurityContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Third Parties
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Data obtained from integrated services, verification
                     partners, and public databases.
                   </p>
@@ -243,7 +243,7 @@ export function PrivacySecurityContent({
                 <span className="text-[#1A6CFF] font-[700]">03.</span>
                 <span>Use of Information</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We utilize collected information solely to architect, operate,
                 and enhance our enterprise services, ensure regulatory and
                 statutory compliance, deliver personalized cognitive workflows,
@@ -258,7 +258,7 @@ export function PrivacySecurityContent({
                 <span className="text-[#1A6CFF] font-[700]">04.</span>
                 <span>AI &amp; Automated Processing</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 Our intelligence layer utilizes advanced machine learning models.
                 We enforce strict isolation between analytical processing and
                 personal identity mapping.
@@ -271,7 +271,7 @@ export function PrivacySecurityContent({
                 <span className="text-[#1A6CFF] font-[700]">05.</span>
                 <span>Security Architecture</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We deploy defense-in-depth methodologies. Security is not a
                 feature; it is the foundational layer.
               </p>
@@ -303,7 +303,7 @@ export function PrivacySecurityContent({
                     </span>
                   </button>
                   {openRight === "access" && (
-                    <p className="pt-2 text-[12.5px] md:text-[13px] leading-[1.6] text-[#64748B] font-sans">
+                    <p className="pt-2 text-[12.5px] md:text-[13px] leading-[1.6] text-[#64748B] font-display">
                       Full transparency into your personal data stored within our
                       systems, including processing purposes, data recipients,
                       and retention parameters.
@@ -328,7 +328,7 @@ export function PrivacySecurityContent({
                     </span>
                   </button>
                   {openRight === "deletion" && (
-                    <p className="pt-2 text-[12.5px] md:text-[13px] leading-[1.6] text-[#64748B] font-sans">
+                    <p className="pt-2 text-[12.5px] md:text-[13px] leading-[1.6] text-[#64748B] font-display">
                       Request permanent cryptographic deletion of non-statutory
                       personal data across active databases and secondary backup
                       layers upon verified identification.
@@ -355,7 +355,7 @@ export function PrivacySecurityContent({
                     </span>
                   </button>
                   {openRight === "rectification" && (
-                    <p className="pt-2 text-[12.5px] md:text-[13px] leading-[1.6] text-[#64748B] font-sans">
+                    <p className="pt-2 text-[12.5px] md:text-[13px] leading-[1.6] text-[#64748B] font-display">
                       Expedited rectification or completion of any inaccurate or
                       incomplete personal information upon receipt of valid
                       notification.
@@ -367,11 +367,11 @@ export function PrivacySecurityContent({
 
             {/* Important Notice Box */}
             <div className="bg-[#FFFDF7] rounded-[12px] p-4.5 sm:p-5 border border-[#FDE68A] flex flex-col gap-1.5 mt-2">
-              <div className="flex items-center gap-2 text-[#D97706] font-sans text-[12px] font-[700] tracking-[0.14em] uppercase">
+              <div className="flex items-center gap-2 text-[#D97706] font-display text-[12px] font-[700] tracking-[0.14em] uppercase">
                 <FaTriangleExclamation className="text-[13px] text-[#F59E0B]" />
                 <span>IMPORTANT NOTICE</span>
               </div>
-              <p className="font-sans text-[12.5px] md:text-[13px] leading-[1.6] text-[#4B5563]">
+              <p className="font-display text-[12.5px] md:text-[13px] leading-[1.6] text-[#4B5563]">
                 This document is a technical abstraction of our legal framework.
                 For specific jurisdictional inquiries, please contact our Data
                 Protection Officer at{" "}
@@ -391,12 +391,12 @@ export function PrivacySecurityContent({
                 <span className="font-display text-[13px] font-[700] tracking-[0.06em] text-[#111827] uppercase">
                   HILLARY STEP SOLUTIONS
                 </span>
-                <span className="font-sans text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
+                <span className="font-display text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
                   © 2024 HILLARY STEP SOLUTIONS. ARCHITECTING ASCENT.
                 </span>
               </div>
 
-              <div className="flex items-center gap-4 text-[12px] font-sans">
+              <div className="flex items-center gap-4 text-[12px] font-display">
                 <button
                   type="button"
                   onClick={() => onNavigateType?.("mca")}

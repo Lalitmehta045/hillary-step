@@ -78,12 +78,12 @@ export function ASICStandardsContent({
   return (
     <div
       ref={contentContainerRef}
-      className="relative w-full bg-white text-[#191C1E] font-sans antialiased"
+      className="relative w-full bg-white text-[#191C1E] font-display antialiased"
     >
       {/* Main Document Wrapper */}
       <div className="mx-auto w-full max-w-[1140px] px-6 md:px-12 pt-14 md:pt-16 pb-12">
         {/* Category Header */}
-        <p className="font-sans text-[12px] md:text-[13px] font-[600] tracking-[0.16em] text-[#1A6CFF] uppercase mb-4">
+        <p className="font-display text-[12px] md:text-[13px] font-[600] tracking-[0.16em] text-[#1A6CFF] uppercase mb-4">
           LEGAL / COMPLIANCE &amp; GOVERNANCE
         </p>
 
@@ -112,7 +112,7 @@ export function ASICStandardsContent({
               >
                 {/* Orange checkpoint dot */}
                 <span className="w-[10px] h-[10px] rounded-full bg-[#FF6A00] ring-4 ring-white shadow-xs transition-transform duration-300 group-hover:scale-125" />
-                <span className="font-sans text-[10px] md:text-[11px] font-[600] tracking-[0.16em] text-[#333333] mt-3 group-hover:text-[#1A6CFF] transition-colors">
+                <span className="font-display text-[10px] md:text-[11px] font-[600] tracking-[0.16em] text-[#333333] mt-3 group-hover:text-[#1A6CFF] transition-colors">
                   {step.label}
                 </span>
               </button>
@@ -125,7 +125,7 @@ export function ASICStandardsContent({
           {/* Left Column: Sticky Table of Contents */}
           <aside className="relative">
             <div className="lg:sticky lg:top-8 flex flex-col">
-              <h2 className="font-sans text-[11px] font-[700] tracking-[0.18em] text-[#9CA3AF] uppercase mb-4">
+              <h2 className="font-display text-[11px] font-[700] tracking-[0.18em] text-[#9CA3AF] uppercase mb-4">
                 CONTENTS
               </h2>
 
@@ -170,13 +170,13 @@ export function ASICStandardsContent({
                 <span className="text-[#1A6CFF] font-[700]">01.</span>
                 <span>Introduction</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 Hillary Step Solutions is committed to upholding the highest
                 standards of integrity, transparency, and accountability in
                 alignment with the ASIC (Australian Securities and Investments
                 Commission) principles and regulatory expectations.
               </p>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This ASIC Standard outlines our approach to corporate
                 governance, financial reporting, risk management, and ethical
                 conduct.
@@ -198,7 +198,7 @@ export function ASICStandardsContent({
                 ].map((obj, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
+                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
                   >
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
@@ -215,7 +215,7 @@ export function ASICStandardsContent({
                 <span className="text-[#1A6CFF] font-[700]">03.</span>
                 <span>Scope</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This Standard applies to all employees, contractors,
                 consultants, and third-party partners engaged by Hillary Step
                 Solutions across all operations and jurisdictions.
@@ -228,11 +228,11 @@ export function ASICStandardsContent({
                 <span className="text-[#1A6CFF] font-[700]">04.</span>
                 <span>Governance Framework</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We maintain a robust governance structure that ensures oversight,
                 accountability, and transparency at all levels.
               </p>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 Our governance framework is built on:
               </p>
 
@@ -246,7 +246,7 @@ export function ASICStandardsContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Board Oversight
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Independent oversight to ensure strategic alignment and compliance.
                   </p>
                 </div>
@@ -259,7 +259,7 @@ export function ASICStandardsContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Policies &amp; Procedures
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Documented policies that guide ethical behavior and regulatory compliance.
                   </p>
                 </div>
@@ -272,7 +272,7 @@ export function ASICStandardsContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Risk Management
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Proactive identification and mitigation of legal, operational, and financial risks.
                   </p>
                 </div>
@@ -295,7 +295,7 @@ export function ASICStandardsContent({
                 ].map((req, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
+                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
                   >
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
@@ -312,7 +312,7 @@ export function ASICStandardsContent({
                 <span className="text-[#1A6CFF] font-[700]">06.</span>
                 <span>Compliance &amp; Monitoring</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We implement continuous monitoring, internal audits, and
                 reporting mechanisms to ensure ongoing compliance with ASIC
                 standards and industry best practices.
@@ -325,7 +325,7 @@ export function ASICStandardsContent({
                 <span className="text-[#1A6CFF] font-[700]">07.</span>
                 <span>Enforcement</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 Non-compliance with this Standard may result in disciplinary
                 action, including termination of employment or contract, and
                 potential legal proceedings.
@@ -338,7 +338,7 @@ export function ASICStandardsContent({
                 <span className="text-[#1A6CFF] font-[700]">08.</span>
                 <span>Continuous Improvement</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 We regularly review and update our policies and practices to
                 adapt to regulatory changes and emerging risks.
               </p>
@@ -361,7 +361,7 @@ export function ASICStandardsContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Leadership
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Ensure compliance culture and provide oversight.
                   </p>
                 </div>
@@ -374,7 +374,7 @@ export function ASICStandardsContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Employees
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Understand and adhere to policies and report concerns.
                   </p>
                 </div>
@@ -387,7 +387,7 @@ export function ASICStandardsContent({
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
                     Partners
                   </h4>
-                  <p className="font-sans text-[12.5px] leading-[1.5] text-[#64748B]">
+                  <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
                     Comply with this Standard in all engagements.
                   </p>
                 </div>
@@ -400,7 +400,7 @@ export function ASICStandardsContent({
                 <span className="text-[#1A6CFF] font-[700]">10.</span>
                 <span>References</span>
               </h3>
-              <p className="font-sans text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This Standard aligns with the following:
               </p>
               <ul className="flex flex-col gap-2 pt-1">
@@ -412,7 +412,7 @@ export function ASICStandardsContent({
                 ].map((refItem, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 font-sans text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
+                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
                   >
                     <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
                       ●
@@ -425,11 +425,11 @@ export function ASICStandardsContent({
 
             {/* Important Notice Box */}
             <div className="bg-[#FFFDF7] rounded-[12px] p-4.5 sm:p-5 border border-[#FDE68A] flex flex-col gap-1.5 mt-2">
-              <div className="flex items-center gap-2 text-[#D97706] font-sans text-[12px] font-[700] tracking-[0.14em] uppercase">
+              <div className="flex items-center gap-2 text-[#D97706] font-display text-[12px] font-[700] tracking-[0.14em] uppercase">
                 <FaTriangleExclamation className="text-[13px] text-[#F59E0B]" />
                 <span>IMPORTANT NOTICE</span>
               </div>
-              <p className="font-sans text-[12.5px] md:text-[13px] leading-[1.6] text-[#4B5563]">
+              <p className="font-display text-[12.5px] md:text-[13px] leading-[1.6] text-[#4B5563]">
                 This ASIC Standard is a corporate compliance framework and not a
                 substitute for legal advice. For specific inquiries, please
                 contact our Compliance Officer at{" "}
@@ -449,12 +449,12 @@ export function ASICStandardsContent({
                 <span className="font-display text-[13px] font-[700] tracking-[0.06em] text-[#111827] uppercase">
                   HILLARY STEP SOLUTIONS
                 </span>
-                <span className="font-sans text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
+                <span className="font-display text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
                   © 2024 HILLARY STEP SOLUTIONS. ARCHITECTING ASCENT.
                 </span>
               </div>
 
-              <div className="flex items-center gap-4 text-[12px] font-sans">
+              <div className="flex items-center gap-4 text-[12px] font-display">
                 <button
                   type="button"
                   onClick={() => onNavigateType?.("privacy")}
