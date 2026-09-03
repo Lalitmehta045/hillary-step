@@ -3,11 +3,16 @@
 import { m } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { FaScaleBalanced, FaShieldHalved, FaFileContract, FaBuildingUser } from "react-icons/fa6";
+import { MCAParametersContent } from "./MCAParametersContent";
+import { ASICStandardsContent } from "./ASICStandardsContent";
+import { USLaborCodesContent } from "./USLaborCodesContent";
+import { PrivacySecurityContent } from "./PrivacySecurityContent";
 
 export type StatutoryType = "mca" | "asic" | "labor" | "msme" | "privacy" | null;
 
 interface StatutoryContentProps {
   type: StatutoryType;
+  onNavigateType?: (type: StatutoryType) => void;
 }
 
 const contentData = {
@@ -123,8 +128,20 @@ const contentData = {
   }
 };
 
-export function StatutoryContent({ type }: StatutoryContentProps) {
+export function StatutoryContent({ type, onNavigateType }: StatutoryContentProps) {
   if (!type) return null;
+  if (type === "mca") {
+    return <MCAParametersContent onNavigateType={onNavigateType as any} />;
+  }
+  if (type === "asic") {
+    return <ASICStandardsContent onNavigateType={onNavigateType as any} />;
+  }
+  if (type === "labor") {
+    return <USLaborCodesContent onNavigateType={onNavigateType as any} />;
+  }
+  if (type === "privacy") {
+    return <PrivacySecurityContent onNavigateType={onNavigateType as any} />;
+  }
   const data = contentData[type];
 
   return (

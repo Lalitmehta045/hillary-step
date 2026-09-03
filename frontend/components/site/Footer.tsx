@@ -8,6 +8,10 @@ import { GlobalStaffingModal } from "@/components/site/GlobalStaffingModal";
 import { ITSolutionsModal } from "@/components/site/ITSolutionsModal";
 import { CivilInfraModal } from "@/components/site/CivilInfraModal";
 import { StatutoryModal } from "@/components/site/StatutoryModal";
+import { MCAParametersModal } from "@/components/site/MCAParametersModal";
+import { ASICStandardsModal } from "@/components/site/ASICStandardsModal";
+import { USLaborCodesModal } from "@/components/site/USLaborCodesModal";
+import { PrivacySecurityModal } from "@/components/site/PrivacySecurityModal";
 import type { StatutoryType } from "@/components/site/StatutoryContent";
 import Image from "next/image";
 import { FaLinkedinIn, FaYoutube, FaLocationDot } from "react-icons/fa6";
@@ -67,13 +71,21 @@ export function Footer() {
   const [isITModalOpen, setIsITModalOpen] = useState(false);
   const [isStaffingModalOpen, setIsStaffingModalOpen] = useState(false);
   const [isCivilModalOpen, setIsCivilModalOpen] = useState(false);
+  const [isMCAModalOpen, setIsMCAModalOpen] = useState(false);
+  const [isASICModalOpen, setIsASICModalOpen] = useState(false);
+  const [isLaborModalOpen, setIsLaborModalOpen] = useState(false);
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [statutoryType, setStatutoryType] = useState<StatutoryType>(null);
 
   const handleAction = (action: FooterLink["action"]) => {
     if (action === "it") setIsITModalOpen(true);
     if (action === "staffing") setIsStaffingModalOpen(true);
     if (action === "civil") setIsCivilModalOpen(true);
-    if (action === "mca" || action === "asic" || action === "labor" || action === "msme" || action === "privacy") {
+    if (action === "mca") setIsMCAModalOpen(true);
+    if (action === "asic") setIsASICModalOpen(true);
+    if (action === "labor") setIsLaborModalOpen(true);
+    if (action === "privacy") setIsPrivacyModalOpen(true);
+    if (action === "msme") {
       setStatutoryType(action);
     }
   };
@@ -177,6 +189,50 @@ export function Footer() {
       <ITSolutionsModal isOpen={isITModalOpen} onClose={() => setIsITModalOpen(false)} />
       <GlobalStaffingModal isOpen={isStaffingModalOpen} onClose={() => setIsStaffingModalOpen(false)} />
       <CivilInfraModal isOpen={isCivilModalOpen} onClose={() => setIsCivilModalOpen(false)} />
+      <MCAParametersModal
+        isOpen={isMCAModalOpen}
+        onClose={() => setIsMCAModalOpen(false)}
+        onNavigateType={(t) => {
+          setIsMCAModalOpen(false);
+          if (t === "asic") setIsASICModalOpen(true);
+          else if (t === "labor") setIsLaborModalOpen(true);
+          else if (t === "privacy") setIsPrivacyModalOpen(true);
+          else setStatutoryType(t);
+        }}
+      />
+      <ASICStandardsModal
+        isOpen={isASICModalOpen}
+        onClose={() => setIsASICModalOpen(false)}
+        onNavigateType={(t) => {
+          setIsASICModalOpen(false);
+          if (t === "mca") setIsMCAModalOpen(true);
+          else if (t === "labor") setIsLaborModalOpen(true);
+          else if (t === "privacy") setIsPrivacyModalOpen(true);
+          else setStatutoryType(t);
+        }}
+      />
+      <USLaborCodesModal
+        isOpen={isLaborModalOpen}
+        onClose={() => setIsLaborModalOpen(false)}
+        onNavigateType={(t) => {
+          setIsLaborModalOpen(false);
+          if (t === "mca") setIsMCAModalOpen(true);
+          else if (t === "asic") setIsASICModalOpen(true);
+          else if (t === "privacy") setIsPrivacyModalOpen(true);
+          else setStatutoryType(t);
+        }}
+      />
+      <PrivacySecurityModal
+        isOpen={isPrivacyModalOpen}
+        onClose={() => setIsPrivacyModalOpen(false)}
+        onNavigateType={(t) => {
+          setIsPrivacyModalOpen(false);
+          if (t === "mca") setIsMCAModalOpen(true);
+          else if (t === "asic") setIsASICModalOpen(true);
+          else if (t === "labor") setIsLaborModalOpen(true);
+          else setStatutoryType(t);
+        }}
+      />
       <StatutoryModal 
         isOpen={statutoryType !== null} 
         type={statutoryType} 
