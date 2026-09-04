@@ -94,15 +94,20 @@ export function GlobalTalentGlobe3D() {
     glowRing.position.y = 0.36;
     baseGroup.add(glowRing);
 
-    // --- Core White Sphere (Earth Body) ---
+    // --- Core Real Earth Satellite Sphere Beneath Dots ---
     const sphereRadius = 1.48;
     const coreGeometry = new THREE.SphereGeometry(sphereRadius * 0.995, 64, 64);
+    const textureLoader = new THREE.TextureLoader();
+    const satelliteTexture = textureLoader.load("/assets/earth-blue-marble.jpg");
+    satelliteTexture.colorSpace = THREE.SRGBColorSpace;
+
     const coreMaterial = new THREE.MeshStandardMaterial({
-      color: 0xFDFDFD,
-      roughness: 0.42,
-      metalness: 0.04,
+      map: satelliteTexture,
+      roughness: 0.65,
+      metalness: 0.05,
     });
     const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
+    coreMesh.rotation.y = -Math.PI / 2;
     globeGroup.add(coreMesh);
 
     // Soft atmosphere glow shell

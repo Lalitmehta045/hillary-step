@@ -179,18 +179,16 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                       setActiveTab(tab.id);
                       setActiveCardIndex(idx);
                     }}
-                    className={`group w-full flex items-center gap-3.5 px-4 py-3 rounded-[14px] text-left transition-all duration-200 cursor-pointer ${
-                      isActive
+                    className={`group w-full flex items-center gap-3.5 px-4 py-3 rounded-[14px] text-left transition-all duration-200 cursor-pointer ${isActive
                         ? "bg-white text-[#111827] font-[700] shadow-xs border border-gray-100"
                         : "text-[#4B5563] hover:text-[#111827] hover:bg-white/60 font-[500]"
-                    }`}
+                      }`}
                   >
                     <div
-                      className={`w-8 h-8 rounded-[10px] flex items-center justify-center transition-colors ${
-                        isActive
+                      className={`w-8 h-8 rounded-[10px] flex items-center justify-center transition-colors ${isActive
                           ? "bg-[#EAF8EE] text-[#16A34A]"
                           : "bg-transparent text-[#9CA3AF] group-hover:text-[#111827]"
-                      }`}
+                        }`}
                     >
                       <Icon className="text-[15px]" />
                     </div>
@@ -243,11 +241,10 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                     setActiveCardIndex(idx);
                     setActiveTab(card.tabId);
                   }}
-                  className={`group relative w-full bg-white rounded-[20px] p-6 sm:p-7 border transition-all duration-300 cursor-pointer flex items-center justify-between gap-6 ${
-                    isSelected
+                  className={`group relative w-full bg-white rounded-[20px] p-6 sm:p-7 border transition-all duration-300 cursor-pointer flex items-center justify-between gap-6 ${isSelected
                       ? "border-[#16A34A]/40 shadow-[0_8px_30px_rgb(22,163,74,0.08)] bg-gradient-to-r from-white to-[#F0FDF4]/30"
                       : "border-[#E2E8F0]/80 hover:border-gray-300 hover:shadow-xs"
-                  }`}
+                    }`}
                 >
                   <div className="flex flex-col gap-1.5 max-w-[540px]">
                     <div className="flex items-center gap-2">

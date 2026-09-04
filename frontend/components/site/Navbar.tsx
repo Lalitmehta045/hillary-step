@@ -1,367 +1,437 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { m, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 
-const NAV = [
-  { name: "Home", href: "/#home" },
-  { name: "About", href: "/#about" },
-  { name: "Pillars", href: "/#pillars" },
-  { name: "Capabilities", href: "/#capabilities" },
-  { name: "Global Presence", href: "/#global-presence" }
+const links = [
+  { slug: "home", label: "Home", href: "/#home", num: "01", subtitle: "Ecosystem Overview" },
+  { slug: "about", label: "About", href: "/#about", num: "02", subtitle: "Mission & Leadership" },
+  { slug: "pillars", label: "Pillars", href: "/#pillars", num: "03", subtitle: "Civil, Staffing & IT" },
+  { slug: "capabilities", label: "Capabilities", href: "/#capabilities", num: "04", subtitle: "Global Delivery" },
+  { slug: "global-presence", label: "Global Presence", href: "/#global-presence", num: "05", subtitle: "USA · IND · AUS" },
+  { slug: "contact", label: "Contact Us", href: "/#contact", num: "06", subtitle: "Start a Conversation" },
 ];
-const TOP_TRIGGER_ZONE = 75; // px from top of viewport
-const HIDE_DELAY_MS = 250; // ms to wait before hiding on mouse leave
-const SCROLL_THRESHOLD = 80; // px scroll offset considered "Hero / top of page"
 
-export function Navbar() {
-  const [isAtTop, setIsAtTop] = useState(true);
-  const [isRevealed, setIsRevealed] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
-  const [selectedRegion, setSelectedRegion] = useState("USA");
+const REGIONS = ["USA", "IND", "AUS"];
+const REGION_FLAGS: Record<string, string> = {
+  USA: "https://flagcdn.com/us.svg",
+  IND: "https://flagcdn.com/in.svg",
+  AUS: "https://flagcdn.com/au.svg",
+};
 
-  const REGIONS = ["USA", "IND", "AUS"];
-  const REGION_FLAGS: Record<string, string> = {
-    USA: "https://flagcdn.com/us.svg",
-    IND: "https://flagcdn.com/in.svg",
-    AUS: "https://flagcdn.com/au.svg"
+// Reusable Magnetic Button with spring physics
+function MagneticButton({
+  children,
+  href,
+  onClick,
+  className = "",
+}: {
+  children: React.ReactNode;
+  href?: string;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  className?: string;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const x = useSpring(mx, { stiffness: 220, damping: 16, mass: 0.35 });
+  const y = useSpring(my, { stiffness: 220, damping: 16, mass: 0.35 });
+
+  const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const r = ref.current?.getBoundingClientRect();
+    if (!r) return;
+    mx.set((e.clientX - r.left - r.width / 2) * 0.22);
+    my.set((e.clientY - r.top - r.height / 2) * 0.32);
   };
 
-  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isOverNavbarRef = useRef(false);
+  const onLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
 
-  // Clear hide timer helper
-  const clearHideTimer = useCallback(() => {
-    if (hideTimerRef.current) {
-      clearTimeout(hideTimerRef.current);
-      hideTimerRef.current = null;
-    }
+  return (
+    <m.a
+      ref={ref}
+      href={href}
+      onClick={onClick}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      style={{ x, y }}
+      whileTap={{ scale: 0.96 }}
+      className={className}
+    >
+      {children}
+    </m.a>
+  );
+}
+
+export function Navbar() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState("USA");
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 30);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Schedule hiding the navbar after HIDE_DELAY_MS
-  const scheduleHide = useCallback(() => {
-    clearHideTimer();
-    hideTimerRef.current = setTimeout(() => {
-      setIsRevealed(false);
-      hideTimerRef.current = null;
-    }, HIDE_DELAY_MS);
-  }, [clearHideTimer]);
-
-  // Reveal navbar immediately
-  const revealNavbar = useCallback(() => {
-    clearHideTimer();
-    setIsRevealed(true);
-  }, [clearHideTimer]);
-
-  // Scroll detection — efficient passive listener
   useEffect(() => {
-    const handleScroll = () => {
-      const atTop = window.scrollY <= SCROLL_THRESHOLD;
-      setIsAtTop((prev) => (prev !== atTop ? atTop : prev));
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
     };
+  }, [open]);
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Viewport & Pointer tracking for desktop hover reveal
-  useEffect(() => {
-    const checkDesktop = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-
-    checkDesktop();
-    window.addEventListener("resize", checkDesktop, { passive: true });
-
-    const handlePointerMove = (e: PointerEvent) => {
-      // Ignore touch events or mobile viewports
-      if (e.pointerType === "touch" || window.innerWidth < 1024) return;
-
-      if (e.clientY <= TOP_TRIGGER_ZONE) {
-        revealNavbar();
-      } else if (!isOverNavbarRef.current) {
-        // Pointer is below trigger zone and not over the navbar
-        if (!hideTimerRef.current && isRevealed) {
-          scheduleHide();
+  const go = (href: string) => {
+    setOpen(false);
+    setTimeout(() => {
+      if (href.startsWith("/#")) {
+        const id = href.replace("/#", "");
+        if (id === "home") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.history.pushState(null, "", "#home");
+          return;
         }
-      }
-    };
-
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-
-    return () => {
-      window.removeEventListener("resize", checkDesktop);
-      window.removeEventListener("pointermove", handlePointerMove);
-      clearHideTimer();
-    };
-  }, [revealNavbar, scheduleHide, clearHideTimer, isRevealed]);
-
-  // Body scroll lock on mobile menu open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isMobileMenuOpen]);
-
-  // Determine visibility state
-  // On mobile (< 1024px) or when at the top of the page (Hero), always visible.
-  // When scrolled down on desktop, visible only when revealed by hover.
-  const isVisible = !isDesktop || isAtTop || isRevealed;
-
-  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('/#') && window.location.pathname === '/') {
-      e.preventDefault();
-      const targetId = href.replace('/#', '');
-      const element = document.getElementById(targetId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-        window.history.pushState(null, '', `#${targetId}`);
-      } else if (targetId === 'home') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        window.history.pushState(null, '', '#home');
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          window.history.pushState(null, "", `#${id}`);
+        } else {
+          window.location.href = href;
+        }
+      } else if (href.startsWith("#")) {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       } else {
         window.location.href = href;
       }
-    }
+    }, 450);
   };
 
   return (
     <>
-      {/* Invisible desktop top hover trigger zone (active only when scrolled down) */}
-      {isDesktop && !isAtTop && (
-        <div
-          className="fixed top-0 inset-x-0 h-[75px] z-40 pointer-events-auto"
-          onMouseEnter={revealNavbar}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Main Navbar Header */}
-      <header
-        onMouseEnter={() => {
-          if (!isDesktop) return;
-          isOverNavbarRef.current = true;
-          revealNavbar();
-        }}
-        onMouseLeave={(e) => {
-          if (!isDesktop) return;
-          isOverNavbarRef.current = false;
-          // If cursor exited directly into the top trigger zone, stay revealed
-          if (e.clientY <= TOP_TRIGGER_ZONE) return;
-          scheduleHide();
-        }}
-        style={{
-          transform: isVisible ? "translateY(0)" : "translateY(-100%)",
-          opacity: isVisible ? 1 : 0,
-          pointerEvents: isVisible ? "auto" : "none",
-          backgroundColor: isAtTop ? "rgba(255, 255, 255, 0)" : "rgba(255, 255, 255, 0.82)",
-          backdropFilter: isAtTop ? "none" : "blur(12px)",
-          WebkitBackdropFilter: isAtTop ? "none" : "blur(12px)",
-          borderBottom: isAtTop ? "1px solid rgba(0, 0, 0, 0)" : "1px solid rgba(0, 0, 0, 0.06)",
-          boxShadow: isAtTop ? "none" : "0 4px 24px rgba(0, 0, 0, 0.03)",
-          transition:
-            "transform 300ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms cubic-bezier(0.16, 1, 0.3, 1), background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease, backdrop-filter 300ms ease, -webkit-backdrop-filter 300ms ease",
-        }}
-        className="fixed top-0 inset-x-0 z-50 will-change-[transform,opacity]"
+      {/* Top Header Bar */}
+      <m.header
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: open ? 0 : 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed top-0 inset-x-0 z-[9000] transition-all duration-500 ${
+          open ? "pointer-events-none" : scrolled ? "py-3" : "py-5 md:py-6"
+        }`}
       >
-        <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between px-[64px] max-md:px-[24px] max-lg:px-[40px] py-[24px]">
-          <a href="#" className="shrink-0 leading-none">
+        <div
+          className={`mx-4 md:mx-auto max-w-6xl flex items-center justify-between transition-all duration-500 rounded-full px-4 sm:px-6 py-2.5 ${
+            scrolled
+              ? "bg-white/70 text-[#111111] backdrop-blur-xl border border-white/60 shadow-[0_10px_35px_rgba(0,0,0,0.07)]"
+              : "bg-transparent text-white border border-transparent shadow-none backdrop-blur-none"
+          }`}
+        >
+          {/* Logo */}
+          <a
+            href="/#home"
+            onClick={(e) => {
+              e.preventDefault();
+              go("/#home");
+            }}
+            className="flex items-center gap-3 shrink-0 group cursor-pointer"
+          >
             <Image
               src="/assets/Hillary Step Solutions  logo.png"
               alt="Hillary Step Solutions Logo"
-              width={63}
-              height={43}
+              width={54}
+              height={36}
               priority
-              className="object-contain"
+              className="object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
             />
           </a>
 
-          <nav className="hidden items-center gap-[36px] lg:flex">
-            {NAV.map((item) => (
+          {/* Desktop Nav Links */}
+          <div className="hidden lg:flex items-center gap-1 font-display text-sm">
+            {links.slice(0, 5).map((l) => (
               <a
-                key={item.name}
-                href={item.href}
-                onClick={(e) => handleSmoothScroll(e, item.href)}
-                className="group relative font-display text-[14px] font-[510] leading-[20px] text-[#111111]"
+                key={l.slug}
+                href={l.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  go(l.href);
+                }}
+                className={`link-underline px-4 py-2 font-medium text-sm transition-colors cursor-pointer ${
+                  scrolled
+                    ? "text-slate-700 hover:text-[#1A6CFF]"
+                    : "text-white/90 hover:text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+                }`}
               >
-                <span className="relative block">
-                  <span className="block group-hover:opacity-0 transition-opacity duration-300">{item.name}</span>
-                  <span className="absolute inset-0 grad-text opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
-                    {item.name}
-                  </span>
-                </span>
+                {l.label}
               </a>
             ))}
-          </nav>
+          </div>
 
-          <div className="flex items-center gap-[16px] max-lg:hidden">
-            <div className="relative group">
+          {/* Right Action Section */}
+          <div className="flex items-center gap-3">
+            {/* Region Selector */}
+            <div className="relative group hidden sm:block">
               <button
                 type="button"
-                className="flex items-center gap-[7px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] cursor-pointer py-[10px]"
+                className={`flex items-center gap-1.5 font-display text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
+                  scrolled
+                    ? "bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200/80"
+                    : "bg-black/20 text-white hover:bg-black/30 border border-white/20 backdrop-blur-sm drop-shadow-sm"
+                }`}
               >
-                <span className="flex items-center gap-[6px]">
-                  <img src={REGION_FLAGS[selectedRegion]} alt={`${selectedRegion} flag`} className="w-[24px] h-[18px] object-contain rounded-[2px]" />
-                  {selectedRegion}
-                </span>
-                <ChevronIcon />
+                <img
+                  src={REGION_FLAGS[selectedRegion]}
+                  alt={`${selectedRegion} flag`}
+                  className="w-4 h-3 object-cover rounded-[2px]" 
+                />
+                <span>{selectedRegion}</span>
+                <span className="text-[10px] opacity-60">▼</span>
               </button>
 
-              {/* Invisible bridge for hover continuity */}
-              <div className="absolute top-full left-0 right-0 h-[10px]" />
-
               {/* Dropdown Menu */}
-              <div className="absolute top-[100%] right-0 mt-[4px] w-[140px] rounded-[12px] bg-white border border-[#E5E7EB] shadow-[0_8px_30px_rgb(0,0,0,0.08)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-[8px] z-50 translate-y-[-10px] group-hover:translate-y-0">
-                {REGIONS.filter(r => r !== selectedRegion).map(region => (
+              <div className="absolute top-[100%] right-0 mt-2 w-28 rounded-xl bg-white border border-slate-200 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-1.5 z-50">
+                {REGIONS.filter((r) => r !== selectedRegion).map((region) => (
                   <button
                     key={region}
                     onClick={() => setSelectedRegion(region)}
-                    className="flex w-full items-center gap-[8px] px-[16px] py-[10px] text-left font-display text-[14px] font-[510] text-[#111111] hover:bg-[#F8F9FB] hover:text-[#1A6CFF] transition-colors"
+                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 hover:text-[#1A6CFF] transition-colors cursor-pointer"
                   >
-                    <img src={REGION_FLAGS[region]} alt={`${region} flag`} className="w-[24px] h-[18px] object-contain rounded-[2px]" />
+                    <img
+                      src={REGION_FLAGS[region]}
+                      alt={`${region} flag`}
+                      className="w-4 h-3 object-cover rounded-[2px]"
+                    />
                     {region}
                   </button>
                 ))}
               </div>
             </div>
 
-            <AnimatedButton
+            {/* Magnetic CTA Button */}
+            <MagneticButton
               href="/#contact"
-              variant="subtleShadow"
-              onClick={(e: any) => handleSmoothScroll(e, "/#contact")}
-              className="flex h-[44px] items-center gap-[9px] rounded-full bg-[#1A6CFF] px-[22px] font-display text-[14px] font-[510] leading-[20px] text-white hover:bg-[#1556cc] transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                go("/#contact");
+              }}
+              className="hidden md:inline-flex items-center gap-2 rounded-full bg-[#1A6CFF] text-white px-5 py-2.5 font-display text-sm font-semibold hover:bg-[#1556cc] shadow-[0_4px_14px_rgba(26,108,255,0.3)] transition cursor-pointer"
             >
               Contact Us
-            </AnimatedButton>
-            <AnimatedButton
+              <span className="text-xs">↗</span>
+            </MagneticButton>
+
+            {/* Admin Portal Button - Frosted Glass Style */}
+            <a
               href="/admin/login"
-              variant="subtleShadow"
-              className="flex h-[44px] items-center gap-[9px] rounded-full border border-[#111111]/10 bg-white/50 px-[22px] font-display text-[14px] font-[510] leading-[20px] text-[#111111] backdrop-blur-sm hover:bg-black/5 transition-colors"
+              className={`hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 font-display text-xs font-semibold transition-all duration-300 cursor-pointer ${
+                scrolled
+                  ? "border border-slate-300/80 bg-white/50 hover:bg-white/80 text-slate-800 backdrop-blur-md shadow-sm"
+                  : "border border-white/30 bg-white/15 hover:bg-white/25 text-white backdrop-blur-md shadow-sm drop-shadow-sm"
+              }`}
             >
               Admin Portal
-              <ArrowUpRight />
-            </AnimatedButton>
-          </div>
-
-          <button
-            className="lg:hidden flex h-[44px] w-[44px] items-center justify-center rounded-full bg-white/20 backdrop-blur-md border border-black/10 text-ink"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open Menu"
-          >
-            <MenuIcon />
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-white overflow-y-auto animate-in fade-in duration-300">
-          <div className="mx-auto flex w-full items-center justify-between px-[24px] pt-[24px] pb-[24px]">
-            <a href="#" className="shrink-0 leading-none" onClick={() => setIsMobileMenuOpen(false)}>
-              <Image
-                src="/assets/Hillary Step Solutions  logo.png"
-                alt="Hillary Step Solutions Logo"
-                width={63}
-                height={43}
-                className="object-contain"
-              />
+              <span className="text-xs">↗</span>
             </a>
+
+            {/* Circular Hamburger Button - Mobile Only */}
             <button
-              className="flex h-[44px] w-[44px] items-center justify-center rounded-full bg-black/5 border border-black/10 text-black"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-label="Close Menu"
+              onClick={() => setOpen((o) => !o)}
+              aria-label="Toggle menu"
+              className={`lg:hidden relative h-10 w-10 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105 ${
+                scrolled
+                  ? "bg-slate-100 border border-slate-200 text-slate-800 hover:bg-slate-200"
+                  : "bg-black/20 border border-white/20 text-white hover:bg-black/30 backdrop-blur-sm"
+              }`}
             >
-              <CloseIcon />
+              <span className="flex flex-col gap-1.5">
+                <m.span
+                  animate={{ rotate: open ? 45 : 0, y: open ? 4 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="block h-[1.5px] w-5 bg-current"
+                />
+                <m.span
+                  animate={{ rotate: open ? -45 : 0, y: open ? -3.5 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="block h-[1.5px] w-5 bg-current"
+                />
+              </span>
             </button>
           </div>
-          <div className="flex flex-col px-[24px] pt-[40px] gap-[32px]">
-            {NAV.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                onClick={(e) => {
-                  handleSmoothScroll(e, item.href);
-                  setIsMobileMenuOpen(false);
-                }}
-                className="font-display text-[32px] font-[600] leading-[36px] text-[#111111]"
-              >
-                {item.name}
-              </a>
-            ))}
-            <div className="mt-[40px] flex flex-col gap-[16px] border-t border-black/10 pt-[40px]">
-              <a
-                href="/#contact"
-                onClick={(e) => {
-                  handleSmoothScroll(e, "/#contact");
-                  setIsMobileMenuOpen(false);
-                }}
-                className="flex h-[54px] w-full items-center justify-center gap-[9px] rounded-full bg-[#1A6CFF] px-[22px] font-sans text-[16px] font-semibold text-white"
-              >
-                Contact Us
-              </a>
-              <a
-                href="/admin/login"
-                className="flex h-[54px] w-full items-center justify-center gap-[9px] rounded-full bg-white border border-black/10 px-[22px] font-sans text-[16px] font-semibold text-[#111111]"
-              >
-                Admin Portal
-                <ArrowUpRight />
-              </a>
-            </div>
-          </div>
         </div>
-      )}
+      </m.header>
+
+      {/* Full-Screen Circular ClipPath Overlay Menu — Clean, Simple White Background */}
+      <AnimatePresence>
+        {open && (
+          <m.div
+            initial={{ clipPath: "circle(0% at calc(100% - 48px) 40px)" }}
+            animate={{ clipPath: "circle(160% at calc(100% - 48px) 40px)" }}
+            exit={{ clipPath: "circle(0% at calc(100% - 48px) 40px)" }}
+            transition={{ duration: 0.75, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[9999] bg-white text-[#111111] flex flex-col justify-between overflow-hidden shadow-2xl"
+          >
+            {/* Overlay Top Bar */}
+            <div className="w-full px-6 sm:px-12 md:px-16 pt-6 pb-4 flex items-center justify-between border-b border-slate-100 bg-white">
+              <a
+                href="/#home"
+                onClick={(e) => {
+                  e.preventDefault();
+                  go("/#home");
+                }}
+                className="flex items-center gap-3 cursor-pointer"
+              >
+                <Image
+                  src="/assets/Hillary Step Solutions  logo.png"
+                  alt="Hillary Step Solutions Logo"
+                  width={52}
+                  height={35}
+                  priority
+                  className="object-contain"
+                />
+                <span className="font-display font-bold text-sm tracking-wider uppercase text-slate-900 hidden sm:inline">
+                  Hillary Step Solutions
+                </span>
+              </a>
+
+              {/* Clean Close Button */}
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close menu"
+                className="h-10 w-10 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 flex items-center justify-center cursor-pointer transition-transform hover:scale-105"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            {/* Main Interactive Content */}
+            <div className="flex-1 w-full px-6 sm:px-12 md:px-16 lg:px-24 py-8 flex flex-col lg:flex-row gap-8 lg:gap-16 justify-between items-stretch overflow-y-auto">
+              {/* Left Column: Navigation Index */}
+              <div className="w-full lg:w-3/5 flex flex-col justify-center">
+                <div className="text-[11px] uppercase tracking-[0.3em] text-[#1A6CFF] font-semibold mb-4 sm:mb-6 flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#1A6CFF]" />
+                  Navigation
+                </div>
+
+                <nav className="flex flex-col">
+                  {links.map((l, i) => (
+                    <m.a
+                      key={l.slug}
+                      href={l.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        go(l.href);
+                      }}
+                      initial={{ y: 30, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.1 + i * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      className="group flex items-center justify-between border-b border-slate-100 py-3.5 sm:py-4.5 cursor-pointer transition-all duration-200 hover:pl-2"
+                    >
+                      <div className="flex items-baseline gap-4 sm:gap-6">
+                        <span className="font-mono text-xs text-[#1A6CFF] font-semibold w-6">
+                          {l.num}
+                        </span>
+                        <span className="font-display font-bold text-2xl sm:text-4xl md:text-5xl tracking-tight text-slate-900 group-hover:text-[#1A6CFF] transition-colors duration-200">
+                          {l.label}
+                        </span>
+                        <span className="hidden sm:inline-block text-xs text-slate-400 font-normal ml-3">
+                          {l.subtitle}
+                        </span>
+                      </div>
+                      <span className="text-slate-300 group-hover:text-[#1A6CFF] group-hover:translate-x-1 group-hover:-translate-y-1 text-xl sm:text-2xl transition-all duration-200">
+                        ↗
+                      </span>
+                    </m.a>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Right Column: Clean White Cards */}
+              <div className="w-full lg:w-2/5 flex flex-col gap-4 justify-center">
+                {/* Global Command Hubs Card */}
+                <div className="rounded-2xl border border-slate-200/80 bg-[#F8F9FB] p-6 shadow-sm">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.25em] text-slate-400 mb-3 flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#40F600]" />
+                    Global Command Hubs
+                  </div>
+                  <div className="space-y-2 text-xs text-slate-700">
+                    <div className="flex items-center justify-between py-1.5 border-b border-slate-200/50">
+                      <span className="flex items-center gap-2 font-medium">
+                        <img src="https://flagcdn.com/us.svg" alt="USA" className="w-4 h-3 object-cover rounded-[2px]" />
+                        United States
+                      </span>
+                      <span className="text-slate-500">New York · LA · Dallas</span>
+                    </div>
+                    <div className="flex items-center justify-between py-1.5 border-b border-slate-200/50">
+                      <span className="flex items-center gap-2 font-medium">
+                        <img src="https://flagcdn.com/in.svg" alt="India" className="w-4 h-3 object-cover rounded-[2px]" />
+                        India
+                      </span>
+                      <span className="text-slate-500">Delhi NCR · Bengaluru · Mumbai</span>
+                    </div>
+                    <div className="flex items-center justify-between py-1.5">
+                      <span className="flex items-center gap-2 font-medium">
+                        <img src="https://flagcdn.com/au.svg" alt="Australia" className="w-4 h-3 object-cover rounded-[2px]" />
+                        Australia
+                      </span>
+                      <span className="text-slate-500">Sydney · Melbourne · Brisbane</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Direct Project Action Card */}
+                <div className="rounded-2xl border border-blue-100 bg-blue-50/40 p-6 shadow-sm">
+                  <h4 className="font-display font-bold text-base text-slate-900 mb-1">
+                    Ready to scale global operations?
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                    Connect with our team for civil infrastructure, high-velocity software engineering, and global staffing.
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <a
+                      href="/#contact"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        go("/#contact");
+                      }}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#1A6CFF] hover:bg-[#1556cc] text-white px-5 py-2 font-display text-xs font-semibold shadow-[0_4px_12px_rgba(26,108,255,0.25)] transition"
+                    >
+                      Start Project
+                      <span>↗</span>
+                    </a>
+                    <a
+                      href="/admin/login"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 px-4 py-2 font-display text-xs font-medium transition shadow-sm"
+                    >
+                      Admin Portal
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Footer Row */}
+            <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 py-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500 font-display bg-white">
+              <div>
+                Inquiries:{" "}
+                <a href="mailto:info@hillarystep.com" className="text-[#1A6CFF] hover:underline lowercase font-medium">
+                  info@hillarystep.com
+                </a>
+              </div>
+              <div className="hidden md:block text-slate-400">
+                Civil Infrastructure · Global Staffing · IT Solutions
+              </div>
+              <div>
+                © {new Date().getFullYear()} Hillary Step Solutions Private Limited
+              </div>
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
     </>
-  );
-}
-
-function GlobeIcon() {
-  return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18" />
-    </svg>
-  );
-}
-
-function ChevronIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  );
-}
-
-function ArrowUpRight() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M7 17L17 7M17 7H8M17 7v9" />
-    </svg>
-  );
-}
-
-function MenuIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <line x1="18" y1="6" x2="6" y2="18"></line>
-      <line x1="6" y1="6" x2="18" y2="18"></line>
-    </svg>
   );
 }

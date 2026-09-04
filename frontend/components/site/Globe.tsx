@@ -1,4 +1,7 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
 import { landPoints, slerp, toVec, type Vec3 } from "./geo";
 
 
@@ -167,6 +170,7 @@ type Label = { id: number; x: number; y: number; o: number; def: ArcDef["label"]
 export function Globe({ active = "India" }: { active?: string }) {
   const wrap = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
+  const threeCanvas = useRef<HTMLCanvasElement>(null);
   const [labels, setLabels] = useState<Label[]>([]);
 
   // target longitude for each region
@@ -184,9 +188,80 @@ export function Globe({ active = "India" }: { active?: string }) {
   useEffect(() => {
     const el = wrap.current;
     const cv = canvas.current;
-    if (!el || !cv) return;
+    const threeCv = threeCanvas.current;
+    if (!el || !cv || !threeCv) return;
     const ctx = cv.getContext("2d");
     if (!ctx) return;
+
+    // --- Three.js Setup for Real Earth Satellite Map ---
+    const threeScene = new THREE.Scene();
+    const threeCamera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+    const threeRenderer = new THREE.WebGLRenderer({
+      canvas: threeCv,
+      alpha: true,
+      antialias: true,
+      powerPreference: "high-performance",
+    });
+    threeRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+    threeRenderer.toneMappingExposure = 1.28;
+
+    const textureLoader = new THREE.TextureLoader();
+    const earthTexture = textureLoader.load("/assets/earth-blue-marble.jpg");
+    earthTexture.colorSpace = THREE.SRGBColorSpace;
+
+    // Group for matching tilt and spin
+    const tiltGroup = new THREE.Group();
+    threeScene.add(tiltGroup);
+
+    // Realistic Satellite Earth Sphere (positioned right beneath the dots layer)
+    const earthGeo = new THREE.SphereGeometry(0.998, 64, 64);
+    const earthMat = new THREE.MeshStandardMaterial({
+      map: earthTexture,
+      roughness: 0.68,
+      metalness: 0.05,
+    });
+    const earthMesh = new THREE.Mesh(earthGeo, earthMat);
+    tiltGroup.add(earthMesh);
+
+    // Subtle atmospheric rim glow
+    const atmosphereGeo = new THREE.SphereGeometry(1.025, 64, 64);
+    const atmosphereMat = new THREE.ShaderMaterial({
+      vertexShader: `
+        varying vec3 vNormal;
+        void main() {
+          vNormal = normalize(normalMatrix * normal);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vNormal;
+        void main() {
+          float intensity = pow(0.62 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+          gl_FragColor = vec4(0.2, 0.55, 1.0, 1.0) * intensity * 0.75;
+        }
+      `,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide,
+      transparent: true,
+    });
+    const atmosphereMesh = new THREE.Mesh(atmosphereGeo, atmosphereMat);
+    tiltGroup.add(atmosphereMesh);
+
+    // Lights for Three.js Satellite Earth - ensuring all regions (US, India, Australia) are clearly visible
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.65);
+    threeScene.add(ambientLight);
+
+    const frontLight = new THREE.DirectionalLight(0xffffff, 1.8);
+    frontLight.position.set(0.5, 1.5, 5);
+    threeScene.add(frontLight);
+
+    const warmKeyLight = new THREE.DirectionalLight(0xfffaed, 1.1);
+    warmKeyLight.position.set(-4, 3, 3);
+    threeScene.add(warmKeyLight);
+
+    const rimLight = new THREE.DirectionalLight(0x7c6cf6, 1.0);
+    rimLight.position.set(4, -2, -2);
+    threeScene.add(rimLight);
 
     const onEnter = () => {
       pausedRef.current = true;
@@ -241,6 +316,9 @@ export function Globe({ active = "India" }: { active?: string }) {
       cv.height = Math.floor(h * dpr);
       cv.style.width = `${w}px`;
       cv.style.height = `${h}px`;
+
+      threeRenderer.setPixelRatio(dpr);
+      threeRenderer.setSize(w, h, false);
     };
     resize();
     const ro = new ResizeObserver(resize);
@@ -329,45 +407,37 @@ export function Globe({ active = "India" }: { active?: string }) {
         }
       }
 
-      // soft sphere body
-      const sunScreen = project(sunVecGeo);
-      const dx = sunScreen.x - cx;
-      const dy = sunScreen.y - cy;
-      const mag = Math.sqrt(dx * dx + dy * dy) || 1;
+      // Synchronize Three.js Earth satellite orientation & camera in real time
+      tiltGroup.rotation.x = TILT;
+      earthMesh.rotation.y = spin - Math.PI / 2;
 
-      const gradX = cx + (dx / mag) * R * 0.5;
-      const gradY = cy + (dy / mag) * R * 0.5;
+      const fov = 2 * Math.atan((h / 2) / (R * cam)) * (180 / Math.PI);
+      threeCamera.fov = fov;
+      threeCamera.aspect = w / h;
+      threeCamera.position.set(0, 0, cam);
+      threeCamera.lookAt(0, 0, 0);
+      threeCamera.updateProjectionMatrix();
 
-      const body = ctx.createRadialGradient(
-        gradX,
-        gradY,
-        R * 0.1,
+      threeRenderer.render(threeScene, threeCamera);
+
+      // Soft edge vignette & subtle atmospheric ring over satellite earth
+      const edgeVignette = ctx.createRadialGradient(
         cx,
         cy,
-        R * 1.05,
+        R * 0.82,
+        cx,
+        cy,
+        R,
       );
-
-      // Interpolate sphere highlight based on whether sun is in front
-      const sunZ = Math.max(-1, Math.min(1, sunScreen.z));
-      const sunIntensityBg = (sunZ + 1) / 2;
-
-      const r0 = 20 + 20 * sunIntensityBg;
-      const g0 = 20 + 30 * sunIntensityBg;
-      const b0 = 30 + 40 * sunIntensityBg;
-
-      const r1 = 10 + 5 * sunIntensityBg;
-      const g1 = 10 + 5 * sunIntensityBg;
-      const b1 = 15 + 10 * sunIntensityBg;
-
-      body.addColorStop(0, `rgba(${r0 | 0},${g0 | 0},${b0 | 0},0.9)`);
-      body.addColorStop(0.72, `rgba(${r1 | 0},${g1 | 0},${b1 | 0},0.85)`);
-      body.addColorStop(1, "rgba(5,5,15,0.6)");
-      ctx.strokeStyle = "rgba(124,92,246,0.2)";
+      edgeVignette.addColorStop(0, "rgba(5,10,25,0)");
+      edgeVignette.addColorStop(0.85, "rgba(5,10,25,0.2)");
+      edgeVignette.addColorStop(1, "rgba(10,15,35,0.5)");
       ctx.beginPath();
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
-      ctx.fillStyle = body;
+      ctx.fillStyle = edgeVignette;
       ctx.fill();
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(124,92,246,0.3)";
+      ctx.lineWidth = 1.2;
       ctx.stroke();
 
       // dots — floating / drifting like petals
@@ -576,6 +646,12 @@ export function Globe({ active = "India" }: { active?: string }) {
       io.disconnect();
       el.removeEventListener("pointerenter", onEnter);
       el.removeEventListener("pointerleave", onLeave);
+      threeRenderer.dispose();
+      earthGeo.dispose();
+      earthMat.dispose();
+      earthTexture.dispose();
+      atmosphereGeo.dispose();
+      atmosphereMat.dispose();
     };
   }, []);
 
@@ -586,6 +662,7 @@ export function Globe({ active = "India" }: { active?: string }) {
       <div className="absolute left-[-15%] top-[25%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(circle,rgba(255,200,100,0.12)_0%,rgba(255,200,100,0)_60%)] blur-3xl pointer-events-none z-0" />
       <div className="absolute left-[-5%] top-[40%] w-[25%] h-[25%] rounded-full bg-[radial-gradient(circle,rgba(255,240,150,0.15)_0%,rgba(255,240,150,0)_60%)] blur-2xl pointer-events-none z-0" />
 
+      <canvas ref={threeCanvas} className="absolute inset-0 block h-full w-full pointer-events-none z-[5]" aria-hidden />
       <canvas ref={canvas} className="block h-full w-full relative z-10" aria-hidden />
       <div className="pointer-events-none absolute inset-0 z-20">
         {labels.map((l) => (
