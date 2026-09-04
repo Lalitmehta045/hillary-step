@@ -247,21 +247,22 @@ export function Globe({ active = "India" }: { active?: string }) {
     const atmosphereMesh = new THREE.Mesh(atmosphereGeo, atmosphereMat);
     tiltGroup.add(atmosphereMesh);
 
-    // Lights for Three.js Satellite Earth - ensuring all regions (US, India, Australia) are clearly visible
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.65);
+    // Lights for Three.js Satellite Earth
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.15); // Dark ambient for true night
     threeScene.add(ambientLight);
 
-    const frontLight = new THREE.DirectionalLight(0xffffff, 1.8);
-    frontLight.position.set(0.5, 1.5, 5);
-    threeScene.add(frontLight);
+    // Dynamic sun light attached to the earth mesh
+    const sunLight = new THREE.DirectionalLight(0xfffaed, 4.0);
+    earthMesh.add(sunLight);
 
-    const warmKeyLight = new THREE.DirectionalLight(0xfffaed, 1.1);
-    warmKeyLight.position.set(-4, 3, 3);
-    threeScene.add(warmKeyLight);
+    // Aesthetic rim lights to gently highlight edges in the dark
+    const rimLight1 = new THREE.DirectionalLight(0x7c6cf6, 1.2);
+    rimLight1.position.set(5, 2, -5);
+    threeScene.add(rimLight1);
 
-    const rimLight = new THREE.DirectionalLight(0x7c6cf6, 1.0);
-    rimLight.position.set(4, -2, -2);
-    threeScene.add(rimLight);
+    const rimLight2 = new THREE.DirectionalLight(0x3fa0ff, 0.8);
+    rimLight2.position.set(-5, -2, -5);
+    threeScene.add(rimLight2);
 
     const onEnter = () => {
       pausedRef.current = true;
@@ -353,6 +354,9 @@ export function Globe({ active = "India" }: { active?: string }) {
       const sunLon = (12 - utcHours) * 15;
       const sunVecGeo = toVec(0, sunLon);
 
+      // Sync Three.js sun light with our computed sun vector
+      sunLight.position.set(sunVecGeo.x * 5, sunVecGeo.y * 5, sunVecGeo.z * 5);
+
       let diff = targetSpinRef.current - focusRef.current;
       while (diff > Math.PI) diff -= Math.PI * 2;
       while (diff < -Math.PI) diff += Math.PI * 2;
@@ -436,9 +440,6 @@ export function Globe({ active = "India" }: { active?: string }) {
       ctx.arc(cx, cy, R, 0, Math.PI * 2);
       ctx.fillStyle = edgeVignette;
       ctx.fill();
-      ctx.strokeStyle = "rgba(124,92,246,0.3)";
-      ctx.lineWidth = 1.2;
-      ctx.stroke();
 
       // dots — floating / drifting like petals
       for (let i = 0; i < n; i++) {
@@ -455,6 +456,7 @@ export function Globe({ active = "India" }: { active?: string }) {
         const p = project(drifted);
 
         const isFront = p.z >= 0.22;
+        if (!isFront) continue;
 
         // Normalize position more broadly across the globe to span 0 to 1
         const g = 0.5 + ((p.x - cx) / R) * 0.5 - ((p.y - cy) / R) * 0.5;
@@ -465,40 +467,37 @@ export function Globe({ active = "India" }: { active?: string }) {
         let bCol = k < 0.5 ? BLUE[2]! + (GREEN[2]! - BLUE[2]!) * (k / 0.5) : GREEN[2]! + (ORANGE[2]! - GREEN[2]!) * ((k - 0.5) / 0.5);
 
         const twinkle = 0.78 + 0.22 * f2;
-
-        let opacity = 0;
-        if (isFront) {
-          const fade = Math.min(1, (p.z - 0.22) / 0.2);
-          opacity = Math.min(1, (0.9 + 0.5 * fade) * twinkle);
-        } else {
-          // Back dots are faint
-          opacity = 0.05;
-        }
+        const fade = Math.min(1, (p.z - 0.22) / 0.2);
+        let opacity = Math.min(1, (0.9 + 0.5 * fade) * twinkle);
 
         const sunDot = drifted.x * sunVecGeo.x + drifted.y * sunVecGeo.y + drifted.z * sunVecGeo.z;
         const sunIntensity = Math.max(0.0, Math.min(1.0, (sunDot + 0.2) / 0.4));
 
-        let rSize = Math.max(0.45, (isFront ? 0.8 : 0.6) * p.s * (R / 620));
+        let rSize = Math.max(0.45, 0.8 * p.s * (R / 620));
 
         // Night time star/city lights effect
-        if (sunDot < -0.1 && i % 5 === 0) {
-          const starTwinkle = 0.1 + 0.9 * Math.max(0, Math.sin(t * sp * 4 + ph0[i]!));
-          // Transition gradually from day colors to star colors based on how deep into the night we are
-          const nightDepth = Math.min(1, (-0.1 - sunDot) * 2);
-          rCol = rCol * (1 - nightDepth) + 255 * nightDepth;
-          gCol = gCol * (1 - nightDepth) + 245 * nightDepth;
-          bCol = bCol * (1 - nightDepth) + 210 * nightDepth;
+        if (sunDot < 0.0) {
+          const nightDepth = Math.min(1, (-sunDot) * 2.5); // 0 at dusk, 1 deep night
+          if (i % 6 === 0) {
+            // City lights (Golden/Orange)
+            const cityTwinkle = 0.3 + 0.7 * Math.max(0, Math.sin(t * sp * 3 + ph0[i]!));
+            rCol = rCol * (1 - nightDepth) + 255 * nightDepth;
+            gCol = gCol * (1 - nightDepth) + 200 * nightDepth;
+            bCol = bCol * (1 - nightDepth) + 100 * nightDepth;
 
-          if (isFront) {
-            opacity = Math.max(opacity * sunIntensity, starTwinkle * nightDepth);
-            if (starTwinkle > 0.7 && nightDepth > 0.5) {
-              rSize *= 1.5; // Occasional brighter/larger stars
+            opacity = Math.max(opacity * sunIntensity, cityTwinkle * nightDepth * 0.95);
+            if (cityTwinkle > 0.8 && nightDepth > 0.5) {
+              rSize *= 1.6; // Brighter city lights
             }
           } else {
-            opacity = 0.02;
+            // Normal land mass at night (Deep blue/purple)
+            rCol = rCol * (1 - nightDepth) + 25 * nightDepth;
+            gCol = gCol * (1 - nightDepth) + 35 * nightDepth;
+            bCol = bCol * (1 - nightDepth) + 90 * nightDepth;
+            opacity = Math.max(opacity * sunIntensity, 0.35 * nightDepth * twinkle);
           }
         } else {
-          opacity *= Math.max(0.15, sunIntensity); // normal dots get dark
+          opacity *= Math.max(0.25, sunIntensity); // normal day dots
         }
 
         ctx.fillStyle = `rgba(${rCol | 0},${gCol | 0},${bCol | 0},${opacity.toFixed(3)})`;
@@ -557,7 +556,8 @@ export function Globe({ active = "India" }: { active?: string }) {
           for (let s = 0; s <= steps; s++) {
             const u = tail + ((head - tail) * s) / steps;
             const pr = project(pointAt(u));
-            if (pr.z < -0.35) {
+            const isOccluded = pr.z < 0.22 && Math.hypot(pr.x - cx, pr.y - cy) < R * 0.99;
+            if (isOccluded) {
               started = false;
               continue;
             }
