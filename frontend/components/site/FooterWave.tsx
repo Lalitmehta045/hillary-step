@@ -102,7 +102,7 @@ export function FooterWave({ className }: { className?: string }) {
     /* ── nodes (halved from 110 → 55) ── */
     const nodes: WaveNode[] = Array.from({ length: 55 }, () => ({
       t: Math.random(),
-      amp: (Math.random() - 0.5) * 190,
+      amp: (Math.random() - 0.5) * 350, // Increased amplitude to spread nodes wider
       phase: Math.random() * Math.PI * 2,
       speed: 0.006 + Math.random() * 0.012,
       r: Math.random() < 0.18 ? 4 + Math.random() * 3 : 1 + Math.random() * 2.2,
@@ -131,7 +131,7 @@ export function FooterWave({ className }: { className?: string }) {
       /* wave bands */
       const bands = 34;
       for (let b = 0; b < bands; b++) {
-        const off = (b - bands / 2) * 1.5;
+        const off = (b - bands / 2) * 4.0; // Increased offset multiplier to make the band cluster wider
         ctx.beginPath();
         for (let i = 0; i <= 90; i++) {
           const px = i / 90;
@@ -144,7 +144,7 @@ export function FooterWave({ className }: { className?: string }) {
           else ctx.lineTo(x, y);
         }
         ctx.strokeStyle = grad;
-        ctx.lineWidth = 0.9;
+        ctx.lineWidth = 1.2; // Slightly thicker lines
         ctx.stroke();
       }
 
@@ -163,7 +163,7 @@ export function FooterWave({ className }: { className?: string }) {
       });
 
       /* ── spatial-grid accelerated connections ── */
-      const maxDist = Math.max(110, w * 0.12);
+      const maxDist = Math.max(140, w * 0.15); // Increased connection distance for wider spread
       const maxDistSq = maxDist * maxDist; // avoid sqrt per-pair
       const cellSize = maxDist; // one cell per max-connection range
 
@@ -224,7 +224,7 @@ export function FooterWave({ className }: { className?: string }) {
                     ctx.lineTo(b.x, b.y);
                     ctx.strokeStyle =
                       "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + 0.3 * (1 - d / maxDist) + ")";
-                    ctx.lineWidth = 0.6;
+                    ctx.lineWidth = 0.8; // Slightly thicker connection lines
                     ctx.stroke();
                   }
                 }

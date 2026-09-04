@@ -494,19 +494,37 @@ export function EcoSmartInfraShowcase() {
               key={exp.title}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4, delay: idx * 0.15 }}
               className="flex flex-col items-start group"
             >
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center text-[#111827] group-hover:text-[#EA580C] transition-colors duration-300">
+              <m.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.15 + 0.1, ease: "easeOut" }}
+                className="w-12 h-12 rounded-xl flex items-center justify-center text-[#111827] group-hover:text-[#EA580C] transition-colors duration-300"
+              >
                 {exp.icon}
-              </div>
-              <h3 className="mt-2 font-display text-[17px] sm:text-[18px] font-[700] text-[#111827] leading-snug">
+              </m.div>
+              <m.h3
+                initial={{ opacity: 0, x: -15 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.15 + 0.2, ease: "easeOut" }}
+                className="mt-2 font-display text-[17px] sm:text-[18px] font-[700] text-[#111827] leading-snug"
+              >
                 {exp.title}
-              </h3>
-              <p className="mt-1 font-sans text-[13.5px] sm:text-[14px] text-[#64748B] leading-relaxed">
+              </m.h3>
+              <m.p
+                initial={{ opacity: 0, x: -15 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.15 + 0.3, ease: "easeOut" }}
+                className="mt-1 font-sans text-[13.5px] sm:text-[14px] text-[#64748B] leading-relaxed"
+              >
                 {exp.description}
-              </p>
+              </m.p>
             </m.div>
           ))}
         </div>

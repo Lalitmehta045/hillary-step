@@ -251,9 +251,9 @@ export function Globe({ active = "India" }: { active?: string }) {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.15); // Dark ambient for true night
     threeScene.add(ambientLight);
 
-    // Dynamic sun light attached to the earth mesh
+    // Dynamic sun light aligned with the dots (fixed to geography)
     const sunLight = new THREE.DirectionalLight(0xfffaed, 4.0);
-    earthMesh.add(sunLight);
+    tiltGroup.add(sunLight);
 
     // Aesthetic rim lights to gently highlight edges in the dark
     const rimLight1 = new THREE.DirectionalLight(0x7c6cf6, 1.2);
@@ -354,9 +354,6 @@ export function Globe({ active = "India" }: { active?: string }) {
       const sunLon = (12 - utcHours) * 15;
       const sunVecGeo = toVec(0, sunLon);
 
-      // Sync Three.js sun light with our computed sun vector
-      sunLight.position.set(sunVecGeo.x * 5, sunVecGeo.y * 5, sunVecGeo.z * 5);
-
       let diff = targetSpinRef.current - focusRef.current;
       while (diff > Math.PI) diff -= Math.PI * 2;
       while (diff < -Math.PI) diff += Math.PI * 2;
@@ -375,6 +372,11 @@ export function Globe({ active = "India" }: { active?: string }) {
       const sinT = Math.sin(TILT);
       const cosS = Math.cos(spin);
       const sinS = Math.sin(spin);
+
+      // Sync Three.js sun light with our computed sun vector (rotated by spin to match camera view)
+      const sunX = sunVecGeo.x * cosS + sunVecGeo.z * sinS;
+      const sunZ = -sunVecGeo.x * sinS + sunVecGeo.z * cosS;
+      sunLight.position.set(sunX * 5, sunVecGeo.y * 5, sunZ * 5);
 
       const project = (p: Vec3) => {
         // spin around Y, then tilt around X
@@ -401,6 +403,11 @@ export function Globe({ active = "India" }: { active?: string }) {
         for (const s of bgStars) {
           const sx = s.x * w;
           const sy = s.y * h;
+
+          // Hide stars that overlap with the globe
+          const distSq = (sx - cx) * (sx - cx) + (sy - cy) * (sy - cy);
+          if (distSq < R * R * 1.05) continue;
+
           const twinkle = 0.3 + 0.7 * Math.sin(t * s.speed + s.a);
           if (twinkle > 0) {
             ctx.fillStyle = `rgba(255, 255, 255, ${(0.5 * twinkle * nightFactor).toFixed(3)})`;
@@ -475,27 +482,10 @@ export function Globe({ active = "India" }: { active?: string }) {
 
         let rSize = Math.max(0.45, 0.8 * p.s * (R / 620));
 
-        // Night time star/city lights effect
+        // Fade out dots smoothly on the night side
         if (sunDot < 0.0) {
-          const nightDepth = Math.min(1, (-sunDot) * 2.5); // 0 at dusk, 1 deep night
-          if (i % 6 === 0) {
-            // City lights (Golden/Orange)
-            const cityTwinkle = 0.3 + 0.7 * Math.max(0, Math.sin(t * sp * 3 + ph0[i]!));
-            rCol = rCol * (1 - nightDepth) + 255 * nightDepth;
-            gCol = gCol * (1 - nightDepth) + 200 * nightDepth;
-            bCol = bCol * (1 - nightDepth) + 100 * nightDepth;
-
-            opacity = Math.max(opacity * sunIntensity, cityTwinkle * nightDepth * 0.95);
-            if (cityTwinkle > 0.8 && nightDepth > 0.5) {
-              rSize *= 1.6; // Brighter city lights
-            }
-          } else {
-            // Normal land mass at night (Deep blue/purple)
-            rCol = rCol * (1 - nightDepth) + 25 * nightDepth;
-            gCol = gCol * (1 - nightDepth) + 35 * nightDepth;
-            bCol = bCol * (1 - nightDepth) + 90 * nightDepth;
-            opacity = Math.max(opacity * sunIntensity, 0.35 * nightDepth * twinkle);
-          }
+          // Rapidly fade out as it goes further into the night side
+          opacity *= Math.max(0, 1.0 - (-sunDot) * 4.0);
         } else {
           opacity *= Math.max(0.25, sunIntensity); // normal day dots
         }

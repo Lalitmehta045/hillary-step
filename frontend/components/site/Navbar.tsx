@@ -70,6 +70,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState("USA");
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -113,17 +114,33 @@ export function Navbar() {
 
   return (
     <>
-      {/* Top Header Bar */}
-      <m.header
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: open ? 0 : 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 inset-x-0 z-[9000] transition-all duration-500 ${
-          open ? "pointer-events-none" : scrolled ? "py-3" : "py-5 md:py-6"
-        }`}
+      <div
+        className="fixed top-0 inset-x-0 z-[9000]"
+        onMouseLeave={() => setIsHovered(false)}
+        style={{ pointerEvents: "none" }}
       >
+        {/* Invisible Hover Trigger */}
+        <div 
+          className="absolute top-0 inset-x-0 h-6" 
+          style={{ pointerEvents: "auto" }} 
+          onMouseEnter={() => setIsHovered(true)}
+        />
+
+        {/* Top Header Bar */}
+        <m.header
+          initial={{ y: -100 }}
+          animate={{ 
+            y: (scrolled && !isHovered && !open) ? "-120%" : 0, 
+            opacity: open ? 0 : 1
+          }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          style={{ pointerEvents: (scrolled && !isHovered && !open) ? "none" : "auto" }}
+          className={`relative w-full transition-all duration-200 ${
+            open ? "pointer-events-none" : scrolled ? "py-3" : "py-5 md:py-6"
+          }`}
+        >
         <div
-          className={`mx-4 md:mx-auto max-w-6xl flex items-center justify-between transition-all duration-500 rounded-full px-4 sm:px-6 py-2.5 ${
+          className={`mx-4 md:mx-auto max-w-6xl flex items-center justify-between transition-all duration-200 rounded-full px-4 sm:px-6 py-2.5 ${
             scrolled
               ? "bg-white/70 text-[#111111] backdrop-blur-xl border border-white/60 shadow-[0_10px_35px_rgba(0,0,0,0.07)]"
               : "bg-transparent text-white border border-transparent shadow-none backdrop-blur-none"
@@ -209,23 +226,23 @@ export function Navbar() {
               </div>
             </div>
 
-            {/* Magnetic CTA Button */}
-            <MagneticButton
+            {/* CTA Button */}
+            <a
               href="/#contact"
               onClick={(e) => {
                 e.preventDefault();
                 go("/#contact");
               }}
-              className="hidden md:inline-flex items-center gap-2 rounded-full bg-[#1A6CFF] text-white px-5 py-2.5 font-display text-sm font-semibold hover:bg-[#1556cc] shadow-[0_4px_14px_rgba(26,108,255,0.3)] transition cursor-pointer"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-[#1A6CFF] text-white px-4 py-2 font-display text-xs font-medium hover:bg-[#1556cc] shadow-[0_4px_14px_rgba(26,108,255,0.3)] transition cursor-pointer"
             >
               Contact Us
               <span className="text-xs">↗</span>
-            </MagneticButton>
+            </a>
 
             {/* Admin Portal Button - Frosted Glass Style */}
             <a
               href="/admin/login"
-              className={`hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 font-display text-xs font-semibold transition-all duration-300 cursor-pointer ${
+              className={`hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 font-display text-xs font-medium transition-all duration-300 cursor-pointer ${
                 scrolled
                   ? "border border-slate-300/80 bg-white/50 hover:bg-white/80 text-slate-800 backdrop-blur-md shadow-sm"
                   : "border border-white/30 bg-white/15 hover:bg-white/25 text-white backdrop-blur-md shadow-sm drop-shadow-sm"
@@ -260,7 +277,8 @@ export function Navbar() {
             </button>
           </div>
         </div>
-      </m.header>
+        </m.header>
+      </div>
 
       {/* Full-Screen Circular ClipPath Overlay Menu — Clean, Simple White Background */}
       <AnimatePresence>

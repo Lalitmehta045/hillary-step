@@ -258,10 +258,17 @@ export function InnovationLab() {
                 </div>
                 <ul className="flex flex-col gap-3 xl:gap-4">
                   {["Custom Software Development", "AI & Machine Learning", "Cloud Solutions", "Web & Mobile Applications", "Data Engineering & Analytics", "Cybersecurity"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 xl:gap-3 text-[11px] xl:text-[12px] text-gray-300 hover:text-white transition-colors">
+                    <m.li
+                      key={i}
+                      initial={{ opacity: 0, x: -15 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.3 + i * 0.1, ease: "easeOut" }}
+                      className="flex items-start gap-2 xl:gap-3 text-[11px] xl:text-[12px] text-gray-300 hover:text-white transition-colors"
+                    >
                       <div className="w-[5px] h-[5px] rounded-full bg-[#1A6CFF] mt-1.5 flex-shrink-0 shadow-[0_0_5px_#1A6CFF]" />
                       <span className="leading-[1.4]">{item}</span>
-                    </li>
+                    </m.li>
                   ))}
                 </ul>
               </div>
@@ -285,10 +292,17 @@ export function InnovationLab() {
                 </div>
                 <ul className="flex flex-col gap-3 xl:gap-4">
                   {["International Recruitment", "Contract Staffing", "Permanent Hiring", "RPO Services", "Staff Augmentation", "Offshore Development Teams"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 xl:gap-3 text-[11px] xl:text-[12px] text-gray-300 hover:text-white transition-colors">
+                    <m.li
+                      key={i}
+                      initial={{ opacity: 0, x: -15 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.3 + i * 0.1, ease: "easeOut" }}
+                      className="flex items-start gap-2 xl:gap-3 text-[11px] xl:text-[12px] text-gray-300 hover:text-white transition-colors"
+                    >
                       <div className="w-[5px] h-[5px] rounded-full bg-[#22c55e] mt-1.5 flex-shrink-0 shadow-[0_0_5px_#22c55e]" />
                       <span className="leading-[1.4]">{item}</span>
-                    </li>
+                    </m.li>
                   ))}
                 </ul>
               </div>
@@ -312,10 +326,17 @@ export function InnovationLab() {
                 </div>
                 <ul className="grid grid-cols-2 gap-x-6 xl:gap-x-8 gap-y-3 xl:gap-y-4">
                   {["Engineering Consultancy", "EPC Services", "Project Management", "Smart Cities", "Infrastructure Development", "Sustainable Infrastructure"].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 xl:gap-3 text-[11px] xl:text-[12px] text-gray-300 hover:text-white transition-colors">
+                    <m.li
+                      key={i}
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.3 + i * 0.1, ease: "easeOut" }}
+                      className="flex items-start gap-2 xl:gap-3 text-[11px] xl:text-[12px] text-gray-300 hover:text-white transition-colors"
+                    >
                       <div className="w-[5px] h-[5px] rounded-full bg-[#FF9500] mt-1.5 flex-shrink-0 shadow-[0_0_5px_#FF9500]" />
                       <span className="leading-[1.4]">{item}</span>
-                    </li>
+                    </m.li>
                   ))}
                 </ul>
               </div>
@@ -366,10 +387,17 @@ export function InnovationLab() {
                   </div>
                   <ul className="flex flex-col gap-3">
                     {["Custom Software Development", "AI & Machine Learning", "Cloud Solutions", "Web & Mobile Applications", "Data Engineering & Analytics", "Cybersecurity"].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-[11px] text-gray-300">
+                      <m.li
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.2 + i * 0.1, ease: "easeOut" }}
+                        className="flex items-start gap-3 text-[11px] text-gray-300"
+                      >
                         <div className="w-1 h-1 rounded-full bg-[#1A6CFF] mt-1.5 flex-shrink-0" />
                         <span className="leading-[1.4]">{item}</span>
-                      </li>
+                      </m.li>
                     ))}
                   </ul>
                 </div>
@@ -403,10 +431,17 @@ export function InnovationLab() {
                   </div>
                   <ul className="flex flex-col gap-3">
                     {["International Recruitment", "Contract Staffing", "Permanent Hiring", "RPO Services", "Staff Augmentation", "Offshore Development Teams"].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-[11px] text-gray-300">
+                      <m.li
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.2 + i * 0.1, ease: "easeOut" }}
+                        className="flex items-start gap-3 text-[11px] text-gray-300"
+                      >
                         <div className="w-1 h-1 rounded-full bg-[#22c55e] mt-1.5 flex-shrink-0" />
                         <span className="leading-[1.4]">{item}</span>
-                      </li>
+                      </m.li>
                     ))}
                   </ul>
                 </div>
@@ -440,10 +475,17 @@ export function InnovationLab() {
                   </div>
                   <ul className="grid grid-cols-2 gap-3">
                     {["Engineering Consultancy", "EPC Services", "Project Management", "Smart Cities", "Infrastructure Development", "Sustainable Infrastructure"].map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-[11px] text-gray-300">
+                      <m.li
+                        key={i}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.2 + i * 0.1, ease: "easeOut" }}
+                        className="flex items-start gap-2 text-[11px] text-gray-300"
+                      >
                         <div className="w-1 h-1 rounded-full bg-[#FF9500] mt-1.5 flex-shrink-0" />
                         <span className="leading-[1.4]">{item}</span>
-                      </li>
+                      </m.li>
                     ))}
                   </ul>
                 </div>
