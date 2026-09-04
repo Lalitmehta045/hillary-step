@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { GradientReveal } from "@/components/motion/GradientReveal";
+
 import {
   FaBuildingColumns,
   FaFileLines,
@@ -91,13 +93,13 @@ export function MCAParametersContent({
           LEGAL / COMPLIANCE &amp; GOVERNANCE
         </p>
 
-        {/* Main Title: MCA (Blue) & COMPLIANCE (Orange) */}
+        {/* Main Title: MCA COMPLIANCE */}
         <div className="flex flex-col select-none mb-10 md:mb-12">
-          <h1 className="font-display text-[48px] sm:text-[58px] md:text-[68px] font-[800] leading-[0.95] tracking-[-0.03em] text-[#1A6CFF]">
-            MCA
+          <h1 className="font-display text-[48px] sm:text-[58px] md:text-[68px] font-[800] leading-[0.95] tracking-[-0.03em] w-fit">
+            <GradientReveal className="grad-text">MCA</GradientReveal>
           </h1>
-          <h1 className="font-display text-[48px] sm:text-[58px] md:text-[68px] font-[800] leading-[0.95] tracking-[-0.03em] text-[#FF6A00]">
-            COMPLIANCE
+          <h1 className="font-display text-[48px] sm:text-[58px] md:text-[68px] font-[800] leading-[0.95] tracking-[-0.03em] w-fit">
+            <GradientReveal className="grad-text">COMPLIANCE</GradientReveal>
           </h1>
         </div>
 

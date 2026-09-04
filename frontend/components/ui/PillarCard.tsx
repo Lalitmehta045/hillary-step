@@ -7,7 +7,7 @@ import Link from "next/link";
 import { memo } from "react";
 
 // Hoisted transition objects
-const cardHoverTransition = { duration: 0.3, ease: "easeOut" as const };
+const cardHoverTransition = { duration: 0.35, ease: [0.16, 1, 0.3, 1] as const };
 const imageRevealTransition = { duration: 1.2, ease: "easeOut" as const };
 const imageInitial = { scale: 1.05 };
 const imageAnimate = { scale: 1 };
@@ -27,7 +27,7 @@ export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title,
     <m.article
       whileHover={hoverVariants.cardLift}
       transition={cardHoverTransition}
-      className="relative h-[620px] max-md:h-[350px] max-lg:h-[450px] overflow-hidden rounded-[32px] border border-[#EFEFF1] shadow-sm bg-white"
+      className="group relative h-[620px] max-md:h-[350px] max-lg:h-[450px] overflow-hidden rounded-[32px] border border-[#EFEFF1] shadow-sm bg-white cursor-pointer will-change-transform"
     >
       <m.div
         initial={imageInitial}
@@ -41,7 +41,7 @@ export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title,
           alt={alt}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover opacity-80"
+          className="object-cover opacity-80 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-90"
         />
       </m.div>
       <div className="relative flex items-start justify-between p-[32px]">
@@ -53,7 +53,7 @@ export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title,
             {title}
           </h3>
         </div>
-        <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] bg-white/90">
+        <span className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] bg-white/90 group-hover:bg-white group-hover:scale-110 transition-all duration-300 shadow-xs">
           <ExpandIcon />
         </span>
       </div>
@@ -62,7 +62,7 @@ export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title,
 
   if (href) {
     return (
-      <Link href={href} className="block outline-none focus-visible:ring-2 focus-visible:ring-[#1A6CFF] rounded-[32px]">
+      <Link href={href} className="block outline-none focus-visible:ring-2 focus-visible:ring-[#1A6CFF] rounded-[32px] relative hover:z-20">
         {content}
       </Link>
     );
@@ -70,7 +70,7 @@ export const PillarCard = memo(function PillarCard({ image, alt, eyebrow, title,
 
   if (onClick) {
     return (
-      <button onClick={onClick} className="block w-full text-left outline-none focus-visible:ring-2 focus-visible:ring-[#1A6CFF] rounded-[32px]">
+      <button onClick={onClick} className="block w-full text-left outline-none focus-visible:ring-2 focus-visible:ring-[#1A6CFF] rounded-[32px] relative hover:z-20">
         {content}
       </button>
     );

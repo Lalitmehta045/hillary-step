@@ -69,15 +69,85 @@ function MagneticButton({
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState("USA");
   const [isHovered, setIsHovered] = useState(false);
 
+  const holdTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isHoveredRef = useRef(false);
+  const openRef = useRef(false);
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    isHoveredRef.current = isHovered;
+  }, [isHovered]);
+
+  useEffect(() => {
+    openRef.current = open;
+  }, [open]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 30);
+
+      // If at top of the page, header is always visible
+      if (currentScrollY <= 50) {
+        setIsVisible(true);
+        if (holdTimerRef.current) {
+          clearTimeout(holdTimerRef.current);
+          holdTimerRef.current = null;
+        }
+        return;
+      }
+
+      // During active scrolling, header moves along with user ("scroll me sath sath chalega")
+      setIsVisible(true);
+
+      // Reset hold/inactivity timer
+      if (holdTimerRef.current) {
+        clearTimeout(holdTimerRef.current);
+      }
+
+      // If user holds / pauses on the page, hide after 2.5s ("if anyone holds on a page it will go off")
+      holdTimerRef.current = setTimeout(() => {
+        if (!isHoveredRef.current && !openRef.current && window.scrollY > 50) {
+          setIsVisible(false);
+        }
+      }, 2500);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (holdTimerRef.current) {
+        clearTimeout(holdTimerRef.current);
+      }
+    };
   }, []);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    setIsVisible(true);
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    if (window.scrollY > 50) {
+      if (holdTimerRef.current) {
+        clearTimeout(holdTimerRef.current);
+      }
+      holdTimerRef.current = setTimeout(() => {
+        if (!isHoveredRef.current && !openRef.current && window.scrollY > 50) {
+          setIsVisible(false);
+        }
+      }, 2500);
+    }
+  };
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -112,35 +182,38 @@ export function Navbar() {
     }, 450);
   };
 
+  const shouldHide = !isVisible && !isHovered && !open;
+
   return (
     <>
       <div
         className="fixed top-0 inset-x-0 z-[9000]"
-        onMouseLeave={() => setIsHovered(false)}
         style={{ pointerEvents: "none" }}
       >
-        {/* Invisible Hover Trigger */}
+        {/* Invisible Hover Trigger at top edge of viewport */}
         <div 
-          className="absolute top-0 inset-x-0 h-6" 
+          className="absolute top-0 inset-x-0 h-7" 
           style={{ pointerEvents: "auto" }} 
-          onMouseEnter={() => setIsHovered(true)}
+          onMouseEnter={handleMouseEnter}
         />
 
         {/* Top Header Bar */}
         <m.header
-          initial={{ y: -100 }}
+          initial={{ y: 0, opacity: 1 }}
           animate={{ 
-            y: (scrolled && !isHovered && !open) ? "-120%" : 0, 
-            opacity: open ? 0 : 1
+            y: shouldHide ? "-120%" : 0, 
+            opacity: open ? 0 : shouldHide ? 0 : 1
           }}
-          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          style={{ pointerEvents: (scrolled && !isHovered && !open) ? "none" : "auto" }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          style={{ pointerEvents: shouldHide ? "none" : "auto" }}
           className={`relative w-full transition-all duration-200 ${
             open ? "pointer-events-none" : scrolled ? "py-3" : "py-5 md:py-6"
           }`}
         >
         <div
-          className={`mx-4 md:mx-auto max-w-6xl flex items-center justify-between transition-all duration-200 rounded-full px-4 sm:px-6 py-2.5 ${
+          className={`mx-auto w-[94%] max-w-[1400px] flex items-center justify-between transition-all duration-200 rounded-full px-5 sm:px-8 py-2.5 ${
             scrolled
               ? "bg-white/70 text-[#111111] backdrop-blur-xl border border-white/60 shadow-[0_10px_35px_rgba(0,0,0,0.07)]"
               : "bg-transparent text-white border border-transparent shadow-none backdrop-blur-none"

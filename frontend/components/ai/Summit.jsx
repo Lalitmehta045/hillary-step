@@ -5,7 +5,7 @@ import { useReducedMotion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LAYERS = ["TECHNOLOGY", "PEOPLE", "INFRASTRUCTURE", "INTELLIGENCE"];
+const LAYERS = ["PLATFORMS", "PEOPLE", "PROJECTS", "INTELLIGENCE"];
 
 export default function Summit() {
   const ref = useRef(null);

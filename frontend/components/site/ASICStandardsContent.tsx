@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { GradientReveal } from "@/components/motion/GradientReveal";
+
 import {
   FaUsers,
   FaShieldHalved,
@@ -87,13 +89,10 @@ export function ASICStandardsContent({
           LEGAL / COMPLIANCE &amp; GOVERNANCE
         </p>
 
-        {/* Main Title: ASIC (Blue) STANDARD (Green-to-Orange Gradient) */}
+        {/* Main Title: ASIC STANDARD */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 select-none mb-10 md:mb-12">
-          <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] leading-none tracking-[-0.03em] text-[#0080FF]">
-            ASIC
-          </h1>
-          <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] leading-none tracking-[-0.03em] text-transparent bg-clip-text bg-gradient-to-r from-[#00C48C] via-[#EAB308] to-[#FF5500]">
-            STANDARD
+          <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] leading-none tracking-[-0.03em]">
+            <GradientReveal className="grad-text">ASIC STANDARD</GradientReveal>
           </h1>
         </div>
 

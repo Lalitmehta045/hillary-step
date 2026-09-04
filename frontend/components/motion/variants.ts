@@ -15,8 +15,9 @@ export const hoverVariants = {
     boxShadow: "0px 8px 16px rgba(0,0,0,0.1)",
   },
   cardLift: {
-    y: -6,
-    boxShadow: "0 16px 32px -12px rgba(0,0,0,0.15)",
+    scale: 1.05,
+    y: -10,
+    boxShadow: "0 28px 60px -15px rgba(0,0,0,0.22)",
   },
   socialIcon: {
     scale: 1.1,

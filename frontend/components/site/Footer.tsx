@@ -12,6 +12,7 @@ import { MCAParametersModal } from "@/components/site/MCAParametersModal";
 import { ASICStandardsModal } from "@/components/site/ASICStandardsModal";
 import { USLaborCodesModal } from "@/components/site/USLaborCodesModal";
 import { PrivacySecurityModal } from "@/components/site/PrivacySecurityModal";
+import { MSMECertifiedModal } from "@/components/site/MSMECertifiedModal";
 import type { StatutoryType } from "@/components/site/StatutoryContent";
 import Image from "next/image";
 import { FaLinkedinIn, FaYoutube, FaLocationDot } from "react-icons/fa6";
@@ -75,6 +76,7 @@ export function Footer() {
   const [isASICModalOpen, setIsASICModalOpen] = useState(false);
   const [isLaborModalOpen, setIsLaborModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [isMSMEModalOpen, setIsMSMEModalOpen] = useState(false);
   const [statutoryType, setStatutoryType] = useState<StatutoryType>(null);
 
   const handleAction = (action: FooterLink["action"]) => {
@@ -85,9 +87,7 @@ export function Footer() {
     if (action === "asic") setIsASICModalOpen(true);
     if (action === "labor") setIsLaborModalOpen(true);
     if (action === "privacy") setIsPrivacyModalOpen(true);
-    if (action === "msme") {
-      setStatutoryType(action);
-    }
+    if (action === "msme") setIsMSMEModalOpen(true);
   };
 
   return (
@@ -197,6 +197,7 @@ export function Footer() {
           if (t === "asic") setIsASICModalOpen(true);
           else if (t === "labor") setIsLaborModalOpen(true);
           else if (t === "privacy") setIsPrivacyModalOpen(true);
+          else if (t === "msme") setIsMSMEModalOpen(true);
           else setStatutoryType(t);
         }}
       />
@@ -208,6 +209,7 @@ export function Footer() {
           if (t === "mca") setIsMCAModalOpen(true);
           else if (t === "labor") setIsLaborModalOpen(true);
           else if (t === "privacy") setIsPrivacyModalOpen(true);
+          else if (t === "msme") setIsMSMEModalOpen(true);
           else setStatutoryType(t);
         }}
       />
@@ -219,6 +221,7 @@ export function Footer() {
           if (t === "mca") setIsMCAModalOpen(true);
           else if (t === "asic") setIsASICModalOpen(true);
           else if (t === "privacy") setIsPrivacyModalOpen(true);
+          else if (t === "msme") setIsMSMEModalOpen(true);
           else setStatutoryType(t);
         }}
       />
@@ -230,7 +233,20 @@ export function Footer() {
           if (t === "mca") setIsMCAModalOpen(true);
           else if (t === "asic") setIsASICModalOpen(true);
           else if (t === "labor") setIsLaborModalOpen(true);
+          else if (t === "msme") setIsMSMEModalOpen(true);
           else setStatutoryType(t);
+        }}
+      />
+      <MSMECertifiedModal
+        isOpen={isMSMEModalOpen}
+        onClose={() => setIsMSMEModalOpen(false)}
+        onNavigateType={(t) => {
+          setIsMSMEModalOpen(false);
+          if (t === "mca") setIsMCAModalOpen(true);
+          else if (t === "asic") setIsASICModalOpen(true);
+          else if (t === "labor") setIsLaborModalOpen(true);
+          else if (t === "privacy") setIsPrivacyModalOpen(true);
+          else setStatutoryType(t as any);
         }}
       />
       <StatutoryModal 

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { GradientReveal } from "@/components/motion/GradientReveal";
+
 import {
   FaScaleBalanced,
   FaGavel,
@@ -90,22 +92,16 @@ export function USLaborCodesContent({
           LEGAL / COMPLIANCE &amp; GOVERNANCE
         </p>
 
-        {/* Main Title: US (Blue) CORPORATE (Green-Yellow) / LABOR (Blue) CODES (Yellow-Orange) */}
-        <div className="flex flex-col select-none mb-10 md:mb-12 gap-0.5">
+        {/* Main Title: US CORPORATE LABOR CODES */}
+        <div className="flex flex-col select-none mb-10 md:mb-12 gap-1">
           <div className="flex flex-wrap items-center gap-x-3 leading-none">
-            <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] tracking-[-0.03em] text-[#1A6CFF]">
-              US
-            </h1>
-            <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] tracking-[-0.03em] text-transparent bg-clip-text bg-gradient-to-r from-[#00C48C] via-[#84CC16] to-[#EAB308]">
-              CORPORATE
+            <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] tracking-[-0.03em] leading-none">
+              <GradientReveal className="grad-text">US CORPORATE</GradientReveal>
             </h1>
           </div>
           <div className="flex flex-wrap items-center gap-x-3 leading-none">
-            <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] tracking-[-0.03em] text-[#1A6CFF]">
-              LABOR
-            </h1>
-            <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] tracking-[-0.03em] text-transparent bg-clip-text bg-gradient-to-r from-[#EAB308] via-[#F97316] to-[#FF5500]">
-              CODES
+            <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] tracking-[-0.03em] leading-none">
+              <GradientReveal className="grad-text">LABOR CODES</GradientReveal>
             </h1>
           </div>
         </div>

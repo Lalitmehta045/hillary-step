@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 const DEFAULT_COUNT = 5200;
-const PALETTE = ["#00E5FF", "#00FF87", "#FF6B00"];
-const WEIGHTS = [0.42, 0.34, 0.24];
+const PALETTE = ["#0090FF", "#00FF87", "#FF6B00"];
+const WEIGHTS = [0.48, 0.18, 0.34];
 
 const createDotTexture = (): THREE.CanvasTexture | null => {
   if (typeof document === "undefined") return null;
@@ -17,7 +17,8 @@ const createDotTexture = (): THREE.CanvasTexture | null => {
 
   const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 30);
   gradient.addColorStop(0, "rgba(255,255,255,1)");
-  gradient.addColorStop(0.4, "rgba(255,255,255,0.5)");
+  gradient.addColorStop(0.45, "rgba(255,255,255,0.85)");
+  gradient.addColorStop(0.8, "rgba(255,255,255,0.3)");
   gradient.addColorStop(1, "rgba(255,255,255,0)");
 
   ctx.fillStyle = gradient;
@@ -113,11 +114,11 @@ export function FluidBlob({
 
     const dotTex = createDotTexture();
     const material = new THREE.PointsMaterial({
-      size: 0.05,
+      size: 0.062,
       map: dotTex || undefined,
       vertexColors: true,
       transparent: true,
-      opacity: 0.9,
+      opacity: 1.0,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
       sizeAttenuation: true,

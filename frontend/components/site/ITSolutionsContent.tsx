@@ -150,32 +150,52 @@ export function ITSolutionsContent() {
     <div className="w-full font-display bg-[#f8f6f3] pb-24">
       {/* HERO SECTION */}
       <m.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="px-4 md:px-12 py-4 bg-[#f8f6f3]"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="px-3 md:px-6 py-3.5 bg-[#f8f6f3]"
       >
-        <div className="relative w-full max-w-[1136px] mx-auto h-[500px] rounded-[32px] overflow-hidden flex flex-col justify-center">
+        <div className="relative w-full h-[500px] rounded-[22px] overflow-hidden flex flex-col justify-center">
           <img src="/images/it_workspace_hero.jpg" alt="Hero Background" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/60"></div>
 
           <div className="relative z-10 w-full px-8 md:px-16 flex flex-col md:flex-row md:items-center justify-between gap-8">
             <div className="flex flex-col">
-              <p className="text-[13px] font-[600] tracking-wide text-[#3b82f6] uppercase mb-[12px]">
+              <m.p
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+                className="text-[13px] font-[600] tracking-wide text-[#3b82f6] uppercase mb-[12px]"
+              >
                 IT Solutions
-              </p>
-              <h1 className="text-white text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] max-w-[600px]">
+              </m.p>
+              <m.h1
+                initial={{ opacity: 0, y: 28 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.30 }}
+                className="text-white text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] max-w-[600px]"
+              >
                 Technology that powers your business forward.
-              </h1>
+              </m.h1>
             </div>
             <div className="flex flex-col items-start md:items-end gap-6 max-w-[400px]">
-              <p className="text-white text-[13px] md:text-[14px] leading-relaxed opacity-90 md:text-right">
+              <m.p
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.45 }}
+                className="text-white text-[13px] md:text-[14px] leading-relaxed opacity-90 md:text-right"
+              >
                 From strategy to deployment, we build secure, scalable, and future-ready solutions to help your business adapt, innovate, and grow.
-              </p>
-              <button className="bg-white text-black font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition-colors text-[13px]">
-                Start Your Furnishing Journey
-              </button>
+              </m.p>
+              <m.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.60 }}
+              >
+                <button className="bg-white text-black font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition-colors text-[13px]">
+                  Start Your Furnishing Journey
+                </button>
+              </m.div>
             </div>
           </div>
         </div>
@@ -374,16 +394,19 @@ export function ITSolutionsContent() {
                 <m.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className="rounded-[32px] p-8 md:p-10 flex flex-col items-center justify-center text-center relative"
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="group cursor-pointer rounded-[32px] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden transition-all duration-300 hover:shadow-[0_20px_45px_rgba(96,122,253,0.35)] border border-white/50 hover:border-white"
                   style={{ background: 'linear-gradient(180deg, rgba(221,224,240,1) 0%, rgba(96,122,253,1) 100%)' }}
                 >
-                  <h3 className="font-bold text-[#152759] mb-4 text-[18px]">End-to-End Solutions</h3>
-                  <p className="text-[14px] text-[#2c4380] leading-relaxed px-4">
-                    We manage every aspect of your furnishing project, saving you time and resources.
+                  <h3 className="font-bold text-[#152759] mb-4 text-[19px] tracking-tight group-hover:text-[#0b173d] transition-colors">
+                    End-to-End IT Solutions
+                  </h3>
+                  <p className="text-[14px] text-[#2c4380] leading-relaxed px-2">
+                    We manage every lifecycle phase of your digital engineering—from cloud architecture to scalable platform deployment.
                   </p>
-                  <div className="mt-8 text-[#5c7ae6]">
+                  <div className="mt-8 text-[#5c7ae6] group-hover:text-[#152759] group-hover:scale-115 group-hover:rotate-6 transition-all duration-500">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <circle cx="12" cy="12" r="10" />
                       <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
@@ -394,15 +417,24 @@ export function ITSolutionsContent() {
                 <m.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="rounded-[32px] p-8 md:p-10 flex flex-col items-center justify-center text-center text-white"
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="group cursor-pointer rounded-[32px] p-8 md:p-10 flex flex-col items-center justify-center text-center text-white relative overflow-hidden transition-all duration-300 hover:shadow-[0_20px_45px_rgba(96,122,253,0.35)] border border-white/50 hover:border-white"
                   style={{ background: 'linear-gradient(180deg, rgba(221,224,240,1) 0%, rgba(96,122,253,1) 100%)' }}
                 >
-                  <h3 className="font-bold text-[18px] mb-4">After-Sales Support</h3>
-                  <p className="text-[14px] leading-relaxed px-4 opacity-90">
-                    We are committed to providing ongoing support & after-sales service to address any future needs or concerns.
+                  <h3 className="font-bold text-[19px] text-[#152759] mb-4 tracking-tight group-hover:text-[#0b173d] transition-colors">
+                    24/7 Managed Operations
+                  </h3>
+                  <p className="text-[14px] text-[#2c4380] leading-relaxed px-2">
+                    Proactive cloud infrastructure monitoring, automated security patching, and rapid SLA-backed support for 99.99% uptime.
                   </p>
+                  <div className="mt-8 text-[#5c7ae6] group-hover:text-[#152759] group-hover:scale-115 transition-all duration-500">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      <path d="m9 12 2 2 4-4" />
+                    </svg>
+                  </div>
                 </m.div>
               </div>
 
@@ -410,16 +442,23 @@ export function ITSolutionsContent() {
               <m.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -8, scale: 1.015 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="rounded-[32px] p-8 md:p-12 flex flex-col items-center justify-center text-center relative overflow-hidden text-white min-h-[250px]"
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="group cursor-pointer rounded-[32px] p-8 md:p-12 flex flex-col items-center justify-center text-center relative overflow-hidden text-white min-h-[250px] transition-all duration-500 hover:shadow-[0_25px_50px_rgba(0,0,0,0.4)] border border-white/10 hover:border-blue-400/50"
               >
-                <img src="/images/hero_bg.jpg" className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-black/40"></div>
-                <div className="relative z-10 max-w-[600px]">
-                  <h3 className="font-bold text-[22px] mb-4">Superior Quality</h3>
-                  <p className="text-[14px] opacity-90 leading-relaxed">
-                    Our partnerships with the best suppliers guarantee access to the finest materials, craftsmanship, and quality control processes.
+                <img
+                  src="/images/it_datacenter_hero.jpg"
+                  alt="Enterprise Datacenter & Infrastructure"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/40 transition-opacity duration-500 group-hover:opacity-95"></div>
+                <div className="relative z-10 max-w-[620px]">
+                  <h3 className="font-bold text-[24px] mb-3 tracking-tight text-white group-hover:text-blue-200 transition-colors">
+                    Enterprise-Grade Infrastructure
+                  </h3>
+                  <p className="text-[14px] opacity-90 leading-relaxed text-gray-200">
+                    Built on zero-trust security standards, automated CI/CD pipelines, and resilient cloud architectures engineered for mission-critical workloads.
                   </p>
                 </div>
               </m.div>
@@ -429,22 +468,27 @@ export function ITSolutionsContent() {
             <m.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
+              whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="rounded-[32px] p-8 md:p-12 flex flex-col justify-center text-white text-center gap-12"
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="group cursor-pointer rounded-[32px] p-8 md:p-12 flex flex-col justify-center text-white text-center gap-10 relative overflow-hidden transition-all duration-500 hover:shadow-[0_25px_50px_rgba(2,4,126,0.5)] border border-white/20 hover:border-white/60"
               style={{ background: 'linear-gradient(180deg, rgba(78,88,134,1) 0%, rgba(2,4,126,1) 100%)' }}
             >
-              <div>
-                <h3 className="font-bold text-[18px] mb-4">No Variety<br />Restrictions</h3>
+              <div className="relative z-10">
+                <h3 className="font-bold text-[20px] mb-3 leading-snug group-hover:text-blue-200 transition-colors">
+                  Multi-Stack<br />Versatility
+                </h3>
                 <p className="text-[13px] opacity-80 leading-relaxed">
-                  We partner with any vendor meeting our quality standards, providing the broadest selection of furniture solutions to suit your needs and preferences.
+                  We architect across leading enterprise platforms—AWS, Azure, GCP, Kubernetes, and AI frameworks—avoiding vendor lock-in.
                 </p>
               </div>
-              <div className="w-full h-[1px] bg-white/10 my-4"></div>
-              <div>
-                <h3 className="font-bold text-[18px] mb-4">Bespoke Furniture</h3>
+              <div className="w-full h-[1px] bg-white/15 group-hover:bg-white/40 transition-colors my-2"></div>
+              <div className="relative z-10">
+                <h3 className="font-bold text-[20px] mb-3 leading-snug group-hover:text-blue-200 transition-colors">
+                  Bespoke Software Engineering
+                </h3>
                 <p className="text-[13px] opacity-80 leading-relaxed">
-                  We specialize in sourcing custom-made furniture pieces that perfectly match your unique vision and requirements.
+                  Tailored cognitive applications, intelligent workflow automation, and custom APIs built from first principles for your unique scale.
                 </p>
               </div>
             </m.div>

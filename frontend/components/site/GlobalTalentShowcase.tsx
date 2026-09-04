@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { m } from "framer-motion";
 import { GlobalTalentGlobe3D } from "./GlobalTalentGlobe3D";
 import {
   FaHouse,
@@ -94,28 +95,52 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
           {/* Left Hero Column */}
           <div className="lg:col-span-6 flex flex-col items-start gap-5 z-10">
             {/* Pill Tag */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EAF8EE] border border-[#DCFCE7]">
+            <m.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+              className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EAF8EE] border border-[#DCFCE7]"
+            >
               <span className="text-[11.5px] font-[700] tracking-[0.14em] text-[#16A34A] uppercase">
                 GLOBAL STAFFING
               </span>
-            </div>
+            </m.div>
 
             {/* Headline */}
-            <h1 className="font-display text-[44px] sm:text-[56px] md:text-[64px] font-[800] leading-[1.05] tracking-[-0.03em] text-[#111827]">
+            <m.h1
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.30 }}
+              className="font-display text-[44px] sm:text-[56px] md:text-[64px] font-[800] leading-[1.05] tracking-[-0.03em] text-[#111827]"
+            >
               Global <span className="text-[#16A34A]">Talent.</span>
               <br />
               Local Understanding.
-            </h1>
+            </m.h1>
 
             {/* Subtitle */}
-            <p className="font-display text-[15px] sm:text-[16.5px] leading-[1.6] text-[#4B5563] max-w-[500px]">
+            <m.p
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.45 }}
+              className="font-display text-[15px] sm:text-[16.5px] leading-[1.6] text-[#4B5563] max-w-[500px]"
+            >
               We connect businesses with qualified professionals across markets,
               helping organizations build reliable teams without the complexity
               of international hiring.
-            </p>
+            </m.p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-2">
+            <m.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.60 }}
+              className="flex flex-wrap items-center gap-3.5 pt-2"
+            >
               <button
                 type="button"
                 onClick={() => handleAction("post")}
@@ -133,10 +158,16 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                 <span>Find a Job</span>
                 <FaArrowRight className="text-[12px] transition-transform group-hover:translate-x-0.5" />
               </button>
-            </div>
+            </m.div>
 
             {/* Trust Proof */}
-            <div className="pt-6 flex flex-col gap-3">
+            <m.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.75 }}
+              className="pt-6 flex flex-col gap-3"
+            >
               <p className="text-[12px] font-[500] text-[#9CA3AF] tracking-wide">
                 Trusted by 500+ companies worldwide
               </p>
@@ -150,7 +181,7 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                   </span>
                 ))}
               </div>
-            </div>
+            </m.div>
           </div>
 
           {/* Right Hero Column: Interactive 3D WebGL Globe */}

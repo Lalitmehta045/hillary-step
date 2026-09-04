@@ -7,6 +7,7 @@ import { MCAParametersContent } from "./MCAParametersContent";
 import { ASICStandardsContent } from "./ASICStandardsContent";
 import { USLaborCodesContent } from "./USLaborCodesContent";
 import { PrivacySecurityContent } from "./PrivacySecurityContent";
+import { MSMECertifiedContent } from "./MSMECertifiedContent";
 
 export type StatutoryType = "mca" | "asic" | "labor" | "msme" | "privacy" | null;
 
@@ -142,7 +143,10 @@ export function StatutoryContent({ type, onNavigateType }: StatutoryContentProps
   if (type === "privacy") {
     return <PrivacySecurityContent onNavigateType={onNavigateType as any} />;
   }
-  const data = contentData[type];
+  if (type === "msme") {
+    return <MSMECertifiedContent onNavigateType={onNavigateType as any} />;
+  }
+  const data = (contentData as Record<string, any>)[type as string] || contentData.msme;
 
   return (
     <div className="flex flex-col w-full h-full bg-[#F8F9FB] text-[#111111] overflow-hidden">
@@ -173,7 +177,7 @@ export function StatutoryContent({ type, onNavigateType }: StatutoryContentProps
         </FadeIn>
 
         <StaggerContainer className="grid grid-cols-3 max-md:grid-cols-1 gap-[24px]">
-          {data.highlights.map((highlight, idx) => {
+          {data.highlights.map((highlight: any, idx: number) => {
             const Icon = highlight.icon;
             return (
               <StaggerItem key={idx}>

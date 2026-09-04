@@ -378,26 +378,111 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
     }
   };
 
+  const handleHeroTabClick = (tab: "post" | "find") => {
+    setActiveTab(tab);
+    const toggleEl = document.getElementById("staffing-toggle-section");
+    if (toggleEl) {
+      toggleEl.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="w-full font-display">
-      <div className={`${isModal ? "px-[80px] pt-[80px] pb-[80px] max-md:px-[24px]" : "pt-[100px] max-md:pt-[110px]"}`}>
-      {/* Modal Specific Top Header */}
-      {isModal && (
-        <div className="mb-[64px]">
-          <p className="text-[14px] font-[600] tracking-wide text-[#3AF900] uppercase mb-[12px]">
-            Global Talent – People
-          </p>
-          <h2 className="font-display text-[48px] font-[700] leading-[1.1] tracking-[-1px] text-[#111111] mb-[20px]">
-            <span className="bg-gradient-to-r from-[#86EFAC] via-[#14532D] to-[#86EFAC] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Global Talent.</span> Local<br />Understanding.
-          </h2>
-          <p className="text-[18px] leading-[28px] text-[#6B7280] max-w-[700px]">
-            We connect businesses with qualified professionals across markets, helping organizations build reliable teams without the complexity of international hiring.
-          </p>
-        </div>
-      )}
+      <div className={`px-4 md:px-8 ${isModal ? "pt-5 pb-12" : "pt-8 pb-16 max-w-[1280px] mx-auto"}`}>
+        {/* ============================================================ */}
+        {/* 1. HERO BANNER                                               */}
+        {/* ============================================================ */}
+        <m.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-full rounded-[28px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-emerald-200/50 bg-[#061E12]"
+        >
+          {/* Background Image & Ambient Lighting */}
+          <div className="absolute inset-0 w-full h-full">
+            <img
+              src="/assets/staffing.png"
+              alt="Global talent acquisition and staffing solutions"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: "right top" }}
+            />
+            {/* Luminous Brand Gradients: Smooth transition on left for crystal-clear readability, preserving the right visual */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 via-38% md:via-48% to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#DCFCE7]/70 via-[#BBF7D0]/30 via-42% to-transparent mix-blend-multiply pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent pointer-events-none" />
+          </div>
 
-      {/* Toggle Buttons */}
-      <div id="staffing-toggle-section" className="flex justify-center mb-[48px] max-md:mb-[32px]">
+          {/* Content Container */}
+          <div className="relative z-10 max-w-[620px] p-7 sm:p-10 md:p-14 lg:p-16 flex flex-col items-start justify-center min-h-[400px] md:min-h-[470px]">
+            {/* Eyebrow / Pill Tag */}
+            <m.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
+              className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EAF8EE] border border-[#DCFCE7] mb-3 sm:mb-4 shadow-xs"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
+              <span className="text-[11.5px] font-[700] tracking-[0.14em] text-[#15803D] uppercase">
+                GLOBAL TALENT &bull; PEOPLE
+              </span>
+            </m.div>
+
+            {/* Headline */}
+            <m.h1
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.20 }}
+              className="font-display text-[32px] sm:text-[42px] md:text-[48px] font-[800] leading-[1.1] tracking-[-1px] text-[#111827]"
+            >
+              <span className="text-[#16A34A] font-[900]">Global</span> Talent.
+              <br />
+              Local Understanding<span className="text-[#10B981]">.</span>
+            </m.h1>
+
+            {/* Subtitle */}
+            <m.p
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+              className="mt-4 sm:mt-5 text-[14px] sm:text-[15.5px] leading-[1.65] text-[#27272A] font-[450] max-w-[480px]"
+            >
+              We connect businesses with qualified professionals across markets, helping organizations build reliable teams without the complexity of international hiring.
+            </m.p>
+
+            {/* CTA Buttons */}
+            <m.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.50 }}
+              className="mt-6 sm:mt-8 flex flex-wrap items-center gap-3.5"
+            >
+              <button
+                type="button"
+                onClick={() => handleHeroTabClick("post")}
+                className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#0066FF] hover:bg-[#0052CC] text-white text-[14px] font-[600] tracking-wide shadow-[0_8px_20px_rgba(0,102,255,0.35)] hover:shadow-[0_12px_28px_rgba(0,102,255,0.45)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+              >
+                <span>Post a Job</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleHeroTabClick("find")}
+                className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-white/90 hover:bg-white text-[#111827] border border-gray-200/90 text-[14px] font-[600] tracking-wide shadow-xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer backdrop-blur-sm"
+              >
+                <span>Find a Job</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+            </m.div>
+          </div>
+        </m.div>
+
+        {/* ============================================================ */}
+        {/* 2. FORM & TOGGLE SECTION                                     */}
+        {/* ============================================================ */}
+        <div className="mt-12 sm:mt-16 max-w-[1000px] mx-auto">
+          {/* Toggle Buttons */}
+          <div id="staffing-toggle-section" className="flex justify-center mb-[48px] max-md:mb-[32px]">
         <div className="relative flex w-[320px] rounded-full bg-[#F3F3F4] p-[4px]">
           {/* Animated Background */}
           <m.div
@@ -982,6 +1067,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
         </m.div>
       )}
       </AnimatePresence>
+        </div>
       </div>
 
       {/* Brand-New 3D Globe & Global Talent Showcase Section */}

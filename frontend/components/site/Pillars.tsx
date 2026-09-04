@@ -34,8 +34,8 @@ const PILLARS: Pillar[] = [
   {
     eyebrow: "PILLAR THREE",
     title: "Eco Smart Infra – Projects",
-    image: "/assets/pillar-civil.png",
-    alt: "Wireframe skyline and bridge illustration in orange",
+    image: "/assets/updated grenary civil image.png",
+    alt: "Wireframe skyline, greenery trees and bridge illustration in orange",
   },
 ];
 

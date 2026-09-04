@@ -4,41 +4,45 @@ import { useEffect, useRef, useState } from "react";
 import { GradientReveal } from "@/components/motion/GradientReveal";
 
 import {
-  FaUser,
-  FaGear,
-  FaShareNodes,
+  FaBuildingUser,
+  FaScaleBalanced,
+  FaShieldHalved,
+  FaFileContract,
+  FaAward,
+  FaHandshakeAngle,
   FaTriangleExclamation,
   FaPlus,
   FaMinus,
+  FaCheck,
 } from "react-icons/fa6";
 
-interface PrivacySecurityContentProps {
+interface MSMECertifiedContentProps {
   onClose?: () => void;
-  onNavigateType?: (type: "mca" | "asic" | "labor" | "msme") => void;
+  onNavigateType?: (type: "mca" | "asic" | "labor" | "privacy") => void;
 }
 
 const TOC_ITEMS = [
-  { id: "sec-01", num: "01.", label: "Introduction" },
-  { id: "sec-02", num: "02.", label: "Information Collection" },
-  { id: "sec-03", num: "03.", label: "Use of Information" },
-  { id: "sec-04", num: "04.", label: "AI & Processing" },
-  { id: "sec-05", num: "05.", label: "Data Security" },
-  { id: "sec-06", num: "06.", label: "Your Rights" },
+  { id: "msme-01", num: "01.", label: "Executive Overview" },
+  { id: "msme-02", num: "02.", label: "Statutory Framework" },
+  { id: "msme-03", num: "03.", label: "Enterprise Classification" },
+  { id: "msme-04", num: "04.", label: "Procurement & Tenders" },
+  { id: "msme-05", num: "05.", label: "Quality & Innovation" },
+  { id: "msme-06", num: "06.", label: "Statutory Governance" },
 ];
 
 const STEPPER_ITEMS = [
-  { label: "COLLECT", targetId: "sec-02" },
-  { label: "USE", targetId: "sec-03" },
-  { label: "PROTECT", targetId: "sec-05" },
-  { label: "GOVERN", targetId: "sec-06" },
+  { label: "REGISTER", targetId: "msme-02" },
+  { label: "CLASSIFY", targetId: "msme-03" },
+  { label: "DELIVER", targetId: "msme-04" },
+  { label: "GOVERN", targetId: "msme-06" },
 ];
 
-export function PrivacySecurityContent({
+export function MSMECertifiedContent({
   onClose,
   onNavigateType,
-}: PrivacySecurityContentProps) {
-  const [activeSection, setActiveSection] = useState<string>("sec-01");
-  const [openRight, setOpenRight] = useState<string | null>("access");
+}: MSMECertifiedContentProps) {
+  const [activeSection, setActiveSection] = useState<string>("msme-01");
+  const [openRight, setOpenRight] = useState<string | null>("payment");
   const contentContainerRef = useRef<HTMLDivElement>(null);
 
   // IntersectionObserver scroll-spy
@@ -82,13 +86,13 @@ export function PrivacySecurityContent({
       <div className="mx-auto w-full max-w-[1140px] px-6 md:px-12 pt-14 md:pt-16 pb-12">
         {/* Category Header */}
         <p className="font-display text-[12px] md:text-[13px] font-[600] tracking-[0.16em] text-[#1A6CFF] uppercase mb-4">
-          LEGAL / PRIVACY &amp; SECURITY
+          STATUTORY COMPLIANCE / MINISTRY OF MSME
         </p>
 
-        {/* Main Title: PRIVACY & TERMS */}
+        {/* Main Title: MSME & CERTIFIED */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 select-none mb-10 md:mb-12">
           <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] leading-none tracking-[-0.03em]">
-            <GradientReveal className="grad-text">PRIVACY &amp; TERMS</GradientReveal>
+            <GradientReveal className="grad-text">MSME &amp; CERTIFIED</GradientReveal>
           </h1>
         </div>
 
@@ -124,7 +128,7 @@ export function PrivacySecurityContent({
                 CONTENTS
               </h2>
 
-              <nav aria-label="Privacy and Terms Contents">
+              <nav aria-label="MSME Statutory Contents">
                 <ul className="flex flex-col gap-[7px] max-lg:grid max-lg:grid-cols-2 max-sm:grid-cols-1">
                   {TOC_ITEMS.map((item) => {
                     const isActive = activeSection === item.id;
@@ -159,202 +163,241 @@ export function PrivacySecurityContent({
 
           {/* Right Column: 6 Detailed Sections */}
           <main className="flex flex-col gap-10 text-[#374151]">
-            {/* 01. Introduction */}
-            <section id="sec-01" className="scroll-mt-12 flex flex-col gap-2.5">
+            {/* 01. Executive Overview */}
+            <section id="msme-01" className="scroll-mt-12 flex flex-col gap-2.5">
               <h3 className="font-display text-[18px] md:text-[20px] font-[700] text-[#111827] flex items-baseline gap-2">
                 <span className="text-[#1A6CFF] font-[700]">01.</span>
-                <span>Introduction</span>
+                <span>Executive Overview</span>
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
-                Hillary Step Solutions (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to
-                architectural precision in protecting your privacy. This Privacy
-                Policy describes how we collect, use, process, and govern your
-                personal information across our global infrastructure and
-                AI-driven platforms.
+                Hillary Step Solutions is proudly recognized and registered under the Ministry of Micro, Small &amp; Medium Enterprises (MSME), Government of India. This statutory validation solidifies our commitment to pioneering technological innovation, generating high-skilled employment, and operating in strict accordance with national economic governance protocols.
               </p>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
-                By accessing or using our services, you acknowledge that you have
-                read and understood this Privacy Policy. We maintain strict
-                operational rigor in ensuring that data is handled with the
-                highest level of security and compliance.
+                Our certified status provides enterprise clients, public sector undertakings, and international partners with verified transparency, rigorous statutory adherence, and verified compliance benchmarks across our IT platforms, global workforce talent pipelines, and eco-smart civil infrastructure operations.
               </p>
             </section>
 
-            {/* 02. Information Collection */}
-            <section id="sec-02" className="scroll-mt-12 flex flex-col gap-3">
+            {/* 02. Statutory Framework */}
+            <section id="msme-02" className="scroll-mt-12 flex flex-col gap-3">
               <h3 className="font-display text-[18px] md:text-[20px] font-[700] text-[#111827] flex items-baseline gap-2">
                 <span className="text-[#1A6CFF] font-[700]">02.</span>
-                <span>Information Collection</span>
+                <span>Statutory Framework &amp; UDYAM Registration</span>
               </h3>
+              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
+                Our registration is codified under the Micro, Small and Medium Enterprises Development (MSMED) Act, 2006, and formally registered on the Government of India&apos;s digital Udyam portal.
+              </p>
 
               {/* 3 Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
                 {/* Card 1 */}
                 <div className="bg-[#F8FAFC] rounded-[12px] p-4 sm:p-5 border border-[#E2E8F0]/60 flex flex-col gap-2 transition-all duration-300 hover:shadow-xs hover:border-[#1A6CFF]/30">
-                  <div className="text-[#334155] text-[18px]">
-                    <FaUser />
+                  <div className="text-[#1A6CFF] text-[18px]">
+                    <FaAward />
                   </div>
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
-                    Provided Data
+                    Udyam Certified
                   </h4>
                   <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
-                    Information you directly supply through forms, account
-                    creation, and direct communication.
+                    Authenticated under the Government of India national portal with perpetual statutory recognition.
                   </p>
                 </div>
 
                 {/* Card 2 */}
                 <div className="bg-[#F8FAFC] rounded-[12px] p-4 sm:p-5 border border-[#E2E8F0]/60 flex flex-col gap-2 transition-all duration-300 hover:shadow-xs hover:border-[#1A6CFF]/30">
-                  <div className="text-[#334155] text-[18px]">
-                    <FaGear />
+                  <div className="text-[#10B981] text-[18px]">
+                    <FaScaleBalanced />
                   </div>
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
-                    Automated
+                    MSMED Act 2006
                   </h4>
                   <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
-                    Telemetry, usage metrics, and IP data collected automatically
-                    via our operational infrastructure.
+                    Full alignment with corporate governance, priority status, and statutory dispute protocols.
                   </p>
                 </div>
 
                 {/* Card 3 */}
                 <div className="bg-[#F8FAFC] rounded-[12px] p-4 sm:p-5 border border-[#E2E8F0]/60 flex flex-col gap-2 transition-all duration-300 hover:shadow-xs hover:border-[#1A6CFF]/30">
-                  <div className="text-[#334155] text-[18px]">
-                    <FaShareNodes />
+                  <div className="text-[#FF6A00] text-[18px]">
+                    <FaBuildingUser />
                   </div>
                   <h4 className="font-display text-[14px] font-[700] text-[#111827] leading-snug">
-                    Third Parties
+                    Enterprise Class
                   </h4>
                   <p className="font-display text-[12.5px] leading-[1.5] text-[#64748B]">
-                    Data obtained from integrated services, verification
-                    partners, and public databases.
+                    Certified service provider in advanced cognitive engineering, IT consulting, and infrastructure delivery.
                   </p>
                 </div>
               </div>
             </section>
 
-            {/* 03. Use of Information */}
-            <section id="sec-03" className="scroll-mt-12 flex flex-col gap-2">
+            {/* 03. Enterprise Classification */}
+            <section id="msme-03" className="scroll-mt-12 flex flex-col gap-3">
               <h3 className="font-display text-[18px] md:text-[20px] font-[700] text-[#111827] flex items-baseline gap-2">
                 <span className="text-[#1A6CFF] font-[700]">03.</span>
-                <span>Use of Information</span>
+                <span>Enterprise Classification &amp; Metrics</span>
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
-                We utilize collected information solely to architect, operate,
-                and enhance our enterprise services, ensure regulatory and
-                statutory compliance, deliver personalized cognitive workflows,
-                and maintain transparent communication with our clients and
-                partners.
+                Following the revised composite criteria notification by the Ministry of MSME, enterprises are classified based on cumulative investment in plant &amp; machinery/equipment and audited annual turnover.
               </p>
+
+              {/* Classification Comparison Table */}
+              <div className="overflow-x-auto rounded-[12px] border border-gray-200/80 bg-white">
+                <table className="w-full text-left font-display text-[12.5px] md:text-[13px]">
+                  <thead className="bg-[#F8FAFC] border-b border-gray-200/80 text-[#111827] font-[700]">
+                    <tr>
+                      <th className="py-3 px-4">Classification</th>
+                      <th className="py-3 px-4">Investment Ceiling</th>
+                      <th className="py-3 px-4">Annual Turnover Ceiling</th>
+                      <th className="py-3 px-4">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 text-[#4B5563]">
+                    <tr>
+                      <td className="py-3 px-4 font-[600] text-[#111827]">Micro Enterprise</td>
+                      <td className="py-3 px-4">Up to ₹1 Crore</td>
+                      <td className="py-3 px-4">Up to ₹5 Crore</td>
+                      <td className="py-3 px-4 text-[#64748B]">Pre-scaling</td>
+                    </tr>
+                    <tr className="bg-[#F0F7FF]/50">
+                      <td className="py-3 px-4 font-[700] text-[#007BFF] flex items-center gap-2">
+                        <FaCheck className="text-[#10B981] text-[12px]" />
+                        <span>Small / Medium Enterprise</span>
+                      </td>
+                      <td className="py-3 px-4 font-[600] text-[#111827]">₹10 Cr to ₹50 Cr</td>
+                      <td className="py-3 px-4 font-[600] text-[#111827]">₹50 Cr to ₹250 Cr</td>
+                      <td className="py-3 px-4">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-[600] bg-[#10B981]/15 text-[#059669]">
+                          Hillary Step Certified
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-3 px-4 font-[600] text-[#111827]">Medium Enterprise</td>
+                      <td className="py-3 px-4">Up to ₹50 Crore</td>
+                      <td className="py-3 px-4">Up to ₹250 Crore</td>
+                      <td className="py-3 px-4 text-[#64748B]">Enterprise scale</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </section>
 
-            {/* 04. AI & Automated Processing */}
-            <section id="sec-04" className="scroll-mt-12 flex flex-col gap-2">
+            {/* 04. Procurement & Tenders */}
+            <section id="msme-04" className="scroll-mt-12 flex flex-col gap-2.5">
               <h3 className="font-display text-[18px] md:text-[20px] font-[700] text-[#111827] flex items-baseline gap-2">
                 <span className="text-[#1A6CFF] font-[700]">04.</span>
-                <span>AI &amp; Automated Processing</span>
+                <span>Public Procurement &amp; Tender Benefits</span>
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
-                Our intelligence layer utilizes advanced machine learning models.
-                We enforce strict isolation between analytical processing and
-                personal identity mapping.
+                As an accredited MSME, Hillary Step Solutions benefits from and complies with national Public Procurement Policy frameworks, ensuring competitive agility, statutory bid exemptions, and expedited vendor onboarding:
               </p>
+              <ul className="flex flex-col gap-2 pt-1 font-display text-[13px] md:text-[13.5px] text-[#4B5563]">
+                <li className="flex items-start gap-2.5">
+                  <span className="w-[6px] h-[6px] rounded-full bg-[#FF6A00] mt-2 shrink-0" />
+                  <span>
+                    <strong className="text-[#111827]">EMD &amp; Tender Fee Waivers:</strong> Exemption from Earnest Money Deposit (EMD) and tender document fees in central and state government digital procurements.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="w-[6px] h-[6px] rounded-full bg-[#FF6A00] mt-2 shrink-0" />
+                  <span>
+                    <strong className="text-[#111827]">25% Mandatory Procurement Policy:</strong> Direct qualification under the statutory 25% annual procurement quota reserved for MSEs by Central Ministries and PSUs.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="w-[6px] h-[6px] rounded-full bg-[#FF6A00] mt-2 shrink-0" />
+                  <span>
+                    <strong className="text-[#111827]">Priority Vendor Onboarding:</strong> Streamlined commercial due diligence across both domestic government bids and international enterprise subcontracts.
+                  </span>
+                </li>
+              </ul>
             </section>
 
-            {/* 05. Security Architecture */}
-            <section id="sec-05" className="scroll-mt-12 flex flex-col gap-2">
+            {/* 05. Quality & Innovation */}
+            <section id="msme-05" className="scroll-mt-12 flex flex-col gap-2.5">
               <h3 className="font-display text-[18px] md:text-[20px] font-[700] text-[#111827] flex items-baseline gap-2">
                 <span className="text-[#1A6CFF] font-[700]">05.</span>
-                <span>Security Architecture</span>
+                <span>Quality Standards &amp; Technological Innovation</span>
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
-                We deploy defense-in-depth methodologies. Security is not a
-                feature; it is the foundational layer.
+                MSME certification is deeply integrated with our engineering philosophy. We maintain zero-defect standards across digital systems, infrastructure planning, and workforce deployment. Our technology stack leverages machine intelligence, containerized pipelines, and global best practices to bridge local innovation with international enterprise requirements.
               </p>
             </section>
 
-            {/* 06. Your Rights */}
-            <section id="sec-06" className="scroll-mt-12 flex flex-col gap-3">
+            {/* 06. Statutory Governance */}
+            <section id="msme-06" className="scroll-mt-12 flex flex-col gap-3">
               <h3 className="font-display text-[18px] md:text-[20px] font-[700] text-[#111827] flex items-baseline gap-2">
                 <span className="text-[#1A6CFF] font-[700]">06.</span>
-                <span>Your Rights</span>
+                <span>Statutory Governance &amp; Compliance Safeguards</span>
               </h3>
 
-              {/* Rights Accordion list */}
+              {/* Accordion list */}
               <div className="flex flex-col border-t border-b border-gray-200 divide-y divide-gray-100">
-                {/* Right 1: Right to Access */}
+                {/* Accordion 1: Delayed Payment Protection */}
                 <div className="py-3.5">
                   <button
                     type="button"
                     onClick={() =>
-                      setOpenRight(openRight === "access" ? null : "access")
+                      setOpenRight(openRight === "payment" ? null : "payment")
                     }
                     className="w-full flex items-center justify-between text-left cursor-pointer bg-transparent border-0 p-0 group"
                   >
                     <span className="font-mono text-[13px] md:text-[13.5px] text-[#111827] tracking-wider uppercase font-[500] group-hover:text-[#1A6CFF] transition-colors">
-                      Right to Access
+                      Delayed Payment Protection (Section 15, MSMED Act)
                     </span>
                     <span className="text-[#9CA3AF] text-[11px]">
-                      {openRight === "access" ? <FaMinus /> : <FaPlus />}
+                      {openRight === "payment" ? <FaMinus /> : <FaPlus />}
                     </span>
                   </button>
-                  {openRight === "access" && (
+                  {openRight === "payment" && (
                     <p className="pt-2 text-[12.5px] md:text-[13px] leading-[1.6] text-[#64748B] font-display">
-                      Full transparency into your personal data stored within our
-                      systems, including processing purposes, data recipients,
-                      and retention parameters.
+                      Under Section 15 of the MSMED Act, buyers are legally bound to make payments within 45 days of agreement. Failure triggers compound interest with monthly rests at 3x the RBI bank rate, safeguarding liquidity and operational integrity.
                     </p>
                   )}
                 </div>
 
-                {/* Right 2: Right to Deletion */}
+                {/* Accordion 2: MSEFC Dispute Redressal */}
                 <div className="py-3.5">
                   <button
                     type="button"
                     onClick={() =>
-                      setOpenRight(openRight === "deletion" ? null : "deletion")
+                      setOpenRight(openRight === "dispute" ? null : "dispute")
                     }
                     className="w-full flex items-center justify-between text-left cursor-pointer bg-transparent border-0 p-0 group"
                   >
                     <span className="font-mono text-[13px] md:text-[13.5px] text-[#111827] tracking-wider uppercase font-[500] group-hover:text-[#1A6CFF] transition-colors">
-                      Right to Deletion
+                      MSEFC Statutory Arbitration &amp; Conciliation
                     </span>
                     <span className="text-[#9CA3AF] text-[11px]">
-                      {openRight === "deletion" ? <FaMinus /> : <FaPlus />}
+                      {openRight === "dispute" ? <FaMinus /> : <FaPlus />}
                     </span>
                   </button>
-                  {openRight === "deletion" && (
+                  {openRight === "dispute" && (
                     <p className="pt-2 text-[12.5px] md:text-[13px] leading-[1.6] text-[#64748B] font-display">
-                      Request permanent cryptographic deletion of non-statutory
-                      personal data across active databases and secondary backup
-                      layers upon verified identification.
+                      Any contractual disputes are referenceable to the Micro and Small Enterprises Facilitation Council (MSEFC) for swift statutory conciliation and arbitration, bypassing protracted commercial litigation.
                     </p>
                   )}
                 </div>
 
-                {/* Right 3: Right to Rectification */}
+                {/* Accordion 3: Statutory Audit Disclosures */}
                 <div className="py-3.5">
                   <button
                     type="button"
                     onClick={() =>
-                      setOpenRight(
-                        openRight === "rectification" ? null : "rectification"
-                      )
+                      setOpenRight(openRight === "audit" ? null : "audit")
                     }
                     className="w-full flex items-center justify-between text-left cursor-pointer bg-transparent border-0 p-0 group"
                   >
                     <span className="font-mono text-[13px] md:text-[13.5px] text-[#111827] tracking-wider uppercase font-[500] group-hover:text-[#1A6CFF] transition-colors">
-                      Right to Rectification
+                      Corporate Transparency &amp; MCA Disclosures
                     </span>
                     <span className="text-[#9CA3AF] text-[11px]">
-                      {openRight === "rectification" ? <FaMinus /> : <FaPlus />}
+                      {openRight === "audit" ? <FaMinus /> : <FaPlus />}
                     </span>
                   </button>
-                  {openRight === "rectification" && (
+                  {openRight === "audit" && (
                     <p className="pt-2 text-[12.5px] md:text-[13px] leading-[1.6] text-[#64748B] font-display">
-                      Expedited rectification or completion of any inaccurate or
-                      incomplete personal information upon receipt of valid
-                      notification.
+                      Full transparency is maintained with mandatory statutory disclosures in audited balance sheets, corporate filings, and periodic returns submitted to the Registrar of Companies and Ministry of Corporate Affairs.
                     </p>
                   )}
                 </div>
@@ -365,17 +408,15 @@ export function PrivacySecurityContent({
             <div className="bg-[#FFFDF7] rounded-[12px] p-4.5 sm:p-5 border border-[#FDE68A] flex flex-col gap-1.5 mt-2">
               <div className="flex items-center gap-2 text-[#D97706] font-display text-[12px] font-[700] tracking-[0.14em] uppercase">
                 <FaTriangleExclamation className="text-[13px] text-[#F59E0B]" />
-                <span>IMPORTANT NOTICE</span>
+                <span>OFFICIAL STATUTORY DISCLOSURE</span>
               </div>
               <p className="font-display text-[12.5px] md:text-[13px] leading-[1.6] text-[#4B5563]">
-                This document is a technical abstraction of our legal framework.
-                For specific jurisdictional inquiries, please contact our Data
-                Protection Officer at{" "}
+                This document confirms the statutory registration and compliance standing of Hillary Step Solutions under the Ministry of Micro, Small &amp; Medium Enterprises, Government of India. For tender verifications, certificate extracts, or corporate compliance inquiries, contact{" "}
                 <a
-                  href="mailto:legal@hillarystep.com"
+                  href="mailto:compliance@hillarystep.com"
                   className="text-[#1A6CFF] font-[500] hover:underline"
                 >
-                  legal@hillarystep.com
+                  compliance@hillarystep.com
                 </a>
                 .
               </p>
@@ -419,10 +460,10 @@ export function PrivacySecurityContent({
                 <span className="text-[#E5E7EB] select-none">|</span>
                 <button
                   type="button"
-                  onClick={() => onNavigateType?.("msme")}
+                  onClick={() => onNavigateType?.("privacy")}
                   className="text-[#FF6A00] font-[500] hover:underline cursor-pointer bg-transparent border-0 p-0"
                 >
-                  MSME Certified
+                  Privacy &amp; Terms
                 </button>
               </div>
             </div>

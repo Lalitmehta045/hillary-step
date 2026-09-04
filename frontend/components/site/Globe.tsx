@@ -206,19 +206,76 @@ export function Globe({ active = "India" }: { active?: string }) {
     threeRenderer.toneMappingExposure = 1.28;
 
     const textureLoader = new THREE.TextureLoader();
-    const earthTexture = textureLoader.load("/assets/earth-blue-marble.jpg");
+    const earthTexture = textureLoader.load("/assets/earth-blue-marble.jpg", () => {
+      earthMat.needsUpdate = true;
+    });
     earthTexture.colorSpace = THREE.SRGBColorSpace;
+
+    const earthLightsTexture = textureLoader.load("/assets/earth-lights.png", () => {
+      earthMat.needsUpdate = true;
+    });
+    earthLightsTexture.colorSpace = THREE.SRGBColorSpace;
 
     // Group for matching tilt and spin
     const tiltGroup = new THREE.Group();
     threeScene.add(tiltGroup);
 
-    // Realistic Satellite Earth Sphere (positioned right beneath the dots layer)
+    // Realistic Satellite Earth Sphere with Day / Night satellite city lights
     const earthGeo = new THREE.SphereGeometry(0.998, 64, 64);
-    const earthMat = new THREE.MeshStandardMaterial({
-      map: earthTexture,
-      roughness: 0.68,
-      metalness: 0.05,
+    const earthMat = new THREE.ShaderMaterial({
+      uniforms: {
+        dayTexture: { value: earthTexture },
+        nightTexture: { value: earthLightsTexture },
+        sunDirection: { value: new THREE.Vector3(0, 0, 1) },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        varying vec3 vNormal;
+
+        void main() {
+          vUv = uv;
+          vNormal = normalize(normal);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D dayTexture;
+        uniform sampler2D nightTexture;
+        uniform vec3 sunDirection;
+
+        varying vec2 vUv;
+        varying vec3 vNormal;
+
+        void main() {
+          vec4 daySample = texture2D(dayTexture, vUv);
+          vec4 nightSample = texture2D(nightTexture, vUv);
+
+          // Dot product between surface normal and sun direction in Earth's local coordinates
+          float sunDot = dot(normalize(vNormal), normalize(sunDirection));
+
+          // Smooth twilight / terminator transition between day and night
+          float dayFactor = smoothstep(-0.15, 0.18, sunDot);
+
+          // Day side illumination: realistic sunlight
+          float daylight = max(0.06, sunDot * 0.95 + 0.12);
+          vec3 dayColor = daySample.rgb * daylight * 1.35;
+
+          // Night side: dark space continent silhouette
+          vec3 nightTerrain = daySample.rgb * 0.045;
+
+          // Vibrant satellite city lights with golden/amber incandescent glow
+          vec3 rawLights = nightSample.rgb;
+          vec3 cityLights = pow(rawLights, vec3(0.92)) * 3.8;
+          cityLights *= vec3(1.28, 1.10, 0.85);
+
+          vec3 nightColor = nightTerrain + cityLights;
+
+          // Composite final Earth color (clean transition between day and night without orange band)
+          vec3 finalColor = mix(nightColor, dayColor, dayFactor);
+
+          gl_FragColor = vec4(finalColor, 1.0);
+        }
+      `,
     });
     const earthMesh = new THREE.Mesh(earthGeo, earthMat);
     tiltGroup.add(earthMesh);
@@ -421,6 +478,13 @@ export function Globe({ active = "India" }: { active?: string }) {
       // Synchronize Three.js Earth satellite orientation & camera in real time
       tiltGroup.rotation.x = TILT;
       earthMesh.rotation.y = spin - Math.PI / 2;
+
+      // Update sun direction in earthMesh's local space for day/night satellite shader
+      tiltGroup.updateMatrixWorld(true);
+      const sunWorld = new THREE.Vector3();
+      sunLight.getWorldPosition(sunWorld);
+      const localSun = earthMesh.worldToLocal(sunWorld).normalize();
+      earthMat.uniforms.sunDirection.value.copy(localSun);
 
       const fov = 2 * Math.atan((h / 2) / (R * cam)) * (180 / Math.PI);
       threeCamera.fov = fov;
