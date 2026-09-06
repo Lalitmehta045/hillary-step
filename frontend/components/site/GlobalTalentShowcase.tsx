@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { m } from "framer-motion";
-import { GlobalTalentGlobe3D } from "./GlobalTalentGlobe3D";
 import {
   FaHouse,
   FaLayerGroup,
@@ -23,14 +22,6 @@ import {
 interface GlobalTalentShowcaseProps {
   onSelectTab?: (tab: "post" | "find") => void;
 }
-
-const PARTNERS = [
-  { name: "Microsoft", symbol: "⊞ Microsoft" },
-  { name: "airbnb", symbol: "airbnb" },
-  { name: "NVIDIA", symbol: "NVIDIA" },
-  { name: "deel.", symbol: "deel." },
-  { name: "stripe", symbol: "stripe" },
-];
 
 const NAV_TABS = [
   { id: "overview", label: "Overview", icon: FaHouse },
@@ -86,111 +77,7 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
   };
 
   return (
-    <div className="w-full bg-[#FFFFFF] text-[#111827] font-display antialiased select-none border-t border-gray-100 mt-16 pt-8">
-      {/* ============================================================ */}
-      {/* SECTION 1: HERO SECTION                                      */}
-      {/* ============================================================ */}
-      <section className="relative w-full max-w-[1240px] mx-auto px-6 sm:px-10 lg:px-14 pt-8 md:pt-12 pb-12 overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Left Hero Column */}
-          <div className="lg:col-span-6 flex flex-col items-start gap-5 z-10">
-            {/* Pill Tag */}
-            <m.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EAF8EE] border border-[#DCFCE7]"
-            >
-              <span className="text-[11.5px] font-[700] tracking-[0.14em] text-[#16A34A] uppercase">
-                GLOBAL STAFFING
-              </span>
-            </m.div>
-
-            {/* Headline */}
-            <m.h1
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.30 }}
-              className="font-display text-[44px] sm:text-[56px] md:text-[64px] font-[800] leading-[1.05] tracking-[-0.03em] text-[#111827]"
-            >
-              Global <span className="text-[#16A34A]">Talent.</span>
-              <br />
-              Local Understanding.
-            </m.h1>
-
-            {/* Subtitle */}
-            <m.p
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.45 }}
-              className="font-display text-[15px] sm:text-[16.5px] leading-[1.6] text-[#4B5563] max-w-[500px]"
-            >
-              We connect businesses with qualified professionals across markets,
-              helping organizations build reliable teams without the complexity
-              of international hiring.
-            </m.p>
-
-            {/* CTA Buttons */}
-            <m.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.60 }}
-              className="flex flex-wrap items-center gap-3.5 pt-2"
-            >
-              <button
-                type="button"
-                onClick={() => handleAction("post")}
-                className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#111111] hover:bg-black text-white text-[14px] font-[600] tracking-[-0.01em] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm cursor-pointer"
-              >
-                <span>Post a Job</span>
-                <FaArrowRight className="text-[12px] transition-transform group-hover:translate-x-0.5" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleAction("find")}
-                className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#F4F4F5] hover:bg-[#E4E4E7] text-[#111111] text-[14px] font-[600] tracking-[-0.01em] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-              >
-                <span>Find a Job</span>
-                <FaArrowRight className="text-[12px] transition-transform group-hover:translate-x-0.5" />
-              </button>
-            </m.div>
-
-            {/* Trust Proof */}
-            <m.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.75 }}
-              className="pt-6 flex flex-col gap-3"
-            >
-              <p className="text-[12px] font-[500] text-[#9CA3AF] tracking-wide">
-                Trusted by 500+ companies worldwide
-              </p>
-              <div className="flex flex-wrap items-center gap-6 text-[#9CA3AF] font-[600] text-[13px] sm:text-[14px]">
-                {PARTNERS.map((p) => (
-                  <span
-                    key={p.name}
-                    className="hover:text-[#4B5563] transition-colors cursor-default"
-                  >
-                    {p.symbol}
-                  </span>
-                ))}
-              </div>
-            </m.div>
-          </div>
-
-          {/* Right Hero Column: Interactive 3D WebGL Globe */}
-          <div className="lg:col-span-6 relative flex items-center justify-center">
-            <GlobalTalentGlobe3D />
-          </div>
-        </div>
-      </section>
-
+    <div className="w-full bg-[#FFFFFF] text-[#111827] font-display antialiased select-none border-t border-gray-100 mt-12 pt-6">
       {/* ============================================================ */}
       {/* SECTION 2: INTERACTIVE VALUE PROPS WITH LEFT NAV TABS        */}
       {/* ============================================================ */}
@@ -211,14 +98,14 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                       setActiveCardIndex(idx);
                     }}
                     className={`group w-full flex items-center gap-3.5 px-4 py-3 rounded-[14px] text-left transition-all duration-200 cursor-pointer ${isActive
-                        ? "bg-white text-[#111827] font-[700] shadow-xs border border-gray-100"
-                        : "text-[#4B5563] hover:text-[#111827] hover:bg-white/60 font-[500]"
+                      ? "bg-white text-[#111827] font-[700] shadow-xs border border-gray-100"
+                      : "text-[#4B5563] hover:text-[#111827] hover:bg-white/60 font-[500]"
                       }`}
                   >
                     <div
                       className={`w-8 h-8 rounded-[10px] flex items-center justify-center transition-colors ${isActive
-                          ? "bg-[#EAF8EE] text-[#16A34A]"
-                          : "bg-transparent text-[#9CA3AF] group-hover:text-[#111827]"
+                        ? "bg-[#EAF8EE] text-[#16A34A]"
+                        : "bg-transparent text-[#9CA3AF] group-hover:text-[#111827]"
                         }`}
                     >
                       <Icon className="text-[15px]" />
@@ -273,8 +160,8 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                     setActiveTab(card.tabId);
                   }}
                   className={`group relative w-full bg-white rounded-[20px] p-6 sm:p-7 border transition-all duration-300 cursor-pointer flex items-center justify-between gap-6 ${isSelected
-                      ? "border-[#16A34A]/40 shadow-[0_8px_30px_rgb(22,163,74,0.08)] bg-gradient-to-r from-white to-[#F0FDF4]/30"
-                      : "border-[#E2E8F0]/80 hover:border-gray-300 hover:shadow-xs"
+                    ? "border-[#16A34A]/40 shadow-[0_8px_30px_rgb(22,163,74,0.08)] bg-gradient-to-r from-white to-[#F0FDF4]/30"
+                    : "border-[#E2E8F0]/80 hover:border-gray-300 hover:shadow-xs"
                     }`}
                 >
                   <div className="flex flex-col gap-1.5 max-w-[540px]">

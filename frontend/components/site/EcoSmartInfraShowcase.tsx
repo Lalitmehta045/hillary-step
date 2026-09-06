@@ -313,7 +313,7 @@ export function EcoSmartInfraShowcase() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full rounded-[28px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.1)] border border-orange-200/40 bg-[#FF8C00]"
+        className="relative w-full rounded-[28px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.1)]"
       >
         {/* Background Image & Ambient Lighting */}
         <div className="absolute inset-0 w-full h-full">

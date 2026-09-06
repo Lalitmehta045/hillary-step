@@ -48,7 +48,7 @@ const COLUMNS: {
     title: "CORPORATE GATEWAY",
     links: [
       { label: "About the Ascent", href: "/#about" },
-      { label: "The Incubation Lab", href: "/#pillars" },
+      { label: "Peak Intelligence Core", href: "/#ai-experience" },
       { label: "Contact the Sherpas", href: "/#contact" },
     ],
   },

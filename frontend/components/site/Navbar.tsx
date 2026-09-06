@@ -248,10 +248,10 @@ export function Navbar() {
                   e.preventDefault();
                   go(l.href);
                 }}
-                className={`link-underline px-4 py-2 font-medium text-sm transition-colors cursor-pointer ${
+                className={`nav-link-grad px-4 py-2 font-medium text-sm transition-colors cursor-pointer ${
                   scrolled
-                    ? "text-slate-700 hover:text-[#1A6CFF]"
-                    : "text-white/90 hover:text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+                    ? "text-slate-700"
+                    : "text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
                 }`}
               >
                 {l.label}
@@ -426,7 +426,7 @@ export function Navbar() {
                         <span className="font-mono text-xs text-[#1A6CFF] font-semibold w-6">
                           {l.num}
                         </span>
-                        <span className="font-display font-bold text-2xl sm:text-4xl md:text-5xl tracking-tight text-slate-900 group-hover:text-[#1A6CFF] transition-colors duration-200">
+                        <span className="font-display font-bold text-2xl sm:text-4xl md:text-5xl tracking-tight text-slate-900 group-hover-nav-grad transition-colors duration-200">
                           {l.label}
                         </span>
                         <span className="hidden sm:inline-block text-xs text-slate-400 font-normal ml-3">

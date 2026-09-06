@@ -108,9 +108,17 @@ body {
 }
 
 @keyframes gradient-flow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Unified animated gradient using logo colors (Blue, Green, Orange) */
@@ -118,13 +126,11 @@ body {
 .grad-text-bg,
 .grad-text-bgreen,
 .grad-text-green {
-  background-image: linear-gradient(
-    90deg,
-    #1a6cff 0%,
-    #40f600 33%,
-    #ff9500 66%,
-    #1a6cff 100%
-  );
+  background-image: linear-gradient(90deg,
+      #1a6cff 0%,
+      #40f600 33%,
+      #ff9500 66%,
+      #1a6cff 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -181,24 +187,26 @@ body {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.15);
 }
 
-.link-underline {
+.nav-link-grad {
   position: relative;
+  transition: color 0.2s ease, opacity 0.2s ease;
 }
-.link-underline::after {
-  content: '';
-  position: absolute;
-  bottom: 2px;
-  left: 14px;
-  right: 14px;
-  height: 1.5px;
-  background: linear-gradient(90deg, #1a6cff, #40f600, #ff9500);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border-radius: 9999px;
-}
-.link-underline:hover::after {
-  transform: scaleX(1);
+
+.group:hover .group-hover-nav-grad,
+.nav-link-grad:hover {
+  background-image: linear-gradient(90deg,
+      #1a6cff 0%,
+      #40f600 33%,
+      #ff9500 66%,
+      #1a6cff 100%) !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background-size: 300% 100% !important;
+  will-change: background-position;
+  animation: gradient-flow 6s ease infinite !important;
+  filter: none !important;
 }
 
 .bg-radial-blue {
@@ -214,4 +222,4 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
+}

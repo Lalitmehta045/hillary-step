@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { m, AnimatePresence } from "framer-motion";
 import { GlobalStaffingContent } from "./GlobalStaffingContent";
-import { CoreStaffingServices } from "./CoreStaffingServices";
 
 interface GlobalStaffingModalProps {
   isOpen: boolean;
@@ -81,7 +80,6 @@ export function GlobalStaffingModal({ isOpen, onClose }: GlobalStaffingModalProp
 
             {/* Content */}
             <GlobalStaffingContent isModal={true} />
-            <CoreStaffingServices />
           </m.div>
         </m.div>
       )}

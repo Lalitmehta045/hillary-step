@@ -12,7 +12,6 @@ import CoreArchitecture from "./CoreArchitecture";
 import DataPipeline from "./DataPipeline";
 import HumanMachine from "./HumanMachine";
 import Summit from "./Summit";
-import Teaser from "./Teaser";
 import "./ai.css";
 
 const CoreCanvas = dynamic(() => import("./CoreCanvas"), { ssr: false });
@@ -164,7 +163,6 @@ export default function AISection() {
           <DataPipeline />
           <HumanMachine />
           <Summit />
-          <Teaser />
         </div>
       </main>
     </div>
