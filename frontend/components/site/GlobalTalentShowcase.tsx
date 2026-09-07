@@ -18,6 +18,9 @@ import {
   FaCircleCheck,
   FaRocket,
 } from "react-icons/fa6";
+import { AnimatedCubeCard } from "./AnimatedCubeCard";
+import { AiEngineVisual } from "./AiEngineCard";
+import { ProfileFlowCard } from "./ProfileFlowCard";
 
 interface GlobalTalentShowcaseProps {
   onSelectTab?: (tab: "post" | "find") => void;
@@ -117,34 +120,7 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
             </div>
 
             {/* Bottom Mini 3D Feature Card */}
-            <div className="bg-white rounded-[16px] border border-[#E2E8F0]/80 p-4.5 flex flex-col gap-3 shadow-xs">
-              <div className="w-full h-[88px] rounded-[12px] bg-gradient-to-br from-[#F0FDF4] to-[#DCFCE7] flex items-center justify-center overflow-hidden relative">
-                <svg width="100" height="70" viewBox="0 0 100 70" fill="none">
-                  <g opacity="0.85" transform="translate(14, 18)">
-                    <polygon points="18,0 36,10 18,20 0,10" fill="#86EFAC" />
-                    <polygon points="0,10 18,20 18,42 0,32" fill="#4ADE80" />
-                    <polygon points="18,20 36,10 36,32 18,42" fill="#22C55E" />
-                  </g>
-                  <g transform="translate(42, 8)">
-                    <polygon points="18,0 36,10 18,20 0,10" fill="#BBF7D0" />
-                    <polygon points="0,10 18,20 18,42 0,32" fill="#22C55E" />
-                    <polygon points="18,20 36,10 36,32 18,42" fill="#15803D" />
-                  </g>
-                  <g opacity="0.75" transform="translate(62, 22)">
-                    <polygon points="14,0 28,8 14,16 0,8" fill="#86EFAC" />
-                    <polygon points="0,8 14,16 14,34 0,26" fill="#4ADE80" />
-                    <polygon points="14,16 28,8 28,26 14,34" fill="#22C55E" />
-                  </g>
-                </svg>
-              </div>
-              <p className="text-[12.5px] leading-[1.5] text-[#4B5563] font-[500]">
-                People-centric.
-                <br />
-                AI-powered.
-                <br />
-                Outcome-driven.
-              </p>
-            </div>
+            <AnimatedCubeCard />
           </div>
 
           {/* Right Embossed Feature Cards List */}
@@ -212,7 +188,7 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Card 1 */}
-          <div className="md:col-span-7 bg-[#F8FAFC] rounded-[22px] border border-[#E2E8F0]/80 p-7 flex flex-col justify-between gap-6 hover:shadow-sm transition-all duration-300">
+          <div className="md:col-span-7 bg-[#F8FAFC] rounded-[22px] border border-[#E2E8F0]/80 p-5 sm:p-7 flex flex-col justify-between gap-5 sm:gap-6 hover:shadow-sm transition-all duration-300">
             <div className="flex flex-col gap-3">
               <h3 className="text-[18px] sm:text-[20px] font-[700] text-[#111827]">
                 Tech Asset Pool &amp; AI Engine
@@ -236,38 +212,11 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
               </div>
             </div>
 
-            <div className="w-full h-[150px] rounded-[16px] bg-gradient-to-br from-white to-[#F0FDF4] border border-[#E2E8F0]/60 flex items-center justify-center overflow-hidden relative">
-              <svg width="220" height="110" viewBox="0 0 220 110" fill="none">
-                <polygon
-                  points="110,10 200,55 110,100 20,55"
-                  fill="#F8FAFC"
-                  stroke="#E2E8F0"
-                  strokeWidth="1.5"
-                />
-                <line x1="65" y1="32" x2="155" y2="78" stroke="#E2E8F0" strokeWidth="1" />
-                <line x1="110" y1="10" x2="110" y2="100" stroke="#E2E8F0" strokeWidth="1" />
-                <line x1="155" y1="32" x2="65" y2="78" stroke="#E2E8F0" strokeWidth="1" />
-                <g transform="translate(94, 28)">
-                  <polygon points="16,0 32,9 16,18 0,9" fill="#86EFAC" />
-                  <polygon points="0,9 16,18 16,36 0,27" fill="#22C55E" />
-                  <polygon points="16,18 32,9 32,27 16,36" fill="#15803D" />
-                </g>
-                <g transform="translate(60, 42)">
-                  <polygon points="10,0 20,6 10,12 0,6" fill="#BBF7D0" />
-                  <polygon points="0,6 10,12 10,24 0,18" fill="#4ADE80" />
-                  <polygon points="10,12 20,6 20,18 10,24" fill="#22C55E" />
-                </g>
-                <g transform="translate(138, 44)">
-                  <polygon points="10,0 20,6 10,12 0,6" fill="#BBF7D0" />
-                  <polygon points="0,6 10,12 10,24 0,18" fill="#4ADE80" />
-                  <polygon points="10,12 20,6 20,18 10,24" fill="#22C55E" />
-                </g>
-              </svg>
-            </div>
+            <AiEngineVisual className="!mt-0" />
           </div>
 
           {/* Card 2 */}
-          <div className="md:col-span-5 bg-[#F8FAFC] rounded-[22px] border border-[#E2E8F0]/80 p-7 flex flex-col justify-between gap-6 hover:shadow-sm transition-all duration-300">
+          <div className="md:col-span-5 bg-[#F8FAFC] rounded-[22px] border border-[#E2E8F0]/80 p-5 sm:p-7 flex flex-col justify-between gap-5 sm:gap-6 hover:shadow-sm transition-all duration-300">
             <div className="flex flex-col gap-3">
               <h3 className="text-[18px] sm:text-[20px] font-[700] text-[#111827]">
                 Continuous Upgrades
@@ -289,27 +238,45 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
             </div>
 
             <div className="w-full h-[150px] rounded-[16px] bg-gradient-to-br from-white to-[#F0FDF4] border border-[#E2E8F0]/60 flex items-center justify-center overflow-hidden relative">
+              <style>{`
+                @keyframes spin-ring {
+                  100% {
+                    stroke-dashoffset: 0;
+                  }
+                  0% {
+                    stroke-dashoffset: 100;
+                  }
+                }
+                .animate-spin-ring {
+                  animation: spin-ring 2s linear infinite;
+                }
+              `}</style>
               <svg width="150" height="110" viewBox="0 0 150 110" fill="none">
                 <ellipse cx="75" cy="85" rx="55" ry="16" fill="#E2E8F0" opacity="0.6" />
+                {/* Background Ring */}
                 <path
                   d="M35,50 C35,30 60,20 85,30 C110,40 120,65 95,75 C70,85 45,70 35,50 Z"
                   stroke="#E5E7EB"
                   strokeWidth="16"
                   fill="none"
                 />
+                {/* Animated Foreground Ring Segment */}
                 <path
-                  d="M45,45 C50,30 75,25 95,35 C115,45 110,65 90,70"
+                  d="M35,50 C35,30 60,20 85,30 C110,40 120,65 95,75 C70,85 45,70 35,50 Z"
                   stroke="#22C55E"
                   strokeWidth="12"
                   strokeLinecap="round"
                   fill="none"
+                  pathLength="100"
+                  strokeDasharray="25 75"
+                  className="animate-spin-ring"
                 />
               </svg>
             </div>
           </div>
 
           {/* Card 3 */}
-          <div className="md:col-span-12 bg-[#F8FAFC] rounded-[22px] border border-[#E2E8F0]/80 p-7 flex flex-col lg:flex-row items-center justify-between gap-8 hover:shadow-sm transition-all duration-300">
+          <div className="md:col-span-12 bg-[#F8FAFC] rounded-[22px] border border-[#E2E8F0]/80 p-5 sm:p-7 flex flex-col lg:flex-row items-center justify-between gap-8 hover:shadow-sm transition-all duration-300">
             <div className="flex flex-col gap-3 max-w-[560px]">
               <h3 className="text-[18px] sm:text-[20px] font-[700] text-[#111827]">
                 Academic Synergy &amp; Fresh Talent Pipelines
@@ -335,31 +302,8 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
               </div>
             </div>
 
-            <div className="w-full lg:w-[460px] h-[150px] rounded-[16px] bg-gradient-to-br from-white to-[#F0FDF4] border border-[#E2E8F0]/60 flex items-center justify-center overflow-hidden relative px-6">
-              <div className="flex items-center justify-between w-full max-w-[380px]">
-                <div className="w-16 h-16 rounded-[16px] bg-white border border-gray-200 shadow-xs flex items-center justify-center text-[#16A34A]">
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-                    <path d="M6 12v5c3 3 9 3 12 0v-5" />
-                  </svg>
-                </div>
-
-                <div className="flex-1 px-4 flex items-center justify-center">
-                  <div className="w-full border-t-2 border-dashed border-[#86EFAC]" />
-                </div>
-
-                <div className="flex items-center -space-x-3">
-                  <div className="w-11 h-11 rounded-full ring-3 ring-white bg-[#E0E7FF] text-[#4338CA] flex items-center justify-center font-[700] text-[13px] shadow-sm">
-                    JD
-                  </div>
-                  <div className="w-11 h-11 rounded-full ring-3 ring-white bg-[#DCFCE7] text-[#15803D] flex items-center justify-center font-[700] text-[13px] shadow-sm">
-                    SK
-                  </div>
-                  <div className="w-11 h-11 rounded-full ring-3 ring-white bg-[#FEF3C7] text-[#B45309] flex items-center justify-center font-[700] text-[13px] shadow-sm">
-                    AL
-                  </div>
-                </div>
-              </div>
+            <div className="w-full lg:w-[460px]">
+              <ProfileFlowCard />
             </div>
           </div>
         </div>

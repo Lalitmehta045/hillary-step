@@ -1,0 +1,189 @@
+/* --------------------------------
+   CONTAINER & CARD SYSTEM
+-------------------------------- */
+
+.ai-card-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ai-card {
+  width: 100%;
+  padding: clamp(18px, 3.5vw, 28px);
+  box-sizing: border-box;
+  border: 1px solid #e1e7e4;
+  border-radius: clamp(16px, 2.5vw, 24px);
+  background: #f8faf9;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.03),
+    0 8px 20px rgba(0, 0, 0, 0.025);
+  transition: all 0.3s ease;
+}
+
+/* --------------------------------
+   HEADER
+-------------------------------- */
+
+.ai-header h2 {
+  margin: 0;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: clamp(17px, 2.2vw, 20px);
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #101915;
+}
+
+.ai-header p {
+  max-width: 790px;
+  margin: clamp(8px, 1.5vw, 12px) 0 0;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: clamp(13px, 1.5vw, 14px);
+  line-height: 1.6;
+  font-weight: 400;
+  color: #36516c;
+}
+
+/* --------------------------------
+   TAGS
+-------------------------------- */
+
+.ai-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(6px, 1.2vw, 9px);
+  margin-top: clamp(10px, 1.8vw, 15px);
+}
+
+.ai-tags span {
+  display: inline-flex;
+  align-items: center;
+  height: clamp(26px, 3.2vw, 29px);
+  padding: 0 clamp(10px, 1.8vw, 13px);
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 1px solid #e0e7e3;
+  background: #ffffff;
+  color: #079447;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: clamp(11px, 1.4vw, 12px);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.035);
+  white-space: nowrap;
+}
+
+/* --------------------------------
+   VISUAL STAGE AREA
+-------------------------------- */
+
+.ai-visual {
+  position: relative;
+  width: 100%;
+  height: clamp(148px, 20vw, 175px);
+  margin-top: clamp(16px, 2.5vw, 24px);
+  overflow: hidden;
+  border-radius: clamp(12px, 2vw, 16px);
+  border: 1px solid #e3ebe7;
+  background: #f5fcf7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+/* --------------------------------
+   MASTER SVG (PRECISION ISOMETRIC)
+-------------------------------- */
+
+.ai-master-svg {
+  width: 100%;
+  height: 100%;
+  max-height: 168px;
+  overflow: visible;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.06));
+}
+
+/* --------------------------------
+   CUBE COLOR GRADIENTS & FACES
+-------------------------------- */
+
+.cube-top {
+  fill: #8ceeb1;
+  transition: fill 0.3s ease;
+}
+
+.cube-left {
+  fill: #3ece73;
+  transition: fill 0.3s ease;
+}
+
+.cube-right {
+  fill: #15b85a;
+  transition: fill 0.3s ease;
+}
+
+/* --------------------------------
+   PULSE LINES & SHADOWS
+-------------------------------- */
+
+.iso-pulse-line {
+  will-change: stroke-dashoffset, opacity;
+}
+
+.iso-shadow {
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.iso-cube-group {
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+}
+
+/* --------------------------------
+   RESPONSIVE (MEDIA QUERIES)
+-------------------------------- */
+
+@media (max-width: 640px) {
+  .ai-card {
+    padding: 16px;
+  }
+
+  .ai-visual {
+    height: 138px;
+    padding: 4px 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .ai-card {
+    padding: 14px;
+  }
+
+  .ai-visual {
+    height: 126px;
+  }
+
+  .ai-tags span {
+    font-size: 11px;
+    padding: 0 9px;
+    height: 25px;
+  }
+}

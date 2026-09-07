@@ -1,0 +1,237 @@
+.profile-flow-card {
+  width: 100%;
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+  border: 1px solid #e2ebe6;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      #ffffff 0%,
+      #f5fcf7 65%,
+      #effaf3 100%
+    );
+}
+
+.profile-flow-inner {
+  position: relative;
+
+  width: 100%;
+  height: 150px;
+
+  display: flex;
+  align-items: center;
+
+  box-sizing: border-box;
+
+  padding: 0 24px;
+}
+
+/* --------------------------------
+   EDUCATION ICON
+-------------------------------- */
+
+.education-icon {
+  position: relative;
+
+  z-index: 5;
+
+  width: 64px;
+  height: 64px;
+
+  flex: 0 0 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  border: 1px solid #e0e7e4;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 7px rgba(0, 0, 0, 0.035),
+    0 1px 2px rgba(0, 0, 0, 0.025);
+}
+
+/* --------------------------------
+   CONNECTION
+-------------------------------- */
+
+.profile-connection {
+  position: relative;
+
+  flex: 1;
+
+  height: 20px;
+
+  display: flex;
+  align-items: center;
+
+  margin-left: 16px;
+  margin-right: 8px;
+
+  overflow: visible;
+}
+
+.connection-line {
+  width: 100%;
+  height: 1px;
+
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      #39df7e 0,
+      #39df7e 5px,
+      transparent 5px,
+      transparent 9px
+    );
+
+  opacity: 0.95;
+}
+
+/* --------------------------------
+   PROFILE GROUP
+-------------------------------- */
+
+.profile-group {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 112px;
+  height: 60px;
+
+  flex: 0 0 112px;
+}
+
+/* --------------------------------
+   PROFILE SLOT
+-------------------------------- */
+
+.profile-slot {
+  position: absolute;
+
+  top: 50%;
+  margin-top: -24.5px;
+
+  width: 49px;
+  height: 49px;
+
+  border-radius: 50%;
+
+  will-change:
+    transform,
+    opacity;
+
+  z-index: 1;
+}
+
+.profile-slot:nth-child(1) {
+  left: 0;
+  z-index: 3;
+}
+
+.profile-slot:nth-child(2) {
+  left: 31px;
+  z-index: 2;
+}
+
+.profile-slot:nth-child(3) {
+  left: 62px;
+  z-index: 1;
+}
+
+/* --------------------------------
+   PROFILE CIRCLE
+-------------------------------- */
+
+.profile-circle {
+  width: 49px;
+  height: 49px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border-radius: 50%;
+
+  border: 3px solid rgba(255, 255, 255, 0.95);
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: -0.02em;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.04);
+
+  user-select: none;
+}
+
+/* --------------------------------
+   RESPONSIVE
+-------------------------------- */
+
+@media (max-width: 600px) {
+  .profile-flow-inner {
+    padding: 0 18px;
+  }
+
+  .education-icon {
+    width: 56px;
+    height: 56px;
+
+    flex-basis: 56px;
+  }
+
+  .profile-connection {
+    margin-left: 12px;
+    margin-right: 4px;
+  }
+
+  .profile-group {
+    width: 100px;
+    flex-basis: 100px;
+  }
+
+  .profile-slot {
+    width: 44px;
+    height: 44px;
+    margin-top: -22px;
+  }
+
+  .profile-circle {
+    width: 44px;
+    height: 44px;
+
+    font-size: 11px;
+  }
+
+  .profile-slot:nth-child(1) {
+    left: 0;
+  }
+
+  .profile-slot:nth-child(2) {
+    left: 27px;
+  }
+
+  .profile-slot:nth-child(3) {
+    left: 54px;
+  }
+}
