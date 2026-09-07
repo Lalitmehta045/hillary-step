@@ -169,9 +169,9 @@ export function AiEngineVisual({ className = "" }: { className?: string }) {
             opacity: 1,
             y: 0,
             scale: 1,
-            duration: 0.46,
-            stagger: 0.08,
-            ease: "back.out(1.2)",
+            duration: 1.2,
+            stagger: 0.12,
+            ease: "power2.out",
           }
         );
       }
@@ -187,8 +187,8 @@ export function AiEngineVisual({ className = "" }: { className?: string }) {
           {
             opacity: 1,
             scale: 1,
-            duration: 0.48,
-            stagger: 0.08,
+            duration: 1.2,
+            stagger: 0.12,
             ease: "power2.out",
           }
         );
@@ -198,11 +198,11 @@ export function AiEngineVisual({ className = "" }: { className?: string }) {
         gsap.fromTo(
           pulseLines,
           { strokeDashoffset: 100, opacity: 0 },
-          { strokeDashoffset: 0, opacity: 1, duration: 0.55, ease: "power2.out" }
+          { strokeDashoffset: 0, opacity: 1, duration: 1.25, ease: "power2.out" }
         );
       }
 
-      // Schedule next pattern transition after holding
+      // Schedule next pattern transition after comfortable hold (~3.7s total cycle)
       timer = setTimeout(() => {
         if (!isMounted) return;
 
@@ -212,9 +212,9 @@ export function AiEngineVisual({ className = "" }: { className?: string }) {
             opacity: 0,
             y: -5,
             scale: 0.8,
-            duration: 0.32,
-            stagger: 0.06,
-            ease: "power2.in",
+            duration: 0.7,
+            stagger: 0.08,
+            ease: "power2.inOut",
           });
         }
 
@@ -222,17 +222,17 @@ export function AiEngineVisual({ className = "" }: { className?: string }) {
           gsap.to(shadows, {
             opacity: 0,
             scale: 0.3,
-            duration: 0.3,
-            stagger: 0.06,
-            ease: "power2.in",
+            duration: 0.65,
+            stagger: 0.08,
+            ease: "power2.inOut",
           });
         }
 
         if (pulseLines && pulseLines.length > 0) {
           gsap.to(pulseLines, {
             opacity: 0,
-            duration: 0.3,
-            ease: "power2.in",
+            duration: 0.65,
+            ease: "power2.inOut",
             onComplete: () => {
               if (!isMounted) return;
               setPatternIndex((prev) => (prev + 1) % PATTERNS.length);
@@ -242,9 +242,9 @@ export function AiEngineVisual({ className = "" }: { className?: string }) {
           setTimeout(() => {
             if (!isMounted) return;
             setPatternIndex((prev) => (prev + 1) % PATTERNS.length);
-          }, 350);
+          }, 450);
         }
-      }, 1900);
+      }, 3500);
     }, container);
 
     return () => {

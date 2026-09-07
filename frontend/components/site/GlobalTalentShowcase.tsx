@@ -88,7 +88,7 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Navigation Card */}
           <div className="lg:col-span-4 bg-[#F8FAFC] rounded-[22px] border border-[#E2E8F0]/70 p-5 sm:p-6 flex flex-col gap-6">
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5 relative">
               {NAV_TABS.map((tab, idx) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -100,20 +100,33 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                       setActiveTab(tab.id);
                       setActiveCardIndex(idx);
                     }}
-                    className={`group w-full flex items-center gap-3.5 px-4 py-3 rounded-[14px] text-left transition-all duration-200 cursor-pointer ${isActive
-                      ? "bg-white text-[#111827] font-[700] shadow-xs border border-gray-100"
-                      : "text-[#4B5563] hover:text-[#111827] hover:bg-white/60 font-[500]"
-                      }`}
+                    className={`group relative w-full flex items-center gap-3.5 px-4 py-3 rounded-[14px] text-left transition-colors duration-200 cursor-pointer ${
+                      isActive
+                        ? "text-[#111827] font-[700]"
+                        : "text-[#4B5563] hover:text-[#111827] font-[500]"
+                    }`}
                   >
+                    {isActive && (
+                      <m.div
+                        layoutId="activeNavTabIndicator"
+                        className="absolute inset-0 bg-white rounded-[14px] shadow-xs border border-gray-100/90 z-0"
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 30,
+                        }}
+                      />
+                    )}
                     <div
-                      className={`w-8 h-8 rounded-[10px] flex items-center justify-center transition-colors ${isActive
-                        ? "bg-[#EAF8EE] text-[#16A34A]"
-                        : "bg-transparent text-[#9CA3AF] group-hover:text-[#111827]"
-                        }`}
+                      className={`relative z-10 w-8 h-8 rounded-[10px] flex items-center justify-center transition-colors duration-200 ${
+                        isActive
+                          ? "bg-[#EAF8EE] text-[#16A34A]"
+                          : "bg-transparent text-[#9CA3AF] group-hover:text-[#111827] group-hover:bg-white/40"
+                      }`}
                     >
                       <Icon className="text-[15px]" />
                     </div>
-                    <span className="text-[14px]">{tab.label}</span>
+                    <span className="relative z-10 text-[14px]">{tab.label}</span>
                   </button>
                 );
               })}
@@ -129,20 +142,44 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
               const Icon = card.icon;
               const isSelected = activeCardIndex === idx;
               return (
-                <div
+                <m.div
                   key={card.num}
                   onClick={() => {
                     setActiveCardIndex(idx);
                     setActiveTab(card.tabId);
                   }}
-                  className={`group relative w-full bg-white rounded-[20px] p-6 sm:p-7 border transition-all duration-300 cursor-pointer flex items-center justify-between gap-6 ${isSelected
-                    ? "border-[#16A34A]/40 shadow-[0_8px_30px_rgb(22,163,74,0.08)] bg-gradient-to-r from-white to-[#F0FDF4]/30"
-                    : "border-[#E2E8F0]/80 hover:border-gray-300 hover:shadow-xs"
-                    }`}
+                  animate={{
+                    scale: isSelected ? 1.012 : 1,
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 360,
+                    damping: 28,
+                  }}
+                  className={`group relative w-full bg-white rounded-[20px] p-6 sm:p-7 border transition-all duration-300 cursor-pointer flex items-center justify-between gap-6 overflow-hidden ${
+                    isSelected
+                      ? "border-[#16A34A]/50 shadow-[0_10px_32px_rgb(22,163,74,0.10)]"
+                      : "border-[#E2E8F0]/80 hover:border-gray-300 hover:shadow-xs"
+                  }`}
                 >
-                  <div className="flex flex-col gap-1.5 max-w-[540px]">
+                  {isSelected && (
+                    <m.div
+                      layoutId="activeCardGlow"
+                      className="absolute inset-0 bg-gradient-to-r from-white via-white to-[#F0FDF4]/30 pointer-events-none -z-0"
+                      transition={{
+                        type: "spring",
+                        stiffness: 360,
+                        damping: 28,
+                      }}
+                    />
+                  )}
+                  <div className="relative z-10 flex flex-col gap-1.5 max-w-[540px]">
                     <div className="flex items-center gap-2">
-                      <span className="text-[14px] font-[700] text-[#111827]">
+                      <span
+                        className={`text-[14px] font-[700] transition-colors duration-200 ${
+                          isSelected ? "text-[#16A34A]" : "text-[#111827]"
+                        }`}
+                      >
                         {card.num}
                       </span>
                       <span className="text-[#9CA3AF] text-[13px] font-[600]">
@@ -157,10 +194,16 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                     </p>
                   </div>
 
-                  <div className="shrink-0 w-[52px] h-[52px] rounded-[16px] bg-[#F4FDF7] border border-[#DCFCE7] shadow-xs flex items-center justify-center text-[#16A34A] transition-transform duration-300 group-hover:scale-110">
+                  <div
+                    className={`relative z-10 shrink-0 w-[52px] h-[52px] rounded-[16px] border shadow-xs flex items-center justify-center transition-all duration-300 ${
+                      isSelected
+                        ? "bg-[#EAF8EE] border-[#86EFAC] text-[#16A34A] scale-105"
+                        : "bg-[#F4FDF7] border-[#DCFCE7] text-[#16A34A] group-hover:scale-105"
+                    }`}
+                  >
                     <Icon className="text-[20px]" />
                   </div>
-                </div>
+                </m.div>
               );
             })}
           </div>
@@ -248,7 +291,7 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                   }
                 }
                 .animate-spin-ring {
-                  animation: spin-ring 2s linear infinite;
+                  animation: spin-ring 3.75s linear infinite;
                 }
               `}</style>
               <svg width="150" height="110" viewBox="0 0 150 110" fill="none">

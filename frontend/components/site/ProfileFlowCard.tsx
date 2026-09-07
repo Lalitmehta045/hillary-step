@@ -129,6 +129,7 @@ export function ProfileFlowCard({ className = "" }: ProfileFlowCardProps) {
        *
        * All three profiles enter from the right,
        * following the dotted connection line.
+       * Speed matched to the people-centric card (1.25s, power2.out).
        */
       const intro = gsap.timeline();
 
@@ -139,17 +140,17 @@ export function ProfileFlowCard({ className = "" }: ProfileFlowCardProps) {
             x: 0,
             opacity: 1,
             scale: 1,
-            duration: 0.65,
-            ease: "power3.out",
+            duration: 1.25,
+            ease: "power2.out",
           },
-          index * 0.18
+          index * 0.12
         );
       });
 
       /*
        * Hold the completed arrangement.
        */
-      intro.to({}, { duration: 1.3 });
+      intro.to({}, { duration: 1.5 });
 
       /*
        * ------------------------------------------------
@@ -165,12 +166,12 @@ export function ProfileFlowCard({ className = "" }: ProfileFlowCardProps) {
         if (!slot) return;
 
         /*
-         * Existing profile subtly shrinks/fades.
+         * Existing profile smoothly shrinks and fades.
          */
         gsap.to(slot, {
           scale: 0.72,
           opacity: 0,
-          duration: 0.25,
+          duration: 0.45,
           ease: "power2.in",
           onComplete: () => {
             /*
@@ -191,7 +192,8 @@ export function ProfileFlowCard({ className = "" }: ProfileFlowCardProps) {
             }
 
             /*
-             * New profile comes from the RIGHT.
+             * New profile glides in from the RIGHT with exact 1.25s duration
+             * matching the people-centric cube animation.
              */
             gsap.fromTo(
               slot,
@@ -204,8 +206,8 @@ export function ProfileFlowCard({ className = "" }: ProfileFlowCardProps) {
                 x: 0,
                 opacity: 1,
                 scale: 1,
-                duration: 0.62,
-                ease: "power3.out",
+                duration: 1.25,
+                ease: "power2.out",
               }
             );
 
@@ -217,14 +219,14 @@ export function ProfileFlowCard({ className = "" }: ProfileFlowCardProps) {
       };
 
       /*
-       * Start replacements after intro.
+       * Start replacements after intro with cycle speed matched (~3.7s).
        */
       function scheduleNext() {
         replaceProfile();
-        activeCall = gsap.delayedCall(1.15, scheduleNext);
+        activeCall = gsap.delayedCall(3.7, scheduleNext);
       }
 
-      activeCall = gsap.delayedCall(1.8, scheduleNext);
+      activeCall = gsap.delayedCall(2.8, scheduleNext);
     }, container);
 
     return () => {
