@@ -166,7 +166,7 @@ export function Footer() {
           <FadeIn delay={0.4}>
             <div className="relative flex flex-col items-start gap-[12px]">
               <Image
-                src="/HillaryStepSolutionsLogo.png"
+                src="/assets/HillaryStepSolutionsLogo.png"
                 alt="Hillary Step Solutions Logo"
                 width={63}
                 height={43}
