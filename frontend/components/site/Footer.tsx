@@ -161,12 +161,12 @@ export function Footer() {
         </FadeIn>
       </div>
 
-      <div className="relative z-10 w-full bg-[#424549]">
+      <div className="relative z-10 w-full bg-[#2a2d33]">
         <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[64px] max-md:px-[24px] max-lg:px-[40px] py-[30px]">
           <FadeIn delay={0.4}>
             <div className="relative flex flex-col items-start gap-[12px]">
               <Image
-                src="/hillary-gunmetal.png"
+                src="/HillaryStepSolutionsLogo.svg"
                 alt="Hillary Step Solutions Logo"
                 width={63}
                 height={43}
