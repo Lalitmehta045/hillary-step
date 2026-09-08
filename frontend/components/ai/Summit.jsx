@@ -5,7 +5,12 @@ import { useReducedMotion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LAYERS = ["COGNITIVE DIGITAL - PLATFORMS", "GLOBAL TALENT - PEOPLE", "ECO SMART INFRA - PROJECTS", "INTELLIGENT SaaS - PRODUCTS[R&D]"];
+const LAYERS = [
+  "COGNITIVE DIGITAL - PLATFORMS",
+  "GLOBAL TALENT - PEOPLE",
+  "ECO SMART INFRA - PROJECTS",
+  "INTELLIGENT SaaS - PRODUCTS[R&D]",
+];
 
 export default function Summit() {
   const ref = useRef(null);
@@ -17,6 +22,7 @@ export default function Summit() {
 
   useEffect(() => {
     if (reduced) return undefined;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -26,25 +32,75 @@ export default function Summit() {
           scrub: 0.6,
         },
       });
+
       tl.fromTo(
         coreRef.current,
         { y: "52vh", opacity: 0.4 },
         { y: "-16vh", opacity: 1, duration: 0.8, ease: "none" },
         0,
       );
+
       layerRefs.current.forEach((el, i) => {
-        tl.fromTo(el, { opacity: 0.1 }, { opacity: 1, duration: 0.08 }, 0.12 + i * 0.16);
-        tl.to(el, { opacity: 0.25, duration: 0.08 }, 0.24 + i * 0.16);
+        tl.fromTo(
+          el,
+          { opacity: 0.1 },
+          { opacity: 1, duration: 0.08 },
+          0.12 + i * 0.16,
+        );
+
+        tl.to(
+          el,
+          {
+            opacity: 0.25,
+            duration: 0.08,
+          },
+          0.24 + i * 0.16,
+        );
       });
-      tl.to(flashRef.current, { opacity: 1, duration: 0.05 }, 0.82);
-      tl.to(flashRef.current, { opacity: 0, duration: 0.08 }, 0.87);
+
+      // Smoothly hide the four layer labels near the end
+      tl.to(
+        layerRefs.current,
+        {
+          opacity: 0,
+          y: -12,
+          filter: "blur(6px)",
+          duration: 0.14,
+          ease: "power2.in",
+        },
+        0.80,
+      );
+
+      tl.to(
+        flashRef.current,
+        { opacity: 1, duration: 0.05 },
+        0.82,
+      );
+
+      tl.to(
+        flashRef.current,
+        { opacity: 0, duration: 0.08 },
+        0.87,
+      );
+
       tl.fromTo(
         textRef.current.children,
-        { opacity: 0, y: 40, filter: "blur(10px)" },
-        { opacity: 1, y: 0, filter: "blur(0px)", stagger: 0.05, duration: 0.1 },
+        {
+          opacity: 0,
+          y: 40,
+          filter: "blur(10px)",
+        },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          stagger: 0.05,
+          duration: 0.1,
+        },
         0.88,
       );
     }, ref);
+
     return () => ctx.revert();
   }, [reduced]);
 
@@ -69,12 +125,14 @@ export default function Summit() {
             stroke="rgba(245,245,245,0.1)"
             strokeWidth="1"
           />
+
           <polyline
             points="0,400 0,360 220,300 420,340 640,260 860,310 1100,230 1300,280 1440,240 1440,400"
             fill="none"
             stroke="rgba(245,245,245,0.07)"
             strokeWidth="1"
           />
+
           <polyline
             points="0,400 160,380 380,360 600,330 820,355 1060,320 1280,345 1440,330 1440,400"
             fill="none"
@@ -128,13 +186,14 @@ export default function Summit() {
             <br />
             IN INTELLIGENT.
           </h2>
+
           <p
-            className="mt-8 text-[11px] font-medium uppercase tracking-[0.2em] text-[#8A8A8A]"
+            className="mt-8 mx-auto max-w-4xl text-center text-[11px] font-medium uppercase tracking-[0.2em] leading-relaxed text-[#8A8A8A]"
             data-testid="summit-brand"
           >
-           As every mountain has its Hillary Step—the ultimate bottleneck, 
-                       we align tech, talent, tower, and 
-           global growth to ensure your business doesn't just climb, but conquers.
+            As every mountain has its Hillary Step—the ultimate bottleneck, we
+            align tech, talent, tower, and global growth to ensure your
+            business doesn't just climb, but conquers.
           </p>
         </div>
       </div>
