@@ -133,7 +133,7 @@ export default function Summit() {
             data-testid="summit-brand"
           >
            As every mountain has its Hillary Step—the ultimate bottleneck, 
-           n            we align tech, talent, tower, and 
+                       we align tech, talent, tower, and 
            global growth to ensure your business doesn't just climb, but conquers.
           </p>
         </div>
