@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export function RegionsGradientAnimation() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -19,156 +19,31 @@ export function RegionsGradientAnimation() {
     if (!ctx) return;
 
     let animationFrame = 0;
-    let isVisible = true;
     let width = 0;
     let height = 0;
     let dpr = 1;
+    let visible = true;
 
     /*
-     * Existing Hillary Step color system
-     *
-     * Blue → Cyan → Turquoise → Green → Lime
-     * → Yellow → Orange
+     * EXISTING HILLARY STEP COLOR SYSTEM
      */
     const COLORS = [
-      "#2563EB",
-      "#0284C7",
-      "#06B6D4",
-      "#10B981",
-      "#84CC16",
-      "#EAB308",
-      "#F97316",
-      "#EA580C",
+      "#2563EB", // Royal Blue
+      "#0284C7", // Cyan Blue
+      "#06B6D4", // Turquoise
+      "#10B981", // Emerald
+      "#84CC16", // Lime
+      "#EAB308", // Yellow
+      "#F97316", // Orange
+      "#EA580C", // Deep Orange
     ];
 
     /*
-     * Mesh blobs.
-     *
-     * Their positions intentionally follow the same
-     * left-bottom → right-top flow as the previous ribbon.
+     * -------------------------------------------------------
+     * RESIZE
+     * -------------------------------------------------------
      */
-    const blobs = [
-      {
-        x: 0.02,
-        y: 0.80,
-        radius: 0.32,
-        color: COLORS[0],
-        strength: 1.0,
-        speed: 0.42,
-        phase: 0.0,
-      },
-      {
-        x: 0.12,
-        y: 0.72,
-        radius: 0.30,
-        color: COLORS[1],
-        strength: 0.95,
-        speed: 0.38,
-        phase: 1.2,
-      },
-      {
-        x: 0.25,
-        y: 0.64,
-        radius: 0.28,
-        color: COLORS[2],
-        strength: 0.95,
-        speed: 0.35,
-        phase: 2.0,
-      },
-      {
-        x: 0.39,
-        y: 0.56,
-        radius: 0.27,
-        color: COLORS[3],
-        strength: 0.95,
-        speed: 0.32,
-        phase: 0.7,
-      },
-      {
-        x: 0.53,
-        y: 0.47,
-        radius: 0.27,
-        color: COLORS[4],
-        strength: 0.90,
-        speed: 0.30,
-        phase: 2.8,
-      },
-      {
-        x: 0.67,
-        y: 0.38,
-        radius: 0.26,
-        color: COLORS[5],
-        strength: 0.85,
-        speed: 0.28,
-        phase: 1.6,
-      },
-      {
-        x: 0.81,
-        y: 0.29,
-        radius: 0.25,
-        color: COLORS[6],
-        strength: 0.82,
-        speed: 0.26,
-        phase: 3.1,
-      },
-      {
-        x: 0.94,
-        y: 0.20,
-        radius: 0.22,
-        color: COLORS[7],
-        strength: 0.78,
-        speed: 0.24,
-        phase: 2.2,
-      },
-    ];
 
-    /*
-     * Convert hex → RGB.
-     */
-    function hexToRgb(hex: string) {
-      const value = hex.replace("#", "");
-
-      return {
-        r: parseInt(value.substring(0, 2), 16),
-        g: parseInt(value.substring(2, 4), 16),
-        b: parseInt(value.substring(4, 6), 16),
-      };
-    }
-
-    /*
-     * Organic wave from the original animation.
-     *
-     * This is deliberately retained so the mesh occupies
-     * the same diagonal region as the existing animation.
-     */
-    function getWaveY(
-      x: number,
-      time: number,
-      offset = 0,
-    ) {
-      const diagonal = height * 0.82 - x * 0.55;
-
-      const waveA =
-        Math.sin(x * 0.004 + time * 0.00045 + offset) *
-        height *
-        0.035;
-
-      const waveB =
-        Math.sin(x * 0.009 - time * 0.0003 + offset * 2) *
-        height *
-        0.018;
-
-      const waveC =
-        Math.sin(x * 0.0018 + time * 0.0007) *
-        height *
-        0.028;
-
-      return diagonal + waveA + waveB + waveC;
-    }
-
-    /*
-     * Resize canvas.
-     */
     function resize() {
       const rect = container.getBoundingClientRect();
 
@@ -177,8 +52,8 @@ export function RegionsGradientAnimation() {
 
       dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
 
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
@@ -192,263 +67,451 @@ export function RegionsGradientAnimation() {
     resizeObserver.observe(container);
 
     /*
-     * Create a soft radial mesh blob.
+     * -------------------------------------------------------
+     * ORIGINAL ORGANIC DIAGONAL PATH
      *
-     * The gradient fades naturally into transparency,
-     * allowing neighboring colors to blend together.
+     * The entire mesh follows this path.
+     *
+     * Bottom-left → Top-right
+     * -------------------------------------------------------
      */
-    function drawBlob(
-      x: number,
-      y: number,
-      radius: number,
-      color: string,
-      alpha: number,
-      scaleX = 1,
-      scaleY = 1,
-    ) {
-      const rgb = hexToRgb(color);
 
+    function getWaveY(
+      x: number,
+      time: number,
+      offset = 0,
+    ) {
+      const diagonal =
+        height * 0.82 -
+        x * 0.55;
+
+      const waveA =
+        Math.sin(
+          x * 0.004 +
+            time * 0.00045 +
+            offset,
+        ) *
+        height *
+        0.035;
+
+      const waveB =
+        Math.sin(
+          x * 0.009 -
+            time * 0.0003 +
+            offset * 2,
+        ) *
+        height *
+        0.018;
+
+      const waveC =
+        Math.sin(
+          x * 0.0018 +
+            time * 0.0007,
+        ) *
+        height *
+        0.028;
+
+      return (
+        diagonal +
+        waveA +
+        waveB +
+        waveC
+      );
+    }
+
+    /*
+     * -------------------------------------------------------
+     * HEX → RGB
+     * -------------------------------------------------------
+     */
+
+    function hexToRgb(hex: string) {
+      const value = hex.replace("#", "");
+
+      return {
+        r: parseInt(
+          value.substring(0, 2),
+          16,
+        ),
+        g: parseInt(
+          value.substring(2, 4),
+          16,
+        ),
+        b: parseInt(
+          value.substring(4, 6),
+          16,
+        ),
+      };
+    }
+
+    /*
+     * -------------------------------------------------------
+     * COLOR INTERPOLATION
+     * -------------------------------------------------------
+     */
+
+    function interpolateColor(
+      colorA: string,
+      colorB: string,
+      amount: number,
+    ) {
+      const a = hexToRgb(colorA);
+      const b = hexToRgb(colorB);
+
+      const t = Math.max(
+        0,
+        Math.min(1, amount),
+      );
+
+      return {
+        r: Math.round(
+          a.r +
+            (b.r - a.r) * t,
+        ),
+        g: Math.round(
+          a.g +
+            (b.g - a.g) * t,
+        ),
+        b: Math.round(
+          a.b +
+            (b.b - a.b) * t,
+        ),
+      };
+    }
+
+    /*
+     * -------------------------------------------------------
+     * MULTI-COLOR MESH COLOR
+     * -------------------------------------------------------
+     */
+
+    function getMeshColor(
+      progress: number,
+    ) {
+      const scaled =
+        Math.max(0, Math.min(0.999, progress)) *
+        (COLORS.length - 1);
+
+      const index = Math.floor(scaled);
+      const local =
+        scaled - index;
+
+      return interpolateColor(
+        COLORS[index],
+        COLORS[index + 1],
+        local,
+      );
+    }
+
+    /*
+     * -------------------------------------------------------
+     * MAIN LIQUID MESH
+     *
+     * Instead of blobs, this creates MANY overlapping
+     * translucent gradient fields along the exact wave.
+     * -------------------------------------------------------
+     */
+
+    function drawMesh(time: number) {
+      /*
+       * Work on a transparent layer.
+       */
       ctx.save();
 
-      ctx.translate(x, y);
-      ctx.scale(scaleX, scaleY);
+      /*
+       * Soft blur gives the mesh the smooth,
+       * premium gradient-mesh appearance.
+       */
+      ctx.filter = "blur(28px)";
 
-      const gradient = ctx.createRadialGradient(
-        0,
-        0,
-        0,
-        0,
-        0,
-        radius,
-      );
+      /*
+       * The mesh consists of many overlapping sections.
+       */
+      const sections = 70;
 
-      gradient.addColorStop(
-        0,
-        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`,
-      );
+      for (let i = 0; i < sections; i++) {
+        const progress =
+          i / (sections - 1);
 
-      gradient.addColorStop(
-        0.22,
-        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha * 0.92})`,
-      );
+        /*
+         * Slight organic movement.
+         */
+        const x =
+          -width * 0.16 +
+          progress *
+            width *
+            1.32;
 
-      gradient.addColorStop(
-        0.48,
-        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha * 0.55})`,
-      );
+        /*
+         * Exact wave position.
+         */
+        const centerY =
+          getWaveY(
+            x,
+            time,
+            progress * 0.45,
+          );
 
-      gradient.addColorStop(
-        0.72,
-        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha * 0.20})`,
-      );
+        /*
+         * Make the mesh itself breathe slightly.
+         */
+        const breathing =
+          Math.sin(
+            time * 0.00045 +
+              progress * 8,
+          ) *
+          height *
+          0.012;
 
-      gradient.addColorStop(
-        1,
-        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0)`,
-      );
+        const y =
+          centerY +
+          breathing;
 
-      ctx.fillStyle = gradient;
+        /*
+         * Color follows the exact left→right progression.
+         */
+        const color =
+          getMeshColor(progress);
 
-      ctx.beginPath();
-      ctx.arc(0, 0, radius, 0, Math.PI * 2);
-      ctx.fill();
+        /*
+         * Different widths create the organic
+         * gradient-mesh deformation.
+         */
+        const radiusX =
+          width *
+          (
+            0.11 +
+            Math.sin(
+              progress * 7 +
+                time * 0.0002,
+            ) *
+              0.018
+          );
+
+        const radiusY =
+          height *
+          (
+            0.14 +
+            Math.cos(
+              progress * 6 -
+                time * 0.00018,
+            ) *
+              0.025
+          );
+
+        /*
+         * Fade the ends.
+         */
+        const edgeFade =
+          Math.sin(
+            progress * Math.PI,
+          );
+
+        const alpha =
+          0.15 +
+          edgeFade * 0.34;
+
+        /*
+         * Individual soft radial field.
+         */
+        const gradient =
+          ctx.createRadialGradient(
+            x,
+            y,
+            0,
+            x,
+            y,
+            Math.max(
+              radiusX,
+              radiusY,
+            ),
+          );
+
+        gradient.addColorStop(
+          0,
+          `rgba(${color.r},${color.g},${color.b},${alpha})`,
+        );
+
+        gradient.addColorStop(
+          0.22,
+          `rgba(${color.r},${color.g},${color.b},${alpha * 0.82})`,
+        );
+
+        gradient.addColorStop(
+          0.48,
+          `rgba(${color.r},${color.g},${color.b},${alpha * 0.42})`,
+        );
+
+        gradient.addColorStop(
+          0.72,
+          `rgba(${color.r},${color.g},${color.b},${alpha * 0.14})`,
+        );
+
+        gradient.addColorStop(
+          1,
+          `rgba(${color.r},${color.g},${color.b},0)`,
+        );
+
+        ctx.fillStyle = gradient;
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+          x,
+          y,
+          radiusX,
+          radiusY,
+          -0.35,
+          0,
+          Math.PI * 2,
+        );
+
+        ctx.fill();
+      }
 
       ctx.restore();
     }
 
     /*
-     * Main mesh.
+     * -------------------------------------------------------
+     * SECOND MESH PASS
+     *
+     * Adds depth and removes the appearance of individual
+     * radial circles.
+     * -------------------------------------------------------
      */
-    function drawMesh(time: number) {
+
+    function drawMeshDepth(time: number) {
       ctx.save();
 
-      /*
-       * Clip the mesh into the same broad organic diagonal
-       * area occupied by the previous ribbon.
-       */
-      const clipPath = new Path2D();
+      ctx.filter = "blur(55px)";
 
-      const startY = height * 0.98;
+      const sections = 34;
 
-      clipPath.moveTo(-width * 0.10, startY);
+      for (let i = 0; i < sections; i++) {
+        const progress =
+          i / (sections - 1);
 
-      /*
-       * Upper edge.
-       */
-      for (let i = 0; i <= 45; i++) {
-        const x = -width * 0.08 + (width * 1.18 * i) / 45;
-
-        const y =
-          getWaveY(x, time, 0) -
-          height * 0.12 -
-          Math.sin(i * 0.4 + time * 0.0004) * height * 0.015;
-
-        clipPath.lineTo(x, y);
-      }
-
-      /*
-       * Right side.
-       */
-      clipPath.lineTo(width * 1.15, height * 0.52);
-
-      /*
-       * Lower edge.
-       */
-      for (let i = 45; i >= 0; i--) {
-        const x = -width * 0.08 + (width * 1.18 * i) / 45;
-
-        const y =
-          getWaveY(x, time, 0) +
-          height * 0.12 +
-          Math.sin(i * 0.36 - time * 0.00035) * height * 0.02;
-
-        clipPath.lineTo(x, y);
-      }
-
-      clipPath.closePath();
-
-      ctx.clip(clipPath);
-
-      /*
-       * Base mesh.
-       *
-       * The blobs move very subtly so the animation feels
-       * alive without becoming distracting.
-       */
-      blobs.forEach((blob, index) => {
-        const driftX =
-          Math.sin(
-            time * 0.00045 * blob.speed +
-              blob.phase,
-          ) *
-          width *
-          0.018;
-
-        const driftY =
-          Math.cos(
-            time * 0.00038 * blob.speed +
-              blob.phase * 1.4,
-          ) *
-          height *
-          0.018;
-
-        /*
-         * Follow the same diagonal wave.
-         */
         const x =
-          blob.x * width +
-          driftX;
+          -width * 0.10 +
+          progress *
+            width *
+            1.18;
 
-        const waveY =
+        const y =
           getWaveY(
             x,
             time,
-            index * 0.15,
+            1.4,
           );
 
-        const y =
-          blob.y * height +
-          driftY +
-          (waveY -
-            height * 0.82 +
-            x * 0.55) *
-            0.22;
+        const color =
+          getMeshColor(
+            Math.min(
+              0.999,
+              progress * 1.03,
+            ),
+          );
 
-        drawBlob(
-          x,
-          y,
+        const radius =
           Math.max(
             width,
             height,
           ) *
-            blob.radius,
-          blob.color,
-          0.58 * blob.strength,
-          1.35,
-          0.78,
+          0.19;
+
+        const gradient =
+          ctx.createRadialGradient(
+            x,
+            y,
+            0,
+            x,
+            y,
+            radius,
+          );
+
+        gradient.addColorStop(
+          0,
+          `rgba(${color.r},${color.g},${color.b},0.15)`,
         );
-      });
 
-      /*
-       * Additional large translucent fields.
-       *
-       * These remove the "individual blobs" feeling and make
-       * the result look more like a true gradient mesh.
-       */
-      drawBlob(
-        width * 0.18,
-        height * 0.70,
-        Math.max(width, height) * 0.42,
-        "#0284C7",
-        0.22,
-        1.7,
-        0.62,
-      );
+        gradient.addColorStop(
+          0.45,
+          `rgba(${color.r},${color.g},${color.b},0.07)`,
+        );
 
-      drawBlob(
-        width * 0.42,
-        height * 0.54,
-        Math.max(width, height) * 0.38,
-        "#10B981",
-        0.20,
-        1.65,
-        0.58,
-      );
+        gradient.addColorStop(
+          1,
+          `rgba(${color.r},${color.g},${color.b},0)`,
+        );
 
-      drawBlob(
-        width * 0.67,
-        height * 0.38,
-        Math.max(width, height) * 0.34,
-        "#EAB308",
-        0.18,
-        1.55,
-        0.58,
-      );
+        ctx.fillStyle = gradient;
 
-      drawBlob(
-        width * 0.86,
-        height * 0.25,
-        Math.max(width, height) * 0.30,
-        "#F97316",
-        0.18,
-        1.5,
-        0.58,
-      );
+        ctx.beginPath();
 
-      /*
-       * Soft white blend over the center.
-       *
-       * This creates the premium "mesh on white paper"
-       * appearance instead of a solid ribbon.
-       */
-      const whiteBlend = ctx.createLinearGradient(
-        0,
-        height * 0.25,
-        width,
-        height * 0.75,
-      );
+        ctx.ellipse(
+          x,
+          y,
+          radius * 1.35,
+          radius * 0.58,
+          -0.42,
+          0,
+          Math.PI * 2,
+        );
 
-      whiteBlend.addColorStop(
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    /*
+     * -------------------------------------------------------
+     * WHITE FEATHERING
+     *
+     * Keeps the mesh integrated into the white Global
+     * Presence section.
+     * -------------------------------------------------------
+     */
+
+    function drawWhiteFeather() {
+      ctx.save();
+
+      const gradient =
+        ctx.createLinearGradient(
+          0,
+          height * 0.15,
+          width,
+          height * 0.85,
+        );
+
+      gradient.addColorStop(
         0,
         "rgba(255,255,255,0.00)",
       );
 
-      whiteBlend.addColorStop(
-        0.48,
+      gradient.addColorStop(
+        0.35,
+        "rgba(255,255,255,0.02)",
+      );
+
+      gradient.addColorStop(
+        0.60,
         "rgba(255,255,255,0.10)",
       );
 
-      whiteBlend.addColorStop(
-        0.72,
+      gradient.addColorStop(
+        0.78,
         "rgba(255,255,255,0.32)",
       );
 
-      whiteBlend.addColorStop(
+      gradient.addColorStop(
         1,
-        "rgba(255,255,255,0.82)",
+        "rgba(255,255,255,0.78)",
       );
 
-      ctx.fillStyle = whiteBlend;
+      ctx.fillStyle = gradient;
+
       ctx.fillRect(
         0,
         0,
@@ -460,55 +523,67 @@ export function RegionsGradientAnimation() {
     }
 
     /*
-     * Very subtle moving highlight.
-     *
-     * This replaces the sharper "shimmer line" feeling of
-     * the old animation while retaining movement.
+     * -------------------------------------------------------
+     * SUBTLE MOVING LIGHT
+     * -------------------------------------------------------
      */
-    function drawHighlight(time: number) {
+
+    function drawMovingLight(
+      time: number,
+    ) {
       ctx.save();
 
+      ctx.filter = "blur(30px)";
+
       const progress =
-        (time % 8500) / 8500;
+        (time % 9000) / 9000;
 
       const x =
         -width * 0.15 +
-        progress * width * 1.35;
+        progress *
+          width *
+          1.30;
 
       const y =
-        getWaveY(x, time, 0);
+        getWaveY(
+          x,
+          time,
+          0,
+        );
 
-      const glow = ctx.createRadialGradient(
-        x,
-        y,
+      const gradient =
+        ctx.createRadialGradient(
+          x,
+          y,
+          0,
+          x,
+          y,
+          width * 0.20,
+        );
+
+      gradient.addColorStop(
         0,
-        x,
-        y,
-        width * 0.22,
+        "rgba(255,255,255,0.22)",
       );
 
-      glow.addColorStop(
-        0,
-        "rgba(255,255,255,0.18)",
-      );
-
-      glow.addColorStop(
-        0.25,
+      gradient.addColorStop(
+        0.3,
         "rgba(255,255,255,0.08)",
       );
 
-      glow.addColorStop(
+      gradient.addColorStop(
         1,
         "rgba(255,255,255,0)",
       );
 
-      ctx.fillStyle = glow;
+      ctx.fillStyle = gradient;
 
       ctx.beginPath();
+
       ctx.arc(
         x,
         y,
-        width * 0.22,
+        width * 0.20,
         0,
         Math.PI * 2,
       );
@@ -519,27 +594,33 @@ export function RegionsGradientAnimation() {
     }
 
     /*
-     * Bottom-left atmospheric blue shadow.
+     * -------------------------------------------------------
+     * BOTTOM LEFT BLUE ATMOSPHERE
+     * -------------------------------------------------------
      */
-    function drawBottomGlow() {
+
+    function drawBottomAtmosphere() {
       ctx.save();
 
-      const gradient = ctx.createRadialGradient(
-        width * 0.04,
-        height * 0.88,
-        0,
-        width * 0.04,
-        height * 0.88,
-        width * 0.55,
-      );
+      ctx.filter = "blur(40px)";
+
+      const gradient =
+        ctx.createRadialGradient(
+          width * 0.02,
+          height * 0.92,
+          0,
+          width * 0.02,
+          height * 0.92,
+          width * 0.40,
+        );
 
       gradient.addColorStop(
         0,
-        "rgba(37,99,235,0.12)",
+        "rgba(37,99,235,0.16)",
       );
 
       gradient.addColorStop(
-        0.35,
+        0.45,
         "rgba(37,99,235,0.06)",
       );
 
@@ -552,36 +633,42 @@ export function RegionsGradientAnimation() {
 
       ctx.fillRect(
         0,
-        height * 0.45,
-        width * 0.65,
         height * 0.55,
+        width * 0.50,
+        height * 0.45,
       );
 
       ctx.restore();
     }
 
     /*
-     * Far-right orange atmosphere.
+     * -------------------------------------------------------
+     * TOP RIGHT ORANGE ATMOSPHERE
+     * -------------------------------------------------------
      */
-    function drawOrangeGlow() {
+
+    function drawOrangeAtmosphere() {
       ctx.save();
 
-      const gradient = ctx.createRadialGradient(
-        width * 0.94,
-        height * 0.22,
-        0,
-        width * 0.94,
-        height * 0.22,
-        width * 0.32,
-      );
+      ctx.filter = "blur(40px)";
+
+      const gradient =
+        ctx.createRadialGradient(
+          width * 0.98,
+          height * 0.16,
+          0,
+          width * 0.98,
+          height * 0.16,
+          width * 0.32,
+        );
 
       gradient.addColorStop(
         0,
-        "rgba(249,115,22,0.13)",
+        "rgba(249,115,22,0.14)",
       );
 
       gradient.addColorStop(
-        0.35,
+        0.42,
         "rgba(234,88,12,0.06)",
       );
 
@@ -593,20 +680,23 @@ export function RegionsGradientAnimation() {
       ctx.fillStyle = gradient;
 
       ctx.fillRect(
-        width * 0.65,
+        width * 0.68,
         0,
-        width * 0.35,
-        height * 0.55,
+        width * 0.32,
+        height * 0.48,
       );
 
       ctx.restore();
     }
 
     /*
-     * Main animation loop.
+     * -------------------------------------------------------
+     * RENDER
+     * -------------------------------------------------------
      */
+
     function render(time: number) {
-      if (!isVisible) return;
+      if (!visible) return;
 
       ctx.clearRect(
         0,
@@ -616,33 +706,54 @@ export function RegionsGradientAnimation() {
       );
 
       /*
-       * Keep background completely transparent.
-       * The parent section remains white.
+       * Atmospheric depth.
        */
-      drawBottomGlow();
-      drawOrangeGlow();
+      drawBottomAtmosphere();
+      drawOrangeAtmosphere();
+
+      /*
+       * Main continuous mesh.
+       */
       drawMesh(time);
-      drawHighlight(time);
+
+      /*
+       * Deeper color layer.
+       */
+      drawMeshDepth(time);
+
+      /*
+       * Moving light through the mesh.
+       */
+      drawMovingLight(time);
+
+      /*
+       * Integrate into white background.
+       */
+      drawWhiteFeather();
 
       animationFrame =
-        requestAnimationFrame(render);
+        requestAnimationFrame(
+          render,
+        );
     }
 
     /*
-     * Intersection observer.
-     *
-     * Same behavior as the previous animation:
-     * don't animate when the section isn't visible.
+     * -------------------------------------------------------
+     * INTERSECTION OBSERVER
+     * -------------------------------------------------------
      */
+
     const observer =
       new IntersectionObserver(
         (entries) => {
-          const entry = entries[0];
+          const entry =
+            entries[0];
 
-          isVisible =
-            entry?.isIntersecting ?? true;
+          visible =
+            entry?.isIntersecting ??
+            true;
 
-          if (isVisible) {
+          if (visible) {
             cancelAnimationFrame(
               animationFrame,
             );
@@ -665,7 +776,15 @@ export function RegionsGradientAnimation() {
     observer.observe(container);
 
     animationFrame =
-      requestAnimationFrame(render);
+      requestAnimationFrame(
+        render,
+      );
+
+    /*
+     * -------------------------------------------------------
+     * CLEANUP
+     * -------------------------------------------------------
+     */
 
     return () => {
       cancelAnimationFrame(
@@ -680,7 +799,7 @@ export function RegionsGradientAnimation() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden select-none opacity-[0.82]"
+      className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden select-none"
       aria-hidden="true"
     >
       <canvas
