@@ -33,20 +33,49 @@ const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
 const easeInOutCubic = (x: number) =>
   x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 
+export interface FluidBlobHandle {
+  shatter: () => void;
+}
+
 export interface FluidBlobProps {
   className?: string;
   particleCount?: number;
   interactive?: boolean;
+  onShatterStart?: () => void;
+  onShatterEnd?: () => void;
+  blobRef?: React.RefObject<FluidBlobHandle | null> | React.MutableRefObject<FluidBlobHandle | null>;
 }
 
 export function FluidBlob({
   className = "w-full h-full",
   particleCount = DEFAULT_COUNT,
   interactive = true,
+  onShatterStart,
+  onShatterEnd,
+  blobRef,
 }: FluidBlobProps) {
   const parentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const shatterTriggerRef = useRef<(() => void) | null>(null);
+  const onShatterStartRef = useRef(onShatterStart);
+  onShatterStartRef.current = onShatterStart;
+  const onShatterEndRef = useRef(onShatterEnd);
+  onShatterEndRef.current = onShatterEnd;
+
+  useEffect(() => {
+    if (blobRef) {
+      blobRef.current = {
+        shatter: () => {
+          shatterTriggerRef.current?.();
+        },
+      };
+    }
+    return () => {
+      if (blobRef) {
+        blobRef.current = null;
+      }
+    };
+  }, [blobRef]);
 
   useEffect(() => {
     const parent = parentRef.current;
@@ -136,6 +165,7 @@ export function FluidBlob({
 
     const triggerShatter = () => {
       pendingShatter = true;
+      onShatterStartRef.current?.();
     };
     shatterTriggerRef.current = triggerShatter;
 
@@ -243,6 +273,7 @@ export function FluidBlob({
         const el = t - shatterStart;
         if (el >= 2.0) {
           shatterStart = -1;
+          onShatterEndRef.current?.();
         } else {
           m = el < 0.22 ? easeOutCubic(el / 0.22) : 1 - easeInOutCubic((el - 0.22) / 1.78);
         }

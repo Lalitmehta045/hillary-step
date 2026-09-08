@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { m as motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -16,6 +16,40 @@ export default function Hero() {
   const ref = useRef(null);
   const contentRef = useRef(null);
   const reduced = useReducedMotion();
+
+  const [isBlobActive, setIsBlobActive] = useState(false);
+  const blobRef = useRef(null);
+  const shatterTimerRef = useRef(null);
+
+  const handleShatterStart = useCallback(() => {
+    setIsBlobActive(true);
+    if (shatterTimerRef.current) clearTimeout(shatterTimerRef.current);
+    shatterTimerRef.current = setTimeout(() => {
+      setIsBlobActive(false);
+    }, 2200);
+  }, []);
+
+  const handleShatterEnd = useCallback(() => {
+    setIsBlobActive(false);
+    if (shatterTimerRef.current) {
+      clearTimeout(shatterTimerRef.current);
+      shatterTimerRef.current = null;
+    }
+  }, []);
+
+  const handleSummitClick = useCallback(() => {
+    if (blobRef.current?.shatter) {
+      blobRef.current.shatter();
+    } else {
+      handleShatterStart();
+    }
+  }, [handleShatterStart]);
+
+  useEffect(() => {
+    return () => {
+      if (shatterTimerRef.current) clearTimeout(shatterTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (reduced) return undefined;
@@ -41,7 +75,7 @@ export default function Hero() {
       ref={ref}
       id="ai-hero"
       data-testid="ai-hero"
-      className="relative flex min-h-[105vh] flex-col justify-center px-6 md:px-16 lg:px-24"
+      className="relative flex min-h-[105vh] flex-col justify-center px-6 md:px-16 lg:px-24 overflow-hidden"
     >
       <div ref={contentRef} className="relative z-[2] w-full max-w-[1400px]">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
@@ -81,10 +115,139 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.4, delay: 0.5, ease: "easeOut" }}
-              className="relative aspect-square w-[280px] sm:w-[360px] md:w-[420px] lg:w-[460px] xl:w-[500px]"
+              className="relative aspect-square w-[280px] sm:w-[360px] md:w-[420px] lg:w-[460px] xl:w-[500px] flex items-center justify-center"
             >
               <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-radial from-[#00E5FF]/10 via-[#00FF87]/5 to-transparent blur-3xl" />
-              <FluidBlob className="h-full w-full" interactive={true} />
+
+              {/* Interactive 3D Fluid Particle Blob */}
+              <FluidBlob
+                className="h-full w-full"
+                interactive={true}
+                blobRef={blobRef}
+                onShatterStart={handleShatterStart}
+                onShatterEnd={handleShatterEnd}
+              />
+
+              {/* Circular Arc Labels (Top Summit & Bottom Base) */}
+              <div
+                className={`pointer-events-none absolute inset-0 transition-all duration-500 ease-out z-10 ${
+                  isBlobActive
+                    ? "opacity-0 scale-95 pointer-events-none"
+                    : "opacity-100 scale-100"
+                }`}
+              >
+                <svg
+                  className="h-full w-full overflow-visible select-none"
+                  viewBox="0 0 500 500"
+                >
+                  <defs>
+                    {/* Top arc: hugging the upper summit of the blob */}
+                    <path
+                      id="hero-top-summit-arc"
+                      d="M 48,176 A 215,215 0 0,1 452,176"
+                      fill="none"
+                    />
+                    {/* Bottom arc: smiling under the lower base of the blob */}
+                    <path
+                      id="hero-bottom-base-arc"
+                      d="M 48,324 A 215,215 0 0,0 452,324"
+                      fill="none"
+                    />
+                  </defs>
+
+                  {/* Top Arc: Click the Summit. */}
+                  <g
+                    className="pointer-events-auto cursor-pointer group"
+                    onClick={handleSummitClick}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Click the Summit to trigger particle animation"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") handleSummitClick();
+                    }}
+                  >
+                    {/* Decorative subtle dashed orbital guide */}
+                    <path
+                      d="M 120,110 A 215,215 0 0,1 380,110"
+                      fill="none"
+                      stroke="rgba(0, 229, 255, 0.22)"
+                      strokeWidth="1"
+                      strokeDasharray="3 5"
+                      className="transition-all duration-300 group-hover:stroke-[rgba(0,229,255,0.7)]"
+                    />
+                    <text
+                      className="fill-[#00E5FF] transition-all duration-300 group-hover:fill-white group-hover:drop-shadow-[0_0_12px_rgba(0,229,255,0.9)]"
+                      style={{
+                        fontFamily: "var(--font-sf), monospace, sans-serif",
+                        fontSize: "13px",
+                        fontWeight: 600,
+                        letterSpacing: "0.32em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      <textPath
+                        href="#hero-top-summit-arc"
+                        startOffset="50%"
+                        textAnchor="middle"
+                      >
+                        Click the Summit.
+                      </textPath>
+                    </text>
+                  </g>
+
+                  {/* Bottom Arc: Hover the Base. */}
+                  <g className="pointer-events-none select-none">
+                    {/* Decorative subtle dashed orbital guide */}
+                    <path
+                      d="M 120,390 A 215,215 0 0,0 380,390"
+                      fill="none"
+                      stroke="rgba(0, 255, 135, 0.2)"
+                      strokeWidth="1"
+                      strokeDasharray="3 5"
+                    />
+                    <text
+                      className="fill-[#8A8A8A]"
+                      style={{
+                        fontFamily: "var(--font-sf), monospace, sans-serif",
+                        fontSize: "13px",
+                        fontWeight: 500,
+                        letterSpacing: "0.32em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      <textPath
+                        href="#hero-bottom-base-arc"
+                        startOffset="50%"
+                        textAnchor="middle"
+                      >
+                        Hover the Base.
+                      </textPath>
+                    </text>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Center Revealed Text: "Your Tech Sherpas" */}
+              <div
+                className={`pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center transition-all duration-500 ease-out z-20 ${
+                  isBlobActive
+                    ? "opacity-100 scale-100 blur-none"
+                    : "opacity-0 scale-85 blur-sm pointer-events-none"
+                }`}
+                aria-hidden={!isBlobActive}
+              >
+                {/* Ambient glow behind center badge */}
+                <div className="absolute h-36 w-36 rounded-full bg-radial from-[#00E5FF]/30 via-[#00FF87]/20 to-transparent blur-2xl -z-10" />
+
+                <div className="px-6 py-3.5 rounded-2xl bg-[#050505]/85 backdrop-blur-xl border border-[rgba(0,229,255,0.4)] shadow-[0_0_35px_rgba(0,229,255,0.3)] flex flex-col items-center gap-1">
+                  <span className="text-[10px] sm:text-[11px] font-medium tracking-[0.35em] text-[#00E5FF] uppercase">
+                    HILLARY STEP
+                  </span>
+                  <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] whitespace-nowrap">
+                    Your Tech Sherpas
+                  </h3>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
