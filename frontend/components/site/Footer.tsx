@@ -166,15 +166,15 @@ export function Footer() {
           <FadeIn delay={0.4}>
             <div className="relative flex flex-col items-start gap-[12px]">
               <Image
-                src="/assets/HillaryStepSolutionsLogo.png"
+                src="/assets/HillaryStepSolutionLogo.png"
                 alt="Hillary Step Solutions Logo"
-                width={63}
+                width={120}
                 height={43}
                 className="object-contain"
               />
-              {/* <p className="font-display text-[20px] font-[400] leading-[28px] tracking-[-0.5px] text-white">
+              <p className="font-display text-[20px] font-[400] leading-[28px] tracking-[-0.5px] text-white">
                 Hillary Step Solutions
-              </p> */}
+              </p>
             </div>
           </FadeIn>
 
