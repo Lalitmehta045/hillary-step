@@ -172,9 +172,9 @@ export function Footer() {
                 height={100}
                 className="object-contain"
               />
-              <p className="font-display text-[20px] font-[400] leading-[28px] tracking-[-0.5px] text-white">
+              {/* <p className="font-display text-[20px] font-[400] leading-[28px] tracking-[-0.5px] text-white">
                 Hillary Step Solutions
-              </p>
+              </p> */}
             </div>
           </FadeIn>
 
