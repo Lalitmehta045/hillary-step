@@ -12,702 +12,680 @@ export function RegionsGradientAnimation() {
 
     if (!canvas || !container) return;
 
-    const ctx = canvas.getContext("2d", { alpha: true });
+    const ctx = canvas.getContext("2d", {
+      alpha: true,
+    });
+
     if (!ctx) return;
 
-    let animationFrameId = 0;
+    let animationFrame = 0;
+    let isVisible = true;
     let width = 0;
     let height = 0;
-    let isVisible = false;
+    let dpr = 1;
 
     /*
-     * ------------------------------------------------------------
-     * STATIC GRADIENTS
-     * ------------------------------------------------------------
+     * Existing Hillary Step color system
+     *
+     * Blue → Cyan → Turquoise → Green → Lime
+     * → Yellow → Orange
      */
-
-    let rightOrangeGlow: CanvasGradient | null = null;
-    let botRightWhite: CanvasGradient | null = null;
-    let botLeftShadow: CanvasGradient | null = null;
-
-    const buildStaticGradients = () => {
-      /*
-       * Soft orange glow toward the far right.
-       */
-      rightOrangeGlow = ctx.createLinearGradient(
-        width * 0.70,
-        0,
-        width,
-        0
-      );
-
-      rightOrangeGlow.addColorStop(
-        0,
-        "rgba(249, 115, 22, 0)"
-      );
-
-      rightOrangeGlow.addColorStop(
-        0.55,
-        "rgba(249, 115, 22, 0.20)"
-      );
-
-      rightOrangeGlow.addColorStop(
-        1,
-        "rgba(234, 88, 12, 0.48)"
-      );
-
-      /*
-       * White fade toward bottom-right.
-       */
-      botRightWhite = ctx.createRadialGradient(
-        width,
-        height,
-        0,
-        width,
-        height,
-        width * 0.42
-      );
-
-      botRightWhite.addColorStop(
-        0,
-        "rgba(255, 255, 255, 0.88)"
-      );
-
-      botRightWhite.addColorStop(
-        0.55,
-        "rgba(255, 255, 255, 0.35)"
-      );
-
-      botRightWhite.addColorStop(
-        1,
-        "rgba(255, 255, 255, 0)"
-      );
-
-      /*
-       * Deep blue / purple shadow toward bottom-left.
-       *
-       * Purple is introduced very subtly while keeping
-       * your original blue-green-orange palette.
-       */
-      botLeftShadow = ctx.createRadialGradient(
-        0,
-        height,
-        0,
-        0,
-        height,
-        width * 0.38
-      );
-
-      botLeftShadow.addColorStop(
-        0,
-        "rgba(79, 70, 229, 0.32)"
-      );
-
-      botLeftShadow.addColorStop(
-        0.45,
-        "rgba(37, 99, 235, 0.16)"
-      );
-
-      botLeftShadow.addColorStop(
-        1,
-        "rgba(79, 70, 229, 0)"
-      );
-    };
+    const COLORS = [
+      "#2563EB",
+      "#0284C7",
+      "#06B6D4",
+      "#10B981",
+      "#84CC16",
+      "#EAB308",
+      "#F97316",
+      "#EA580C",
+    ];
 
     /*
-     * ------------------------------------------------------------
-     * RESIZE
-     * ------------------------------------------------------------
+     * Mesh blobs.
+     *
+     * Their positions intentionally follow the same
+     * left-bottom → right-top flow as the previous ribbon.
      */
+    const blobs = [
+      {
+        x: 0.02,
+        y: 0.80,
+        radius: 0.32,
+        color: COLORS[0],
+        strength: 1.0,
+        speed: 0.42,
+        phase: 0.0,
+      },
+      {
+        x: 0.12,
+        y: 0.72,
+        radius: 0.30,
+        color: COLORS[1],
+        strength: 0.95,
+        speed: 0.38,
+        phase: 1.2,
+      },
+      {
+        x: 0.25,
+        y: 0.64,
+        radius: 0.28,
+        color: COLORS[2],
+        strength: 0.95,
+        speed: 0.35,
+        phase: 2.0,
+      },
+      {
+        x: 0.39,
+        y: 0.56,
+        radius: 0.27,
+        color: COLORS[3],
+        strength: 0.95,
+        speed: 0.32,
+        phase: 0.7,
+      },
+      {
+        x: 0.53,
+        y: 0.47,
+        radius: 0.27,
+        color: COLORS[4],
+        strength: 0.90,
+        speed: 0.30,
+        phase: 2.8,
+      },
+      {
+        x: 0.67,
+        y: 0.38,
+        radius: 0.26,
+        color: COLORS[5],
+        strength: 0.85,
+        speed: 0.28,
+        phase: 1.6,
+      },
+      {
+        x: 0.81,
+        y: 0.29,
+        radius: 0.25,
+        color: COLORS[6],
+        strength: 0.82,
+        speed: 0.26,
+        phase: 3.1,
+      },
+      {
+        x: 0.94,
+        y: 0.20,
+        radius: 0.22,
+        color: COLORS[7],
+        strength: 0.78,
+        speed: 0.24,
+        phase: 2.2,
+      },
+    ];
 
-    const handleResize = () => {
-      if (!container || !canvas) return;
+    /*
+     * Convert hex → RGB.
+     */
+    function hexToRgb(hex: string) {
+      const value = hex.replace("#", "");
 
-      const dpr = 1;
+      return {
+        r: parseInt(value.substring(0, 2), 16),
+        g: parseInt(value.substring(2, 4), 16),
+        b: parseInt(value.substring(4, 6), 16),
+      };
+    }
 
-      width = container.clientWidth;
-      height = container.clientHeight;
+    /*
+     * Organic wave from the original animation.
+     *
+     * This is deliberately retained so the mesh occupies
+     * the same diagonal region as the existing animation.
+     */
+    function getWaveY(
+      x: number,
+      time: number,
+      offset = 0,
+    ) {
+      const diagonal = height * 0.82 - x * 0.55;
 
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
+      const waveA =
+        Math.sin(x * 0.004 + time * 0.00045 + offset) *
+        height *
+        0.035;
+
+      const waveB =
+        Math.sin(x * 0.009 - time * 0.0003 + offset * 2) *
+        height *
+        0.018;
+
+      const waveC =
+        Math.sin(x * 0.0018 + time * 0.0007) *
+        height *
+        0.028;
+
+      return diagonal + waveA + waveB + waveC;
+    }
+
+    /*
+     * Resize canvas.
+     */
+    function resize() {
+      const rect = container.getBoundingClientRect();
+
+      width = Math.max(1, rect.width);
+      height = Math.max(1, rect.height);
+
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
 
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
-      ctx.resetTransform();
-      ctx.scale(dpr, dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
 
-      buildStaticGradients();
-    };
+    resize();
 
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(container);
 
     /*
-     * ------------------------------------------------------------
-     * ANIMATION
-     * ------------------------------------------------------------
+     * Create a soft radial mesh blob.
+     *
+     * The gradient fades naturally into transparency,
+     * allowing neighboring colors to blend together.
      */
-
-    const startTime = performance.now();
-
-    let frameCount = 0;
-
-    let cachedRibbonGrad: CanvasGradient | null = null;
-    let cachedSoftRibbonGrad: CanvasGradient | null = null;
-
-    const render = (now: number) => {
-      if (!isVisible) {
-        animationFrameId = 0;
-        return;
-      }
-
-      /*
-       * Same animation speed as your original version.
-       */
-      const time = (now - startTime) * 0.0012;
-
-      ctx.clearRect(0, 0, width, height);
-
-      /*
-       * ----------------------------------------------------------
-       * ORIGINAL ORGANIC WAVE
-       * ----------------------------------------------------------
-       *
-       * Kept intentionally.
-       */
-
-      const getWaveY = (
-        u: number,
-        lineOffset: number = 0,
-        lineRatio: number = 0
-      ) => {
-        /*
-         * Main ascending curve.
-         */
-        const baseCurve =
-          height *
-          (
-            0.88 -
-            0.56 * Math.pow(u, 1.15) -
-            0.10 * Math.sin(u * Math.PI)
-          );
-
-        /*
-         * Main liquid movement.
-         */
-        const wave1 =
-          Math.sin(
-            u * 5.2 -
-            time * 2.2 +
-            lineRatio * 2.0
-          ) *
-          (8 + lineRatio * 6);
-
-        /*
-         * Secondary organic movement.
-         */
-        const wave2 =
-          Math.cos(
-            u * 3.4 +
-            time * 1.6 -
-            lineRatio * 1.5
-          ) * 5;
-
-        return (
-          baseCurve +
-          wave1 +
-          wave2 +
-          lineOffset
-        );
-      };
-
-      /*
-       * ----------------------------------------------------------
-       * WHITE BASE
-       * ----------------------------------------------------------
-       */
-
-      ctx.fillStyle = "rgb(255, 255, 255)";
-      ctx.fillRect(0, 0, width, height);
-
-      const STEPS = 45;
-
-      /*
-       * ----------------------------------------------------------
-       * MAIN RIBBON
-       * ----------------------------------------------------------
-       */
+    function drawBlob(
+      x: number,
+      y: number,
+      radius: number,
+      color: string,
+      alpha: number,
+      scaleX = 1,
+      scaleY = 1,
+    ) {
+      const rgb = hexToRgb(color);
 
       ctx.save();
 
-      ctx.beginPath();
+      ctx.translate(x, y);
+      ctx.scale(scaleX, scaleY);
 
-      ctx.moveTo(
+      const gradient = ctx.createRadialGradient(
         0,
-        getWaveY(0, 0, 0)
+        0,
+        0,
+        0,
+        0,
+        radius,
       );
 
-      for (let s = 1; s <= STEPS; s++) {
-        const u = s / STEPS;
+      gradient.addColorStop(
+        0,
+        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`,
+      );
 
-        ctx.lineTo(
-          u * width,
-          getWaveY(u, 0, 0)
-        );
-      }
+      gradient.addColorStop(
+        0.22,
+        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha * 0.92})`,
+      );
 
-      ctx.lineTo(width, height);
-      ctx.lineTo(0, height);
+      gradient.addColorStop(
+        0.48,
+        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha * 0.55})`,
+      );
 
-      ctx.closePath();
+      gradient.addColorStop(
+        0.72,
+        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha * 0.20})`,
+      );
 
-      /*
-       * ----------------------------------------------------------
-       * MAIN COLOR GRADIENT
-       * ----------------------------------------------------------
-       *
-       * SAME ORIGINAL COLOR FAMILY:
-       *
-       * Blue
-       * Cyan
-       * Turquoise
-       * Emerald
-       * Lime
-       * Yellow
-       * Orange
-       *
-       * But with much smoother transitions.
-       */
+      gradient.addColorStop(
+        1,
+        `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0)`,
+      );
 
-      frameCount++;
+      ctx.fillStyle = gradient;
 
-      if (
-        !cachedRibbonGrad ||
-        frameCount % 3 === 0
-      ) {
-        /*
-         * Keep the shimmer movement from the original.
-         */
-        const shiftX =
-          Math.sin(time * 0.5) * 20;
-
-        cachedRibbonGrad =
-          ctx.createLinearGradient(
-            shiftX,
-            height * 0.82,
-            width + shiftX,
-            height * 0.18
-          );
-
-        /*
-         * Deep Royal Blue
-         */
-        cachedRibbonGrad.addColorStop(
-          0.00,
-          "#2563EB"
-        );
-
-        /*
-         * Cyan Blue
-         */
-        cachedRibbonGrad.addColorStop(
-          0.15,
-          "#0284C7"
-        );
-
-        /*
-         * Vibrant Turquoise
-         */
-        cachedRibbonGrad.addColorStop(
-          0.30,
-          "#06B6D4"
-        );
-
-        /*
-         * Emerald
-         */
-        cachedRibbonGrad.addColorStop(
-          0.47,
-          "#10B981"
-        );
-
-        /*
-         * Lime
-         */
-        cachedRibbonGrad.addColorStop(
-          0.62,
-          "#84CC16"
-        );
-
-        /*
-         * Warm Yellow
-         */
-        cachedRibbonGrad.addColorStop(
-          0.78,
-          "#EAB308"
-        );
-
-        /*
-         * Orange
-         */
-        cachedRibbonGrad.addColorStop(
-          0.90,
-          "#F97316"
-        );
-
-        /*
-         * Deep Orange
-         */
-        cachedRibbonGrad.addColorStop(
-          1.00,
-          "#EA580C"
-        );
-      }
-
-      /*
-       * ----------------------------------------------------------
-       * SOFT UNDER-GLOW
-       * ----------------------------------------------------------
-       *
-       * Creates the soft blurred feeling from your reference
-       * without changing the actual wave animation.
-       */
-
-      if (
-        !cachedSoftRibbonGrad ||
-        frameCount % 3 === 0
-      ) {
-        const glowShift =
-          Math.sin(time * 0.5) * 20;
-
-        cachedSoftRibbonGrad =
-          ctx.createLinearGradient(
-            glowShift,
-            height * 0.90,
-            width + glowShift,
-            height * 0.10
-          );
-
-        cachedSoftRibbonGrad.addColorStop(
-          0,
-          "rgba(37, 99, 235, 0.28)"
-        );
-
-        cachedSoftRibbonGrad.addColorStop(
-          0.25,
-          "rgba(6, 182, 212, 0.22)"
-        );
-
-        cachedSoftRibbonGrad.addColorStop(
-          0.50,
-          "rgba(16, 185, 129, 0.22)"
-        );
-
-        cachedSoftRibbonGrad.addColorStop(
-          0.72,
-          "rgba(234, 179, 8, 0.20)"
-        );
-
-        cachedSoftRibbonGrad.addColorStop(
-          1,
-          "rgba(249, 115, 22, 0.24)"
-        );
-      }
-
-      /*
-       * Soft glow first.
-       */
-      ctx.globalAlpha = 0.55;
-
-      ctx.fillStyle =
-        cachedSoftRibbonGrad;
-
+      ctx.beginPath();
+      ctx.arc(0, 0, radius, 0, Math.PI * 2);
       ctx.fill();
-
-      /*
-       * Main ribbon.
-       */
-      ctx.globalAlpha = 1;
-
-      ctx.fillStyle =
-        cachedRibbonGrad;
-
-      ctx.fill();
-
-      /*
-       * ----------------------------------------------------------
-       * CLIP
-       * ----------------------------------------------------------
-       */
-
-      ctx.clip();
-
-      /*
-       * ----------------------------------------------------------
-       * ORANGE RIGHT GLOW
-       * ----------------------------------------------------------
-       */
-
-      if (rightOrangeGlow) {
-        ctx.fillStyle =
-          rightOrangeGlow;
-
-        ctx.fillRect(
-          width * 0.70,
-          0,
-          width * 0.30,
-          height
-        );
-      }
-
-      /*
-       * ----------------------------------------------------------
-       * BOTTOM RIGHT WHITE FADE
-       * ----------------------------------------------------------
-       */
-
-      if (botRightWhite) {
-        ctx.fillStyle =
-          botRightWhite;
-
-        ctx.fillRect(
-          width * 0.58,
-          height * 0.58,
-          width * 0.42,
-          height * 0.42
-        );
-      }
-
-      /*
-       * ----------------------------------------------------------
-       * BOTTOM LEFT BLUE / PURPLE DEPTH
-       * ----------------------------------------------------------
-       */
-
-      if (botLeftShadow) {
-        ctx.fillStyle =
-          botLeftShadow;
-
-        ctx.fillRect(
-          0,
-          height * 0.52,
-          width * 0.40,
-          height * 0.48
-        );
-      }
-
-      /*
-       * ----------------------------------------------------------
-       * FLUID FANNING LINES
-       * ----------------------------------------------------------
-       *
-       * SAME animation concept as your original.
-       */
-
-      const NUM_LINES = 30;
-
-      for (let i = 0; i < NUM_LINES; i++) {
-        const lineRatio =
-          i / (NUM_LINES - 1);
-
-        const yOffset =
-          Math.pow(
-            lineRatio,
-            1.35
-          ) *
-          (height * 0.52);
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-          0,
-          getWaveY(
-            0,
-            yOffset,
-            lineRatio
-          )
-        );
-
-        for (
-          let s = 1;
-          s <= STEPS;
-          s++
-        ) {
-          const u = s / STEPS;
-
-          const dynamicSpread =
-            u *
-            lineRatio *
-            (
-              12 +
-              Math.sin(
-                time * 2 +
-                u * 3
-              ) *
-              4
-            );
-
-          ctx.lineTo(
-            u * width,
-            getWaveY(
-              u,
-              yOffset +
-                dynamicSpread,
-              lineRatio
-            )
-          );
-        }
-
-        /*
-         * Softer white lines.
-         */
-        ctx.strokeStyle =
-          "rgba(255, 255, 255, 0.52)";
-
-        ctx.lineWidth =
-          i < 12
-            ? 1.15
-            : 0.75;
-
-        ctx.globalAlpha =
-          Math.max(
-            0.08,
-            0.58 -
-              lineRatio * 0.48
-          );
-
-        ctx.stroke();
-      }
-
-      ctx.globalAlpha = 1;
-
-      /*
-       * ----------------------------------------------------------
-       * FAR RIGHT HATCHING
-       * ----------------------------------------------------------
-       */
-
-      const hatchStartX =
-        width * 0.94;
-
-      const HATCH_COUNT = 14;
-
-      ctx.strokeStyle =
-        "rgba(255, 255, 255, 0.45)";
-
-      ctx.lineWidth = 0.8;
-
-      for (
-        let h = 0;
-        h < HATCH_COUNT;
-        h++
-      ) {
-        const yPos =
-          (h / HATCH_COUNT) *
-            height *
-            0.9 +
-          Math.sin(
-            time * 1.5 +
-            h * 0.3
-          ) *
-            2;
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-          hatchStartX,
-          yPos
-        );
-
-        ctx.lineTo(
-          width,
-          yPos -
-            height * 0.15
-        );
-
-        ctx.stroke();
-      }
 
       ctx.restore();
-
-      /*
-       * ----------------------------------------------------------
-       * NEXT FRAME
-       * ----------------------------------------------------------
-       */
-
-      animationFrameId =
-        requestAnimationFrame(
-          render
-        );
-    };
+    }
 
     /*
-     * ------------------------------------------------------------
-     * INTERSECTION OBSERVER
-     * ------------------------------------------------------------
+     * Main mesh.
      */
+    function drawMesh(time: number) {
+      ctx.save();
 
+      /*
+       * Clip the mesh into the same broad organic diagonal
+       * area occupied by the previous ribbon.
+       */
+      const clipPath = new Path2D();
+
+      const startY = height * 0.98;
+
+      clipPath.moveTo(-width * 0.10, startY);
+
+      /*
+       * Upper edge.
+       */
+      for (let i = 0; i <= 45; i++) {
+        const x = -width * 0.08 + (width * 1.18 * i) / 45;
+
+        const y =
+          getWaveY(x, time, 0) -
+          height * 0.12 -
+          Math.sin(i * 0.4 + time * 0.0004) * height * 0.015;
+
+        clipPath.lineTo(x, y);
+      }
+
+      /*
+       * Right side.
+       */
+      clipPath.lineTo(width * 1.15, height * 0.52);
+
+      /*
+       * Lower edge.
+       */
+      for (let i = 45; i >= 0; i--) {
+        const x = -width * 0.08 + (width * 1.18 * i) / 45;
+
+        const y =
+          getWaveY(x, time, 0) +
+          height * 0.12 +
+          Math.sin(i * 0.36 - time * 0.00035) * height * 0.02;
+
+        clipPath.lineTo(x, y);
+      }
+
+      clipPath.closePath();
+
+      ctx.clip(clipPath);
+
+      /*
+       * Base mesh.
+       *
+       * The blobs move very subtly so the animation feels
+       * alive without becoming distracting.
+       */
+      blobs.forEach((blob, index) => {
+        const driftX =
+          Math.sin(
+            time * 0.00045 * blob.speed +
+              blob.phase,
+          ) *
+          width *
+          0.018;
+
+        const driftY =
+          Math.cos(
+            time * 0.00038 * blob.speed +
+              blob.phase * 1.4,
+          ) *
+          height *
+          0.018;
+
+        /*
+         * Follow the same diagonal wave.
+         */
+        const x =
+          blob.x * width +
+          driftX;
+
+        const waveY =
+          getWaveY(
+            x,
+            time,
+            index * 0.15,
+          );
+
+        const y =
+          blob.y * height +
+          driftY +
+          (waveY -
+            height * 0.82 +
+            x * 0.55) *
+            0.22;
+
+        drawBlob(
+          x,
+          y,
+          Math.max(
+            width,
+            height,
+          ) *
+            blob.radius,
+          blob.color,
+          0.58 * blob.strength,
+          1.35,
+          0.78,
+        );
+      });
+
+      /*
+       * Additional large translucent fields.
+       *
+       * These remove the "individual blobs" feeling and make
+       * the result look more like a true gradient mesh.
+       */
+      drawBlob(
+        width * 0.18,
+        height * 0.70,
+        Math.max(width, height) * 0.42,
+        "#0284C7",
+        0.22,
+        1.7,
+        0.62,
+      );
+
+      drawBlob(
+        width * 0.42,
+        height * 0.54,
+        Math.max(width, height) * 0.38,
+        "#10B981",
+        0.20,
+        1.65,
+        0.58,
+      );
+
+      drawBlob(
+        width * 0.67,
+        height * 0.38,
+        Math.max(width, height) * 0.34,
+        "#EAB308",
+        0.18,
+        1.55,
+        0.58,
+      );
+
+      drawBlob(
+        width * 0.86,
+        height * 0.25,
+        Math.max(width, height) * 0.30,
+        "#F97316",
+        0.18,
+        1.5,
+        0.58,
+      );
+
+      /*
+       * Soft white blend over the center.
+       *
+       * This creates the premium "mesh on white paper"
+       * appearance instead of a solid ribbon.
+       */
+      const whiteBlend = ctx.createLinearGradient(
+        0,
+        height * 0.25,
+        width,
+        height * 0.75,
+      );
+
+      whiteBlend.addColorStop(
+        0,
+        "rgba(255,255,255,0.00)",
+      );
+
+      whiteBlend.addColorStop(
+        0.48,
+        "rgba(255,255,255,0.10)",
+      );
+
+      whiteBlend.addColorStop(
+        0.72,
+        "rgba(255,255,255,0.32)",
+      );
+
+      whiteBlend.addColorStop(
+        1,
+        "rgba(255,255,255,0.82)",
+      );
+
+      ctx.fillStyle = whiteBlend;
+      ctx.fillRect(
+        0,
+        0,
+        width,
+        height,
+      );
+
+      ctx.restore();
+    }
+
+    /*
+     * Very subtle moving highlight.
+     *
+     * This replaces the sharper "shimmer line" feeling of
+     * the old animation while retaining movement.
+     */
+    function drawHighlight(time: number) {
+      ctx.save();
+
+      const progress =
+        (time % 8500) / 8500;
+
+      const x =
+        -width * 0.15 +
+        progress * width * 1.35;
+
+      const y =
+        getWaveY(x, time, 0);
+
+      const glow = ctx.createRadialGradient(
+        x,
+        y,
+        0,
+        x,
+        y,
+        width * 0.22,
+      );
+
+      glow.addColorStop(
+        0,
+        "rgba(255,255,255,0.18)",
+      );
+
+      glow.addColorStop(
+        0.25,
+        "rgba(255,255,255,0.08)",
+      );
+
+      glow.addColorStop(
+        1,
+        "rgba(255,255,255,0)",
+      );
+
+      ctx.fillStyle = glow;
+
+      ctx.beginPath();
+      ctx.arc(
+        x,
+        y,
+        width * 0.22,
+        0,
+        Math.PI * 2,
+      );
+
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    /*
+     * Bottom-left atmospheric blue shadow.
+     */
+    function drawBottomGlow() {
+      ctx.save();
+
+      const gradient = ctx.createRadialGradient(
+        width * 0.04,
+        height * 0.88,
+        0,
+        width * 0.04,
+        height * 0.88,
+        width * 0.55,
+      );
+
+      gradient.addColorStop(
+        0,
+        "rgba(37,99,235,0.12)",
+      );
+
+      gradient.addColorStop(
+        0.35,
+        "rgba(37,99,235,0.06)",
+      );
+
+      gradient.addColorStop(
+        1,
+        "rgba(37,99,235,0)",
+      );
+
+      ctx.fillStyle = gradient;
+
+      ctx.fillRect(
+        0,
+        height * 0.45,
+        width * 0.65,
+        height * 0.55,
+      );
+
+      ctx.restore();
+    }
+
+    /*
+     * Far-right orange atmosphere.
+     */
+    function drawOrangeGlow() {
+      ctx.save();
+
+      const gradient = ctx.createRadialGradient(
+        width * 0.94,
+        height * 0.22,
+        0,
+        width * 0.94,
+        height * 0.22,
+        width * 0.32,
+      );
+
+      gradient.addColorStop(
+        0,
+        "rgba(249,115,22,0.13)",
+      );
+
+      gradient.addColorStop(
+        0.35,
+        "rgba(234,88,12,0.06)",
+      );
+
+      gradient.addColorStop(
+        1,
+        "rgba(234,88,12,0)",
+      );
+
+      ctx.fillStyle = gradient;
+
+      ctx.fillRect(
+        width * 0.65,
+        0,
+        width * 0.35,
+        height * 0.55,
+      );
+
+      ctx.restore();
+    }
+
+    /*
+     * Main animation loop.
+     */
+    function render(time: number) {
+      if (!isVisible) return;
+
+      ctx.clearRect(
+        0,
+        0,
+        width,
+        height,
+      );
+
+      /*
+       * Keep background completely transparent.
+       * The parent section remains white.
+       */
+      drawBottomGlow();
+      drawOrangeGlow();
+      drawMesh(time);
+      drawHighlight(time);
+
+      animationFrame =
+        requestAnimationFrame(render);
+    }
+
+    /*
+     * Intersection observer.
+     *
+     * Same behavior as the previous animation:
+     * don't animate when the section isn't visible.
+     */
     const observer =
       new IntersectionObserver(
         (entries) => {
-          entries.forEach(
-            (entry) => {
-              isVisible =
-                entry.isIntersecting;
+          const entry = entries[0];
 
-              if (
-                isVisible &&
-                !animationFrameId
-              ) {
-                animationFrameId =
-                  requestAnimationFrame(
-                    render
-                  );
-              }
-            }
-          );
+          isVisible =
+            entry?.isIntersecting ?? true;
+
+          if (isVisible) {
+            cancelAnimationFrame(
+              animationFrame,
+            );
+
+            animationFrame =
+              requestAnimationFrame(
+                render,
+              );
+          } else {
+            cancelAnimationFrame(
+              animationFrame,
+            );
+          }
         },
         {
-          threshold: 0,
-        }
+          threshold: 0.01,
+        },
       );
 
     observer.observe(container);
 
-    /*
-     * ------------------------------------------------------------
-     * CLEANUP
-     * ------------------------------------------------------------
-     */
+    animationFrame =
+      requestAnimationFrame(render);
 
     return () => {
-      observer.disconnect();
-
-      if (animationFrameId) {
-        cancelAnimationFrame(
-          animationFrameId
-        );
-      }
-
-      window.removeEventListener(
-        "resize",
-        handleResize
+      cancelAnimationFrame(
+        animationFrame,
       );
+
+      resizeObserver.disconnect();
+      observer.disconnect();
     };
   }, []);
 
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden select-none opacity-[0.28]"
+      className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden select-none opacity-[0.82]"
       aria-hidden="true"
     >
       <canvas
         ref={canvasRef}
-        className="block h-full w-full"
+        className="absolute inset-0 h-full w-full"
       />
     </div>
   );
