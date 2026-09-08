@@ -129,10 +129,12 @@ export default function Summit() {
             IN INTELLIGENT.
           </h2>
           <p
-            className="mt-8 text-[11px] font-medium uppercase tracking-[0.4em] text-[#8A8A8A]"
+            className="mt-8 text-[11px] font-medium uppercase tracking-[0.2em] text-[#8A8A8A]"
             data-testid="summit-brand"
           >
-           As every mountain has its Hillary Step—the ultimate bottleneck, we align tech, talent, tower, and global growth to ensure your business doesn't just climb, but conquers.
+           As every mountain has its Hillary Step—the ultimate bottleneck, 
+           n            we align tech, talent, tower, and 
+           global growth to ensure your business doesn't just climb, but conquers.
           </p>
         </div>
       </div>
