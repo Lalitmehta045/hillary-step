@@ -168,8 +168,8 @@ export function Footer() {
               <Image
                 src="/assets/HillaryStepSolutionLogo.png"
                 alt="Hillary Step Solutions Logo"
-                width={180}
-                height={90}
+                width={280}
+                height={100}
                 className="object-contain"
               />
               <p className="font-display text-[20px] font-[400] leading-[28px] tracking-[-0.5px] text-white">
