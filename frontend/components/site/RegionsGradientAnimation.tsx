@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 export function RegionsGradientAnimation() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -12,787 +12,537 @@ export function RegionsGradientAnimation() {
 
     if (!canvas || !container) return;
 
-    const ctx = canvas.getContext("2d", {
-      alpha: true,
-    });
-
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    let animationFrame = 0;
+    let animationFrameId = 0;
     let width = 0;
     let height = 0;
-    let dpr = 1;
-    let visible = true;
+    let isVisible = false;
 
-    /*
-     * EXISTING HILLARY STEP COLOR SYSTEM
-     */
-    const COLORS = [
-      "#2563EB", // Royal Blue
-      "#0284C7", // Cyan Blue
-      "#06B6D4", // Turquoise
-      "#10B981", // Emerald
-      "#84CC16", // Lime
-      "#EAB308", // Yellow
-      "#F97316", // Orange
-      "#EA580C", // Deep Orange
-    ];
-
-    /*
-     * -------------------------------------------------------
-     * RESIZE
-     * -------------------------------------------------------
-     */
-
-    function resize() {
+    const resize = () => {
       const rect = container.getBoundingClientRect();
 
-      width = Math.max(1, rect.width);
-      height = Math.max(1, rect.height);
+      width = Math.max(1, Math.floor(rect.width));
+      height = Math.max(1, Math.floor(rect.height));
 
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
 
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
+    };
 
     resize();
-
-    const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(container);
+    window.addEventListener("resize", resize);
 
     /*
-     * -------------------------------------------------------
-     * ORIGINAL ORGANIC DIAGONAL PATH
+     * Soft gradient mesh points.
      *
-     * The entire mesh follows this path.
-     *
-     * Bottom-left → Top-right
-     * -------------------------------------------------------
+     * These positions intentionally follow the same general
+     * left-bottom → right-top composition of the old animation.
      */
+    const blobs = [
+      {
+        x: 0.10,
+        y: 0.76,
+        radius: 0.55,
+        color: [29, 78, 216],
+        strength: 0.82,
+        speed: 0.00042,
+        phase: 0.0,
+      },
+      {
+        x: 0.25,
+        y: 0.55,
+        radius: 0.48,
+        color: [2, 132, 199],
+        strength: 0.78,
+        speed: 0.00038,
+        phase: 1.2,
+      },
+      {
+        x: 0.42,
+        y: 0.40,
+        radius: 0.46,
+        color: [6, 182, 212],
+        strength: 0.72,
+        speed: 0.00035,
+        phase: 2.1,
+      },
+      {
+        x: 0.56,
+        y: 0.32,
+        radius: 0.43,
+        color: [16, 185, 129],
+        strength: 0.70,
+        speed: 0.00032,
+        phase: 3.0,
+      },
+      {
+        x: 0.69,
+        y: 0.38,
+        radius: 0.40,
+        color: [132, 204, 22],
+        strength: 0.64,
+        speed: 0.0003,
+        phase: 4.0,
+      },
+      {
+        x: 0.80,
+        y: 0.49,
+        radius: 0.38,
+        color: [234, 179, 8],
+        strength: 0.58,
+        speed: 0.00028,
+        phase: 4.8,
+      },
+      {
+        x: 0.90,
+        y: 0.61,
+        radius: 0.35,
+        color: [249, 115, 22],
+        strength: 0.48,
+        speed: 0.00025,
+        phase: 5.6,
+      },
+    ];
 
-    function getWaveY(
+    const drawBlob = (
       x: number,
-      time: number,
-      offset = 0,
-    ) {
-      const diagonal =
-        height * 0.82 -
-        x * 0.55;
-
-      const waveA =
-        Math.sin(
-          x * 0.004 +
-            time * 0.00045 +
-            offset,
-        ) *
-        height *
-        0.035;
-
-      const waveB =
-        Math.sin(
-          x * 0.009 -
-            time * 0.0003 +
-            offset * 2,
-        ) *
-        height *
-        0.018;
-
-      const waveC =
-        Math.sin(
-          x * 0.0018 +
-            time * 0.0007,
-        ) *
-        height *
-        0.028;
-
-      return (
-        diagonal +
-        waveA +
-        waveB +
-        waveC
-      );
-    }
-
-    /*
-     * -------------------------------------------------------
-     * HEX → RGB
-     * -------------------------------------------------------
-     */
-
-    function hexToRgb(hex: string) {
-      const value = hex.replace("#", "");
-
-      return {
-        r: parseInt(
-          value.substring(0, 2),
-          16,
-        ),
-        g: parseInt(
-          value.substring(2, 4),
-          16,
-        ),
-        b: parseInt(
-          value.substring(4, 6),
-          16,
-        ),
-      };
-    }
-
-    /*
-     * -------------------------------------------------------
-     * COLOR INTERPOLATION
-     * -------------------------------------------------------
-     */
-
-    function interpolateColor(
-      colorA: string,
-      colorB: string,
-      amount: number,
-    ) {
-      const a = hexToRgb(colorA);
-      const b = hexToRgb(colorB);
-
-      const t = Math.max(
+      y: number,
+      radius: number,
+      color: number[],
+      alpha: number
+    ) => {
+      const gradient = ctx.createRadialGradient(
+        x,
+        y,
         0,
-        Math.min(1, amount),
+        x,
+        y,
+        radius
       );
-
-      return {
-        r: Math.round(
-          a.r +
-            (b.r - a.r) * t,
-        ),
-        g: Math.round(
-          a.g +
-            (b.g - a.g) * t,
-        ),
-        b: Math.round(
-          a.b +
-            (b.b - a.b) * t,
-        ),
-      };
-    }
-
-    /*
-     * -------------------------------------------------------
-     * MULTI-COLOR MESH COLOR
-     * -------------------------------------------------------
-     */
-
-    function getMeshColor(
-      progress: number,
-    ) {
-      const scaled =
-        Math.max(0, Math.min(0.999, progress)) *
-        (COLORS.length - 1);
-
-      const index = Math.floor(scaled);
-      const local =
-        scaled - index;
-
-      return interpolateColor(
-        COLORS[index],
-        COLORS[index + 1],
-        local,
-      );
-    }
-
-    /*
-     * -------------------------------------------------------
-     * MAIN LIQUID MESH
-     *
-     * Instead of blobs, this creates MANY overlapping
-     * translucent gradient fields along the exact wave.
-     * -------------------------------------------------------
-     */
-
-    function drawMesh(time: number) {
-      /*
-       * Work on a transparent layer.
-       */
-      ctx.save();
-
-      /*
-       * Soft blur gives the mesh the smooth,
-       * premium gradient-mesh appearance.
-       */
-      ctx.filter = "blur(28px)";
-
-      /*
-       * The mesh consists of many overlapping sections.
-       */
-      const sections = 70;
-
-      for (let i = 0; i < sections; i++) {
-        const progress =
-          i / (sections - 1);
-
-        /*
-         * Slight organic movement.
-         */
-        const x =
-          -width * 0.16 +
-          progress *
-            width *
-            1.32;
-
-        /*
-         * Exact wave position.
-         */
-        const centerY =
-          getWaveY(
-            x,
-            time,
-            progress * 0.45,
-          );
-
-        /*
-         * Make the mesh itself breathe slightly.
-         */
-        const breathing =
-          Math.sin(
-            time * 0.00045 +
-              progress * 8,
-          ) *
-          height *
-          0.012;
-
-        const y =
-          centerY +
-          breathing;
-
-        /*
-         * Color follows the exact left→right progression.
-         */
-        const color =
-          getMeshColor(progress);
-
-        /*
-         * Different widths create the organic
-         * gradient-mesh deformation.
-         */
-        const radiusX =
-          width *
-          (
-            0.11 +
-            Math.sin(
-              progress * 7 +
-                time * 0.0002,
-            ) *
-              0.018
-          );
-
-        const radiusY =
-          height *
-          (
-            0.14 +
-            Math.cos(
-              progress * 6 -
-                time * 0.00018,
-            ) *
-              0.025
-          );
-
-        /*
-         * Fade the ends.
-         */
-        const edgeFade =
-          Math.sin(
-            progress * Math.PI,
-          );
-
-        const alpha =
-          0.15 +
-          edgeFade * 0.34;
-
-        /*
-         * Individual soft radial field.
-         */
-        const gradient =
-          ctx.createRadialGradient(
-            x,
-            y,
-            0,
-            x,
-            y,
-            Math.max(
-              radiusX,
-              radiusY,
-            ),
-          );
-
-        gradient.addColorStop(
-          0,
-          `rgba(${color.r},${color.g},${color.b},${alpha})`,
-        );
-
-        gradient.addColorStop(
-          0.22,
-          `rgba(${color.r},${color.g},${color.b},${alpha * 0.82})`,
-        );
-
-        gradient.addColorStop(
-          0.48,
-          `rgba(${color.r},${color.g},${color.b},${alpha * 0.42})`,
-        );
-
-        gradient.addColorStop(
-          0.72,
-          `rgba(${color.r},${color.g},${color.b},${alpha * 0.14})`,
-        );
-
-        gradient.addColorStop(
-          1,
-          `rgba(${color.r},${color.g},${color.b},0)`,
-        );
-
-        ctx.fillStyle = gradient;
-
-        ctx.beginPath();
-
-        ctx.ellipse(
-          x,
-          y,
-          radiusX,
-          radiusY,
-          -0.35,
-          0,
-          Math.PI * 2,
-        );
-
-        ctx.fill();
-      }
-
-      ctx.restore();
-    }
-
-    /*
-     * -------------------------------------------------------
-     * SECOND MESH PASS
-     *
-     * Adds depth and removes the appearance of individual
-     * radial circles.
-     * -------------------------------------------------------
-     */
-
-    function drawMeshDepth(time: number) {
-      ctx.save();
-
-      ctx.filter = "blur(55px)";
-
-      const sections = 34;
-
-      for (let i = 0; i < sections; i++) {
-        const progress =
-          i / (sections - 1);
-
-        const x =
-          -width * 0.10 +
-          progress *
-            width *
-            1.18;
-
-        const y =
-          getWaveY(
-            x,
-            time,
-            1.4,
-          );
-
-        const color =
-          getMeshColor(
-            Math.min(
-              0.999,
-              progress * 1.03,
-            ),
-          );
-
-        const radius =
-          Math.max(
-            width,
-            height,
-          ) *
-          0.19;
-
-        const gradient =
-          ctx.createRadialGradient(
-            x,
-            y,
-            0,
-            x,
-            y,
-            radius,
-          );
-
-        gradient.addColorStop(
-          0,
-          `rgba(${color.r},${color.g},${color.b},0.15)`,
-        );
-
-        gradient.addColorStop(
-          0.45,
-          `rgba(${color.r},${color.g},${color.b},0.07)`,
-        );
-
-        gradient.addColorStop(
-          1,
-          `rgba(${color.r},${color.g},${color.b},0)`,
-        );
-
-        ctx.fillStyle = gradient;
-
-        ctx.beginPath();
-
-        ctx.ellipse(
-          x,
-          y,
-          radius * 1.35,
-          radius * 0.58,
-          -0.42,
-          0,
-          Math.PI * 2,
-        );
-
-        ctx.fill();
-      }
-
-      ctx.restore();
-    }
-
-    /*
-     * -------------------------------------------------------
-     * WHITE FEATHERING
-     *
-     * Keeps the mesh integrated into the white Global
-     * Presence section.
-     * -------------------------------------------------------
-     */
-
-    function drawWhiteFeather() {
-      ctx.save();
-
-      const gradient =
-        ctx.createLinearGradient(
-          0,
-          height * 0.15,
-          width,
-          height * 0.85,
-        );
 
       gradient.addColorStop(
         0,
-        "rgba(255,255,255,0.00)",
+        `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`
       );
 
       gradient.addColorStop(
-        0.35,
-        "rgba(255,255,255,0.02)",
+        0.28,
+        `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${
+          alpha * 0.82
+        })`
       );
 
       gradient.addColorStop(
-        0.60,
-        "rgba(255,255,255,0.10)",
+        0.55,
+        `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${
+          alpha * 0.48
+        })`
       );
 
       gradient.addColorStop(
         0.78,
-        "rgba(255,255,255,0.32)",
+        `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${
+          alpha * 0.16
+        })`
       );
 
       gradient.addColorStop(
         1,
-        "rgba(255,255,255,0.78)",
+        `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0)`
       );
 
       ctx.fillStyle = gradient;
-
       ctx.fillRect(
-        0,
-        0,
-        width,
-        height,
+        x - radius,
+        y - radius,
+        radius * 2,
+        radius * 2
       );
+    };
 
-      ctx.restore();
-    }
+    const render = (now: number) => {
+      if (!isVisible) {
+        animationFrameId = 0;
+        return;
+      }
 
-    /*
-     * -------------------------------------------------------
-     * SUBTLE MOVING LIGHT
-     * -------------------------------------------------------
-     */
+      ctx.clearRect(0, 0, width, height);
 
-    function drawMovingLight(
-      time: number,
-    ) {
+      /*
+       * Pure white base.
+       */
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, width, height);
+
+      /*
+       * Slow global movement.
+       */
+      const t = now * 0.00018;
+
+      /*
+       * Slight blur makes the individual gradient fields
+       * merge into one continuous mesh.
+       */
       ctx.save();
 
-      ctx.filter = "blur(30px)";
+      const blurAmount = Math.max(
+        24,
+        Math.min(width, height) * 0.055
+      );
 
-      const progress =
-        (time % 9000) / 9000;
+      ctx.filter = `blur(${blurAmount}px)`;
 
-      const x =
-        -width * 0.15 +
-        progress *
+      /*
+       * Draw the individual color fields.
+       */
+      blobs.forEach((blob, index) => {
+        const movementX =
+          Math.sin(
+            t * (1.0 + blob.speed * 1000) +
+              blob.phase
+          ) *
           width *
-          1.30;
+          0.045;
 
-      const y =
-        getWaveY(
-          x,
-          time,
-          0,
-        );
+        const movementY =
+          Math.cos(
+            t * (0.8 + blob.speed * 850) +
+              blob.phase * 1.35
+          ) *
+          height *
+          0.055;
 
-      const gradient =
-        ctx.createRadialGradient(
+        /*
+         * Organic breathing.
+         */
+        const breathing =
+          1 +
+          Math.sin(
+            t * 1.6 +
+              blob.phase +
+              index * 0.35
+          ) *
+            0.08;
+
+        const x =
+          width * blob.x +
+          movementX +
+          Math.sin(t * 0.55 + index) *
+            width *
+            0.018;
+
+        const y =
+          height * blob.y +
+          movementY +
+          Math.cos(t * 0.48 + index) *
+            height *
+            0.018;
+
+        const radius =
+          Math.min(width, height) *
+          blob.radius *
+          breathing;
+
+        drawBlob(
           x,
           y,
-          0,
-          x,
-          y,
-          width * 0.20,
+          radius,
+          blob.color,
+          blob.strength
         );
-
-      gradient.addColorStop(
-        0,
-        "rgba(255,255,255,0.22)",
-      );
-
-      gradient.addColorStop(
-        0.3,
-        "rgba(255,255,255,0.08)",
-      );
-
-      gradient.addColorStop(
-        1,
-        "rgba(255,255,255,0)",
-      );
-
-      ctx.fillStyle = gradient;
-
-      ctx.beginPath();
-
-      ctx.arc(
-        x,
-        y,
-        width * 0.20,
-        0,
-        Math.PI * 2,
-      );
-
-      ctx.fill();
+      });
 
       ctx.restore();
-    }
 
-    /*
-     * -------------------------------------------------------
-     * BOTTOM LEFT BLUE ATMOSPHERE
-     * -------------------------------------------------------
-     */
-
-    function drawBottomAtmosphere() {
+      /*
+       * Additional large soft blue field at the lower-left.
+       * This gives the composition the same visual weight
+       * as the reference image.
+       */
       ctx.save();
 
-      ctx.filter = "blur(40px)";
+      ctx.filter = `blur(${Math.min(
+        width,
+        height
+      ) * 0.08}px)`;
 
-      const gradient =
-        ctx.createRadialGradient(
-          width * 0.02,
-          height * 0.92,
-          0,
-          width * 0.02,
-          height * 0.92,
-          width * 0.40,
-        );
-
-      gradient.addColorStop(
+      const blueGlow = ctx.createRadialGradient(
+        width * 0.12,
+        height * 0.82,
         0,
-        "rgba(37,99,235,0.16)",
+        width * 0.12,
+        height * 0.82,
+        Math.min(width, height) * 0.72
       );
 
-      gradient.addColorStop(
-        0.45,
-        "rgba(37,99,235,0.06)",
+      blueGlow.addColorStop(
+        0,
+        "rgba(29, 78, 216, 0.42)"
       );
 
-      gradient.addColorStop(
+      blueGlow.addColorStop(
+        0.35,
+        "rgba(37, 99, 235, 0.25)"
+      );
+
+      blueGlow.addColorStop(
+        0.68,
+        "rgba(6, 182, 212, 0.09)"
+      );
+
+      blueGlow.addColorStop(
         1,
-        "rgba(37,99,235,0)",
+        "rgba(255, 255, 255, 0)"
       );
 
-      ctx.fillStyle = gradient;
-
-      ctx.fillRect(
-        0,
-        height * 0.55,
-        width * 0.50,
-        height * 0.45,
-      );
+      ctx.fillStyle = blueGlow;
+      ctx.fillRect(0, 0, width, height);
 
       ctx.restore();
-    }
 
-    /*
-     * -------------------------------------------------------
-     * TOP RIGHT ORANGE ATMOSPHERE
-     * -------------------------------------------------------
-     */
-
-    function drawOrangeAtmosphere() {
+      /*
+       * Soft central green/cyan atmosphere.
+       */
       ctx.save();
 
-      ctx.filter = "blur(40px)";
+      ctx.filter = `blur(${Math.min(
+        width,
+        height
+      ) * 0.075}px)`;
 
-      const gradient =
-        ctx.createRadialGradient(
-          width * 0.98,
-          height * 0.16,
-          0,
-          width * 0.98,
-          height * 0.16,
-          width * 0.32,
-        );
-
-      gradient.addColorStop(
+      const greenGlow = ctx.createRadialGradient(
+        width * 0.48,
+        height * 0.38,
         0,
-        "rgba(249,115,22,0.14)",
+        width * 0.48,
+        height * 0.38,
+        Math.min(width, height) * 0.58
       );
 
-      gradient.addColorStop(
-        0.42,
-        "rgba(234,88,12,0.06)",
+      greenGlow.addColorStop(
+        0,
+        "rgba(16, 185, 129, 0.24)"
       );
 
-      gradient.addColorStop(
+      greenGlow.addColorStop(
+        0.38,
+        "rgba(132, 204, 22, 0.14)"
+      );
+
+      greenGlow.addColorStop(
+        0.72,
+        "rgba(234, 179, 8, 0.05)"
+      );
+
+      greenGlow.addColorStop(
         1,
-        "rgba(234,88,12,0)",
+        "rgba(255, 255, 255, 0)"
       );
 
-      ctx.fillStyle = gradient;
-
-      ctx.fillRect(
-        width * 0.68,
-        0,
-        width * 0.32,
-        height * 0.48,
-      );
+      ctx.fillStyle = greenGlow;
+      ctx.fillRect(0, 0, width, height);
 
       ctx.restore();
-    }
 
-    /*
-     * -------------------------------------------------------
-     * RENDER
-     * -------------------------------------------------------
-     */
+      /*
+       * Warm orange field toward the right side.
+       */
+      ctx.save();
 
-    function render(time: number) {
-      if (!visible) return;
+      ctx.filter = `blur(${Math.min(
+        width,
+        height
+      ) * 0.065}px)`;
 
-      ctx.clearRect(
+      const orangeGlow = ctx.createRadialGradient(
+        width * 0.88,
+        height * 0.58,
         0,
+        width * 0.88,
+        height * 0.58,
+        Math.min(width, height) * 0.48
+      );
+
+      orangeGlow.addColorStop(
+        0,
+        "rgba(249, 115, 22, 0.25)"
+      );
+
+      orangeGlow.addColorStop(
+        0.38,
+        "rgba(234, 179, 8, 0.13)"
+      );
+
+      orangeGlow.addColorStop(
+        0.72,
+        "rgba(249, 115, 22, 0.045)"
+      );
+
+      orangeGlow.addColorStop(
+        1,
+        "rgba(255, 255, 255, 0)"
+      );
+
+      ctx.fillStyle = orangeGlow;
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.restore();
+
+      /*
+       * Large white wash on the right.
+       *
+       * This keeps the design premium and prevents the
+       * gradient from becoming a full saturated background.
+       */
+      const whiteFade = ctx.createLinearGradient(
+        width * 0.58,
         0,
         width,
-        height,
+        0
       );
 
-      /*
-       * Atmospheric depth.
-       */
-      drawBottomAtmosphere();
-      drawOrangeAtmosphere();
+      whiteFade.addColorStop(
+        0,
+        "rgba(255, 255, 255, 0)"
+      );
+
+      whiteFade.addColorStop(
+        0.55,
+        "rgba(255, 255, 255, 0.10)"
+      );
+
+      whiteFade.addColorStop(
+        0.82,
+        "rgba(255, 255, 255, 0.38)"
+      );
+
+      whiteFade.addColorStop(
+        1,
+        "rgba(255, 255, 255, 0.82)"
+      );
+
+      ctx.fillStyle = whiteFade;
+      ctx.fillRect(0, 0, width, height);
 
       /*
-       * Main continuous mesh.
+       * Subtle top white atmospheric fade.
        */
-      drawMesh(time);
+      const topFade = ctx.createLinearGradient(
+        0,
+        0,
+        0,
+        height * 0.28
+      );
+
+      topFade.addColorStop(
+        0,
+        "rgba(255, 255, 255, 0.62)"
+      );
+
+      topFade.addColorStop(
+        0.65,
+        "rgba(255, 255, 255, 0.10)"
+      );
+
+      topFade.addColorStop(
+        1,
+        "rgba(255, 255, 255, 0)"
+      );
+
+      ctx.fillStyle = topFade;
+      ctx.fillRect(0, 0, width, height);
 
       /*
-       * Deeper color layer.
+       * Very subtle moving highlight.
+       * This is what gives the mesh a "living" quality.
        */
-      drawMeshDepth(time);
+      ctx.save();
 
-      /*
-       * Moving light through the mesh.
-       */
-      drawMovingLight(time);
+      ctx.globalCompositeOperation = "screen";
+      ctx.filter = `blur(${Math.min(
+        width,
+        height
+      ) * 0.045}px)`;
 
-      /*
-       * Integrate into white background.
-       */
-      drawWhiteFeather();
+      const highlightX =
+        width *
+        (0.45 +
+          Math.sin(t * 0.42) * 0.08);
 
-      animationFrame =
-        requestAnimationFrame(
-          render,
-        );
-    }
+      const highlightY =
+        height *
+        (0.30 +
+          Math.cos(t * 0.36) * 0.06);
 
-    /*
-     * -------------------------------------------------------
-     * INTERSECTION OBSERVER
-     * -------------------------------------------------------
-     */
+      const highlight = ctx.createRadialGradient(
+        highlightX,
+        highlightY,
+        0,
+        highlightX,
+        highlightY,
+        Math.min(width, height) * 0.32
+      );
 
-    const observer =
-      new IntersectionObserver(
-        (entries) => {
-          const entry =
-            entries[0];
+      highlight.addColorStop(
+        0,
+        "rgba(255, 255, 255, 0.18)"
+      );
 
-          visible =
-            entry?.isIntersecting ??
-            true;
+      highlight.addColorStop(
+        0.45,
+        "rgba(255, 255, 255, 0.06)"
+      );
 
-          if (visible) {
-            cancelAnimationFrame(
-              animationFrame,
-            );
+      highlight.addColorStop(
+        1,
+        "rgba(255, 255, 255, 0)"
+      );
 
-            animationFrame =
-              requestAnimationFrame(
-                render,
-              );
-          } else {
-            cancelAnimationFrame(
-              animationFrame,
-            );
+      ctx.fillStyle = highlight;
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.restore();
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+
+          if (isVisible && !animationFrameId) {
+            animationFrameId =
+              requestAnimationFrame(render);
           }
-        },
-        {
-          threshold: 0.01,
-        },
-      );
+        });
+      },
+      {
+        threshold: 0,
+      }
+    );
 
     observer.observe(container);
 
-    animationFrame =
-      requestAnimationFrame(
-        render,
-      );
-
-    /*
-     * -------------------------------------------------------
-     * CLEANUP
-     * -------------------------------------------------------
-     */
-
     return () => {
-      cancelAnimationFrame(
-        animationFrame,
-      );
-
-      resizeObserver.disconnect();
       observer.disconnect();
+
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+
+      window.removeEventListener(
+        "resize",
+        resize
+      );
     };
   }, []);
 
@@ -804,7 +554,7 @@ export function RegionsGradientAnimation() {
     >
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
+        className="block h-full w-full"
       />
     </div>
   );
