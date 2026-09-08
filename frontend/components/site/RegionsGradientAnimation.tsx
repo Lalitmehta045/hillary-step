@@ -40,7 +40,7 @@ export function RegionsGradientAnimation() {
         return;
       }
 
-      const time = now * 0.00015;
+      const time = now * 0.015;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -58,15 +58,17 @@ export function RegionsGradientAnimation() {
        * The gradient moves very slowly to create
        * a subtle fluid feeling.
        */
-      const driftX = Math.sin(time) * width * 0.025;
-      const driftY = Math.cos(time * 0.8) * height * 0.02;
+     const driftX = Math.sin(time) * width * 0.015;
+const driftY = Math.cos(time * 0.8) * height * 0.015;
 
-      const gradient = ctx.createLinearGradient(
-        width * 0.18 + driftX,
-        height * 0.02 + driftY,
-        width * 0.78 + driftX,
-        height * 0.98 + driftY
-      );
+const offsetX = -width * 0.10;
+
+    const gradient = ctx.createLinearGradient(
+  width * 0.18 + driftX + offsetX,
+  height * 0.02 + driftY,
+  width * 0.68 + driftX + offsetX,
+  height * 0.82 + driftY
+);
 
       /*
        * Very soft pink at the top
