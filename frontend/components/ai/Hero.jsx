@@ -53,7 +53,7 @@ export default function Hero() {
               className="mb-8 text-[11px] md:text-xs font-medium uppercase tracking-[0.35em] text-[#8A8A8A]"
               data-testid="hero-kicker"
             >
-              Hillary Step / AI Intelligence
+              HSS | PLATFORMS • PEOPLE • PROJECTS
             </motion.p>
 
             <MaskReveal
@@ -72,7 +72,7 @@ export default function Hero() {
               className="mt-8 max-w-md text-base md:text-lg font-light leading-relaxed text-[#8A8A8A]"
               data-testid="hero-subcopy"
             >
-              AI becomes more powerful when it becomes part of the system.
+              The Execution Process becomes truly flawless once you understand our AI-driven Methodology.
             </motion.p>
           </div>
 
@@ -98,7 +98,7 @@ export default function Hero() {
         data-testid="hero-scroll-cue"
       >
         <span className="text-[10px] md:text-[11px] font-medium uppercase tracking-[0.3em] text-[#8A8A8A]">
-          Scroll to explore
+          EXPLORE THE CORE
         </span>
         <svg
           className="scroll-cue h-4 w-4 text-[#8A8A8A]"

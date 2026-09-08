@@ -5,7 +5,7 @@ import { useReducedMotion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LAYERS = ["PLATFORMS", "PEOPLE", "PROJECTS", "INTELLIGENCE"];
+const LAYERS = ["COGNITIVE DIGITAL - PLATFORMS", "GLOBAL TALENT - PEOPLE", "ECO SMART INFRA - PROJECTS", "INTELLIGENT SaaS - PRODUCTS[R&D]"];
 
 export default function Summit() {
   const ref = useRef(null);
@@ -126,13 +126,13 @@ export default function Summit() {
           >
             THE NEXT ASCENT
             <br />
-            IS INTELLIGENT.
+            IN INTELLIGENT.
           </h2>
           <p
             className="mt-8 text-[11px] font-medium uppercase tracking-[0.4em] text-[#8A8A8A]"
             data-testid="summit-brand"
           >
-            Hillary Step Solutions
+           As every mountain has its Hillary Step—the ultimate bottleneck, we align tech, talent, tower, and global growth to ensure your business doesn't just climb, but conquers.
           </p>
         </div>
       </div>

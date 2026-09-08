@@ -5,12 +5,12 @@ import Image from "next/image";
 import { m, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 
 const links = [
-  { slug: "home", label: "Home", href: "/#home", num: "01", subtitle: "Ecosystem Overview" },
-  { slug: "about", label: "About", href: "/#about", num: "02", subtitle: "Mission & Leadership" },
-  { slug: "pillars", label: "Pillars", href: "/#pillars", num: "03", subtitle: "Civil, Staffing & IT" },
-  { slug: "capabilities", label: "Capabilities", href: "/#capabilities", num: "04", subtitle: "Global Delivery" },
-  { slug: "global-presence", label: "Global Presence", href: "/#global-presence", num: "05", subtitle: "USA · IND · AUS" },
-  { slug: "contact", label: "Contact Us", href: "/#contact", num: "06", subtitle: "Start a Conversation" },
+  { slug: "home", label: "HOME", href: "/#home", num: "01", subtitle: "Ecosystem Overview" },
+  { slug: "about", label: "ABOUT THE ASCENT", href: "/#about", num: "02", subtitle: "Mission & Leadership" },
+  { slug: "capabilities", label: "CAPABILITIES", href: "/#pillars", num: "03", subtitle: "Global Delivery" },
+  { slug: "peak-intelligence-core", label: "PEAK INTELLIGENCE CORE", href: "/#ai-experience", num: "04", subtitle: "AI · Intelligence · Innovation" },
+  { slug: "global-presence", label: "GLOBAL PRESENCE", href: "/#global-presence", num: "05", subtitle: "USA · IND · AUS" },
+  { slug: "contact", label: "CONTACT US", href: "/#contact", num: "06", subtitle: "Start a Conversation" },
 ];
 
 const REGIONS = ["USA", "IND", "AUS"];
