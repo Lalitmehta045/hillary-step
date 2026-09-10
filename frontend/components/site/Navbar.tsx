@@ -191,165 +191,161 @@ export function Navbar() {
         style={{ pointerEvents: "none" }}
       >
         {/* Invisible Hover Trigger at top edge of viewport */}
-        <div 
-          className="absolute top-0 inset-x-0 h-7" 
-          style={{ pointerEvents: "auto" }} 
+        <div
+          className="absolute top-0 inset-x-0 h-7"
+          style={{ pointerEvents: "auto" }}
           onMouseEnter={handleMouseEnter}
         />
 
         {/* Top Header Bar */}
         <m.header
           initial={{ y: 0, opacity: 1 }}
-          animate={{ 
-            y: shouldHide ? "-120%" : 0, 
+          animate={{
+            y: shouldHide ? "-120%" : 0,
             opacity: open ? 0 : shouldHide ? 0 : 1
           }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           style={{ pointerEvents: shouldHide ? "none" : "auto" }}
-          className={`relative w-full transition-all duration-200 ${
-            open ? "pointer-events-none" : scrolled ? "py-3" : "py-5 md:py-6"
-          }`}
+          className={`relative w-full transition-all duration-200 ${open ? "pointer-events-none" : scrolled ? "py-3" : "py-5 md:py-6"
+            }`}
         >
-        <div
-          className={`mx-auto w-[94%] max-w-[1400px] flex items-center justify-between transition-all duration-200 rounded-full px-5 sm:px-8 py-2.5 ${
-            scrolled
-              ? "bg-white/70 text-[#111111] backdrop-blur-xl border border-white/60 shadow-[0_10px_35px_rgba(0,0,0,0.07)]"
-              : "bg-transparent text-white border border-transparent shadow-none backdrop-blur-none"
-          }`}
-        >
-          {/* Logo */}
-          <a
-            href="/#home"
-            onClick={(e) => {
-              e.preventDefault();
-              go("/#home");
-            }}
-            className="flex items-center gap-3 shrink-0 group cursor-pointer"
+          <div
+            className={`mx-auto w-[94%] max-w-[1400px] flex items-center justify-between transition-all duration-200 rounded-full px-5 sm:px-8 py-2 ${scrolled
+                ? "bg-white/70 text-[#111111] backdrop-blur-xl border border-white/60 shadow-[0_10px_35px_rgba(0,0,0,0.07)]"
+                : "bg-transparent text-white border border-transparent shadow-none backdrop-blur-none"
+              }`}
           >
-            <Image
-              src="/assets/HSS-LOGO.png"
-              alt="Hillary Step Solutions Logo"
-              width={72}
-              height={48}
-              priority
-              className="object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
-            />
-          </a>
-
-          {/* Desktop Nav Links */}
-          <div className="hidden lg:flex items-center gap-1 font-display text-sm">
-            {links.slice(0, 5).map((l) => (
-              <a
-                key={l.slug}
-                href={l.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  go(l.href);
-                }}
-                className={`nav-link-grad px-4 py-2 font-medium text-sm transition-colors cursor-pointer ${
-                  scrolled
-                    ? "text-slate-700"
-                    : "text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
-                }`}
-              >
-                {l.label}
-              </a>
-            ))}
-          </div>
-
-          {/* Right Action Section */}
-          <div className="flex items-center gap-3">
-            {/* Region Selector */}
-            <div className="relative group hidden sm:block">
-              <button
-                type="button"
-                className={`flex items-center gap-1.5 font-display text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
-                  scrolled
-                    ? "bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200/80"
-                    : "bg-black/20 text-white hover:bg-black/30 border border-white/20 backdrop-blur-sm drop-shadow-sm"
-                }`}
-              >
-                <img
-                  src={REGION_FLAGS[selectedRegion]}
-                  alt={`${selectedRegion} flag`}
-                  className="w-4 h-3 object-cover rounded-[2px]" 
-                />
-                <span>{selectedRegion}</span>
-                <span className="text-[10px] opacity-60">▼</span>
-              </button>
-
-              {/* Dropdown Menu */}
-              <div className="absolute top-[100%] right-0 mt-2 w-28 rounded-xl bg-white border border-slate-200 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-1.5 z-50">
-                {REGIONS.filter((r) => r !== selectedRegion).map((region) => (
-                  <button
-                    key={region}
-                    onClick={() => setSelectedRegion(region)}
-                    className="flex w-full items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 hover:text-[#1A6CFF] transition-colors cursor-pointer"
-                  >
-                    <img
-                      src={REGION_FLAGS[region]}
-                      alt={`${region} flag`}
-                      className="w-4 h-3 object-cover rounded-[2px]"
-                    />
-                    {region}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* CTA Button */}
+            {/* Logo */}
             <a
-              href="/#contact"
+              href="/#home"
               onClick={(e) => {
                 e.preventDefault();
-                go("/#contact");
+                go("/#home");
               }}
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-[#1A6CFF] text-white px-4 py-2 font-display text-xs font-medium hover:bg-[#1556cc] shadow-[0_4px_14px_rgba(26,108,255,0.3)] transition cursor-pointer"
+              className="flex items-center shrink-0 group cursor-pointer -ml-1"
             >
-              Contact Us
-              <span className="text-xs">↗</span>
+              <div className="flex h-12 w-[105px] items-center justify-start overflow-visible">
+                <Image
+                  src="/assets/HSS-LOGO.png"
+                  alt="Hillary Step Solutions Logo"
+                  width={105}
+                  height={60}
+                  priority
+                  className="h-auto w-[105px] object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
+                />
+              </div>
             </a>
 
-            {/* Admin Portal Button - Frosted Glass Style */}
-            <a
-              href="/admin/login"
-              className={`hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 font-display text-xs font-medium transition-all duration-300 cursor-pointer ${
-                scrolled
-                  ? "border border-slate-300/80 bg-white/50 hover:bg-white/80 text-slate-800 backdrop-blur-md shadow-sm"
-                  : "border border-white/30 bg-white/15 hover:bg-white/25 text-white backdrop-blur-md shadow-sm drop-shadow-sm"
-              }`}
-            >
-              Admin Portal
-              <span className="text-xs">↗</span>
-            </a>
+            {/* Desktop Nav Links */}
+            <div className="hidden lg:flex items-center gap-1 font-display text-sm">
+              {links.slice(0, 5).map((l) => (
+                <a
+                  key={l.slug}
+                  href={l.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    go(l.href);
+                  }}
+                  className={`nav-link-grad px-4 py-2 font-medium text-sm transition-colors cursor-pointer ${scrolled
+                      ? "text-slate-700"
+                      : "text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+                    }`}
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
 
-            {/* Circular Hamburger Button - Mobile Only */}
-            <button
-              onClick={() => setOpen((o) => !o)}
-              aria-label="Toggle menu"
-              className={`lg:hidden relative h-10 w-10 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105 ${
-                scrolled
-                  ? "bg-slate-100 border border-slate-200 text-slate-800 hover:bg-slate-200"
-                  : "bg-black/20 border border-white/20 text-white hover:bg-black/30 backdrop-blur-sm"
-              }`}
-            >
-              <span className="flex flex-col gap-1.5">
-                <m.span
-                  animate={{ rotate: open ? 45 : 0, y: open ? 4 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="block h-[1.5px] w-5 bg-current"
-                />
-                <m.span
-                  animate={{ rotate: open ? -45 : 0, y: open ? -3.5 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="block h-[1.5px] w-5 bg-current"
-                />
-              </span>
-            </button>
+            {/* Right Action Section */}
+            <div className="flex items-center gap-3">
+              {/* Region Selector */}
+              <div className="relative group hidden sm:block">
+                <button
+                  type="button"
+                  className={`flex items-center gap-1.5 font-display text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer ${scrolled
+                      ? "bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200/80"
+                      : "bg-black/20 text-white hover:bg-black/30 border border-white/20 backdrop-blur-sm drop-shadow-sm"
+                    }`}
+                >
+                  <img
+                    src={REGION_FLAGS[selectedRegion]}
+                    alt={`${selectedRegion} flag`}
+                    className="w-4 h-3 object-cover rounded-[2px]"
+                  />
+                  <span>{selectedRegion}</span>
+                  <span className="text-[10px] opacity-60">▼</span>
+                </button>
+
+                {/* Dropdown Menu */}
+                <div className="absolute top-[100%] right-0 mt-2 w-28 rounded-xl bg-white border border-slate-200 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-1.5 z-50">
+                  {REGIONS.filter((r) => r !== selectedRegion).map((region) => (
+                    <button
+                      key={region}
+                      onClick={() => setSelectedRegion(region)}
+                      className="flex w-full items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 hover:text-[#1A6CFF] transition-colors cursor-pointer"
+                    >
+                      <img
+                        src={REGION_FLAGS[region]}
+                        alt={`${region} flag`}
+                        className="w-4 h-3 object-cover rounded-[2px]"
+                      />
+                      {region}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <a
+                href="/#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  go("/#contact");
+                }}
+                className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-[#1A6CFF] text-white px-4 py-2 font-display text-xs font-medium hover:bg-[#1556cc] shadow-[0_4px_14px_rgba(26,108,255,0.3)] transition cursor-pointer"
+              >
+                Contact Us
+                <span className="text-xs">↗</span>
+              </a>
+
+              {/* Admin Portal Button - Frosted Glass Style */}
+              <a
+                href="/admin/login"
+                className={`hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 font-display text-xs font-medium transition-all duration-300 cursor-pointer ${scrolled
+                    ? "border border-slate-300/80 bg-white/50 hover:bg-white/80 text-slate-800 backdrop-blur-md shadow-sm"
+                    : "border border-white/30 bg-white/15 hover:bg-white/25 text-white backdrop-blur-md shadow-sm drop-shadow-sm"
+                  }`}
+              >
+                Admin Portal
+                <span className="text-xs">↗</span>
+              </a>
+
+              {/* Circular Hamburger Button - Mobile Only */}
+              <button
+                onClick={() => setOpen((o) => !o)}
+                aria-label="Toggle menu"
+                className={`lg:hidden relative h-10 w-10 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105 ${scrolled
+                    ? "bg-slate-100 border border-slate-200 text-slate-800 hover:bg-slate-200"
+                    : "bg-black/20 border border-white/20 text-white hover:bg-black/30 backdrop-blur-sm"
+                  }`}
+              >
+                <span className="flex flex-col gap-1.5">
+                  <m.span
+                    animate={{ rotate: open ? 45 : 0, y: open ? 4 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="block h-[1.5px] w-5 bg-current"
+                  />
+                  <m.span
+                    animate={{ rotate: open ? -45 : 0, y: open ? -3.5 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="block h-[1.5px] w-5 bg-current"
+                  />
+                </span>
+              </button>
+            </div>
           </div>
-        </div>
         </m.header>
       </div>
 
