@@ -229,10 +229,10 @@ export function Navbar() {
             className="flex items-center gap-3 shrink-0 group cursor-pointer"
           >
             <Image
-              src="/assets/Hillary Step Solutions  logo.png"
+              src="/assets/HSS-LOGO.png"
               alt="Hillary Step Solutions Logo"
-              width={54}
-              height={36}
+              width={72}
+              height={48}
               priority
               className="object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
             />
