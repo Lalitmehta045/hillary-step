@@ -21,6 +21,7 @@ import {
 import { AnimatedCubeCard } from "./AnimatedCubeCard";
 import { AiEngineVisual } from "./AiEngineCard";
 import { ProfileFlowCard } from "./ProfileFlowCard";
+import { BentoGridFeatures } from "./BentoGridFeatures";
 
 interface GlobalTalentShowcaseProps {
   onSelectTab?: (tab: "post" | "find") => void;
@@ -351,6 +352,11 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
           </div>
         </div>
       </section>
+
+      {/* ============================================================ */}
+      {/* SECTION 3.5: ORGANIZATION & TALENT ARCHITECTURE (BENTO GRID) */}
+      {/* ============================================================ */}
+      <BentoGridFeatures />
 
       {/* ============================================================ */}
       {/* SECTION 4: DELIVERY METHODOLOGY - 4-STAGE DELIVERY PROCESS   */}
