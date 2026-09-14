@@ -3,6 +3,7 @@ import { m } from "framer-motion";
 import { itServices } from "@/lib/services-data";
 import { ServiceDetailModal } from "./ServiceDetailModal";
 import type { ServiceData } from "@/lib/services-data";
+import { CognitivePlatformAnimations } from "./CognitivePlatformAnimations";
 
 const icons: Record<string, React.ReactNode> = {
   code: (
@@ -201,8 +202,6 @@ export function ITSolutionsContent() {
         </div>
       </m.div>
 
-
-
       {/* RESTORED SERVICES SECTION */}
       <div className="px-8 md:px-16 pt-8 pb-16 max-w-[1400px] mx-auto">
         <div className="flex flex-col items-center w-full">
@@ -283,6 +282,9 @@ export function ITSolutionsContent() {
           </m.div>
         </div>
       </div>
+
+      {/* COGNITIVE PLATFORM ANIMATIONS */}
+      <CognitivePlatformAnimations />
 
       {/* HOW WE SIMPLIFY */}
       <div className="px-8 md:px-16 py-12 relative">
