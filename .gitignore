@@ -1,4 +1,4 @@
-﻿# OS Files
+# OS Files
 .DS_Store
 Thumbs.db
 
@@ -9,3 +9,5 @@ Thumbs.db
 
 # Local test / temporary artifacts
 *.pdf
+*.bak.mp4
+

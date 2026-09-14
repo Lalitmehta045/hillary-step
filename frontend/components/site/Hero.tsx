@@ -5,7 +5,9 @@ import { StaggerContainer, StaggerItem, FadeIn } from "@/components/motion/FadeI
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { Navbar } from "@/components/site/Navbar";
 
-const HERO_VIDEO_SRC = "/hero-video/hero-everest.mp4";
+const HERO_VIDEO_SRC = "/hero-video/CINE%20V5.mp4";
+const HERO_VIDEO_MOBILE_SRC = "/hero-video/cine-v5-mobile.mp4";
+const HERO_POSTER_SRC = "/hero-video/hero-poster.webp";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -14,6 +16,13 @@ export function Hero() {
     const video = videoRef.current;
     if (!video) return;
 
+    // Essential for iOS Safari & WebKit autoplay policies
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const tryPlay = () => {
@@ -21,10 +30,29 @@ export function Hero() {
         video.pause();
         return;
       }
-      void video.play().catch(() => {
-        // Autoplay can fail before user gesture; muted + playsInline covers most cases.
-      });
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay can fail before user gesture in low-power mode.
+        });
+      }
     };
+
+    // Low-power / battery saver mode fallback: play on first user interaction
+    const handleFirstInteraction = () => {
+      tryPlay();
+      removeInteractionListeners();
+    };
+
+    const removeInteractionListeners = () => {
+      window.removeEventListener("touchstart", handleFirstInteraction);
+      window.removeEventListener("click", handleFirstInteraction);
+      window.removeEventListener("scroll", handleFirstInteraction);
+    };
+
+    window.addEventListener("touchstart", handleFirstInteraction, { passive: true });
+    window.addEventListener("click", handleFirstInteraction, { passive: true });
+    window.addEventListener("scroll", handleFirstInteraction, { passive: true });
 
     // Pause when scrolled away — decoding a full-bleed loop offscreen wastes CPU/GPU.
     const visibility = new IntersectionObserver(
@@ -45,9 +73,12 @@ export function Hero() {
     };
     motionQuery.addEventListener("change", onMotionChange);
 
+    tryPlay();
+
     return () => {
       visibility.disconnect();
       motionQuery.removeEventListener("change", onMotionChange);
+      removeInteractionListeners();
     };
   }, []);
 
@@ -56,17 +87,21 @@ export function Hero() {
       <div className="absolute inset-0 h-full w-full">
         <video
           ref={videoRef}
-          src={HERO_VIDEO_SRC}
           autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
+          poster={HERO_POSTER_SRC}
           disablePictureInPicture
           disableRemotePlayback
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover pointer-events-none"
-        />
+          className="absolute inset-0 h-full w-full object-cover pointer-events-none transform-gpu will-change-transform"
+          style={{ transform: "translateZ(0)" }}
+        >
+          <source media="(max-width: 768px)" src={HERO_VIDEO_MOBILE_SRC} type="video/mp4" />
+          <source src={HERO_VIDEO_SRC} type="video/mp4" />
+        </video>
       </div>
 
       {/* Navigation */}
