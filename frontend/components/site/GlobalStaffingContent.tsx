@@ -71,7 +71,7 @@ const STEPS = [
     description: "Upload any supporting documents or attachments.",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V7Z" />
         <path d="M14 2v4a2 2 0 0 0 2 2h4" />
         <path d="M12 18v-6" />
         <path d="m9 15 3-3 3 3" />
@@ -406,7 +406,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
             <img
               src="/assets/staffing.png"
               alt="Global talent acquisition and staffing solutions"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-[28px] border-0"
               style={{ objectPosition: "right top" }}
             />
             {/* Luminous Brand Gradients: Smooth transition on left for crystal-clear readability, preserving the right visual */}
@@ -578,8 +578,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                               <button
                                 key={step.id}
                                 onClick={() => setActiveStep(index)}
-                                className={`flex flex-col items-start max-md:items-center max-md:justify-center gap-[12px] max-md:gap-0 p-[24px] max-md:p-[12px] max-md:flex-1 rounded-[12px] text-left transition-colors relative overflow-hidden ${isActive ? "bg-[#E1EFFA] text-[#111111]" : "text-[#4B5563] hover:text-[#111111] hover:bg-black/5"
-                                  }`}
+                                className={`flex flex-col items-start max-md:items-center max-md:justify-center gap-[12px] max-md:gap-0 p-[24px] max-md:p-[12px] max-md:flex-1 rounded-[12px] text-left transition-colors relative overflow-hidden ${isActive ? "bg-[#E1EFFA] text-[#111111]" : "text-[#4B5563] hover:text-[#111111] hover:bg-black/5"}`}
                                 title={step.label}
                               >
                                 <div className="flex items-center gap-[16px] max-md:gap-0">
@@ -622,10 +621,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                               ref={(el) => { stepRefs.current[index] = el; }}
                               type="button"
                               onClick={() => setActiveStep(index)}
-                              className={`relative overflow-hidden flex w-full max-md:flex-1 items-start max-md:items-center max-md:justify-center text-left transition-all duration-500 ease-out ${isActive
-                                ? "gap-[16px] max-md:gap-0 p-[24px] pb-[28px] max-md:p-[16px] rounded-[16px] max-md:rounded-[12px] bg-[#E1EFFA]"
-                                : "gap-[12px] max-md:gap-0 px-[24px] py-[20px] max-md:p-[16px] rounded-[12px] max-md:rounded-[12px] hover:bg-gray-50/50 max-md:bg-transparent"
-                                }`}
+                              className={`relative overflow-hidden flex w-full max-md:flex-1 items-start max-md:items-center max-md:justify-center text-left transition-all duration-500 ease-out ${isActive ? "gap-[16px] max-md:gap-0 p-[24px] pb-[28px] max-md:p-[16px] rounded-[16px] max-md:rounded-[12px] bg-[#E1EFFA]" : "gap-[12px] max-md:gap-0 px-[24px] py-[20px] max-md:p-[16px] rounded-[12px] max-md:rounded-[12px] hover:bg-gray-50/50 max-md:bg-transparent"}`}
                             >
                               <m.span layout="position" className={`shrink-0 ${isActive ? "mt-[2px] max-md:mt-0 text-[#1A6CFF]" : "text-[#6B7280]"}`}>
                                 <svg width="24" height="24" viewBox={step.icon.props.viewBox} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -634,10 +630,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                               </m.span>
 
                               <div className={`min-w-0 flex-1 flex flex-col justify-start max-md:hidden ${isActive ? "min-h-[104px]" : ""}`}>
-                                <m.p layout="position" className={`font-display font-[600] text-[#111111] transition-all duration-300 ${isActive
-                                  ? "text-[20px] leading-[28px]"
-                                  : "text-[17px] leading-[22px]"
-                                  }`}>
+                                <m.p layout="position" className={`font-display font-[600] text-[#111111] transition-all duration-300 ${isActive ? "text-[20px] leading-[28px]" : "text-[17px] leading-[22px]"}`}>
                                   {step.label}
                                 </m.p>
 
