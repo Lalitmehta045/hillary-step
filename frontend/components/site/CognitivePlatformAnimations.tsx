@@ -7,8 +7,7 @@ import { m, AnimatePresence } from "framer-motion";
 const ICONS = {
   clerk: {
     name: "Clerk",
-    viewBox: "0 0 24 24",
-    path: "m21.47 20.829-2.881-2.881a.572.572 0 0 0-.7-.084 6.854 6.854 0 0 1-7.081 0 .576.576 0 0 0-.7.084l-2.881 2.881a.576.576 0 0 0-.103.69.57.57 0 0 0 .166.186 12 12 0 0 0 14.113 0 .58.58 0 0 0 .239-.423.576.576 0 0 0-.172-.453Zm.002-17.668-2.88 2.88a.569.569 0 0 1-.701.084A6.857 6.857 0 0 0 8.724 8.08a6.862 6.862 0 0 0-1.222 3.692 6.86 6.86 0 0 0 .978 3.764.573.573 0 0 1-.083.699l-2.881 2.88a.567.567 0 0 1-.864-.063A11.993 11.993 0 0 1 6.771 2.7a11.99 11.99 0 0 1 14.637-.405.566.566 0 0 1 .232.418.57.57 0 0 1-.168.448Zm-7.118 12.261a3.427 3.427 0 1 0 0-6.854 3.427 3.427 0 0 0 0 6.854Z",
+    isClerk: true,
   },
   claudeSpark: {
     name: "Anthropic / Claude",
@@ -62,7 +61,22 @@ const ICONS = {
   docker: {
     name: "Docker",
     viewBox: "0 0 24 24",
-    path: "M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.186.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.186.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.186.186.186m5.893 2.715h2.118a.186.186 0 00.186-.186V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.186V9.006a.185.185 0 00-.184-.186H8.1a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.186V9.006a.185.185 0 00-.185-.186H5.136a.186.186 0 00-.186.185v1.888c0 .102.084.185.186.185m-2.928 0h2.119a.185.185 0 00.185-.186V9.006a.185.185 0 00-.185-.186H2.208a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m21.432.404c-.382-.24-1.748-.484-3.522.427-.478-.37-1.12-.563-1.85-.563-.448 0-.898.073-1.32.222l-.128.046c-.053-.02-.107-.04-.162-.057a6.2 6.2 0 00-1.833-.274H1.05A1.05 1.05 0 000 12.04v.328c0 1.258.423 2.454 1.192 3.372 1.343 1.6 3.666 2.428 6.905 2.463 6.945.074 11.233-3.09 12.83-8.892.833.092 1.666.012 2.378-.454.492-.323.593-.654.59-.728a.428.428 0 00-.248-.352",
+    path: "M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.186.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.186.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.186.186.186m5.893 2.715h2.118a.186.186 0 00.186-.186V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.186V9.006a.185.185 0 00-.184-.186H8.1a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.186V9.006a.185.185 0 00-.185-.186H5.136a.186.186 0 00-.186.185v1.888c0 .102.084.186.186.185m-2.928 0h2.119a.185.185 0 00.185-.186V9.006a.185.185 0 00-.185-.186H2.208a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m21.432.404c-.382-.24-1.748-.484-3.522.427-.478-.37-1.12-.563-1.85-.563-.448 0-.898.073-1.32.222l-.128.046c-.053-.02-.107-.04-.162-.057a6.2 6.2 0 00-1.833-.274H1.05A1.05 1.05 0 000 12.04v.328c0 1.258.423 2.454 1.192 3.372 1.343 1.6 3.666 2.428 6.905 2.463 6.945.074 11.233-3.09 12.83-8.892.833.092 1.666.012 2.378-.454.492-.323.593-.654.59-.728a.428.428 0 00-.248-.352",
+  },
+  google: {
+    name: "Google",
+    viewBox: "0 0 24 24",
+    path: "M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09zM12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23zM5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63zM12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z",
+  },
+  microsoft: {
+    name: "Microsoft",
+    viewBox: "0 0 24 24",
+    path: "M1 1h10v10H1zM13 1h10v10H13zM1 13h10v10H1zM13 13h10v10H13z",
+  },
+  slack: {
+    name: "Slack",
+    viewBox: "0 0 24 24",
+    path: "M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z",
   },
 };
 
@@ -71,6 +85,20 @@ type IconKey = keyof typeof ICONS;
 function IconRenderer({ iconKey, className = "w-4 h-4" }: { iconKey: IconKey; className?: string }) {
   const item = ICONS[iconKey];
   if (!item) return null;
+
+  if ("isClerk" in item && item.isClerk) {
+    return (
+      <svg viewBox="0 0 32 32" className={className} fill="none">
+        <path
+          d="M 23.5 10.5 A 9.5 9.5 0 1 0 23.5 21.5"
+          stroke="currentColor"
+          strokeWidth="3.8"
+          strokeLinecap="round"
+        />
+        <circle cx="16" cy="16" r="3.6" fill="currentColor" />
+      </svg>
+    );
+  }
 
   if ("isSpark" in item && item.isSpark) {
     // Anthropic / Claude iconic multi-ray starburst spark
@@ -97,53 +125,94 @@ function IconRenderer({ iconKey, className = "w-4 h-4" }: { iconKey: IconKey; cl
   );
 }
 
+/**
+ * True simultaneous cross-dissolve:
+ * Outgoing icon (opacity 1 -> 0) and incoming icon (opacity 0 -> 1) animate concurrently
+ * without mode="wait" to prevent any blank/empty frames.
+ */
+function CrossfadeIcon({
+  iconKey,
+  className = "w-4 h-4",
+}: {
+  iconKey: IconKey;
+  className?: string;
+}) {
+  return (
+    <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+      <AnimatePresence initial={false}>
+        <m.div
+          key={iconKey}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.28, ease: "easeInOut" }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        >
+          <IconRenderer iconKey={iconKey} className={`${className} text-white/85`} />
+        </m.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // Card 1 pool for rotating satellite nodes
+// Default (idle): slot0 = github, slot1 = docker, slot2 = supabase
 const CARD1_POOL: IconKey[] = [
-  "claudeSpark",
-  "openai",
-  "prisma",
   "github",
-  "googlecloud",
-  "supabase",
   "docker",
+  "supabase",
+  "slack",
+  "prisma",
   "notion",
 ];
 
 // Card 2 distinct pools for 4 independently shuffling satellites
-const CARD2_POOL_A: IconKey[] = ["notion", "github", "claudeSpark", "docker"];
-const CARD2_POOL_B: IconKey[] = ["planetscale", "supabase", "prisma", "googlecloud"];
-const CARD2_POOL_C: IconKey[] = ["dropbox", "openai", "notion", "github"];
-const CARD2_POOL_D: IconKey[] = ["atlassian", "docker", "planetscale", "claudeSpark"];
+const CARD2_POOL_A: IconKey[] = ["google", "notion", "github", "docker"];
+const CARD2_POOL_B: IconKey[] = ["github", "planetscale", "supabase", "prisma"];
+const CARD2_POOL_C: IconKey[] = ["atlassian", "dropbox", "openai", "notion"];
+const CARD2_POOL_D: IconKey[] = ["microsoft", "docker", "planetscale", "claudeSpark"];
 
 /* ──────────────────────────────────────────────────────────
-   CARD 1 — Cognitive Digital Platform
+   CARD 1 — Clerk CLI
+   - IDLE by default (static diagram, calm soft glow, default icons: GitHub, Docker, Supabase)
+   - HOVER ONLY: Flowing dotted pulse, moving cyan pulse dot, breathing hero glow, cycling satellite icons
    ────────────────────────────────────────────────────────── */
-function DigitalPlatformCard() {
+function ClerkCliCard() {
+  const [isHovered, setIsHovered] = useState(false);
   const [cycleIndex, setCycleIndex] = useState(0);
 
+  // Rotate icons ONLY when hovered
   useEffect(() => {
+    if (!isHovered) {
+      setCycleIndex(0);
+      return;
+    }
     const timer = setInterval(() => {
       setCycleIndex((prev) => (prev + 1) % CARD1_POOL.length);
     }, 1800);
     return () => clearInterval(timer);
-  }, []);
+  }, [isHovered]);
 
   const slot0Key = CARD1_POOL[(cycleIndex + 0) % CARD1_POOL.length];
   const slot1Key = CARD1_POOL[(cycleIndex + 1) % CARD1_POOL.length];
   const slot2Key = CARD1_POOL[(cycleIndex + 2) % CARD1_POOL.length];
 
   return (
-    <div className="relative h-[360px] w-full overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#121316] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none">
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group relative h-[360px] w-full overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#121316] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none transition-colors duration-500 hover:border-white/[0.14]"
+    >
       {/* Subtle radial ambient background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_44%_56%,rgba(0,229,255,0.035),transparent_65%)] pointer-events-none" />
 
       {/* Top Header: bold white title + 2-line gray-400 description */}
       <div className="relative z-20">
         <h3 className="text-[17px] font-semibold tracking-[-0.01em] text-white">
-          Cognitive Digital Platform
+          Clerk CLI
         </h3>
         <p className="mt-1 text-[13px] leading-[20px] text-gray-400 max-w-[400px]">
-          Connect applications, data, and intelligent agents through one unified neural backbone. No complex configuration or manual API plumbing required.
+          Manage your users, organizations, and authentication directly from the terminal. Streamline your development workflow with powerful CLI commands.
         </p>
       </div>
 
@@ -157,14 +226,7 @@ function DigitalPlatformCard() {
         >
           {/* Connector from left window panel to hero node (2-segment angular elbow) */}
           <path
-            d="M 12 35 L 23 35 L 30 52 L 38 52"
-            fill="none"
-            stroke="rgba(255, 255, 255, 0.12)"
-            strokeWidth="1.5"
-            vectorEffect="non-scaling-stroke"
-          />
-          <path
-            d="M 12 67 L 23 67 L 30 52 L 38 52"
+            d="M 12 42 L 28 42 L 38 52"
             fill="none"
             stroke="rgba(255, 255, 255, 0.12)"
             strokeWidth="1.5"
@@ -173,7 +235,7 @@ function DigitalPlatformCard() {
 
           {/* Hero Node to Top-Right Satellite (dim angular connector) */}
           <path
-            d="M 48 52 L 58 52 L 71 25 L 81 25"
+            d="M 48 52 L 58 52 L 71 25 L 77 25"
             fill="none"
             stroke="rgba(255, 255, 255, 0.12)"
             strokeWidth="1.5"
@@ -182,7 +244,7 @@ function DigitalPlatformCard() {
 
           {/* Hero Node to Bottom-Right Satellite (dim angular connector) */}
           <path
-            d="M 48 52 L 58 52 L 67 82 L 73 82"
+            d="M 48 52 L 58 52 L 71 82 L 77 82"
             fill="none"
             stroke="rgba(255, 255, 255, 0.12)"
             strokeWidth="1.5"
@@ -200,29 +262,32 @@ function DigitalPlatformCard() {
             vectorEffect="non-scaling-stroke"
           />
 
-          {/* Active Flowing Dotted Pulse along Middle Connector */}
-          <m.line
-            x1="48"
-            y1="52"
-            x2="66"
-            y2="52"
-            stroke="rgba(0, 229, 255, 0.85)"
-            strokeWidth="1.5"
-            strokeDasharray="4 6"
-            vectorEffect="non-scaling-stroke"
-            animate={{ strokeDashoffset: [20, 0] }}
-            transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-          />
-
-          {/* Flowing Pulse Dot traveling from hero toward satellite */}
-          <m.circle
-            r="2.5"
-            fill="#00f0ff"
-            filter="drop-shadow(0 0 5px rgba(0,240,255,0.9))"
-            cy="52"
-            animate={{ cx: [48, 66], opacity: [0, 1, 1, 0] }}
-            transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-          />
+          {/* Active Flowing Dotted Pulse along Middle Connector (ONLY ON HOVER) */}
+          {isHovered && (
+            <>
+              <m.line
+                x1="48"
+                y1="52"
+                x2="66"
+                y2="52"
+                stroke="rgba(0, 229, 255, 0.85)"
+                strokeWidth="1"
+                strokeDasharray="3 4"
+                vectorEffect="non-scaling-stroke"
+                animate={{ strokeDashoffset: [14, 0] }}
+                transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+              />
+              <m.ellipse
+                rx="0.8"
+                ry="1.5"
+                fill="#00f0ff"
+                filter="drop-shadow(0 0 5px rgba(0,240,255,0.9))"
+                cy="52"
+                animate={{ cx: [48, 66], opacity: [0, 1, 1, 0] }}
+                transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </>
+          )}
         </svg>
 
         {/* Off-canvas Dark Terminal/Dashboard Panel peeking from left edge */}
@@ -244,21 +309,29 @@ function DigitalPlatformCard() {
           className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-20"
           style={{ left: "44%", top: "52%" }}
         >
-          {/* Breathing/Pulsing Glow Ring behind hero node (~2.6s cycle) */}
+          {/* Breathing/Pulsing Glow Ring behind hero node (ONLY active on HOVER) */}
           <m.div
             className="absolute w-24 h-24 rounded-full pointer-events-none"
             style={{
               background:
                 "radial-gradient(circle, rgba(0,229,255,0.4) 0%, rgba(6,182,212,0.14) 48%, transparent 72%)",
             }}
-            animate={{ scale: [1, 1.2, 1], opacity: [0.45, 0.95, 0.45] }}
-            transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+            animate={
+              isHovered
+                ? { scale: [1, 1.2, 1], opacity: [0.45, 0.95, 0.45] }
+                : { scale: 1, opacity: 0.3 }
+            }
+            transition={
+              isHovered
+                ? { duration: 2.6, repeat: Infinity, ease: "easeInOut" }
+                : { duration: 0.4 }
+            }
           />
 
           {/* Hero Node Circle */}
           <m.div
             className="relative flex items-center justify-center w-[58px] h-[58px] rounded-full bg-[#181a22] border border-cyan-400/40 shadow-[0_0_30px_rgba(6,182,212,0.35)]"
-            animate={{ scale: [0.97, 1.03, 0.97] }}
+            animate={isHovered ? { scale: [0.97, 1.03, 0.97] } : { scale: 1 }}
             transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
           >
             {/* Center Product Emblem: Glowing Cyan 'C' */}
@@ -269,61 +342,28 @@ function DigitalPlatformCard() {
         </div>
 
         {/* 3 Satellite Nodes stacked diagonally to the right */}
-        {/* Top-Right Satellite */}
+        {/* Top-Right Satellite (default: Docker) */}
         <div
           className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#202127] border border-white/[0.12] shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
-          style={{ left: "85%", top: "25%" }}
+          style={{ left: "81%", top: "25%" }}
         >
-          <AnimatePresence mode="wait">
-            <m.div
-              key={slot0Key}
-              initial={{ opacity: 0, scale: 0.75 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.75 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
-              className="text-white/85 flex items-center justify-center"
-            >
-              <IconRenderer iconKey={slot0Key} className="w-4 h-4" />
-            </m.div>
-          </AnimatePresence>
+          <CrossfadeIcon iconKey={slot0Key} />
         </div>
 
-        {/* Mid-Right Satellite */}
+        {/* Mid-Right Satellite (default: Notion) */}
         <div
           className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#202127] border border-white/[0.14] shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
           style={{ left: "71%", top: "52%" }}
         >
-          <AnimatePresence mode="wait">
-            <m.div
-              key={slot1Key}
-              initial={{ opacity: 0, scale: 0.75 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.75 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
-              className="text-white/85 flex items-center justify-center"
-            >
-              <IconRenderer iconKey={slot1Key} className="w-4 h-4" />
-            </m.div>
-          </AnimatePresence>
+          <CrossfadeIcon iconKey={slot1Key} />
         </div>
 
-        {/* Bottom-Right Satellite */}
+        {/* Bottom-Right Satellite (default: Claude Spark / Starburst) */}
         <div
           className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#202127] border border-white/[0.12] shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
-          style={{ left: "77%", top: "82%" }}
+          style={{ left: "81%", top: "82%" }}
         >
-          <AnimatePresence mode="wait">
-            <m.div
-              key={slot2Key}
-              initial={{ opacity: 0, scale: 0.75 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.75 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
-              className="text-white/85 flex items-center justify-center"
-            >
-              <IconRenderer iconKey={slot2Key} className="w-4 h-4" />
-            </m.div>
-          </AnimatePresence>
+          <CrossfadeIcon iconKey={slot2Key} />
         </div>
       </div>
     </div>
@@ -332,15 +372,27 @@ function DigitalPlatformCard() {
 
 /* ──────────────────────────────────────────────────────────
    CARD 2 — Cognitive AI Runtime
+   - Exact visual reproduction of the user's reference diagram
+   - IDLE by default (static lines, fixed default icons)
+   - HOVER ONLY: Cascading downward pulse line into hero tile, independent satellite icon cycling
    ────────────────────────────────────────────────────────── */
 function RuntimeCard() {
+  const [isHovered, setIsHovered] = useState(false);
   const [indexA, setIndexA] = useState(0);
   const [indexB, setIndexB] = useState(0);
   const [indexC, setIndexC] = useState(0);
   const [indexD, setIndexD] = useState(0);
 
-  // Staggered independent timers for the 4 satellite nodes
+  // Staggered independent timers for the 4 satellite nodes ONLY when hovered
   useEffect(() => {
+    if (!isHovered) {
+      setIndexA(0);
+      setIndexB(0);
+      setIndexC(0);
+      setIndexD(0);
+      return;
+    }
+
     const timerA = setInterval(() => {
       setIndexA((prev) => (prev + 1) % CARD2_POOL_A.length);
     }, 2300);
@@ -372,7 +424,7 @@ function RuntimeCard() {
       clearTimeout(timeoutC);
       clearTimeout(timeoutD);
     };
-  }, []);
+  }, [isHovered]);
 
   const iconA = CARD2_POOL_A[indexA];
   const iconB = CARD2_POOL_B[indexB];
@@ -380,7 +432,11 @@ function RuntimeCard() {
   const iconD = CARD2_POOL_D[indexD];
 
   return (
-    <div className="relative h-[360px] w-full overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#121316] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none">
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group relative h-[360px] w-full overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#121316] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none transition-colors duration-500 hover:border-white/[0.14]"
+    >
       {/* Subtle radial ambient background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(59,130,246,0.04),transparent_65%)] pointer-events-none" />
 
@@ -447,29 +503,31 @@ function RuntimeCard() {
             vectorEffect="non-scaling-stroke"
           />
 
-          {/* Constant Downward Flowing Dotted Pulse above Hero Tile */}
-          <m.line
-            x1="50"
-            y1="0"
-            x2="50"
-            y2="34"
-            stroke="rgba(255, 255, 255, 0.65)"
-            strokeWidth="1.5"
-            strokeDasharray="3 5"
-            vectorEffect="non-scaling-stroke"
-            animate={{ strokeDashoffset: [0, 16] }}
-            transition={{ duration: 0.9, repeat: Infinity, ease: "linear" }}
-          />
-
-          {/* Incoming Pulse Dot cascading into the Hero Tile */}
-          <m.circle
-            r="2"
-            fill="#ffffff"
-            filter="drop-shadow(0 0 4px rgba(255,255,255,0.9))"
-            cx="50"
-            animate={{ cy: [0, 34], opacity: [0, 1, 1, 0] }}
-            transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
-          />
+          {/* Constant Downward Flowing Dotted Pulse above Hero Tile (ONLY ON HOVER) */}
+          {isHovered && (
+            <>
+              <m.line
+                x1="50"
+                y1="0"
+                x2="50"
+                y2="34"
+                stroke="rgba(255, 255, 255, 0.65)"
+                strokeWidth="1.5"
+                strokeDasharray="3 5"
+                vectorEffect="non-scaling-stroke"
+                animate={{ strokeDashoffset: [0, 16] }}
+                transition={{ duration: 0.9, repeat: Infinity, ease: "linear" }}
+              />
+              <m.circle
+                r="2"
+                fill="#ffffff"
+                filter="drop-shadow(0 0 4px rgba(255,255,255,0.9))"
+                cx="50"
+                animate={{ cy: [0, 34], opacity: [0, 1, 1, 0] }}
+                transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </>
+          )}
         </svg>
 
         {/* Center Hero Tile: Fixed Rounded-Square with subtle constant glow */}
@@ -477,7 +535,7 @@ function RuntimeCard() {
           className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-20"
           style={{ left: "50%", top: "42%" }}
         >
-          {/* Subtle constant ambient glow behind tile */}
+          {/* Subtle ambient glow behind tile */}
           <div className="absolute w-20 h-20 rounded-2xl bg-blue-500/10 blur-xl pointer-events-none" />
 
           {/* Rounded-Square Tile */}
@@ -495,18 +553,7 @@ function RuntimeCard() {
           className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#202127] border border-white/[0.12] shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
           style={{ left: "15%", top: "22%" }}
         >
-          <AnimatePresence mode="wait">
-            <m.div
-              key={iconA}
-              initial={{ opacity: 0, scale: 0.75 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.75 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
-              className="text-white/85 flex items-center justify-center"
-            >
-              <IconRenderer iconKey={iconA} className="w-4 h-4" />
-            </m.div>
-          </AnimatePresence>
+          <CrossfadeIcon iconKey={iconA} />
         </div>
 
         {/* Lower-Left Satellite */}
@@ -514,18 +561,7 @@ function RuntimeCard() {
           className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#202127] border border-white/[0.12] shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
           style={{ left: "27%", top: "58%" }}
         >
-          <AnimatePresence mode="wait">
-            <m.div
-              key={iconB}
-              initial={{ opacity: 0, scale: 0.75 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.75 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
-              className="text-white/85 flex items-center justify-center"
-            >
-              <IconRenderer iconKey={iconB} className="w-4 h-4" />
-            </m.div>
-          </AnimatePresence>
+          <CrossfadeIcon iconKey={iconB} />
         </div>
 
         {/* Upper-Right Satellite */}
@@ -533,18 +569,7 @@ function RuntimeCard() {
           className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#202127] border border-white/[0.12] shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
           style={{ left: "85%", top: "22%" }}
         >
-          <AnimatePresence mode="wait">
-            <m.div
-              key={iconC}
-              initial={{ opacity: 0, scale: 0.75 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.75 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
-              className="text-white/85 flex items-center justify-center"
-            >
-              <IconRenderer iconKey={iconC} className="w-4 h-4" />
-            </m.div>
-          </AnimatePresence>
+          <CrossfadeIcon iconKey={iconC} />
         </div>
 
         {/* Lower-Right Satellite */}
@@ -552,18 +577,7 @@ function RuntimeCard() {
           className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#202127] border border-white/[0.12] shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
           style={{ left: "73%", top: "58%" }}
         >
-          <AnimatePresence mode="wait">
-            <m.div
-              key={iconD}
-              initial={{ opacity: 0, scale: 0.75 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.75 }}
-              transition={{ duration: 0.35, ease: "easeInOut" }}
-              className="text-white/85 flex items-center justify-center"
-            >
-              <IconRenderer iconKey={iconD} className="w-4 h-4" />
-            </m.div>
-          </AnimatePresence>
+          <CrossfadeIcon iconKey={iconD} />
         </div>
       </div>
 
@@ -585,9 +599,9 @@ function RuntimeCard() {
    ────────────────────────────────────────────────────────── */
 export function CognitivePlatformAnimations() {
   return (
-    <section className="mx-auto mb-12 mt-2 w-full max-w-[1400px] px-8 md:px-16">
+    <section className="mx-auto mb-12 mt-2 w-full max-w-[1400px] px-8 md:px-16 select-none">
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <DigitalPlatformCard />
+        <ClerkCliCard />
         <RuntimeCard />
       </div>
     </section>

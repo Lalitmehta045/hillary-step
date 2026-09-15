@@ -181,12 +181,12 @@ export function Navbar() {
           <div className={`mx-auto w-[94%] max-w-[1400px] flex items-center justify-between transition-all duration-200 rounded-full px-5 sm:px-8 py-2.5 ${scrolled ? "bg-white/70 text-[#111111] backdrop-blur-xl border border-white/60 shadow-[0_10px_35px_rgba(0,0,0,0.07)]" : "bg-transparent text-white border border-transparent shadow-none backdrop-blur-none"}`}>
             <a href="/#home" onClick={(e) => { e.preventDefault(); go("/#home"); }} className="flex items-center gap-3 shrink-0 group cursor-pointer self-center">
               <Image
-                src="/assets/HSS-LOGO.png"
+                src="/HSS-LOGO.png"
                 alt="Hillary Step Solutions Logo"
                 width={200}
-                height={70}
+                height={72}
                 priority
-                className="h-[42px] w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
+                className={`h-[38px] sm:h-[42px] w-auto object-contain transition-transform duration-300 group-hover:scale-105 ${scrolled ? "drop-shadow-none" : "drop-shadow-[0_2px_12px_rgba(255,255,255,0.35)]"}`}
               />
             </a>
 
@@ -245,7 +245,7 @@ export function Navbar() {
           >
             <div className="w-full px-6 sm:px-12 md:px-16 pt-6 pb-4 flex items-center justify-between border-b border-slate-100 bg-white">
               <a href="/#home" onClick={(e) => { e.preventDefault(); go("/#home"); }} className="flex items-center gap-3 cursor-pointer">
-                <Image src="/assets/HSS-LOGO.png" alt="Hillary Step Solutions Logo" width={200} height={78} priority className="object-contain" />
+                <Image src="/HSS-LOGO.png" alt="Hillary Step Solutions Logo" width={200} height={72} priority className="h-10 w-auto object-contain" />
                 <span className="font-display font-bold text-sm tracking-wider uppercase text-slate-900 hidden sm:inline">Hillary Step Solutions</span>
               </a>
               <button onClick={() => setOpen(false)} aria-label="Close menu" className="h-10 w-10 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 flex items-center justify-center cursor-pointer transition-transform hover:scale-105">

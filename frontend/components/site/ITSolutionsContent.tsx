@@ -4,6 +4,7 @@ import { itServices } from "@/lib/services-data";
 import { ServiceDetailModal } from "./ServiceDetailModal";
 import type { ServiceData } from "@/lib/services-data";
 import { CognitivePlatformAnimations } from "./CognitivePlatformAnimations";
+import { FrameworksIntegrationsSection } from "./FrameworksIntegrationsSection";
 
 const icons: Record<string, React.ReactNode> = {
   code: (
@@ -285,6 +286,9 @@ export function ITSolutionsContent() {
 
       {/* COGNITIVE PLATFORM ANIMATIONS */}
       <CognitivePlatformAnimations />
+
+      {/* FRAMEWORKS & INTEGRATIONS SECTION */}
+      <FrameworksIntegrationsSection />
 
       {/* HOW WE SIMPLIFY */}
       <div className="px-8 md:px-16 py-12 relative">
