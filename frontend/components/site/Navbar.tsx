@@ -183,8 +183,8 @@ export function Navbar() {
               <Image
                 src="/assets/HSS-LOGO.png"
                 alt="Hillary Step Solutions Logo"
-                width={54}
-                height={36}
+                width={200}
+                height={78}
                 priority
                 className="object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
               />
@@ -245,7 +245,7 @@ export function Navbar() {
           >
             <div className="w-full px-6 sm:px-12 md:px-16 pt-6 pb-4 flex items-center justify-between border-b border-slate-100 bg-white">
               <a href="/#home" onClick={(e) => { e.preventDefault(); go("/#home"); }} className="flex items-center gap-3 cursor-pointer">
-                <Image src="/assets/HSS-LOGO.png" alt="Hillary Step Solutions Logo" width={52} height={35} priority className="object-contain" />
+                <Image src="/assets/HSS-LOGO.png" alt="Hillary Step Solutions Logo" width={200} height={78} priority className="object-contain" />
                 <span className="font-display font-bold text-sm tracking-wider uppercase text-slate-900 hidden sm:inline">Hillary Step Solutions</span>
               </a>
               <button onClick={() => setOpen(false)} aria-label="Close menu" className="h-10 w-10 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 flex items-center justify-center cursor-pointer transition-transform hover:scale-105">
