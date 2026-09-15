@@ -179,14 +179,14 @@ export function Navbar() {
           className={`relative w-full transition-all duration-200 ${open ? "pointer-events-none" : scrolled ? "py-3" : "py-5 md:py-6"}`}
         >
           <div className={`mx-auto w-[94%] max-w-[1400px] flex items-center justify-between transition-all duration-200 rounded-full px-5 sm:px-8 py-2.5 ${scrolled ? "bg-white/70 text-[#111111] backdrop-blur-xl border border-white/60 shadow-[0_10px_35px_rgba(0,0,0,0.07)]" : "bg-transparent text-white border border-transparent shadow-none backdrop-blur-none"}`}>
-            <a href="/#home" onClick={(e) => { e.preventDefault(); go("/#home"); }} className="flex items-center gap-3 shrink-0 group cursor-pointer">
+            <a href="/#home" onClick={(e) => { e.preventDefault(); go("/#home"); }} className="flex items-center gap-3 shrink-0 group cursor-pointer self-center">
               <Image
                 src="/assets/HSS-LOGO.png"
                 alt="Hillary Step Solutions Logo"
                 width={200}
-                height={78}
+                height={70}
                 priority
-                className="object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
+                className="h-[42px] w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
               />
             </a>
 
