@@ -4,215 +4,59 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { landPoints, slerp, toVec, type Vec3 } from "./geo";
 
-type Rt = { lat: number; lon: number };
-type ArcDef = { from: Rt; to: Rt; hue: string; delay: number; duration: number; label: { city: string; country: string; tint: string; glyph: string } };
-
-const IND_MUM = { lat: 19.07, lon: 72.87 }, IND_DEL = { lat: 28.61, lon: 77.20 }, IND_BLR = { lat: 12.97, lon: 77.59 }, IND_HYD = { lat: 17.38, lon: 78.48 }, IND_MAA = { lat: 13.08, lon: 80.27 };
-const USA_LA = { lat: 34.05, lon: -118.24 }, USA_SJ = { lat: 37.33, lon: -121.88 }, USA_NY = { lat: 40.71, lon: -74.00 }, USA_DAL = { lat: 32.77, lon: -96.79 }, USA_BOS = { lat: 42.36, lon: -71.05 }, USA_CHI = { lat: 41.87, lon: -87.62 };
-const AUS_SYD = { lat: -33.86, lon: 151.2 }, AUS_MEL = { lat: -37.81, lon: 144.96 }, AUS_BNE = { lat: -27.47, lon: 153.03 }, AUS_PER = { lat: -31.95, lon: 115.86 };
-
-const ARCS: ArcDef[] = [
-  { from: IND_MUM, to: USA_NY, hue: "#ff3d9e", delay: 0, duration: 5.5, label: { city: "New York", country: "NY", tint: "#7c6cf6", glyph: "◈" } },
-  { from: USA_NY, to: AUS_SYD, hue: "#6f5bf5", delay: 1.8, duration: 6.8, label: { city: "Sydney", country: "NSW", tint: "#3fa0ff", glyph: "●" } },
-  { from: AUS_SYD, to: IND_DEL, hue: "#ff8a3d", delay: 3.6, duration: 5.6, label: { city: "Delhi NCR", country: "", tint: "#f0b429", glyph: "◐" } },
-  { from: IND_DEL, to: USA_LA, hue: "#e0399f", delay: 5.4, duration: 6.0, label: { city: "Los Angeles", country: "CA", tint: "#ff3d9e", glyph: "▲" } },
-  { from: USA_LA, to: AUS_MEL, hue: "#5b8def", delay: 7.2, duration: 6.5, label: { city: "Melbourne", country: "VIC", tint: "#ff7a59", glyph: "◆" } },
-  { from: AUS_MEL, to: IND_BLR, hue: "#8b5cf6", delay: 9.0, duration: 5.4, label: { city: "Bengaluru", country: "KA", tint: "#22b07d", glyph: "◼" } },
-  { from: IND_BLR, to: USA_SJ, hue: "#ff3d9e", delay: 10.8, duration: 5.8, label: { city: "San Jose", country: "CA", tint: "#e0399f", glyph: "◈" } },
-  { from: USA_SJ, to: AUS_BNE, hue: "#6f5bf5", delay: 12.6, duration: 7.2, label: { city: "Brisbane", country: "QLD", tint: "#ff8a3d", glyph: "●" } },
-  { from: AUS_BNE, to: IND_HYD, hue: "#ff8a3d", delay: 14.4, duration: 5.6, label: { city: "Hydrabad", country: "TN", tint: "#7c6cf6", glyph: "▲" } },
-  { from: IND_HYD, to: USA_DAL, hue: "#e0399f", delay: 16.2, duration: 5.8, label: { city: "Dallas", country: "TX", tint: "#3fa0ff", glyph: "◐" } },
-  { from: USA_DAL, to: AUS_PER, hue: "#5b8def", delay: 18.0, duration: 6.2, label: { city: "Perth", country: "WA", tint: "#ff7a59", glyph: "◆" } },
-  { from: AUS_PER, to: IND_MAA, hue: "#8b5cf6", delay: 19.8, duration: 6.5, label: { city: "Chennai", country: "TN", tint: "#0f4bd8", glyph: "◼" } },
-  { from: IND_MAA, to: USA_CHI, hue: "#ff3d9e", delay: 21.6, duration: 5.8, label: { city: "Chicago", country: "IL", tint: "#7c6cf6", glyph: "◈" } },
-  { from: USA_CHI, to: USA_BOS, hue: "#6f5bf5", delay: 23.4, duration: 3.5, label: { city: "Boston", country: "MA", tint: "#3fa0ff", glyph: "●" } },
-  { from: USA_BOS, to: IND_MUM, hue: "#ff8a3d", delay: 25.2, duration: 5.6, label: { city: "Mumbai", country: "MH", tint: "#f0b429", glyph: "◐" } },
-];
-
-const TILT = 0.2;
-const BLUE = [26, 108, 255], GREEN = [64, 246, 0], ORANGE = [255, 149, 0];
-type Label = { id: number; x: number; y: number; o: number; def: ArcDef["label"] };
-
-export function Globe({ active = "India" }: { active?: string }) {
-  const wrap = useRef<HTMLDivElement>(null), canvas = useRef<HTMLCanvasElement>(null), threeCanvas = useRef<HTMLCanvasElement>(null);
-  const [labels, setLabels] = useState<Label[]>([]);
-  const targetLon = active === "United States" ? -95 : active === "Australia" ? 135 : 80;
-  const targetSpin = -targetLon * (Math.PI / 180);
-  const targetSpinRef = useRef(targetSpin), focusRef = useRef(targetSpin), lastTime = useRef(performance.now()), pausedRef = useRef(false);
-
-  useEffect(() => { targetSpinRef.current = -targetLon * (Math.PI / 180); }, [active, targetLon]);
-
-  useEffect(() => {
-    const el = wrap.current, cv = canvas.current, threeCv = threeCanvas.current;
-    if (!el || !cv || !threeCv) return;
-    const ctx = cv.getContext("2d");
-    if (!ctx) return;
-
-    const threeScene = new THREE.Scene();
-    const threeCamera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
-    const threeRenderer = new THREE.WebGLRenderer({ canvas: threeCv, alpha: true, antialias: true, powerPreference: "high-performance" });
-    threeRenderer.toneMapping = THREE.ACESFilmicToneMapping;
-    threeRenderer.toneMappingExposure = 1.28;
-
-    const textureLoader = new THREE.TextureLoader();
-    const earthTexture = textureLoader.load("/assets/earth-blue-marble.jpg", () => { earthMat.needsUpdate = true; });
-    earthTexture.colorSpace = THREE.SRGBColorSpace;
-    const earthLightsTexture = textureLoader.load("/assets/earth-lights.png", () => { earthMat.needsUpdate = true; });
-    earthLightsTexture.colorSpace = THREE.SRGBColorSpace;
-
-    const tiltGroup = new THREE.Group();
-    threeScene.add(tiltGroup);
-    const earthGeo = new THREE.SphereGeometry(0.998, 64, 64);
-    const earthMat = new THREE.ShaderMaterial({
-      uniforms: { dayTexture: { value: earthTexture }, nightTexture: { value: earthLightsTexture }, sunDirection: { value: new THREE.Vector3(0, 0, 1) } },
-      vertexShader: `varying vec2 vUv; varying vec3 vNormal; void main(){ vUv=uv; vNormal=normalize(normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
-      fragmentShader: `
-        uniform sampler2D dayTexture; uniform sampler2D nightTexture; uniform vec3 sunDirection;
-        varying vec2 vUv; varying vec3 vNormal;
-        void main(){
-          vec4 daySample=texture2D(dayTexture,vUv); vec4 nightSample=texture2D(nightTexture,vUv);
-          float sunDot=dot(normalize(vNormal),normalize(sunDirection));
-          float dayFactor=smoothstep(-0.15,0.18,sunDot);
-
-          // Royal blue target: #1A52D5. Preserve satellite texture/cloud detail while
-          // pulling the sunlit ocean toward the exact brand blue requested.
-          float blueDominance=daySample.b-max(daySample.r,daySample.g)*0.72;
-          float oceanMask=smoothstep(0.025,0.16,blueDominance);
-          float luminance=dot(daySample.rgb,vec3(0.299,0.587,0.114));
-          vec3 royalBlue=vec3(0.102,0.322,0.835);
-          vec3 texturedRoyal=royalBlue*(0.72+0.42*luminance);
-          vec3 oceanColor=mix(daySample.rgb,texturedRoyal,0.78*oceanMask);
-          float daylight=max(0.06,sunDot*0.95+0.12);
-          vec3 dayColor=oceanColor*daylight*1.32;
-
-          vec3 nightTerrain=daySample.rgb*0.045;
-          vec3 rawLights=nightSample.rgb;
-          vec3 cityLights=pow(rawLights,vec3(0.92))*3.8;
-          cityLights*=vec3(1.28,1.10,0.85);
-          vec3 nightColor=nightTerrain+cityLights;
-          vec3 finalColor=mix(nightColor,dayColor,dayFactor);
-          gl_FragColor=vec4(finalColor,1.0);
-        }
-      `,
-    });
-    const earthMesh = new THREE.Mesh(earthGeo, earthMat);
-    tiltGroup.add(earthMesh);
-
-    // A very thin second spherical shell creates the subtle rounded outline visible
-    // around the Earth in the reference, without adding latitude/longitude wireframe.
-    const horizonGeo = new THREE.SphereGeometry(1.035, 96, 64);
-    const horizonMat = new THREE.ShaderMaterial({
-      uniforms: { glowColor: { value: new THREE.Color("#1A52D5") } },
-      vertexShader: `varying vec3 vNormal; void main(){ vNormal=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
-      fragmentShader: `
-        uniform vec3 glowColor; varying vec3 vNormal;
-        void main(){
-          float facing=abs(dot(normalize(vNormal),vec3(0.0,0.0,1.0)));
-          float rim=1.0-smoothstep(0.0,0.24,facing);
-          float thin=pow(rim,2.8);
-          gl_FragColor=vec4(glowColor,thin*0.82);
-        }
-      `,
-      blending: THREE.AdditiveBlending,
-      side: THREE.FrontSide,
-      transparent: true,
-      depthWrite: false,
-    });
-    const horizonMesh = new THREE.Mesh(horizonGeo, horizonMat);
-    tiltGroup.add(horizonMesh);
-
-    const atmosphereGeo = new THREE.SphereGeometry(1.055, 96, 64);
-    const atmosphereMat = new THREE.ShaderMaterial({
-      vertexShader: `varying vec3 vNormal; void main(){ vNormal=normalize(normalMatrix*normal); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
-      fragmentShader: `
-        varying vec3 vNormal;
-        void main(){
-          float facing=abs(dot(normalize(vNormal),vec3(0.0,0.0,1.0)));
-          float rim=1.0-smoothstep(0.0,0.34,facing);
-          float intensity=pow(rim,3.4);
-          gl_FragColor=vec4(0.08,0.32,0.84,intensity*0.34);
-        }
-      `,
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide,
-      transparent: true,
-      depthWrite: false,
-    });
-    const atmosphereMesh = new THREE.Mesh(atmosphereGeo, atmosphereMat);
-    tiltGroup.add(atmosphereMesh);
-
-    const ambientLight = new THREE.AmbientLight(0xffffff,0.15);
-    threeScene.add(ambientLight);
-    const sunLight = new THREE.DirectionalLight(0xfffaed,4.0);
-    tiltGroup.add(sunLight);
-    const rimLight1 = new THREE.DirectionalLight(0x7c6cf6,1.2);
-    rimLight1.position.set(5,2,-5); threeScene.add(rimLight1);
-    const rimLight2 = new THREE.DirectionalLight(0x3fa0ff,0.8);
-    rimLight2.position.set(-5,-2,-5); threeScene.add(rimLight2);
-
-    const onEnter=()=>{pausedRef.current=true;}, onLeave=()=>{pausedRef.current=false;};
-    el.addEventListener("pointerenter",onEnter); el.addEventListener("pointerleave",onLeave);
-
-    const bgStars:{x:number,y:number,s:number,a:number,speed:number}[]=[];
-    for(let i=0;i<250;i++) bgStars.push({x:Math.random(),y:Math.random(),s:Math.random()*1.5+0.5,a:Math.random()*Math.PI*2,speed:0.5+Math.random()*2});
-
-    const dots=landPoints(60000), n=dots.length;
-    const ph0=new Float32Array(n), ph1=new Float32Array(n), ph2=new Float32Array(n), spd=new Float32Array(n), amp=new Float32Array(n);
-    for(let i=0;i<n;i++){ph0[i]=Math.random()*Math.PI*2;ph1[i]=Math.random()*Math.PI*2;ph2[i]=Math.random()*Math.PI*2;spd[i]=0.35+Math.random()*0.9;amp[i]=0.006+Math.random()*0.03;}
-    const drifted:Vec3={x:0,y:0,z:0};
-    const arcs=ARCS.map(a=>({def:a,a:toVec(a.from.lat,a.from.lon),b:toVec(a.to.lat,a.to.lon)}));
-    let w=0,h=0,dpr=1;
-    const resize=()=>{dpr=Math.min(2,window.devicePixelRatio||1);w=el.clientWidth;h=el.clientHeight;cv.width=Math.floor(w*dpr);cv.height=Math.floor(h*dpr);cv.style.width=`${w}px`;cv.style.height=`${h}px`;threeRenderer.setPixelRatio(dpr);threeRenderer.setSize(w,h,false);};
-    resize(); const ro=new ResizeObserver(resize); ro.observe(el);
-    let raf=0,isVisible=true;
-    const io=new IntersectionObserver(entries=>{if(entries[0])isVisible=entries[0].isIntersecting;}); io.observe(el);
-    const start=performance.now(); lastTime.current=start;
-    const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const frame=(now:number)=>{
-      raf=requestAnimationFrame(frame); if(!isVisible)return;
-      const dt=(now-lastTime.current)/1000; lastTime.current=now; const t=(now-start)/1000+15;
-      if(!reduce&&!pausedRef.current)targetSpinRef.current+=dt*0.1;
-      const nowD=new Date(); const utcHours=nowD.getUTCHours()+nowD.getUTCMinutes()/60+nowD.getUTCSeconds()/3600; const sunLon=(12-utcHours)*15; const sunVecGeo=toVec(0,sunLon);
-      let diff=targetSpinRef.current-focusRef.current; while(diff>Math.PI)diff-=Math.PI*2; while(diff< -Math.PI)diff+=Math.PI*2; focusRef.current+=diff*0.08;
-      const spin=focusRef.current,isMobile=w<768,R=isMobile?Math.min(w,h)*0.42:Math.min(w,h)*0.35,cx=w*0.5,cy=h*0.5,cam=4.2,cosT=Math.cos(TILT),sinT=Math.sin(TILT),cosS=Math.cos(spin),sinS=Math.sin(spin);
-      const sunX=sunVecGeo.x*cosS+sunVecGeo.z*sinS,sunZ=-sunVecGeo.x*sinS+sunVecGeo.z*cosS; sunLight.position.set(sunX*5,sunVecGeo.y*5,sunZ*5);
-      const project=(p:Vec3)=>{const x1=p.x*cosS+p.z*sinS,z1=-p.x*sinS+p.z*cosS,y2=p.y*cosT-z1*sinT,z2=p.y*sinT+z1*cosT,persp=cam/(cam-z2);return{x:cx+x1*R*persp,y:cy-y2*R*persp,z:z2,s:persp};};
-      ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
-      const currentLon=-focusRef.current*(180/Math.PI); let diffLon=Math.abs(currentLon-sunLon)%360; if(diffLon>180)diffLon=360-diffLon; let nightFactor=(diffLon-70)/30; nightFactor=Math.max(0,Math.min(1,nightFactor));
-      if(nightFactor>0) for(const s of bgStars){const sx=s.x*w,sy=s.y*h,distSq=(sx-cx)*(sx-cx)+(sy-cy)*(sy-cy);if(distSq<R*R*1.05)continue;const twinkle=0.3+0.7*Math.sin(t*s.speed+s.a);if(twinkle>0){ctx.fillStyle=`rgba(255,255,255,${(0.5*twinkle*nightFactor).toFixed(3)})`;ctx.beginPath();ctx.arc(sx,sy,s.s,0,Math.PI*2);ctx.fill();}}
-      tiltGroup.rotation.x=TILT; earthMesh.rotation.y=spin-Math.PI/2; tiltGroup.updateMatrixWorld(true);
-      const sunWorld=new THREE.Vector3(); sunLight.getWorldPosition(sunWorld); const localSun=earthMesh.worldToLocal(sunWorld).normalize(); earthMat.uniforms.sunDirection.value.copy(localSun);
-      const fov=2*Math.atan((h/2)/(R*cam))*(180/Math.PI); threeCamera.fov=fov; threeCamera.aspect=w/h; threeCamera.position.set(0,0,cam); threeCamera.lookAt(0,0,0); threeCamera.updateProjectionMatrix(); threeRenderer.render(threeScene,threeCamera);
-      const edgeVignette=ctx.createRadialGradient(cx,cy,R*0.82,cx,cy,R); edgeVignette.addColorStop(0,"rgba(5,10,25,0)");edgeVignette.addColorStop(0.85,"rgba(5,10,25,0.2)");edgeVignette.addColorStop(1,"rgba(10,15,35,0.5)");ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fillStyle=edgeVignette;ctx.fill();
-      for(let i=0;i<n;i++){
-        const d=dots[i]!,sp=spd[i]!,a=amp[i]!,f1=Math.sin(t*sp+ph0[i]!),f2=Math.sin(t*sp*0.83+ph1[i]!),f3=Math.sin(t*sp*1.27+ph2[i]!),lift=1+a*1.6*(0.5+0.5*f3); drifted.x=d.x*lift+a*f1;drifted.y=d.y*lift+a*f2;drifted.z=d.z*lift+a*f3;const p=project(drifted);if(p.z<0.22)continue;
-        const g=0.5+((p.x-cx)/R)*0.5-((p.y-cy)/R)*0.5,k=Math.min(1,Math.max(0,g));
-        const rCol=k<0.5?BLUE[0]!(+((GREEN[0]!-BLUE[0]!)*(k/0.5))):GREEN[0]!+((ORANGE[0]!-GREEN[0]!)*((k-0.5)/0.5));
-        const gCol=k<0.5?BLUE[1]!+((GREEN[1]!-BLUE[1]!)*(k/0.5)):GREEN[1]!+((ORANGE[1]!-GREEN[1]!)*((k-0.5)/0.5));
-        const bCol=k<0.5?BLUE[2]!+((GREEN[2]!-BLUE[2]!)*(k/0.5)):GREEN[2]!+((ORANGE[2]!-GREEN[2]!)*((k-0.5)/0.5));
-        const twinkle=0.78+0.22*f2,fade=Math.min(1,(p.z-0.22)/0.2);let opacity=Math.min(1,(0.9+0.5*fade)*twinkle);const sunDot=drifted.x*sunVecGeo.x+drifted.y*sunVecGeo.y+drifted.z*sunVecGeo.z,sunIntensity=Math.max(0,Math.min(1,(sunDot+0.2)/0.4)),rSize=Math.max(0.45,0.8*p.s*(R/620));if(sunDot<0)opacity*=Math.max(0,1-(-sunDot)*4);else opacity*=Math.max(0.25,sunIntensity);
-        ctx.fillStyle=`rgba(${rCol|0},${gCol|0},${bCol|0},${opacity.toFixed(3)})`;ctx.fillRect(p.x-rSize,p.y-rSize,rSize*2,rSize*2);
-      }
-      const nextLabels:Label[]=[];const cycle=28;
-      arcs.forEach((arc,idx)=>{
-        const timeOffset=t-arc.def.delay,local=((timeOffset%cycle)+cycle)%cycle,headProg=local/arc.def.duration,tailProg=headProg-0.55,head=Math.min(1,Math.max(0,headProg)),tail=Math.min(1,Math.max(0,tailProg)),lift=0.28;
-        const pointAt=(u:number)=>{const base=slerp(arc.a,arc.b,u),alt=1+lift*Math.sin(Math.PI*u);return{x:base.x*alt,y:base.y*alt,z:base.z*alt};};
-        const ring=(v:Vec3,alpha:number)=>{const pr=project(v);if(pr.z<0||alpha<=0)return null;const rr=5*pr.s*(R/620);ctx.beginPath();ctx.arc(pr.x,pr.y,rr,0,Math.PI*2);ctx.strokeStyle=`${arc.def.hue}${Math.round(alpha*255).toString(16).padStart(2,"0")}`;ctx.lineWidth=Math.max(1.2,R/520);ctx.stroke();ctx.beginPath();ctx.arc(pr.x,pr.y,rr*0.36,0,Math.PI*2);ctx.fillStyle=`${arc.def.hue}${Math.round(alpha*255).toString(16).padStart(2,"0")}`;ctx.fill();return pr;};
-        if(tail<1&&head>0){ctx.lineWidth=Math.max(1.3,R/420);ctx.lineCap="round";const steps=64;ctx.beginPath();let started=false;for(let s=0;s<=steps;s++){const u=tail+((head-tail)*s)/steps,pr=project(pointAt(u)),isOccluded=pr.z<0.22&&Math.hypot(pr.x-cx,pr.y-cy)<R*0.99;if(isOccluded){started=false;continue;}if(!started){ctx.moveTo(pr.x,pr.y);started=true;}else ctx.lineTo(pr.x,pr.y);}const pa=project(pointAt(tail)),pb=project(pointAt(head)),dx=pb.x-pa.x,dy=pb.y-pa.y;if(dx*dx+dy*dy>0.5){const grad=ctx.createLinearGradient(pa.x,pa.y,pb.x,pb.y);grad.addColorStop(0,`${arc.def.hue}00`);grad.addColorStop(1,`${arc.def.hue}ee`);ctx.strokeStyle=grad;ctx.stroke();}ring(arc.a,Math.min(1,headProg*6)*(1-tail));}
-        let destAlpha=0;const tailArrivalTime=arc.def.duration*1.55,labelEndTime=tailArrivalTime+1.5;if(headProg>0.9){const fadeIn=Math.min(1,(headProg-0.9)/0.1),fadeOut=local<=labelEndTime?Math.min(1,(labelEndTime-local)/0.6):0;destAlpha=Math.min(fadeIn,fadeOut);}const dest=ring(arc.b,destAlpha);if(dest&&headProg>=0.9)nextLabels.push({id:idx,x:dest.x,y:dest.y,o:Math.max(0,Math.min(1,destAlpha)),def:arc.def.label});
-      });
-      nextLabels.sort((a,b)=>a.y-b.y);for(let i=0;i<nextLabels.length;i++)for(let j=0;j<i;j++){const a=nextLabels[j],b=nextLabels[i];if(Math.abs(a.x-b.x)<160&&Math.abs(a.y-b.y)<42)b.y=a.y+42;}nextLabels.sort((a,b)=>a.id-b.id);
-      setLabels(prev=>{if(prev.length===nextLabels.length&&prev.every((p,i)=>p.id===nextLabels[i]!.id&&Math.abs(p.x-nextLabels[i]!.x)<0.5&&Math.abs(p.y-nextLabels[i]!.y)<0.5&&Math.abs(p.o-nextLabels[i]!.o)<0.02))return prev;return nextLabels;});
-    };
-    raf=requestAnimationFrame(frame);
-    return()=>{cancelAnimationFrame(raf);ro.disconnect();io.disconnect();el.removeEventListener("pointerenter",onEnter);el.removeEventListener("pointerleave",onLeave);threeRenderer.dispose();earthGeo.dispose();earthMat.dispose();earthTexture.dispose();horizonGeo.dispose();horizonMat.dispose();atmosphereGeo.dispose();atmosphereMat.dispose();};
-  },[]);
-
-  return <div ref={wrap} className="relative h-full w-full overflow-hidden transition-colors duration-700 bg-slate-950">
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_52%,rgba(255,180,100,0.10),transparent_34%),radial-gradient(circle_at_78%_20%,rgba(20,55,120,0.16),transparent_38%)] pointer-events-none z-0" />
-    <canvas ref={threeCanvas} className="absolute inset-0 block h-full w-full pointer-events-none z-[5]" aria-hidden />
-    <canvas ref={canvas} className="block h-full w-full relative z-10" aria-hidden />
-    <div className="pointer-events-none absolute inset-0 z-20">{labels.map(l=><div key={l.id} className="absolute flex -translate-y-1/2 items-center gap-2 rounded-lg px-2 py-1.5 shadow-[0_8px_24px_-8px_rgba(38,20,90,0.35)] ring-1 backdrop-blur transition-colors bg-slate-900/95 ring-white/10" style={{left:l.x+14,top:l.y-22,opacity:l.o}}><span className="flex h-6 w-6 items-center justify-center rounded-md text-[11px] text-primary-foreground" style={{backgroundColor:l.def.tint}}>{l.def.glyph}</span><span className="text-[13px] font-semibold text-slate-100">{l.def.city}{l.def.country?",":""}</span>{l.def.country&&<span className="text-[13px] text-slate-400">{l.def.country}</span>}</div>)}</div>
-  </div>;
+type Rt={lat:number;lon:number};
+type ArcDef={from:Rt;to:Rt;hue:string;delay:number;duration:number;label:{city:string;country:string;tint:string;glyph:string}};
+const IND_MUM={lat:19.07,lon:72.87},IND_DEL={lat:28.61,lon:77.20},IND_BLR={lat:12.97,lon:77.59},IND_HYD={lat:17.38,lon:78.48},IND_MAA={lat:13.08,lon:80.27};
+const USA_LA={lat:34.05,lon:-118.24},USA_SJ={lat:37.33,lon:-121.88},USA_NY={lat:40.71,lon:-74},USA_DAL={lat:32.77,lon:-96.79},USA_BOS={lat:42.36,lon:-71.05},USA_CHI={lat:41.87,lon:-87.62};
+const AUS_SYD={lat:-33.86,lon:151.2},AUS_MEL={lat:-37.81,lon:144.96},AUS_BNE={lat:-27.47,lon:153.03},AUS_PER={lat:-31.95,lon:115.86};
+const ARCS:ArcDef[]=[
+{from:IND_MUM,to:USA_NY,hue:"#ff3d9e",delay:0,duration:5.5,label:{city:"New York",country:"NY",tint:"#7c6cf6",glyph:"◈"}},
+{from:USA_NY,to:AUS_SYD,hue:"#6f5bf5",delay:1.8,duration:6.8,label:{city:"Sydney",country:"NSW",tint:"#3fa0ff",glyph:"●"}},
+{from:AUS_SYD,to:IND_DEL,hue:"#ff8a3d",delay:3.6,duration:5.6,label:{city:"Delhi NCR",country:"",tint:"#f0b429",glyph:"◐"}},
+{from:IND_DEL,to:USA_LA,hue:"#e0399f",delay:5.4,duration:6,label:{city:"Los Angeles",country:"CA",tint:"#ff3d9e",glyph:"▲"}},
+{from:USA_LA,to:AUS_MEL,hue:"#5b8def",delay:7.2,duration:6.5,label:{city:"Melbourne",country:"VIC",tint:"#ff7a59",glyph:"◆"}},
+{from:AUS_MEL,to:IND_BLR,hue:"#8b5cf6",delay:9,duration:5.4,label:{city:"Bengaluru",country:"KA",tint:"#22b07d",glyph:"◼"}},
+{from:IND_BLR,to:USA_SJ,hue:"#ff3d9e",delay:10.8,duration:5.8,label:{city:"San Jose",country:"CA",tint:"#e0399f",glyph:"◈"}},
+{from:USA_SJ,to:AUS_BNE,hue:"#6f5bf5",delay:12.6,duration:7.2,label:{city:"Brisbane",country:"QLD",tint:"#ff8a3d",glyph:"●"}},
+{from:AUS_BNE,to:IND_HYD,hue:"#ff8a3d",delay:14.4,duration:5.6,label:{city:"Hydrabad",country:"TN",tint:"#7c6cf6",glyph:"▲"}},
+{from:IND_HYD,to:USA_DAL,hue:"#e0399f",delay:16.2,duration:5.8,label:{city:"Dallas",country:"TX",tint:"#3fa0ff",glyph:"◐"}},
+{from:USA_DAL,to:AUS_PER,hue:"#5b8def",delay:18,duration:6.2,label:{city:"Perth",country:"WA",tint:"#ff7a59",glyph:"◆"}},
+{from:AUS_PER,to:IND_MAA,hue:"#8b5cf6",delay:19.8,duration:6.5,label:{city:"Chennai",country:"TN",tint:"#0f4bd8",glyph:"◼"}},
+{from:IND_MAA,to:USA_CHI,hue:"#ff3d9e",delay:21.6,duration:5.8,label:{city:"Chicago",country:"IL",tint:"#7c6cf6",glyph:"◈"}},
+{from:USA_CHI,to:USA_BOS,hue:"#6f5bf5",delay:23.4,duration:3.5,label:{city:"Boston",country:"MA",tint:"#3fa0ff",glyph:"●"}},
+{from:USA_BOS,to:IND_MUM,hue:"#ff8a3d",delay:25.2,duration:5.6,label:{city:"Mumbai",country:"MH",tint:"#f0b429",glyph:"◐"}}];
+const TILT=.2,BLUE=[26,108,255],GREEN=[64,246,0],ORANGE=[255,149,0];
+type Label={id:number;x:number;y:number;o:number;def:ArcDef["label"]};
+export function Globe({active="India"}:{active?:string}){
+ const wrap=useRef<HTMLDivElement>(null),canvas=useRef<HTMLCanvasElement>(null),threeCanvas=useRef<HTMLCanvasElement>(null);const[labels,setLabels]=useState<Label[]>([]);
+ const targetLon=active==="United States"?-95:active==="Australia"?135:80,targetSpin=-targetLon*Math.PI/180,targetSpinRef=useRef(targetSpin),focusRef=useRef(targetSpin),lastTime=useRef(performance.now()),pausedRef=useRef(false);
+ useEffect(()=>{targetSpinRef.current=-targetLon*Math.PI/180},[active,targetLon]);
+ useEffect(()=>{
+  const el=wrap.current,cv=canvas.current,threeCv=threeCanvas.current;if(!el||!cv||!threeCv)return;const ctx=cv.getContext("2d");if(!ctx)return;
+  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(35,1,.1,100),renderer=new THREE.WebGLRenderer({canvas:threeCv,alpha:true,antialias:true,powerPreference:"high-performance"});renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.28;
+  const loader=new THREE.TextureLoader(),earthTexture=loader.load("/assets/earth-blue-marble.jpg",()=>{earthMat.needsUpdate=true});earthTexture.colorSpace=THREE.SRGBColorSpace;const lightsTexture=loader.load("/assets/earth-lights.png",()=>{earthMat.needsUpdate=true});lightsTexture.colorSpace=THREE.SRGBColorSpace;
+  const group=new THREE.Group();scene.add(group);const geo=new THREE.SphereGeometry(.998,64,64);
+  const earthMat=new THREE.ShaderMaterial({uniforms:{dayTexture:{value:earthTexture},nightTexture:{value:lightsTexture},sunDirection:{value:new THREE.Vector3(0,0,1)}},vertexShader:`varying vec2 vUv;varying vec3 vNormal;void main(){vUv=uv;vNormal=normalize(normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,fragmentShader:`uniform sampler2D dayTexture;uniform sampler2D nightTexture;uniform vec3 sunDirection;varying vec2 vUv;varying vec3 vNormal;void main(){vec3 tex=texture2D(dayTexture,vUv).rgb;vec3 lights=texture2D(nightTexture,vUv).rgb;float sunDot=dot(normalize(vNormal),normalize(sunDirection));float dayFactor=smoothstep(-.15,.18,sunDot);
+ // Day oceans use #1A52D5 as the actual base, not merely a tint. This keeps the ocean visibly royal blue while retaining texture variation and cloud detail.
+ float blueDominance=tex.b-max(tex.r,tex.g)*.55;float oceanMask=smoothstep(-.015,.12,blueDominance);float luminance=dot(tex,vec3(.299,.587,.114));vec3 royalBlue=vec3(.10196,.32157,.83529);vec3 oceanDetail=royalBlue*(.88+.30*luminance);vec3 oceanColor=mix(tex,oceanDetail,oceanMask*.96);
+ // Lift the sunlit ocean enough to remain visibly blue even near the terminator.
+ float daylight=.72+.42*max(0.,sunDot);vec3 dayColor=oceanColor*daylight*1.48;
+ vec3 nightTerrain=tex*.035;vec3 cityLights=pow(lights,vec3(.92))*3.8*vec3(1.28,1.10,.85);vec3 nightColor=nightTerrain+cityLights;gl_FragColor=vec4(mix(nightColor,dayColor,dayFactor),1.0);}`});const earth=new THREE.Mesh(geo,earthMat);group.add(earth);
+  const horizonGeo=new THREE.SphereGeometry(1.035,96,64),horizonMat=new THREE.ShaderMaterial({uniforms:{glowColor:{value:new THREE.Color("#1A52D5")}},vertexShader:`varying vec3 vNormal;void main(){vNormal=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,fragmentShader:`uniform vec3 glowColor;varying vec3 vNormal;void main(){float facing=abs(dot(normalize(vNormal),vec3(0.,0.,1.)));float rim=1.-smoothstep(0.,.24,facing);gl_FragColor=vec4(glowColor,pow(rim,2.8)*.82);}`,blending:THREE.AdditiveBlending,side:THREE.FrontSide,transparent:true,depthWrite:false});group.add(new THREE.Mesh(horizonGeo,horizonMat));
+  const atmoGeo=new THREE.SphereGeometry(1.055,96,64),atmoMat=new THREE.ShaderMaterial({vertexShader:`varying vec3 vNormal;void main(){vNormal=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,fragmentShader:`varying vec3 vNormal;void main(){float facing=abs(dot(normalize(vNormal),vec3(0.,0.,1.)));float rim=1.-smoothstep(0.,.34,facing);gl_FragColor=vec4(.08,.32,.84,pow(rim,3.4)*.34);}`,blending:THREE.AdditiveBlending,side:THREE.BackSide,transparent:true,depthWrite:false});group.add(new THREE.Mesh(atmoGeo,atmoMat));
+  scene.add(new THREE.AmbientLight(0xffffff,.15));const sun=new THREE.DirectionalLight(0xfffaed,4);group.add(sun);const rim1=new THREE.DirectionalLight(0x7c6cf6,1.2);rim1.position.set(5,2,-5);scene.add(rim1);const rim2=new THREE.DirectionalLight(0x3fa0ff,.8);rim2.position.set(-5,-2,-5);scene.add(rim2);
+  const enter=()=>{pausedRef.current=true},leave=()=>{pausedRef.current=false};el.addEventListener("pointerenter",enter);el.addEventListener("pointerleave",leave);
+  const stars:{x:number;y:number;s:number;a:number;speed:number}[]=[];for(let i=0;i<250;i++)stars.push({x:Math.random(),y:Math.random(),s:Math.random()*1.5+.5,a:Math.random()*Math.PI*2,speed:.5+Math.random()*2});
+  const dots=landPoints(60000),n=dots.length,ph0=new Float32Array(n),ph1=new Float32Array(n),ph2=new Float32Array(n),spd=new Float32Array(n),amp=new Float32Array(n);for(let i=0;i<n;i++){ph0[i]=Math.random()*Math.PI*2;ph1[i]=Math.random()*Math.PI*2;ph2[i]=Math.random()*Math.PI*2;spd[i]=.35+Math.random()*.9;amp[i]=.006+Math.random()*.03}const drifted:Vec3={x:0,y:0,z:0},arcs=ARCS.map(a=>({def:a,a:toVec(a.from.lat,a.from.lon),b:toVec(a.to.lat,a.to.lon)}));let w=0,h=0,dpr=1;
+  const resize=()=>{dpr=Math.min(2,window.devicePixelRatio||1);w=el.clientWidth;h=el.clientHeight;cv.width=Math.floor(w*dpr);cv.height=Math.floor(h*dpr);cv.style.width=`${w}px`;cv.style.height=`${h}px`;renderer.setPixelRatio(dpr);renderer.setSize(w,h,false)};resize();const ro=new ResizeObserver(resize);ro.observe(el);let raf=0,visible=true;const io=new IntersectionObserver(e=>{if(e[0])visible=e[0].isIntersecting});io.observe(el);const start=performance.now();lastTime.current=start;const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const frame=(now:number)=>{raf=requestAnimationFrame(frame);if(!visible)return;const dt=(now-lastTime.current)/1000;lastTime.current=now,t=void 0;};
+  let t=0;
+  const render=(now:number)=>{raf=requestAnimationFrame(render);if(!visible)return;const dt=(now-lastTime.current)/1000;lastTime.current=now;t=(now-start)/1000+15;if(!reduce&&!pausedRef.current)targetSpinRef.current+=dt*.1;const d=new Date(),utc=d.getUTCHours()+d.getUTCMinutes()/60+d.getUTCSeconds()/3600,sunLon=(12-utc)*15,sunGeo=toVec(0,sunLon);let diff=targetSpinRef.current-focusRef.current;while(diff>Math.PI)diff-=Math.PI*2;while(diff<-Math.PI)diff+=Math.PI*2;focusRef.current+=diff*.08;const spin=focusRef.current,mobile=w<768,R=mobile?Math.min(w,h)*.42:Math.min(w,h)*.35,cx=w*.5,cy=h*.5,cam=4.2,ct=Math.cos(TILT),st=Math.sin(TILT),cs=Math.cos(spin),ss=Math.sin(spin);const sx=sunGeo.x*cs+sunGeo.z*ss,sz=-sunGeo.x*ss+sunGeo.z*cs;sun.position.set(sx*5,sunGeo.y*5,sz*5);const project=(p:Vec3)=>{const x1=p.x*cs+p.z*ss,z1=-p.x*ss+p.z*cs,y2=p.y*ct-z1*st,z2=p.y*st+z1*ct,p=cam/(cam-z2);return{x:cx+x1*R*p,y:cy-y2*R*p,z:z2,s:p}};ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);const currentLon=-focusRef.current*180/Math.PI;let dl=Math.abs(currentLon-sunLon)%360;if(dl>180)dl=360-dl;const nf=Math.max(0,Math.min(1,(dl-70)/30));if(nf>0)for(const s of stars){const x=s.x*w,y=s.y*h;if((x-cx)**2+(y-cy)**2<R*R*1.05)continue;const tw=.3+.7*Math.sin(t*s.speed+s.a);ctx.fillStyle=`rgba(255,255,255,${(.5*tw*nf).toFixed(3)})`;ctx.beginPath();ctx.arc(x,y,s.s,0,Math.PI*2);ctx.fill()}
+   group.rotation.x=TILT;earth.rotation.y=spin-Math.PI/2;group.updateMatrixWorld(true);const sw=new THREE.Vector3();sun.getWorldPosition(sw);earthMat.uniforms.sunDirection.value.copy(earth.worldToLocal(sw).normalize());camera.fov=2*Math.atan((h/2)/(R*cam))*180/Math.PI;camera.aspect=w/h;camera.position.set(0,0,cam);camera.lookAt(0,0,0);camera.updateProjectionMatrix();renderer.render(scene,camera);
+   const vg=ctx.createRadialGradient(cx,cy,R*.82,cx,cy,R);vg.addColorStop(0,"rgba(5,10,25,0)");vg.addColorStop(.85,"rgba(5,10,25,.2)");vg.addColorStop(1,"rgba(10,15,35,.5)");ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fillStyle=vg;ctx.fill();
+   for(let i=0;i<n;i++){const d=dots[i]!,a=amp[i]!,sp=spd[i]!,f1=Math.sin(t*sp+ph0[i]!),f2=Math.sin(t*sp*.83+ph1[i]!),f3=Math.sin(t*sp*1.27+ph2[i]!),lift=1+a*1.6*(.5+.5*f3);drifted.x=d.x*lift+a*f1;drifted.y=d.y*lift+a*f2;drifted.z=d.z*lift+a*f3;const q=project(drifted);if(q.z<.22)continue;const g=.5+(q.x-cx)/R*.5-(q.y-cy)/R*.5,k=Math.max(0,Math.min(1,g));const rc=k<.5?BLUE[0]+(GREEN[0]-BLUE[0])*k/.5:GREEN[0]+(ORANGE[0]-GREEN[0])*(k-.5)/.5,gc=k<.5?BLUE[1]+(GREEN[1]-BLUE[1])*k/.5:GREEN[1]+(ORANGE[1]-GREEN[1])*(k-.5)/.5,bc=k<.5?BLUE[2]+(GREEN[2]-BLUE[2])*k/.5:GREEN[2]+(ORANGE[2]-GREEN[2])*(k-.5)/.5;const tw=.78+.22*f2,fade=Math.min(1,(q.z-.22)/.2);let op=Math.min(1,(.9+.5*fade)*tw);const sd=drifted.x*sunGeo.x+drifted.y*sunGeo.y+drifted.z*sunGeo.z,si=Math.max(0,Math.min(1,(sd+.2)/.4)),size=Math.max(.45,.8*q.s*(R/620));op*=sd<0?Math.max(0,1+sd*4):Math.max(.25,si);ctx.fillStyle=`rgba(${rc|0},${gc|0},${bc|0},${op.toFixed(3)})`;ctx.fillRect(q.x-size,q.y-size,size*2,size*2)}
+   const next:Label[]=[],cycle=28;arcs.forEach((arc,idx)=>{const off=t-arc.def.delay,local=((off%cycle)+cycle)%cycle,hp=local/arc.def.duration,tp=hp-.55,head=Math.min(1,Math.max(0,hp)),tail=Math.min(1,Math.max(0,tp)),point=(u:number)=>{const b=slerp(arc.a,arc.b,u),alt=1+.28*Math.sin(Math.PI*u);return{x:b.x*alt,y:b.y*alt,z:b.z*alt}},ring=(v:Vec3,alpha:number)=>{const q=project(v);if(q.z<0||alpha<=0)return null;const r=5*q.s*(R/620);ctx.beginPath();ctx.arc(q.x,q.y,r,0,Math.PI*2);ctx.strokeStyle=`${arc.def.hue}${Math.round(alpha*255).toString(16).padStart(2,"0")}`;ctx.lineWidth=Math.max(1.2,R/520);ctx.stroke();ctx.beginPath();ctx.arc(q.x,q.y,r*.36,0,Math.PI*2);ctx.fillStyle=`${arc.def.hue}${Math.round(alpha*255).toString(16).padStart(2,"0")}`;ctx.fill();return q};if(tail<1&&head>0){ctx.lineWidth=Math.max(1.3,R/420);ctx.lineCap="round";ctx.beginPath();let started=false;for(let s=0;s<=64;s++){const u=tail+(head-tail)*s/64,q=project(point(u)),occ=q.z<.22&&Math.hypot(q.x-cx,q.y-cy)<R*.99;if(occ){started=false;continue}if(!started){ctx.moveTo(q.x,q.y);started=true}else ctx.lineTo(q.x,q.y)}const pa=project(point(tail)),pb=project(point(head));if((pb.x-pa.x)**2+(pb.y-pa.y)**2>.5){const gr=ctx.createLinearGradient(pa.x,pa.y,pb.x,pb.y);gr.addColorStop(0,`${arc.def.hue}00`);gr.addColorStop(1,`${arc.def.hue}ee`);ctx.strokeStyle=gr;ctx.stroke()}ring(arc.a,Math.min(1,hp*6)*(1-tail))}let da=0;const arrival=arc.def.duration*1.55,end=arrival+1.5;if(hp>.9){const fi=Math.min(1,(hp-.9)/.1),fo=local<=end?Math.min(1,(end-local)/.6):0;da=Math.min(fi,fo)}const dest=ring(arc.b,da);if(dest&&hp>=.9)next.push({id:idx,x:dest.x,y:dest.y,o:Math.max(0,Math.min(1,da)),def:arc.def.label})});next.sort((a,b)=>a.y-b.y);for(let i=0;i<next.length;i++)for(let j=0;j<i;j++)if(Math.abs(next[i].x-next[j].x)<160&&Math.abs(next[i].y-next[j].y)<42)next[i].y=next[j].y+42;next.sort((a,b)=>a.id-b.id);setLabels(prev=>prev.length===next.length&&prev.every((p,i)=>p.id===next[i].id&&Math.abs(p.x-next[i].x)<.5&&Math.abs(p.y-next[i].y)<.5&&Math.abs(p.o-next[i].o)<.02)?prev:next)};
+  raf=requestAnimationFrame(render);return()=>{cancelAnimationFrame(raf);ro.disconnect();io.disconnect();el.removeEventListener("pointerenter",enter);el.removeEventListener("pointerleave",leave);renderer.dispose();geo.dispose();earthMat.dispose();earthTexture.dispose();lightsTexture.dispose();horizonGeo.dispose();horizonMat.dispose();atmoGeo.dispose();atmoMat.dispose()};
+ },[]);
+ return <div ref={wrap} className="relative h-full w-full overflow-hidden bg-slate-950"><div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_52%,rgba(255,180,100,0.10),transparent_34%),radial-gradient(circle_at_78%_20%,rgba(20,55,120,0.16),transparent_38%)] pointer-events-none z-0"/><canvas ref={threeCanvas} className="absolute inset-0 block h-full w-full pointer-events-none z-[5]" aria-hidden/><canvas ref={canvas} className="block h-full w-full relative z-10" aria-hidden/><div className="pointer-events-none absolute inset-0 z-20">{labels.map(l=><div key={l.id} className="absolute flex -translate-y-1/2 items-center gap-2 rounded-lg px-2 py-1.5 shadow-[0_8px_24px_-8px_rgba(38,20,90,0.35)] ring-1 backdrop-blur bg-slate-900/95 ring-white/10" style={{left:l.x+14,top:l.y-22,opacity:l.o}}><span className="flex h-6 w-6 items-center justify-center rounded-md text-[11px] text-primary-foreground" style={{backgroundColor:l.def.tint}}>{l.def.glyph}</span><span className="text-[13px] font-semibold text-slate-100">{l.def.city}{l.def.country?",":""}</span>{l.def.country&&<span className="text-[13px] text-slate-400">{l.def.country}</span>}</div>)}</div></div>;
 }
