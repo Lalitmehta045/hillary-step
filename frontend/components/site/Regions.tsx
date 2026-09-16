@@ -90,9 +90,24 @@ export function Regions() {
 
         <FadeIn delay={0.2} className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
           {/* Map card */}
-          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-br from-[#02050A] via-[#0A101B] to-[#010308] p-[1px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.35)] lg:w-[691px]">
+          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-[#010308] p-[1px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.45)] lg:w-[691px]">
             <div className="relative h-full w-full overflow-hidden rounded-[23px] bg-[#010308]">
               <Globe active={active} />
+
+              {/* Cinematic space atmosphere layered over the globe background. Kept subtle so the Earth remains the hero. */}
+              <div className="pointer-events-none absolute inset-0 z-[15] overflow-hidden">
+                {/* Deep-space depth / Milky-Way style haze */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_48%,rgba(30,60,110,0.12)_0%,rgba(7,13,25,0.04)_34%,rgba(0,0,0,0.48)_100%)]" />
+                <div className="absolute left-[-18%] top-[8%] h-[70%] w-[70%] rotate-[-18deg] rounded-full bg-[radial-gradient(ellipse,rgba(74,111,170,0.11)_0%,rgba(25,48,85,0.035)_38%,transparent_72%)] blur-3xl" />
+                <div className="absolute right-[-22%] bottom-[-18%] h-[70%] w-[65%] rounded-full bg-[radial-gradient(circle,rgba(25,73,140,0.13)_0%,transparent_68%)] blur-3xl" />
+
+                {/* Dense distant star field */}
+                <div className="absolute inset-0 opacity-75 bg-[radial-gradient(circle_at_8%_18%,rgba(255,255,255,0.7)_0_0.7px,transparent_1px),radial-gradient(circle_at_17%_72%,rgba(255,255,255,0.55)_0_0.8px,transparent_1.2px),radial-gradient(circle_at_29%_31%,rgba(180,210,255,0.65)_0_0.7px,transparent_1px),radial-gradient(circle_at_42%_12%,rgba(255,255,255,0.55)_0_0.7px,transparent_1px),radial-gradient(circle_at_57%_24%,rgba(255,255,255,0.6)_0_0.8px,transparent_1.2px),radial-gradient(circle_at_71%_10%,rgba(255,255,255,0.55)_0_0.7px,transparent_1px),radial-gradient(circle_at_86%_25%,rgba(180,210,255,0.65)_0_0.8px,transparent_1.2px),radial-gradient(circle_at_94%_58%,rgba(255,255,255,0.55)_0_0.7px,transparent_1px),radial-gradient(circle_at_78%_82%,rgba(255,255,255,0.6)_0_0.8px,transparent_1.2px),radial-gradient(circle_at_52%_91%,rgba(180,210,255,0.5)_0_0.7px,transparent_1px),radial-gradient(circle_at_24%_91%,rgba(255,255,255,0.5)_0_0.7px,transparent_1px),radial-gradient(circle_at_4%_48%,rgba(180,210,255,0.55)_0_0.7px,transparent_1px)]" />
+
+                {/* Soft atmospheric blue-white bloom around the Earth horizon */}
+                <div className="absolute left-1/2 top-1/2 h-[72%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#7db7ff]/10 shadow-[0_0_70px_18px_rgba(50,120,220,0.045)]" />
+                <div className="absolute left-1/2 top-1/2 h-[66%] w-[66%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,transparent_58%,rgba(73,143,235,0.035)_72%,transparent_76%)]" />
+              </div>
 
               <div className="absolute bottom-[24px] left-[32px] z-30 flex flex-col gap-[2px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" style={{ fontFamily: '\"SF Pro Display\", \"SF Pro Text\", -apple-system, BlinkMacSystemFont, sans-serif' }}>
                 <span className="text-[11px] font-[600] text-white/70 uppercase tracking-[1px]">Timezone</span>
