@@ -90,11 +90,11 @@ export function Regions() {
 
         <FadeIn delay={0.2} className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
           {/* Map card */}
-          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-tr from-[#00FF11] via-[#007BFF] to-[#FF6200] p-[1px] shadow-[0_10px_30px_-15px_rgba(0,0,0,0.05)] lg:w-[691px]">
-            <div className="relative h-full w-full overflow-hidden rounded-[23px] bg-white">
+          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-br from-[#02050A] via-[#0A101B] to-[#010308] p-[1px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.35)] lg:w-[691px]">
+            <div className="relative h-full w-full overflow-hidden rounded-[23px] bg-[#010308]">
               <Globe active={active} />
 
-              <div className="absolute bottom-[24px] left-[32px] z-30 flex flex-col gap-[2px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" style={{ fontFamily: '"SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif' }}>
+              <div className="absolute bottom-[24px] left-[32px] z-30 flex flex-col gap-[2px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" style={{ fontFamily: '\"SF Pro Display\", \"SF Pro Text\", -apple-system, BlinkMacSystemFont, sans-serif' }}>
                 <span className="text-[11px] font-[600] text-white/70 uppercase tracking-[1px]">Timezone</span>
                 <span className="text-[14px] font-[500] text-white">
                   {region.timezone} {currentTime ? `• ${currentTime}` : ""}
@@ -113,8 +113,7 @@ export function Regions() {
                     key={name}
                     type="button"
                     onClick={() => setActive(name)}
-                    className={`flex h-[40px] items-center rounded-full px-[20px] font-sans text-[14px] leading-[20px] tracking-[0px] font-[500] transition-all duration-250 hover:-translate-y-[2px] ${isActive ? "bg-[#007BFF] text-white shadow-md hover:shadow-lg" : "bg-white text-[#171717] shadow-sm hover:shadow-md"
-                      }`}
+                    className={`flex h-[40px] items-center rounded-full px-[20px] font-sans text-[14px] leading-[20px] tracking-[0px] font-[500] transition-all duration-250 hover:-translate-y-[2px] ${isActive ? "bg-[#007BFF] text-white shadow-md hover:shadow-lg" : "bg-white text-[#171717] shadow-sm hover:shadow-md"}`}
                   >
                     {name}
                   </button>
