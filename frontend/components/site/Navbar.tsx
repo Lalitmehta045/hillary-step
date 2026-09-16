@@ -61,73 +61,41 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState("USA");
-  const [isHovered, setIsHovered] = useState(false);
-
-  const holdTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const isHoveredRef = useRef(false);
-  const openRef = useRef(false);
+  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    isHoveredRef.current = isHovered;
-  }, [isHovered]);
+    const clearHideTimer = () => {
+      if (hideTimerRef.current) {
+        clearTimeout(hideTimerRef.current);
+        hideTimerRef.current = null;
+      }
+    };
 
-  useEffect(() => {
-    openRef.current = open;
-  }, [open]);
-
-  useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrolled(currentScrollY > 30);
 
-      if (currentScrollY <= 50) {
-        setIsVisible(true);
-        if (holdTimerRef.current) {
-          clearTimeout(holdTimerRef.current);
-          holdTimerRef.current = null;
-        }
-        return;
-      }
-
+      // Always show the navbar while the user is actively scrolling.
       setIsVisible(true);
+      clearHideTimer();
 
-      if (holdTimerRef.current) {
-        clearTimeout(holdTimerRef.current);
-      }
+      // Keep it visible at the top of the page.
+      if (currentScrollY <= 50) return;
 
-      holdTimerRef.current = setTimeout(() => {
-        if (!isHoveredRef.current && !openRef.current && window.scrollY > 50) {
-          setIsVisible(false);
-        }
-      }, 2500);
+      // Once scrolling stops, hide it smoothly after a short pause.
+      hideTimerRef.current = setTimeout(() => {
+        if (!open) setIsVisible(false);
+      }, 850);
     };
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
+      clearHideTimer();
     };
-  }, []);
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    setIsVisible(true);
-    if (holdTimerRef.current) {
-      clearTimeout(holdTimerRef.current);
-      holdTimerRef.current = null;
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    if (window.scrollY > 50) {
-      if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
-      holdTimerRef.current = setTimeout(() => {
-        if (!isHoveredRef.current && !openRef.current && window.scrollY > 50) setIsVisible(false);
-      }, 2500);
-    }
-  };
+  }, [open]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -162,23 +130,19 @@ export function Navbar() {
     }, 450);
   };
 
-  const shouldHide = !isVisible && !isHovered && !open;
+  const shouldHide = !isVisible && !open;
 
   return (
     <>
       <div className="fixed top-0 inset-x-0 z-[9000]" style={{ pointerEvents: "none" }}>
-        <div className="absolute top-0 inset-x-0 h-7" style={{ pointerEvents: "auto" }} onMouseEnter={handleMouseEnter} />
-
         <m.header
           initial={{ y: 0, opacity: 1 }}
-          animate={{ y: shouldHide ? "-120%" : 0, opacity: open ? 0 : shouldHide ? 0 : 1 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          animate={{ y: shouldHide ? "-120%" : 0, opacity: shouldHide ? 0 : 1 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           style={{ pointerEvents: shouldHide ? "none" : "auto" }}
-          className={`relative w-full transition-all duration-200 ${open ? "pointer-events-none" : scrolled ? "py-3" : "py-5 md:py-6"}`}
+          className={`relative w-full transition-all duration-200 ${scrolled ? "py-3" : "py-5 md:py-6"}`}
         >
-          <div className={`mx-auto w-[94%] max-w-[1400px] flex items-center justify-between transition-all duration-200 rounded-full px-5 sm:px-8 py-2.5 ${scrolled ? "bg-white/70 text-[#111111] backdrop-blur-xl border border-white/60 shadow-[0_10px_35px_rgba(0,0,0,0.07)]" : "bg-transparent text-white border border-transparent shadow-none backdrop-blur-none"}`}>
+          <div className={`mx-auto w-[94%] max-w-[1400px] flex items-center justify-between transition-all duration-300 rounded-full px-5 sm:px-8 py-2.5 ${scrolled ? "bg-white/70 text-[#111111] backdrop-blur-xl border border-white/60 shadow-[0_10px_35px_rgba(0,0,0,0.07)]" : "bg-transparent text-white border border-transparent shadow-none backdrop-blur-none"}`}>
             <a href="/#home" onClick={(e) => { e.preventDefault(); go("/#home"); }} className="flex items-center gap-3 shrink-0 group cursor-pointer self-center">
               <Image
                 src="/HSS-LOGO.png"
