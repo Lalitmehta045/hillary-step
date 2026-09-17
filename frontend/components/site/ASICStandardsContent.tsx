@@ -92,7 +92,7 @@ export function ASICStandardsContent({
         {/* Main Title: ASIC STANDARD */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 select-none mb-10 md:mb-12">
           <h1 className="font-display text-[44px] sm:text-[54px] md:text-[64px] font-[800] leading-none tracking-[-0.03em]">
-            <GradientReveal className="grad-text">ASIC STANDARD</GradientReveal>
+            <GradientReveal className="grad-text">ASIC STANDARDS</GradientReveal>
           </h1>
         </div>
 
@@ -170,7 +170,7 @@ export function ASICStandardsContent({
                 <span>Introduction</span>
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
-                Hillary Step Solutions is committed to upholding the highest
+                Hillary Step Solutions Pty Ltd is committed to upholding the highest
                 standards of integrity, transparency, and accountability in
                 alignment with the ASIC (Australian Securities and Investments
                 Commission) principles and regulatory expectations.
@@ -433,10 +433,10 @@ export function ASICStandardsContent({
                 substitute for legal advice. For specific inquiries, please
                 contact our Compliance Officer at{" "}
                 <a
-                  href="mailto:compliance@hillarystep.com"
+                  href="mailto:info@hillarystepsolutions.com"
                   className="text-[#1A6CFF] font-[500] hover:underline"
                 >
-                  compliance@hillarystep.com
+                  info@hillarystepsolutions.com
                 </a>
                 .
               </p>
@@ -446,10 +446,10 @@ export function ASICStandardsContent({
             <div className="border-t border-gray-100 pt-8 pb-4 mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex flex-col gap-0.5">
                 <span className="font-display text-[13px] font-[700] tracking-[0.06em] text-[#111827] uppercase">
-                  HILLARY STEP SOLUTIONS
+                  HILLARY STEP SOLUTIONS PTY LTD
                 </span>
                 <span className="font-display text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
-                  © 2024 HILLARY STEP SOLUTIONS. ARCHITECTING ASCENT.
+                  © 2024 HILLARY STEP SOLUTIONS PTY LTD. ARCHITECTING ASCENT.
                 </span>
               </div>
 

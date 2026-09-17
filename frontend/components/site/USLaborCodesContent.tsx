@@ -30,7 +30,7 @@ const TOC_ITEMS = [
   { id: "sec-09", num: "09.", label: "Compliance & Reporting" },
   { id: "sec-10", num: "10.", label: "Enforcement" },
   { id: "sec-11", num: "11.", label: "Continuous Improvement" },
-  { id: "sec-12", num: "12.", label: "References" },
+  { id: "sec-12", num: "12.", label: "Corporate Identification" },
 ];
 
 const STEPPER_ITEMS = [
@@ -180,7 +180,7 @@ export function USLaborCodesContent({
                 <span>Introduction</span>
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
-                Hillary Step Solutions is committed to full compliance with all
+                Hillary Step Solutions LLP is committed to full compliance with all
                 applicable United States labor laws and regulations. This
                 framework outlines our approach to fair labor practices, employee
                 rights, workplace safety, and equal opportunity.
@@ -208,7 +208,7 @@ export function USLaborCodesContent({
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This policy applies to all employees, contractors, consultants,
-                and third-party partners engaged by Hillary Step Solutions across
+                and third-party partners engaged by Hillary Step Solutions LLP across
                 all US operations and jurisdictions.
               </p>
             </section>
@@ -510,7 +510,7 @@ export function USLaborCodesContent({
             <section id="sec-12" className="scroll-mt-12 flex flex-col gap-2">
               <h3 className="font-display text-[18px] md:text-[20px] font-[700] text-[#111827] flex items-baseline gap-2">
                 <span className="text-[#1A6CFF] font-[700]">12.</span>
-                <span>References</span>
+                <span>Corporate Identification</span>
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This policy is aligned with current US labor laws and
@@ -548,10 +548,10 @@ export function USLaborCodesContent({
                 constitute legal advice. For specific concerns, please consult
                 our Compliance Officer at{" "}
                 <a
-                  href="mailto:compliance@hillarystep.com"
+                  href="mailto:info@hillarystepsolutions.com"
                   className="text-[#1A6CFF] font-[500] hover:underline"
                 >
-                  compliance@hillarystep.com
+                  info@hillarystepsolutions.com
                 </a>
                 .
               </p>
@@ -561,10 +561,10 @@ export function USLaborCodesContent({
             <div className="border-t border-gray-100 pt-8 pb-4 mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex flex-col gap-0.5">
                 <span className="font-display text-[13px] font-[700] tracking-[0.06em] text-[#111827] uppercase">
-                  HILLARY STEP SOLUTIONS
+                  HILLARY STEP SOLUTIONS LLP
                 </span>
                 <span className="font-display text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
-                  © 2024 HILLARY STEP SOLUTIONS. ARCHITECTING ASCENT.
+                  © 2026 HILLARY STEP SOLUTIONS LLP. ARCHITECTING ASCENT.
                 </span>
               </div>
 

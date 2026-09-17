@@ -517,7 +517,7 @@ export function MCAParametersContent({
               <ul className="flex flex-col gap-2 pt-1">
                 {[
                   "Companies Act, 2013",
-                  "Companies (Accounts) Rules, 2014",
+                  "Companies (Accounts) Rules, 2026",
                   "Secretarial Standards (SS-1 & SS-2)",
                   "MCA Circulars & Notifications (as amended)",
                 ].map((refItem, idx) => (
