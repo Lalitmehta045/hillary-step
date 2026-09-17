@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { MCAParametersContent } from "./MCAParametersContent";
+import { MCAParametersContent } from "./MCAParametersContentOverride";
 
 interface MCAParametersModalProps {
   isOpen: boolean;
@@ -54,13 +54,11 @@ export function MCAParametersModal({
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[9999] flex items-end justify-center px-3 sm:px-6 pt-4 pb-0"
         >
-          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-[#0F172A]/40 backdrop-blur-[6px]"
             onClick={onClose}
           />
 
-          {/* Modal Card */}
           <m.div
             ref={modalRef}
             data-lenis-prevent="true"
@@ -71,7 +69,6 @@ export function MCAParametersModal({
             className="relative flex flex-col w-full max-w-[1240px] h-full max-h-[calc(100vh-20px)] sm:max-h-[calc(100vh-32px)] overflow-y-auto overflow-x-hidden overscroll-contain bg-white rounded-t-[20px] rounded-b-none shadow-2xl z-10 [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Sticky Close Button Header */}
             <div className="sticky top-0 z-50 w-full flex justify-end pointer-events-none p-4 sm:p-6 pb-0 -mb-[52px]">
               <button
                 onClick={onClose}
@@ -93,7 +90,6 @@ export function MCAParametersModal({
               </button>
             </div>
 
-            {/* Main MCA Compliance Content */}
             <MCAParametersContent
               onClose={onClose}
               onNavigateType={onNavigateType}
