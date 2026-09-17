@@ -40,11 +40,7 @@ export function RegionsGradientAnimation() {
       { color: "#FF9500", width: 20, y: 0.85, amplitude: 16, phase: 2.6, speed: 0.00078 },
     ];
 
-    const drawRibbon = (
-      ribbon: (typeof ribbons)[number],
-      t: number,
-      offset: number
-    ) => {
+    const drawRibbon = (ribbon: (typeof ribbons)[number], t: number, offset: number) => {
       const points = Math.max(90, Math.floor(width / 8));
       ctx.beginPath();
 
@@ -81,19 +77,15 @@ export function RegionsGradientAnimation() {
       ctx.clearRect(0, 0, width, height);
       const t = now * 0.001;
 
-      // Soft lower-right ribbon glow only; the section itself stays white.
       ctx.save();
       ctx.filter = `blur(${Math.max(10, Math.min(width, height) * 0.018)}px)`;
       ctx.beginPath();
       ctx.rect(width * 0.42, height * 0.58, width * 0.66, height * 0.5);
       ctx.clip();
 
-      ribbons.forEach((ribbon, index) => {
-        drawRibbon(ribbon, t, index * 4);
-      });
+      ribbons.forEach((ribbon, index) => drawRibbon(ribbon, t, index * 4));
 
       ctx.restore();
-
       animationFrameId = requestAnimationFrame(render);
     };
 
@@ -101,9 +93,7 @@ export function RegionsGradientAnimation() {
       (entries) => {
         entries.forEach((entry) => {
           isVisible = entry.isIntersecting;
-          if (isVisible && !animationFrameId) {
-            animationFrameId = requestAnimationFrame(render);
-          }
+          if (isVisible && !animationFrameId) animationFrameId = requestAnimationFrame(render);
         });
       },
       { threshold: 0 }
