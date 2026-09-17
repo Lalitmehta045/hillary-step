@@ -31,7 +31,7 @@ const TOC_ITEMS = [
   { id: "sec-09", num: "09.", label: "Records & Maintenance" },
   { id: "sec-10", num: "10.", label: "Non-Compliance" },
   { id: "sec-11", num: "11.", label: "Continuous Improvement" },
-  { id: "sec-12", num: "12.", label: "References" },
+  { id: "sec-12", num: "12.", label: "Corporate Identification" },
 ];
 
 const STEPPER_ITEMS = [
@@ -177,7 +177,7 @@ export function MCAParametersContent({
                 <span>Introduction</span>
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
-                Hillary Step Solutions is committed to full compliance with the
+                Hillary Step Solutions Pvt Ltd is committed to full compliance with the
                 provisions of the Companies Act, 2013 and the regulations, rules,
                 circulars, and notifications issued by the Ministry of Corporate
                 Affairs (MCA), Government of India.
@@ -505,11 +505,11 @@ export function MCAParametersContent({
               </p>
             </section>
 
-            {/* 12. References */}
+            {/* 12. Corporate Identification*/}
             <section id="sec-12" className="scroll-mt-12 flex flex-col gap-2">
               <h3 className="font-display text-[18px] md:text-[20px] font-[700] text-[#111827] flex items-baseline gap-2">
                 <span className="text-[#1A6CFF] font-[700]">12.</span>
-                <span>References</span>
+                <span>Corporate Identification</span>
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This policy is aligned with:
@@ -545,10 +545,10 @@ export function MCAParametersContent({
                 not constitute legal advice. For specific concerns, please
                 consult our Compliance Officer at{" "}
                 <a
-                  href="mailto:compliance@hillarystep.com"
+                  href="mailto:info@hillarystepsolutions .com"
                   className="text-[#1A6CFF] font-[500] hover:underline"
                 >
-                  compliance@hillarystep.com
+                  info@hillarystepsolutions.com
                 </a>
                 .
               </p>
@@ -558,10 +558,10 @@ export function MCAParametersContent({
             <div className="border-t border-gray-100 pt-8 pb-4 mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex flex-col gap-0.5">
                 <span className="font-display text-[13px] font-[700] tracking-[0.06em] text-[#111827] uppercase">
-                  HILLARY STEP SOLUTIONS
+                  HILLARY STEP SOLUTIONS PVT LTD
                 </span>
                 <span className="font-display text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
-                  © 2024 HILLARY STEP SOLUTIONS. ARCHITECTING ASCENT.
+                  © 2026 HILLARY STEP SOLUTIONS PVT LTD. ARCHITECTING ASCENT.
                 </span>
               </div>
 
