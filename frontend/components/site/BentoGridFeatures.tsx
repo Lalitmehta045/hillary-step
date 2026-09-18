@@ -112,7 +112,7 @@ export function BentoGridFeatures() {
   }, []);
 
   return (
-    <section className="relative w-full bg-[#F5F5F6] py-14 px-4 sm:px-8 lg:px-14 border-t border-gray-200/70 font-display">
+    <section className="relative w-full bg-white py-14 px-4 sm:px-8 lg:px-14 border-t border-gray-200/70 font-display">
       <div className="max-w-[1240px] mx-auto">
         {/* 3-Column Bento Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
