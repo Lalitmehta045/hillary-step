@@ -78,29 +78,37 @@ export function Regions() {
         >
           <defs>
             <linearGradient id="global-presence-ribbon" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#FF7A18" stopOpacity="0.30" />
-              <stop offset="18%" stopColor="#FF3D81" stopOpacity="0.30" />
-              <stop offset="38%" stopColor="#40F600" stopOpacity="0.28" />
-              <stop offset="58%" stopColor="#20C8FF" stopOpacity="0.32" />
-              <stop offset="78%" stopColor="#2F7BFF" stopOpacity="0.30" />
-              <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.24" />
+              <stop offset="0%" stopColor="#FF7A18" stopOpacity="0.34" />
+              <stop offset="22%" stopColor="#FF7A18" stopOpacity="0.30" />
+              <stop offset="46%" stopColor="#7CFF00" stopOpacity="0.30" />
+              <stop offset="66%" stopColor="#40F600" stopOpacity="0.32" />
+              <stop offset="84%" stopColor="#1A6CFF" stopOpacity="0.32" />
+              <stop offset="100%" stopColor="#1A6CFF" stopOpacity="0.26" />
             </linearGradient>
             <linearGradient id="global-presence-ribbon-highlight" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.10" />
-              <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.28" />
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.10" />
+              <stop offset="0%" stopColor="#FF7A18" stopOpacity="0.34" />
+              <stop offset="45%" stopColor="#7CFF00" stopOpacity="0.22" />
+              <stop offset="72%" stopColor="#40F600" stopOpacity="0.20" />
+              <stop offset="100%" stopColor="#1A6CFF" stopOpacity="0.24" />
             </linearGradient>
             <filter id="global-presence-ribbon-blur" x="-15%" y="-35%" width="130%" height="170%">
               <feGaussianBlur stdDeviation="20" />
             </filter>
-            <clipPath id="global-presence-ribbon-clip">
-              <rect x="300" y="0" width="1300" height="1000" />
-            </clipPath>
+            <linearGradient id="global-presence-ribbon-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="white" stopOpacity="0" />
+              <stop offset="14%" stopColor="white" stopOpacity="0.35" />
+              <stop offset="24%" stopColor="white" stopOpacity="0.9" />
+              <stop offset="30%" stopColor="white" stopOpacity="1" />
+              <stop offset="100%" stopColor="white" stopOpacity="1" />
+            </linearGradient>
+            <mask id="global-presence-ribbon-mask">
+              <rect x="0" y="0" width="1600" height="1000" fill="url(#global-presence-ribbon-fade)" />
+            </mask>
           </defs>
 
-          <g clipPath="url(#global-presence-ribbon-clip)">
+          <g mask="url(#global-presence-ribbon-mask)">
             <path
-              d="M180 930 C 430 865, 650 760, 840 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15"
+              d="M-120 930 C 250 865, 560 760, 820 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15"
               fill="none"
               stroke="url(#global-presence-ribbon)"
               strokeWidth="150"
@@ -112,14 +120,14 @@ export function Regions() {
                 attributeName="d"
                 dur="11s"
                 repeatCount="indefinite"
-                values="M180 930 C 430 865, 650 760, 840 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15;
-                        M180 900 C 430 830, 650 735, 840 665 C 1040 590, 1170 495, 1290 345 C 1400 210, 1490 80, 1690 -15;
-                        M180 930 C 430 865, 650 760, 840 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15"
+                values="M-120 930 C 250 865, 560 760, 820 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15;
+                        M-120 900 C 250 830, 560 735, 820 665 C 1040 590, 1170 495, 1290 345 C 1400 210, 1490 80, 1690 -15;
+                        M-120 930 C 250 865, 560 760, 820 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15"
               />
             </path>
 
             <path
-              d="M160 955 C 430 885, 650 790, 850 715 C 1050 640, 1190 535, 1310 390 C 1420 250, 1510 125, 1710 30"
+              d="M-140 955 C 250 885, 560 790, 830 715 C 1050 640, 1190 535, 1310 390 C 1420 250, 1510 125, 1710 30"
               fill="none"
               stroke="url(#global-presence-ribbon-highlight)"
               strokeWidth="7"
@@ -130,14 +138,14 @@ export function Regions() {
                 attributeName="d"
                 dur="11s"
                 repeatCount="indefinite"
-                values="M160 955 C 430 885, 650 790, 850 715 C 1050 640, 1190 535, 1310 390 C 1420 250, 1510 125, 1710 30;
-                        M160 925 C 430 855, 650 760, 850 685 C 1050 610, 1190 505, 1310 360 C 1420 220, 1510 95, 1710 0;
-                        M160 955 C 430 885, 650 790, 850 715 C 1050 640, 1190 535, 1310 390 C 1420 250, 1510 125, 1710 30"
+                values="M-140 955 C 250 885, 560 790, 830 715 C 1050 640, 1190 535, 1310 390 C 1420 250, 1510 125, 1710 30;
+                        M-140 925 C 250 855, 560 760, 830 685 C 1050 610, 1190 505, 1310 360 C 1420 220, 1510 95, 1710 0;
+                        M-140 955 C 250 885, 560 790, 830 715 C 1050 640, 1190 535, 1310 390 C 1420 250, 1510 125, 1710 30"
               />
             </path>
 
             <path
-              d="M220 975 C 470 905, 680 820, 870 745 C 1060 670, 1200 565, 1330 415 C 1440 285, 1530 145, 1740 55"
+              d="M-80 975 C 300 905, 600 820, 850 745 C 1060 670, 1200 565, 1330 415 C 1440 285, 1530 145, 1740 55"
               fill="none"
               stroke="url(#global-presence-ribbon)"
               strokeWidth="92"
