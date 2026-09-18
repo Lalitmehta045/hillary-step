@@ -155,10 +155,8 @@ export function Navbar() {
 
   return (
     <>
-      <div className="fixed top-0 inset-x-0 z-[9000]" style={{ pointerEvents: "none" }}>
+      <div className="fixed top-0 inset-x-0 z-[9000] pointer-events-auto" onMouseEnter={handleNavMouseEnter} onMouseLeave={handleNavMouseLeave}>
         <m.header
-          onMouseEnter={handleNavMouseEnter}
-          onMouseLeave={handleNavMouseLeave}
           initial={{ y: 0, opacity: 1 }}
           animate={{ y: shouldHide ? "-120%" : 0, opacity: shouldHide ? 0 : 1 }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
