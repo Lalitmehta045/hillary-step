@@ -67,7 +67,7 @@ const HoverCard = ({ service, index, onExplore }: { service: ServiceData, index:
           className="absolute inset-0 w-full h-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-[0.80] z-10"
           style={{ transformOrigin: 'left center' }}
         >
-          <div className="w-full h-full flex flex-col overflow-hidden bg-white rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.12)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-gray-100/50 transition-shadow duration-700">
+          <div className="w-full h-full flex flex-col overflow-hidden bg-white rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.12)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-gray-100/50 transition-shadow duration-700">
             {/* Image */}
             <div className="w-full h-[140px] max-md:h-[130px] relative overflow-hidden">
               <img
@@ -108,7 +108,7 @@ const HoverCard = ({ service, index, onExplore }: { service: ServiceData, index:
 
         {/* Right side: Capabilities Panel (slides in from the right) */}
         <div className="absolute right-0 top-[5%] h-[90%] w-[52%] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] translate-x-[110%] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 z-20 pointer-events-none group-hover:pointer-events-auto">
-          <div className="w-full h-full bg-gradient-to-br from-[#153B8C] to-[#0D2459] rounded-3xl shadow-[-8px_0_30px_rgba(21,59,140,0.35)] p-[20px] pt-[24px] border border-white/10 flex flex-col overflow-hidden relative">
+          <div className="w-full h-full bg-gradient-to-br from-[#153B8C] to-[#0D2459] rounded-2xl shadow-[-8px_0_30px_rgba(21,59,140,0.35)] p-[20px] pt-[24px] border border-white/10 flex flex-col overflow-hidden relative">
             {/* Subtle decorative glow */}
             <div className="absolute top-0 right-0 w-[120px] h-[120px] bg-[#1A6CFF]/15 rounded-full blur-[60px] pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 w-[80px] h-[80px] bg-[#60A5FA]/10 rounded-full blur-[40px] pointer-events-none"></div>
@@ -157,7 +157,7 @@ export function ITSolutionsContent() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="px-3 md:px-6 py-3.5 bg-white"
       >
-        <div className="relative w-full h-[500px] rounded-[22px] overflow-hidden flex flex-col justify-center">
+        <div className="relative w-full h-[500px] rounded-[18px] overflow-hidden flex flex-col justify-center">
           <img src="/images/it_workspace_hero.jpg" alt="Hero Background" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/60"></div>
 
@@ -195,7 +195,7 @@ export function ITSolutionsContent() {
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.60 }}
               >
                 <button className="bg-white text-black font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition-colors text-[13px]">
-                  Start Your Furnishing Journey
+                  Start Your IT Transformation
                 </button>
               </m.div>
             </div>
@@ -241,7 +241,7 @@ export function ITSolutionsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="lg:col-span-1 rounded-[32px] p-8 text-white flex flex-col justify-between lg:h-[228px]"
+            className="lg:col-span-1 rounded-[24px] p-8 text-white flex flex-col justify-between lg:h-[228px]"
             style={{ backgroundColor: 'rgba(14, 77, 183, 1)' }}
           >
             <div className="flex justify-between items-start">
@@ -251,11 +251,11 @@ export function ITSolutionsContent() {
             <div className="flex gap-8 mt-4">
               <div>
                 <div className="text-[40px] font-bold leading-none mb-1">150+</div>
-                <div className="text-[12px] opacity-90">Furniture Suppliers</div>
+                <div className="text-[12px] opacity-90">Enterprise Technology Solutions</div>
               </div>
               <div>
-                <div className="text-[40px] font-bold leading-none mb-1">15+</div>
-                <div className="text-[12px] opacity-90">Years of Industry<br />Experience</div>
+                <div className="text-[40px] font-bold leading-none mb-1">10+</div>
+                <div className="text-[12px] opacity-90">Years of Technology<br />Experience</div>
               </div>
             </div>
           </m.div>
@@ -266,19 +266,19 @@ export function ITSolutionsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-2 bg-[#b4c9e8] rounded-[32px] p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden lg:h-[228px]"
+            className="lg:col-span-2 bg-[#b4c9e8] rounded-[24px] p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden lg:h-[228px]"
           >
             <div className="flex-1 max-w-[500px] flex flex-col justify-center">
               <h3 className="text-[24px] font-bold text-[#1a2b4c] mb-3">Who We Are</h3>
               <p className="text-[#3b4c6b] text-[13px] leading-relaxed mb-3">
-                At Compotto, we understand the challenges of creating exceptional spaces that blend elegance, quality, and functionality.
+                At Hillary Step Solutions, we understand the challenges businesses face when modernizing technology, scaling operations, and building secure digital products.
               </p>
               <p className="text-[#3b4c6b] text-[13px] leading-relaxed line-clamp-2">
-                As Greece's premier furniture solutions provider, we've made it our mission to simplify the furnishing process, ensuring that every project is executed flawlessly from initial consultation to final installation.
+                We bring strategy, engineering, cloud, AI, and managed technology services together to help organizations move from complex requirements to reliable digital outcomes.
               </p>
             </div>
             <div className="w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-full overflow-hidden shrink-0 border-[4px] border-white/40">
-              <img src="/images/who_we_are.jpg" alt="Who We Are" className="w-full h-full object-cover" />
+              <img src="/images/it_workspace_hero.jpg" alt="Who We Are" className="w-full h-full object-cover" />
             </div>
           </m.div>
         </div>
@@ -300,45 +300,45 @@ export function ITSolutionsContent() {
             transition={{ duration: 0.6 }}
             className="text-[32px] md:text-[40px] font-bold text-[#111111] mb-16 max-w-[500px] leading-[1.2]"
           >
-            How We <span className="text-[#3b82f6]">Simplify</span> Your Furnishing Experience
+            How We <span className="text-[#1A6CFF]">Deliver</span> Your IT Solutions
           </m.h2>
 
           <div className="flex flex-col gap-[100vh] pb-[20vh] relative">
             {[
               {
                 num: "1",
-                title: "Initial Consultation",
+                title: "Discovery & Technical Consultation",
                 highlight: "Consultation",
-                desc: "We begin by understanding your space, aesthetic preferences, and practical needs. Our team collaborates with you to define the perfect furnishing strategy for your project.",
-                img: "/images/hero_bg.jpg"
+                desc: "We understand your business goals, technical environment, constraints, and priorities, then define a clear technology roadmap.",
+                img: "/images/it_workspace_hero.jpg"
               },
               {
                 num: "2",
-                title: "Space Planning & Design",
+                title: "Architecture & Solution Design",
                 highlight: "Design",
-                desc: "Our design experts create detailed layouts and visual concepts, ensuring every piece of furniture fits harmoniously into your environment while maximizing functionality.",
-                img: "/images/who_we_are.jpg"
+                desc: "Our architects design secure, scalable solutions across applications, cloud infrastructure, data, and AI—balancing performance, maintainability, and cost.",
+                img: "/images/it_workspace_hero.jpg"
               },
               {
                 num: "3",
-                title: "Sourcing & Procurement",
+                title: "Engineering & Implementation",
                 highlight: "Sourcing",
-                desc: "Leveraging our extensive network of premium suppliers, we source high-quality, bespoke furniture pieces that match your exact specifications and design vision.",
-                img: "/images/hero_bg.jpg"
+                desc: "Our engineering teams build, integrate, test, and deploy production-ready digital solutions using modern frameworks, cloud platforms, APIs, and automation.",
+                img: "/images/it_workspace_hero.jpg"
               },
               {
                 num: "4",
-                title: "Delivery & Installation",
+                title: "Deployment & Integration",
                 highlight: "Installation",
-                desc: "Our professional logistics team handles everything from safe transportation to precise on-site assembly, ensuring a flawless setup with zero hassle for you.",
-                img: "/images/who_we_are.jpg"
+                desc: "We coordinate releases, cloud deployment, integrations, security controls, and operational handover for a controlled transition into production.",
+                img: "/images/it_workspace_hero.jpg"
               },
               {
                 num: "5",
-                title: "After-Sales Support and Maintenance",
+                title: "Managed Support & Optimization",
                 highlight: "Support",
-                desc: "Our commitment to your satisfaction extends beyond the final installation. We conduct a thorough final walkthrough to ensure your satisfaction, and also offer comprehensive after-sales support for warranty claims, maintenance, and care instructions.",
-                img: "/images/after_sales.jpg"
+                desc: "We continuously monitor, maintain, secure, and optimize your technology environment while supporting new requirements as your business evolves.",
+                img: "/images/it_datacenter_hero.jpg"
               }
             ].map((step, i) => {
               const parts = step.title.split(step.highlight);
@@ -353,7 +353,7 @@ export function ITSolutionsContent() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.6 }}
-                    className="bg-white rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] flex flex-col md:flex-row overflow-hidden relative origin-top w-full"
+                    className="bg-white rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] flex flex-col md:flex-row overflow-hidden relative origin-top w-full"
                   >
                     <div className="flex-1 p-10 md:p-16 relative bg-white z-10">
                       <div className="absolute top-4 left-8 text-[180px] font-bold text-[#f0f4f8] leading-none z-0 pointer-events-none select-none">
@@ -389,7 +389,7 @@ export function ITSolutionsContent() {
             transition={{ duration: 0.6 }}
             className="text-[32px] md:text-[40px] font-bold text-[#111111] mb-10"
           >
-            Why <span className="text-[#3b82f6]">Choose</span> Hillary step solutions
+            Why <span className="text-[#3b82f6]">Choose</span> Hillary Step Solutions
           </m.h2>
 
           <div className="grid lg:grid-cols-3 gap-6">
@@ -403,7 +403,7 @@ export function ITSolutionsContent() {
                   whileHover={{ y: -8, scale: 1.02 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="group cursor-pointer rounded-[32px] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden transition-all duration-300 hover:shadow-[0_20px_45px_rgba(96,122,253,0.35)] border border-white/50 hover:border-white"
+                  className="group cursor-pointer rounded-[24px] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden transition-all duration-300 hover:shadow-[0_20px_45px_rgba(96,122,253,0.35)] border border-white/50 hover:border-white"
                   style={{ background: 'linear-gradient(180deg, rgba(221,224,240,1) 0%, rgba(96,122,253,1) 100%)' }}
                 >
                   <h3 className="font-bold text-[#152759] mb-4 text-[19px] tracking-tight group-hover:text-[#0b173d] transition-colors">
@@ -426,7 +426,7 @@ export function ITSolutionsContent() {
                   whileHover={{ y: -8, scale: 1.02 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="group cursor-pointer rounded-[32px] p-8 md:p-10 flex flex-col items-center justify-center text-center text-white relative overflow-hidden transition-all duration-300 hover:shadow-[0_20px_45px_rgba(96,122,253,0.35)] border border-white/50 hover:border-white"
+                  className="group cursor-pointer rounded-[24px] p-8 md:p-10 flex flex-col items-center justify-center text-center text-white relative overflow-hidden transition-all duration-300 hover:shadow-[0_20px_45px_rgba(96,122,253,0.35)] border border-white/50 hover:border-white"
                   style={{ background: 'linear-gradient(180deg, rgba(221,224,240,1) 0%, rgba(96,122,253,1) 100%)' }}
                 >
                   <h3 className="font-bold text-[19px] text-[#152759] mb-4 tracking-tight group-hover:text-[#0b173d] transition-colors">
@@ -451,7 +451,7 @@ export function ITSolutionsContent() {
                 whileHover={{ y: -8, scale: 1.015 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="group cursor-pointer rounded-[32px] p-8 md:p-12 flex flex-col items-center justify-center text-center relative overflow-hidden text-white min-h-[250px] transition-all duration-500 hover:shadow-[0_25px_50px_rgba(0,0,0,0.4)] border border-white/10 hover:border-blue-400/50"
+                className="group cursor-pointer rounded-[24px] p-8 md:p-12 flex flex-col items-center justify-center text-center relative overflow-hidden text-white min-h-[250px] transition-all duration-500 hover:shadow-[0_25px_50px_rgba(0,0,0,0.4)] border border-white/10 hover:border-blue-400/50"
               >
                 <img
                   src="/images/it_datacenter_hero.jpg"
@@ -477,7 +477,7 @@ export function ITSolutionsContent() {
               whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className="group cursor-pointer rounded-[32px] p-8 md:p-12 flex flex-col justify-center text-white text-center gap-10 relative overflow-hidden transition-all duration-500 hover:shadow-[0_25px_50px_rgba(2,4,126,0.5)] border border-white/20 hover:border-white/60"
+              className="group cursor-pointer rounded-[24px] p-8 md:p-12 flex flex-col justify-center text-white text-center gap-10 relative overflow-hidden transition-all duration-500 hover:shadow-[0_25px_50px_rgba(2,4,126,0.5)] border border-white/20 hover:border-white/60"
               style={{ background: 'linear-gradient(180deg, rgba(78,88,134,1) 0%, rgba(2,4,126,1) 100%)' }}
             >
               <div className="relative z-10">
@@ -501,6 +501,27 @@ export function ITSolutionsContent() {
           </div>
         </div>
       </div>
+
+      {/* FINAL CTA */}
+      <section className="px-8 md:px-16 py-16 bg-white">
+        <div className="max-w-[1200px] mx-auto rounded-[20px] bg-gradient-to-r from-[#1A6CFF] via-[#40F600] to-[#FF7A18] p-[1px] overflow-hidden">
+          <div className="rounded-[19px] bg-[#07111f] px-8 md:px-16 py-12 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <p className="text-[12px] font-bold tracking-[0.18em] text-[#7CFF00] uppercase mb-3">Ready to build?</p>
+              <h2 className="text-[30px] md:text-[40px] font-bold text-white leading-tight">Let’s build your next digital solution.</h2>
+              <p className="mt-3 text-[14px] text-white/70 max-w-[620px]">Talk with our technology team about product engineering, cloud, AI, cybersecurity, or managed IT services.</p>
+            </div>
+            <a href="/#contact" className="shrink-0 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-[13px] font-bold text-[#0D2459] transition-all duration-300 hover:scale-[1.03] hover:bg-[#F4FFF0]">Talk to the Sherpas <span>↗</span></a>
+          </div>
+        </div>
+        <div className="max-w-[1200px] mx-auto mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[13px] font-semibold text-[#1E3A8A]">
+          <a href="/#about" className="hover:text-[#1A6CFF] transition-colors">About the Ascent</a>
+          <a href="/#ai-experience" className="hover:text-[#1A6CFF] transition-colors">Peak Intelligence Core</a>
+          <a href="/#global-presence" className="hover:text-[#1A6CFF] transition-colors">Global Presence</a>
+          <a href="/#contact" className="hover:text-[#1A6CFF] transition-colors">Contact the Sherpas</a>
+          <a href="/privacy" className="hover:text-[#1A6CFF] transition-colors">Privacy & Security</a>
+        </div>
+      </section>
 
     </div>
   );
