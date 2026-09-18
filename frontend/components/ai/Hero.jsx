@@ -18,8 +18,11 @@ export default function Hero() {
   const reduced = useReducedMotion();
 
   const [isBlobActive, setIsBlobActive] = useState(false);
+  const [typedRevealLine1, setTypedRevealLine1] = useState("");
+  const [typedRevealLine2, setTypedRevealLine2] = useState("");
   const blobRef = useRef(null);
   const shatterTimerRef = useRef(null);
+  const typingTimerRef = useRef(null);
 
   const handleShatterStart = useCallback(() => {
     setIsBlobActive(true);
@@ -46,8 +49,51 @@ export default function Hero() {
   }, [handleShatterStart]);
 
   useEffect(() => {
+    if (typingTimerRef.current) {
+      clearInterval(typingTimerRef.current);
+      typingTimerRef.current = null;
+    }
+
+    if (!isBlobActive) {
+      setTypedRevealLine1("");
+      setTypedRevealLine2("");
+      return;
+    }
+
+    const line1 = "HILLARY STEP SOLUTIONS";
+    const line2 = "Your Tech Sherpas";
+    let index1 = 0;
+    let index2 = 0;
+
+    typingTimerRef.current = setInterval(() => {
+      if (index1 < line1.length) {
+        index1 += 1;
+        setTypedRevealLine1(line1.slice(0, index1));
+        return;
+      }
+
+      if (index2 < line2.length) {
+        index2 += 1;
+        setTypedRevealLine2(line2.slice(0, index2));
+        return;
+      }
+
+      clearInterval(typingTimerRef.current);
+      typingTimerRef.current = null;
+    }, 30);
+
+    return () => {
+      if (typingTimerRef.current) {
+        clearInterval(typingTimerRef.current);
+        typingTimerRef.current = null;
+      }
+    };
+  }, [isBlobActive]);
+
+  useEffect(() => {
     return () => {
       if (shatterTimerRef.current) clearTimeout(shatterTimerRef.current);
+      if (typingTimerRef.current) clearInterval(typingTimerRef.current);
     };
   }, []);
 
@@ -237,24 +283,39 @@ export default function Hero() {
                 </svg>
               </div>
 
-              {/* Center Revealed Text: "Your Tech Sherpas" */}
+              {/* Center Revealed Text: two-line kinetic typing reveal */}
               <div
-                className={`pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center transition-all duration-500 ease-out z-20 ${
+                className={`pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center z-20 ${
                   isBlobActive
-                    ? "opacity-100 scale-100 blur-none"
-                    : "opacity-0 scale-85 blur-sm pointer-events-none"
+                    ? "opacity-100 scale-100 blur-0"
+                    : "opacity-0 scale-[0.96] blur-[6px] pointer-events-none"
                 }`}
+                style={{
+                  transition: "opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
                 aria-hidden={!isBlobActive}
               >
-                {/* Ambient glow behind center badge */}
-                <div className="absolute h-36 w-36 rounded-full bg-radial from-[#00E5FF]/30 via-[#00FF87]/20 to-transparent blur-2xl -z-10" />
-
-                <div className="px-6 py-3.5 rounded-2xl bg-[#050505]/85 backdrop-blur-xl border border-[rgba(0,229,255,0.4)] shadow-[0_0_35px_rgba(0,229,255,0.3)] flex flex-col items-center gap-1">
-                  <span className="text-[10px] sm:text-[11px] font-medium tracking-[0.35em] text-[#00E5FF] uppercase">
-                    HILLARY STEP SOLUTIONS
+                <div className="absolute h-36 w-36 rounded-full bg-radial from-[#1A6CFF]/25 via-[#40F600]/15 to-transparent blur-2xl -z-10" />
+                <div className="px-6 py-4 rounded-2xl bg-[#050505]/85 backdrop-blur-xl border border-[rgba(26,108,255,0.42)] shadow-[0_0_35px_rgba(26,108,255,0.22)] flex flex-col items-center gap-1.5 min-w-[250px]">
+                  <span
+                    className="min-h-[15px] text-[10px] sm:text-[11px] font-medium tracking-[0.28em] text-[#00E5FF] uppercase"
+                    style={{
+                      opacity: isBlobActive && typedRevealLine1 ? 1 : 0,
+                      transform: isBlobActive && typedRevealLine1 ? "translateY(0)" : "translateY(7px)",
+                      transition: "opacity 420ms cubic-bezier(0.22, 1, 0.36, 1), transform 520ms cubic-bezier(0.22, 1, 0.36, 1)",
+                    }}
+                  >
+                    {typedRevealLine1}
                   </span>
-                  <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] whitespace-nowrap">
-                    Your Tech Sherpas
+                  <h3
+                    className="min-h-[32px] font-display text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] whitespace-nowrap"
+                    style={{
+                      opacity: typedRevealLine2 ? 1 : 0,
+                      transform: typedRevealLine2 ? "translateY(0)" : "translateY(10px)",
+                      transition: "opacity 480ms cubic-bezier(0.22, 1, 0.36, 1), transform 620ms cubic-bezier(0.22, 1, 0.36, 1)",
+                    }}
+                  >
+                    {typedRevealLine2}
                   </h3>
                 </div>
               </div>
