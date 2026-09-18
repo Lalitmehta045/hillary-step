@@ -274,7 +274,7 @@ function GridCell({ item }: { item: ItemData | null }) {
   // Empty cell (used for Column 2 Row 2 to guarantee equal height)
   if (!item) {
     return (
-      <div className="relative h-[140px] w-full border-r border-white/[0.08] pointer-events-none select-none" />
+      <div className="relative h-[140px] w-full border-r border-white/[0.14] pointer-events-none select-none" />
     );
   }
 
@@ -282,7 +282,7 @@ function GridCell({ item }: { item: ItemData | null }) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative h-[140px] w-full flex flex-col items-center justify-center p-4 cursor-pointer overflow-hidden border-r border-white/[0.08] select-none transition-colors duration-200"
+      className="group relative h-[140px] w-full flex flex-col items-center justify-center p-4 cursor-pointer overflow-hidden border-r border-white/[0.14] select-none transition-colors duration-200"
     >
       {/* Dot-matrix background pattern: tinted to brand color, vertical opacity mask */}
       <div
@@ -347,7 +347,7 @@ function GridCell({ item }: { item: ItemData | null }) {
 // ────────────────────────────────────────────────────────────
 export function FrameworksIntegrationsSection() {
   return (
-    <section className="w-full bg-[#08090b] text-white pt-16 pb-20 select-none">
+    <section className="w-full bg-gradient-to-br from-[#07152F] via-[#0D2459] to-[#10251A] text-white pt-16 pb-20 select-none">
       <div className="mx-auto max-w-[1240px] px-6 md:px-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
           {/* ══════════════════════════════════════════════════════
@@ -355,7 +355,7 @@ export function FrameworksIntegrationsSection() {
               ══════════════════════════════════════════════════════ */}
           <div className="flex flex-col items-center">
             {/* Eyebrow / Kicker (Title Case, Cyan) */}
-            <span className="text-[14px] font-medium text-[#00d2ff] tracking-tight text-center">
+            <span className="text-[14px] font-medium text-[#7CFF00] tracking-tight text-center">
               Frameworks
             </span>
 
@@ -365,14 +365,14 @@ export function FrameworksIntegrationsSection() {
             </h2>
 
             {/* 2-line gray subtext */}
-            <p className="mt-4 text-center text-[14px] leading-[22px] text-gray-400 max-w-[440px]">
+            <p className="mt-4 text-center text-[14px] leading-[22px] text-white/65 max-w-[440px]">
               Clerk keeps developer experience front-and-center by providing helpful SDKs for most modern frameworks on web and mobile.
             </p>
 
             {/* Text link with right arrow */}
             <a
               href="#frameworks"
-              className="group mt-5 flex items-center gap-1.5 text-[14px] font-semibold text-white transition-colors duration-200 hover:text-[#00d2ff] cursor-pointer"
+              className="group mt-5 flex items-center gap-1.5 text-[14px] font-semibold text-white transition-colors duration-200 hover:text-[#7CFF00] cursor-pointer"
             >
               <span>All frameworks</span>
               <span className="text-[11px] transition-transform duration-200 group-hover:translate-x-0.5 text-white/90">
@@ -383,31 +383,31 @@ export function FrameworksIntegrationsSection() {
             {/* Sharp Hairline Grid with Top & Bottom Decorative Slivers (No rounded corners, no icons in slivers) */}
             <div className="mt-10 w-full max-w-[540px]">
               {/* Top Extension Sliver (hairline vertical lines extending up, empty) */}
-              <div className="h-6 grid grid-cols-3 border-l border-white/[0.08]">
-                <div className="border-r border-white/[0.08]" />
-                <div className="border-r border-white/[0.08]" />
-                <div className="border-r border-white/[0.08]" />
+              <div className="h-6 grid grid-cols-3 border-l border-white/[0.14]">
+                <div className="border-r border-white/[0.14]" />
+                <div className="border-r border-white/[0.14]" />
+                <div className="border-r border-white/[0.14]" />
               </div>
 
               {/* Row 1 (3 cells) */}
-              <div className="grid grid-cols-3 border-t border-b border-l border-white/[0.08]">
+              <div className="grid grid-cols-3 border-t border-b border-l border-white/[0.14]">
                 {FRAMEWORKS_ROW_1.map((item) => (
                   <GridCell key={item.id} item={item} />
                 ))}
               </div>
 
               {/* Row 2 (3 cells) */}
-              <div className="grid grid-cols-3 border-b border-l border-white/[0.08]">
+              <div className="grid grid-cols-3 border-b border-l border-white/[0.14]">
                 {FRAMEWORKS_ROW_2.map((item) => (
                   <GridCell key={item.id} item={item} />
                 ))}
               </div>
 
               {/* Bottom Extension Sliver (hairline vertical lines extending down, empty) */}
-              <div className="h-6 grid grid-cols-3 border-l border-white/[0.08]">
-                <div className="border-r border-white/[0.08]" />
-                <div className="border-r border-white/[0.08]" />
-                <div className="border-r border-white/[0.08]" />
+              <div className="h-6 grid grid-cols-3 border-l border-white/[0.14]">
+                <div className="border-r border-white/[0.14]" />
+                <div className="border-r border-white/[0.14]" />
+                <div className="border-r border-white/[0.14]" />
               </div>
             </div>
           </div>
@@ -417,7 +417,7 @@ export function FrameworksIntegrationsSection() {
               ══════════════════════════════════════════════════════ */}
           <div className="flex flex-col items-center">
             {/* Eyebrow / Kicker (Title Case, Purple) */}
-            <span className="text-[14px] font-medium text-[#a855f7] tracking-tight text-center">
+            <span className="text-[14px] font-medium text-[#FF7A18] tracking-tight text-center">
               Integrations
             </span>
 
@@ -427,14 +427,14 @@ export function FrameworksIntegrationsSection() {
             </h2>
 
             {/* 2-line gray subtext */}
-            <p className="mt-4 text-center text-[14px] leading-[22px] text-gray-400 max-w-[440px]">
+            <p className="mt-4 text-center text-[14px] leading-[22px] text-white/65 max-w-[440px]">
               Leverage Clerk as the source of truth for your user data and integrate with the tools that you already depend on.
             </p>
 
             {/* Text link with right arrow */}
             <a
               href="#integrations"
-              className="group mt-5 flex items-center gap-1.5 text-[14px] font-semibold text-white transition-colors duration-200 hover:text-[#a855f7] cursor-pointer"
+              className="group mt-5 flex items-center gap-1.5 text-[14px] font-semibold text-white transition-colors duration-200 hover:text-[#FF7A18] cursor-pointer"
             >
               <span>All integrations</span>
               <span className="text-[11px] transition-transform duration-200 group-hover:translate-x-0.5 text-white/90">
@@ -445,31 +445,31 @@ export function FrameworksIntegrationsSection() {
             {/* Sharp Hairline Grid: Exactly identical height as Column 1 (Row 1 has items, Row 2 is empty) */}
             <div className="mt-10 w-full max-w-[540px]">
               {/* Top Extension Sliver (hairline vertical lines extending up, empty) */}
-              <div className="h-6 grid grid-cols-3 border-l border-white/[0.08]">
-                <div className="border-r border-white/[0.08]" />
-                <div className="border-r border-white/[0.08]" />
-                <div className="border-r border-white/[0.08]" />
+              <div className="h-6 grid grid-cols-3 border-l border-white/[0.14]">
+                <div className="border-r border-white/[0.14]" />
+                <div className="border-r border-white/[0.14]" />
+                <div className="border-r border-white/[0.14]" />
               </div>
 
               {/* Row 1 (3 items: Supabase, Convex, Prisma) */}
-              <div className="grid grid-cols-3 border-t border-b border-l border-white/[0.08]">
+              <div className="grid grid-cols-3 border-t border-b border-l border-white/[0.14]">
                 {INTEGRATIONS_ROW_1.map((item) => (
                   <GridCell key={item.id} item={item} />
                 ))}
               </div>
 
               {/* Row 2 (3 items: Stripe, Neon, Firebase) */}
-              <div className="grid grid-cols-3 border-b border-l border-white/[0.08]">
+              <div className="grid grid-cols-3 border-b border-l border-white/[0.14]">
                 {INTEGRATIONS_ROW_2.map((item) => (
                   <GridCell key={item.id} item={item} />
                 ))}
               </div>
 
               {/* Bottom Extension Sliver (hairline vertical lines extending down, empty) */}
-              <div className="h-6 grid grid-cols-3 border-l border-white/[0.08]">
-                <div className="border-r border-white/[0.08]" />
-                <div className="border-r border-white/[0.08]" />
-                <div className="border-r border-white/[0.08]" />
+              <div className="h-6 grid grid-cols-3 border-l border-white/[0.14]">
+                <div className="border-r border-white/[0.14]" />
+                <div className="border-r border-white/[0.14]" />
+                <div className="border-r border-white/[0.14]" />
               </div>
             </div>
           </div>
