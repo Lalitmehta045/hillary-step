@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FooterWave } from "@/components/site/FooterWave";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
@@ -63,6 +63,37 @@ export function Footer() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isMSMEModalOpen, setIsMSMEModalOpen] = useState(false);
   const [statutoryType, setStatutoryType] = useState<StatutoryType>(null);
+  const [typedTagline, setTypedTagline] = useState("");
+  const [isDeletingTagline, setIsDeletingTagline] = useState(false);
+
+  const footerTagline = "Hard Work At The Base. Honor At The Summit. WE ARE YOUR SHERPAS.";
+
+  useEffect(() => {
+    const delay = !isDeletingTagline && typedTagline === footerTagline
+      ? 1800
+      : isDeletingTagline && typedTagline === ""
+        ? 700
+        : isDeletingTagline
+          ? 32
+          : 62;
+
+    const timer = window.setTimeout(() => {
+      if (!isDeletingTagline) {
+        if (typedTagline.length < footerTagline.length) {
+          setTypedTagline(footerTagline.slice(0, typedTagline.length + 1));
+        } else {
+          setIsDeletingTagline(true);
+        }
+      } else if (typedTagline.length > 0) {
+        setTypedTagline(footerTagline.slice(0, typedTagline.length - 1));
+      } else {
+        setIsDeletingTagline(false);
+      }
+    }, delay);
+
+    return () => window.clearTimeout(timer);
+  }, [typedTagline, isDeletingTagline]);
+
 
   const handleAction = (action: FooterLink["action"]) => {
     if (action === "it") setIsITModalOpen(true);
@@ -123,11 +154,19 @@ export function Footer() {
 
       <div className="relative z-10 w-full bg-[#2a2d33]">
         <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[64px] max-md:px-[24px] max-lg:px-[40px] py-[30px]">
-          <FadeIn delay={0.4}>
-            <div className="relative flex flex-col items-start gap-[12px] -translate-x-[14px] max-md:translate-x-0">
-              <Image src="/assets/HillaryStepSolutionLogo.png" alt="Hillary Step Solutions Logo" width={280} height={100} className="object-contain" />
-            </div>
-          </FadeIn>
+          <div className="flex w-full items-center justify-between gap-[40px] max-md:flex-col max-md:items-start max-md:gap-[24px]">
+            <FadeIn delay={0.4}>
+              <div className="relative flex flex-col items-start gap-[12px] -translate-x-[14px] max-md:translate-x-0">
+                <Image src="/assets/HillaryStepSolutionLogo.png" alt="Hillary Step Solutions Logo" width={280} height={100} className="object-contain" />
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.45} className="flex min-h-[70px] flex-1 items-center justify-end max-md:w-full max-md:justify-start">
+              <p className="max-w-[560px] text-right font-display text-[15px] max-md:text-[13px] font-[500] leading-[1.7] tracking-[0.03em] text-white/85 max-md:text-left">
+                {typedTagline}<span className="ml-[3px] inline-block h-[18px] w-[1.5px] translate-y-[3px] bg-white/75 animate-pulse" aria-hidden="true" />
+              </p>
+            </FadeIn>
+          </div>
 
           <FadeIn delay={0.5} className="flex w-full justify-center max-md:justify-start">
             <p className="font-sans text-[14px] max-md:text-[13px] font-[400] leading-[22px] tracking-[0.2px] text-white/80 max-md:text-left">
