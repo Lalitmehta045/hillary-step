@@ -63,31 +63,38 @@ export function Footer() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isMSMEModalOpen, setIsMSMEModalOpen] = useState(false);
   const [statutoryType, setStatutoryType] = useState<StatutoryType>(null);
-  const [typedTagline, setTypedTagline] = useState("");
+  const [typedTaglineLine1, setTypedTaglineLine1] = useState("");
+  const [typedTaglineLine2, setTypedTaglineLine2] = useState("");
   const [isFadingTagline, setIsFadingTagline] = useState(false);
 
-  const footerTagline = "Hard Work At The Base. Honor At The Summit.\\nWE ARE YOUR SHERPAS.";
+  const footerTaglineLine1 = "Hard Work At The Base. Honor At The Summit.";
+  const footerTaglineLine2 = "WE ARE YOUR SHERPAS.";
 
   useEffect(() => {
     if (isFadingTagline) {
       const fadeTimer = window.setTimeout(() => {
-        setTypedTagline("");
+        setTypedTaglineLine1("");
+        setTypedTaglineLine2("");
         setIsFadingTagline(false);
-      }, 750);
+      }, 700);
       return () => window.clearTimeout(fadeTimer);
     }
 
-    if (typedTagline === footerTagline) {
-      const pauseTimer = window.setTimeout(() => setIsFadingTagline(true), 1600);
+    if (typedTaglineLine1 === footerTaglineLine1 && typedTaglineLine2 === footerTaglineLine2) {
+      const pauseTimer = window.setTimeout(() => setIsFadingTagline(true), 1800);
       return () => window.clearTimeout(pauseTimer);
     }
 
     const typingTimer = window.setTimeout(() => {
-      setTypedTagline(footerTagline.slice(0, typedTagline.length + 1));
-    }, 62);
+      if (typedTaglineLine1.length < footerTaglineLine1.length) {
+        setTypedTaglineLine1(footerTaglineLine1.slice(0, typedTaglineLine1.length + 1));
+      } else {
+        setTypedTaglineLine2(footerTaglineLine2.slice(0, typedTaglineLine2.length + 1));
+      }
+    }, 42);
 
     return () => window.clearTimeout(typingTimer);
-  }, [typedTagline, isFadingTagline]);
+  }, [typedTaglineLine1, typedTaglineLine2, isFadingTagline]);
 
 
   const handleAction = (action: FooterLink["action"]) => {
@@ -157,9 +164,22 @@ export function Footer() {
             </FadeIn>
 
             <FadeIn delay={0.45} className="flex min-h-[70px] flex-1 items-center justify-end max-md:w-full max-md:justify-start">
-              <p className={`max-w-[560px] whitespace-pre-line text-right font-display text-[15px] max-md:text-[13px] font-[500] leading-[1.7] tracking-[0.03em] text-white/85 max-md:text-left transition-all duration-700 ease-out ${isFadingTagline ? "translate-y-[-18px] opacity-0" : "translate-y-0 opacity-100"}`}>
-                {typedTagline}<span className="ml-[3px] inline-block h-[18px] w-[1.5px] translate-y-[3px] bg-white/75 animate-pulse" aria-hidden="true" />
-              </p>
+              <div
+                className={`max-w-[560px] min-h-[54px] text-right max-md:text-left transition-all duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${isFadingTagline ? "translate-y-[-12px] scale-[0.985] opacity-0 blur-[4px]" : "translate-y-0 scale-100 opacity-100 blur-0"}`}
+              >
+                <p className="font-display text-[15px] max-md:text-[13px] font-[500] leading-[1.7] tracking-[0.03em] text-white/85">
+                  {typedTaglineLine1}
+                  {typedTaglineLine1.length > 0 && typedTaglineLine1.length < footerTaglineLine1.length && (
+                    <span className="ml-[2px] inline-block h-[16px] w-[1.5px] translate-y-[2px] bg-white/75 animate-pulse" aria-hidden="true" />
+                  )}
+                </p>
+                <p className="font-display text-[15px] max-md:text-[13px] font-[500] leading-[1.7] tracking-[0.03em] text-white/85">
+                  {typedTaglineLine2}
+                  {typedTaglineLine1 === footerTaglineLine1 && typedTaglineLine2.length < footerTaglineLine2.length && (
+                    <span className="ml-[2px] inline-block h-[16px] w-[1.5px] translate-y-[2px] bg-white/75 animate-pulse" aria-hidden="true" />
+                  )}
+                </p>
+              </div>
             </FadeIn>
           </div>
 
