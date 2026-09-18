@@ -426,7 +426,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
             >
               <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
               <span className="text-[11.5px] font-[700] tracking-[0.14em] text-[#15803D] uppercase">
-                GLOBAL TALENT &bull; PEOPLE
+                GLOBAL STAFFING &bull; TALENT
               </span>
             </m.div>
 
@@ -449,7 +449,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
               className="mt-4 sm:mt-5 text-[14px] sm:text-[15.5px] leading-[1.65] text-[#27272A] font-[450] max-w-[480px]"
             >
-              We connect businesses with qualified professionals across markets, helping organizations build reliable teams without the complexity of international hiring.
+              We help organizations build high-performing teams across borders through structured sourcing, specialist talent networks, and local market expertise.
             </m.p>
 
             {/* CTA Buttons */}
@@ -464,7 +464,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 onClick={() => handleHeroTabClick("post")}
                 className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#0066FF] hover:bg-[#0052CC] text-white text-[14px] font-[600] tracking-wide shadow-[0_8px_20px_rgba(0,102,255,0.35)] hover:shadow-[0_12px_28px_rgba(0,102,255,0.45)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
-                <span>Post a Job</span>
+                <span>Start Hiring</span>
                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </button>
 
@@ -473,7 +473,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 onClick={() => handleHeroTabClick("find")}
                 className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-white/90 hover:bg-white text-[#111827] border border-gray-200/90 text-[14px] font-[600] tracking-wide shadow-xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer backdrop-blur-sm"
               >
-                <span>Find a Job</span>
+                <span>Explore Opportunities</span>
                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </button>
             </m.div>
@@ -561,7 +561,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                     {/* Title */}
                     <div className={`${isModal ? "mb-[48px] text-center" : "mb-[40px] max-md:mb-[28px] text-center"}`}>
                       <h2 className={`${isModal ? "text-[36px] leading-[44px] tracking-[-0.5px]" : "text-[44px] max-md:text-[28px] leading-[52.8px] max-md:leading-[36px] tracking-[-1.1px] max-md:tracking-[-0.5px]"} font-[700] text-[#111111]`}>
-                        <span className="bg-gradient-to-r from-[#86EFAC] via-[#14532D] to-[#86EFAC] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Post a Job</span> Find the Right Talent.
+                        <span className="bg-gradient-to-r from-[#86EFAC] via-[#14532D] to-[#86EFAC] bg-[length:200%_auto] animate-[gradient-flow_3s_ease_infinite] bg-clip-text text-transparent">Start Hiring</span> Build the Right Team.
                       </h2>
                     </div>
 
@@ -1021,12 +1021,12 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
      
     
 
-      {/* What happens next? - Positioned at the very end */}
+      {/* What happens after you connect with us? - Positioned at the very end */}
       <div className="w-full bg-white py-14 px-4 md:px-8 border-t border-gray-100">
         <div className="max-w-[1200px] mx-auto flex flex-col items-center">
           <div className="w-full rounded-[24px] bg-[#F8FAFC] border border-[#E5E7EB]/80 px-[48px] py-[40px] max-md:px-[24px] max-md:py-[32px] shadow-sm">
             <h3 className="text-center font-display text-[15px] font-[700] uppercase tracking-[1px] text-[#1A6CFF] mb-[40px] max-md:mb-[32px]">
-              What happens next?
+              What happens after you connect with us?
             </h3>
 
             <div className="flex items-start justify-between gap-[24px] max-md:flex-col max-md:gap-[32px]">
@@ -1043,7 +1043,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 <div className="flex flex-col">
                   <span className="font-display text-[15px] font-[700] text-[#1A6CFF] leading-tight">01</span>
                   <span className="font-display text-[17px] font-[600] text-[#111111] mt-[4px] leading-tight">We review</span>
-                  <span className="font-sans text-[14px] text-[#4B5563] mt-[8px] leading-[20px]">Our team reviews your requirements carefully.</span>
+                  <span className="font-sans text-[14px] text-[#4B5563] mt-[8px] leading-[20px]">Our staffing team reviews your role, business context, and hiring requirements.</span>
                 </div>
               </div>
 
@@ -1069,7 +1069,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 <div className="flex flex-col">
                   <span className="font-display text-[15px] font-[700] text-[#1A6CFF] leading-tight">02</span>
                   <span className="font-display text-[17px] font-[600] text-[#111111] mt-[4px] leading-tight">We shortlist</span>
-                  <span className="font-sans text-[14px] text-[#4B5563] mt-[8px] leading-[20px]">We shortlist the best matched candidates.</span>
+                  <span className="font-sans text-[14px] text-[#4B5563] mt-[8px] leading-[20px]">We source, screen, and shortlist candidates aligned with the role and market.</span>
                 </div>
               </div>
 
@@ -1092,7 +1092,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 <div className="flex flex-col">
                   <span className="font-display text-[15px] font-[700] text-[#1A6CFF] leading-tight">03</span>
                   <span className="font-display text-[17px] font-[600] text-[#111111] mt-[4px] leading-tight">You meet candidates</span>
-                  <span className="font-sans text-[14px] text-[#4B5563] mt-[8px] leading-[20px]">You meet, interview, and choose the right fit.</span>
+                  <span className="font-sans text-[14px] text-[#4B5563] mt-[8px] leading-[20px]">You meet qualified candidates and select the people who fit your team.</span>
                 </div>
               </div>
             </div>
@@ -1103,7 +1103,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            <span className="font-sans text-[13px] font-[500]">Your information is kept confidential and used only to process your staffing request.</span>
+            <span className="font-sans text-[13px] font-[500]">Your requirements and candidate information are handled confidentially throughout the staffing process.</span>
           </div>
         </div>
       </div>
