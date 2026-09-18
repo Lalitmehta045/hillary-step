@@ -429,7 +429,7 @@ export function BentoGridFeatures() {
 
                   {/* List Rows */}
                   <div className="flex flex-col gap-2 relative z-10">
-                    {/* Row 1: Bluth Company */}
+                    {/* Row 1: Hillary Step Solutions */}
                     <div className="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50/80 transition-colors">
                       <div className="flex items-center gap-3">
                         {/* HSS brand icon */}
@@ -438,7 +438,7 @@ export function BentoGridFeatures() {
                         </div>
                         <div className="flex flex-col text-left">
                           <span className="text-[13px] font-semibold text-[#111827] leading-tight">
-                            Bluth Company
+                            Hillary Step Solutions
                           </span>
                           <span className="text-[11px] text-gray-400 font-normal">
                             Mr. Manager
@@ -454,7 +454,7 @@ export function BentoGridFeatures() {
                       </button>
                     </div>
 
-                    {/* Row 2: Dunder Mifflin */}
+                    {/* Row 2: Global Talent Network */}
                     <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50/80 transition-colors">
                       <div className="w-8 h-8 rounded-xl bg-[#1E293B] flex items-center justify-center text-white shrink-0">
                         <span className="text-[10px] font-bold tracking-tight text-emerald-300">
@@ -463,7 +463,7 @@ export function BentoGridFeatures() {
                       </div>
                       <div className="flex flex-col text-left">
                         <span className="text-[13px] font-semibold text-[#111827] leading-tight">
-                          Dunder Mifflin
+                          Global Talent Network
                         </span>
                         <span className="text-[11px] text-gray-400 font-normal">
                           Asst (to the) Regional Manager
