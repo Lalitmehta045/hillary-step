@@ -72,51 +72,54 @@ export function Regions() {
     <section className="relative w-full overflow-hidden bg-white pt-[64px] pb-[64px] max-md:pt-[40px] max-md:pb-[40px]">
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
         <svg
-          className="absolute left-[18%] top-[-8%] h-[125%] w-[112%]"
+          className="absolute inset-0 h-full w-full"
           viewBox="0 0 1600 1000"
           preserveAspectRatio="none"
         >
           <defs>
             <linearGradient id="global-presence-ribbon" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#FF7A18" stopOpacity="0.34" />
-              <stop offset="18%" stopColor="#FF3D81" stopOpacity="0.32" />
-              <stop offset="38%" stopColor="#40F600" stopOpacity="0.30" />
-              <stop offset="58%" stopColor="#20C8FF" stopOpacity="0.34" />
-              <stop offset="78%" stopColor="#2F7BFF" stopOpacity="0.32" />
-              <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.26" />
+              <stop offset="0%" stopColor="#FF7A18" stopOpacity="0.30" />
+              <stop offset="18%" stopColor="#FF3D81" stopOpacity="0.30" />
+              <stop offset="38%" stopColor="#40F600" stopOpacity="0.28" />
+              <stop offset="58%" stopColor="#20C8FF" stopOpacity="0.32" />
+              <stop offset="78%" stopColor="#2F7BFF" stopOpacity="0.30" />
+              <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.24" />
             </linearGradient>
             <linearGradient id="global-presence-ribbon-highlight" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.16" />
-              <stop offset="45%" stopColor="#FFFFFF" stopOpacity="0.30" />
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.12" />
+              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.10" />
+              <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.28" />
+              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.10" />
             </linearGradient>
             <filter id="global-presence-ribbon-blur" x="-15%" y="-35%" width="130%" height="170%">
-              <feGaussianBlur stdDeviation="18" />
+              <feGaussianBlur stdDeviation="20" />
             </filter>
+            <clipPath id="global-presence-ribbon-clip">
+              <rect x="300" y="0" width="1300" height="1000" />
+            </clipPath>
           </defs>
 
-          <g>
+          <g clipPath="url(#global-presence-ribbon-clip)">
             <path
-              d="M-180 900 C 120 830, 260 730, 480 670 C 760 592, 1030 560, 1230 385 C 1370 264, 1480 112, 1740 30"
+              d="M180 930 C 430 865, 650 760, 840 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15"
               fill="none"
               stroke="url(#global-presence-ribbon)"
               strokeWidth="150"
               strokeLinecap="round"
               filter="url(#global-presence-ribbon-blur)"
-              opacity="0.92"
+              opacity="0.98"
             >
               <animate
                 attributeName="d"
-                dur="10s"
+                dur="11s"
                 repeatCount="indefinite"
-                values="M-180 900 C 120 830, 260 730, 480 670 C 760 592, 1030 560, 1230 385 C 1370 264, 1480 112, 1740 30;
-                        M-180 875 C 120 805, 260 700, 480 640 C 760 560, 1030 590, 1230 410 C 1370 286, 1480 132, 1740 5;
-                        M-180 900 C 120 830, 260 730, 480 670 C 760 592, 1030 560, 1230 385 C 1370 264, 1480 112, 1740 30"
+                values="M180 930 C 430 865, 650 760, 840 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15;
+                        M180 900 C 430 830, 650 735, 840 665 C 1040 590, 1170 495, 1290 345 C 1400 210, 1490 80, 1690 -15;
+                        M180 930 C 430 865, 650 760, 840 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15"
               />
             </path>
 
             <path
-              d="M-180 865 C 140 790, 280 710, 500 650 C 770 575, 1010 535, 1215 370 C 1380 238, 1495 100, 1740 10"
+              d="M160 955 C 430 885, 650 790, 850 715 C 1050 640, 1190 535, 1310 390 C 1420 250, 1510 125, 1710 30"
               fill="none"
               stroke="url(#global-presence-ribbon-highlight)"
               strokeWidth="7"
@@ -125,26 +128,26 @@ export function Regions() {
             >
               <animate
                 attributeName="d"
-                dur="10s"
+                dur="11s"
                 repeatCount="indefinite"
-                values="M-180 865 C 140 790, 280 710, 500 650 C 770 575, 1010 535, 1215 370 C 1380 238, 1495 100, 1740 10;
-                        M-180 840 C 140 765, 280 680, 500 620 C 770 545, 1010 565, 1215 395 C 1380 260, 1495 118, 1740 -15;
-                        M-180 865 C 140 790, 280 710, 500 650 C 770 575, 1010 535, 1215 370 C 1380 238, 1495 100, 1740 10"
+                values="M160 955 C 430 885, 650 790, 850 715 C 1050 640, 1190 535, 1310 390 C 1420 250, 1510 125, 1710 30;
+                        M160 925 C 430 855, 650 760, 850 685 C 1050 610, 1190 505, 1310 360 C 1420 220, 1510 95, 1710 0;
+                        M160 955 C 430 885, 650 790, 850 715 C 1050 640, 1190 535, 1310 390 C 1420 250, 1510 125, 1710 30"
               />
             </path>
 
             <path
-              d="M-160 930 C 160 850, 300 770, 520 700 C 790 615, 1050 575, 1260 405 C 1410 280, 1510 130, 1760 45"
+              d="M220 975 C 470 905, 680 820, 870 745 C 1060 670, 1200 565, 1330 415 C 1440 285, 1530 145, 1740 55"
               fill="none"
               stroke="url(#global-presence-ribbon)"
               strokeWidth="92"
               strokeLinecap="round"
-              opacity="0.52"
+              opacity="0.48"
             >
               <animateTransform
                 attributeName="transform"
                 type="translate"
-                values="0 0; 24 -18; 0 0"
+                values="0 0; 22 -14; 0 0"
                 dur="8s"
                 repeatCount="indefinite"
               />
