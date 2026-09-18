@@ -201,10 +201,10 @@ function ClerkCliCard() {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative h-[360px] w-full overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#121316] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none transition-colors duration-500 hover:border-white/[0.14]"
+      className="group relative h-[360px] w-full overflow-hidden rounded-[18px] border border-white/[0.08] bg-gradient-to-br from-[#07152F] via-[#0D2459] to-[#10251A] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none transition-colors duration-500 hover:border-white/[0.14]"
     >
       {/* Subtle radial ambient background glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_44%_56%,rgba(0,229,255,0.035),transparent_65%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_44%_56%,rgba(26,108,255,0.10),transparent_65%)] pointer-events-none" />
 
       {/* Top Header: bold white title + 2-line gray-400 description */}
       <div className="relative z-20">
@@ -330,7 +330,7 @@ function ClerkCliCard() {
 
           {/* Hero Node Circle */}
           <m.div
-            className="relative flex items-center justify-center w-[58px] h-[58px] rounded-full bg-[#181a22] border border-cyan-400/40 shadow-[0_0_30px_rgba(6,182,212,0.35)]"
+            className="relative flex items-center justify-center w-[58px] h-[58px] rounded-full bg-[#181a22] border border-[#1A6CFF]/50 shadow-[0_0_30px_rgba(26,108,255,0.35)]"
             animate={isHovered ? { scale: [0.97, 1.03, 0.97] } : { scale: 1 }}
             transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -435,10 +435,10 @@ function RuntimeCard() {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative h-[360px] w-full overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#121316] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none transition-colors duration-500 hover:border-white/[0.14]"
+      className="group relative h-[360px] w-full overflow-hidden rounded-[18px] border border-white/[0.08] bg-[#121316] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none transition-colors duration-500 hover:border-white/[0.14]"
     >
       {/* Subtle radial ambient background glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(59,130,246,0.04),transparent_65%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(64,246,0,0.07),transparent_65%)] pointer-events-none" />
 
       {/* Hub-style Node Diagram at Top */}
       <div className="relative w-full h-[215px] overflow-hidden">
@@ -536,7 +536,7 @@ function RuntimeCard() {
           style={{ left: "50%", top: "42%" }}
         >
           {/* Subtle ambient glow behind tile */}
-          <div className="absolute w-20 h-20 rounded-2xl bg-blue-500/10 blur-xl pointer-events-none" />
+          <div className="absolute w-20 h-20 rounded-2xl bg-[#40F600]/10 blur-xl pointer-events-none" />
 
           {/* Rounded-Square Tile */}
           <div className="relative flex items-center justify-center w-16 h-16 rounded-[18px] bg-[#1e2027] border border-white/[0.14] shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
