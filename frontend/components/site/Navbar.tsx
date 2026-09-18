@@ -181,7 +181,7 @@ export function Navbar() {
 
   return (
     <>
-      <div ref={navHoverZoneRef} className="fixed top-0 inset-x-0 z-[9000] h-[96px] pointer-events-auto" onMouseEnter={handleNavMouseEnter} onMouseLeave={handleNavMouseLeave}>
+      <div ref={navHoverZoneRef} className="fixed top-0 inset-x-0 z-[9000] h-[96px] pointer-events-auto">
         <m.header
           initial={{ y: 0, opacity: 1 }}
           animate={{ y: shouldHide ? "-120%" : 0, opacity: shouldHide ? 0 : 1 }}
