@@ -9,24 +9,24 @@ import {
   FaEnvelope,
 } from "react-icons/fa6";
 
-// Roles for Card 1 continuous scrolling ticker
+// Staffing roles for Card 1 continuous scrolling ticker
 const ROLES = [
-  "Product Member",
-  "Administrator",
-  "Editor",
-  "QA Tester",
-  "Owner",
-  "Engineer",
-  "Marketing",
-  "Human Resources",
-  "DevOps",
-  "Security Analyst",
+  "Software Engineer",
+  "Project Manager",
+  "Talent Acquisition",
+  "HR Specialist",
+  "Data Analyst",
+  "Cloud Engineer",
+  "Finance Specialist",
+  "Operations Manager",
+  "Cybersecurity Analyst",
+  "Business Development",
 ];
 
 // Quadrupled list to allow endless seamless scrolling
 const EXTENDED_ROLES = [...ROLES, ...ROLES, ...ROLES, ...ROLES];
 
-// 4 photo avatars with background gradient styling matching the screenshot
+// 4 talent avatars with background gradient styling matching the existing visual
 const PHOTO_TILES = [
   {
     id: "top-mid",
@@ -117,16 +117,16 @@ export function BentoGridFeatures() {
         {/* 3-Column Bento Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
           {/* ============================================================ */}
-          {/* COLUMN 1: CUSTOM ROLES & PERMISSIONS                         */}
+          {/* COLUMN 1: STAFFING ROLES & SPECIALISTS                         */}
           {/* ============================================================ */}
           <div className="bg-white rounded-[24px] border border-[#E5E7EB] p-7 sm:p-8 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] relative overflow-hidden min-h-[520px]">
             {/* Header */}
             <div className="flex flex-col gap-2">
               <h3 className="text-[17.5px] sm:text-[18px] font-bold text-[#111827] tracking-tight">
-                Custom roles and permissions
+                Specialists across key functions
               </h3>
               <p className="text-[13.5px] sm:text-[14px] text-[#64748B] leading-[1.5] max-w-[320px]">
-                Powerful primitives to fully customize your app&apos;s authorization story.
+                Access specialized professionals across technology, business, operations, and support functions.
               </p>
             </div>
 
@@ -227,7 +227,7 @@ export function BentoGridFeatures() {
           {/* COLUMN 2: SPLIT STACK (CARD 2A: AUTO-JOIN & 2B: INVITATIONS) */}
           {/* ============================================================ */}
           <div className="flex flex-col gap-6">
-            {/* CARD 2A — AUTO-JOIN */}
+            {/* CARD 2A — TALENT MATCHING */}
             <div className="bg-white rounded-[24px] border border-[#E5E7EB] p-7 sm:p-8 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] relative overflow-hidden flex-1 min-h-[250px]">
               {/* Top Visual Area: Radar Ripple + 3 Avatars + Connector Lines */}
               <div className="relative w-full h-[120px] flex flex-col items-center justify-start pt-1">
@@ -301,14 +301,14 @@ export function BentoGridFeatures() {
                   </svg>
                 </div>
 
-                {/* + Auto-join Pill Button with Ambient Glow */}
+                {/* + Talent matching Pill Button with Ambient Glow */}
                 <div className="relative z-10 -mt-0.5">
                   <div className="absolute inset-0 bg-indigo-500/15 rounded-full blur-md" />
                   <div className="relative inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white border border-gray-200/90 shadow-xs text-[12.5px] font-semibold text-[#111827]">
                     <span className="w-3.5 h-3.5 rounded-full bg-gray-100 flex items-center justify-center text-[9px] text-gray-600 font-bold">
                       +
                     </span>
-                    <span>Auto-join</span>
+                    <span>Talent matching</span>
                   </div>
                 </div>
               </div>
@@ -316,15 +316,15 @@ export function BentoGridFeatures() {
               {/* Bottom Content */}
               <div className="flex flex-col gap-1.5 pt-4">
                 <h4 className="text-[16.5px] sm:text-[17px] font-bold text-[#111827]">
-                  Auto-join
+                  Talent matching
                 </h4>
                 <p className="text-[13.5px] text-[#64748B] leading-[1.5]">
-                  Let your users discover and join organizations based on their email domain.
+                  Connect role requirements with relevant professionals across our talent network.
                 </p>
               </div>
             </div>
 
-            {/* CARD 2B — INVITATIONS */}
+            {/* CARD 2B — CANDIDATE OUTREACH */}
             <div className="bg-white rounded-[24px] border border-[#E5E7EB] p-7 sm:p-8 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] relative overflow-hidden flex-1 min-h-[250px]">
               {/* Upper Area: Signal Path with Traveling Pulse Dot & Dark Button */}
               <div className="relative w-full h-[100px] flex items-center justify-center">
@@ -366,7 +366,7 @@ export function BentoGridFeatures() {
                     <FaEnvelope className="text-[9px] text-white" />
                   </div>
                   <span className="text-[13px] font-medium tracking-tight">
-                    Invite this person
+                    Connect with candidate
                   </span>
                 </div>
               </div>
@@ -374,10 +374,10 @@ export function BentoGridFeatures() {
               {/* Bottom Content */}
               <div className="flex flex-col gap-1.5 pt-4">
                 <h4 className="text-[16.5px] sm:text-[17px] font-bold text-[#111827]">
-                  Invitations
+                  Candidate outreach
                 </h4>
                 <p className="text-[13.5px] text-[#64748B] leading-[1.5]">
-                  Fuel your application&apos;s growth by making it simple for your customers to invite their team.
+                  Keep candidate communication simple, structured, and aligned throughout the hiring process.
                 </p>
               </div>
             </div>
@@ -390,10 +390,10 @@ export function BentoGridFeatures() {
             {/* Header */}
             <div className="flex flex-col gap-2">
               <h3 className="text-[17.5px] sm:text-[18px] font-bold text-[#111827] tracking-tight">
-                Organization UI Components
+                Staffing Delivery Workspace
               </h3>
               <p className="text-[13.5px] sm:text-[14px] text-[#64748B] leading-[1.5]">
-                Clerk&apos;s UI components add turn-key simplicity to complex Organization management tasks.
+                A structured workspace for managing talent pipelines, candidate profiles, and staffing delivery.
               </p>
             </div>
 
@@ -401,7 +401,7 @@ export function BentoGridFeatures() {
             <div className="flex justify-center pt-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-gray-200/90 shadow-xs text-[12px] font-medium text-gray-800">
                 <span className="w-2 h-2 rounded-full bg-black" />
-                <span>Clerk</span>
+                <span>Hillary Step Solutions</span>
                 <FaChevronDown className="text-[9px] text-gray-400 ml-0.5" />
               </div>
             </div>
@@ -422,11 +422,9 @@ export function BentoGridFeatures() {
                   transition={{ duration: 0.6, ease: "easeInOut" }}
                   className="relative z-10 bg-white rounded-[16px] border border-gray-200/90 p-3 sm:p-3.5 shadow-[0_10px_28px_rgba(0,0,0,0.05)] overflow-hidden"
                 >
-                  {/* Faint Watermark Logo */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-                    <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                    </svg>
+                  {/* Faint HSS watermark */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none">
+                    <span className="text-[54px] font-[900] tracking-[-0.08em] text-[#16A34A]">HSS</span>
                   </div>
 
                   {/* List Rows */}
@@ -434,7 +432,7 @@ export function BentoGridFeatures() {
                     {/* Row 1: Bluth Company */}
                     <div className="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50/80 transition-colors">
                       <div className="flex items-center gap-3">
-                        {/* Bluth Green Split Icon */}
+                        {/* HSS brand icon */}
                         <div className="w-8 h-8 rounded-full bg-[#10B981] flex items-center justify-center text-white shrink-0">
                           <div className="w-4 h-4 rounded-full border-2 border-white border-r-transparent rotate-45" />
                         </div>
@@ -459,8 +457,8 @@ export function BentoGridFeatures() {
                     {/* Row 2: Dunder Mifflin */}
                     <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50/80 transition-colors">
                       <div className="w-8 h-8 rounded-xl bg-[#1E293B] flex items-center justify-center text-white shrink-0">
-                        <span className="text-[11px] font-bold tracking-tighter text-blue-300">
-                          DM
+                        <span className="text-[10px] font-bold tracking-tight text-emerald-300">
+                          HSS
                         </span>
                       </div>
                       <div className="flex flex-col text-left">
@@ -477,11 +475,11 @@ export function BentoGridFeatures() {
                     <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50/80 transition-colors">
                       <img
                         src="/assets/bento/card3-user.jpg"
-                        alt="Personal account"
+                        alt="Candidate profile"
                         className="w-8 h-8 rounded-full object-cover border border-gray-200 shrink-0"
                       />
                       <span className="text-[13px] font-medium text-gray-700">
-                        Personal account
+                        Candidate profile
                       </span>
                     </div>
 
@@ -498,10 +496,10 @@ export function BentoGridFeatures() {
 
                   {/* Footer Strip */}
                   <div className="mt-2.5 pt-2.5 border-t border-gray-100 flex items-center justify-center gap-1 text-[11px] text-gray-400">
-                    <span>Secured by</span>
+                    <span>Powered by</span>
                     <span className="font-semibold text-gray-600 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-black" />
-                      clerk
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A]" />
+                      Hillary Step Solutions
                     </span>
                   </div>
                 </m.div>
