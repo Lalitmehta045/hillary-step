@@ -149,13 +149,13 @@ export function ITSolutionsContent() {
   const [detailService, setDetailService] = useState<ServiceData | null>(null);
 
   return (
-    <div className="w-full font-display bg-[#f8f6f3] pb-24">
+    <div className="w-full font-display bg-white pb-24">
       {/* HERO SECTION */}
       <m.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="px-3 md:px-6 py-3.5 bg-[#f8f6f3]"
+        className="px-3 md:px-6 py-3.5 bg-white"
       >
         <div className="relative w-full h-[500px] rounded-[22px] overflow-hidden flex flex-col justify-center">
           <img src="/images/it_workspace_hero.jpg" alt="Hero Background" className="absolute inset-0 w-full h-full object-cover" />
