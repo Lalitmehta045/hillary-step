@@ -254,7 +254,7 @@ export default function Hero() {
                     HILLARY STEP SOLUTIONS
                   </span>
                   <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] whitespace-nowrap">
-                    Hillary Step Solutions
+                    Your Tech Sherpas
                   </h3>
                 </div>
               </div>
