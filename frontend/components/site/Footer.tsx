@@ -24,41 +24,26 @@ type FooterLink = {
   action?: "it" | "staffing" | "civil" | "mca" | "asic" | "labor" | "msme" | "privacy";
 };
 
-const COLUMNS: {
-  title: string;
-  links: FooterLink[];
-}[] = [
-  {
-    title: "OPERATIONAL PILLARS",
-    links: [
-      { label: "Cognitive Digital – Platforms", action: "it" },
-      { label: "Global Talent – People", action: "staffing" },
-      { label: "Eco Smart Infra – Projects", action: "civil" },
-    ],
-  },
-  {
-    title: "STATUTORY COMPLIANCE",
-    links: [
-      { label: "MCA Parameters", action: "mca" },
-      { label: "ASIC Standards", action: "asic" },
-      { label: "US Corporate Labor Codes", action: "labor" },
-    ],
-  },
-  {
-    title: "CORPORATE GATEWAY",
-    links: [
-      { label: "About the Ascent", href: "/#about" },
-      { label: "Peak Intelligence Core", href: "/#ai-experience" },
-      { label: "Contact the Sherpas", href: "/#contact" },
-    ],
-  },
-  {
-    title: "VALIDATIONS",
-    links: [
-      { label: "MSME Certified", action: "msme" },
-      { label: "Privacy & Security", action: "privacy" },
-    ],
-  },
+const COLUMNS: { title: string; links: FooterLink[] }[] = [
+  { title: "OPERATIONAL PILLARS", links: [
+    { label: "Cognitive Digital – Platforms", action: "it" },
+    { label: "Global Talent – People", action: "staffing" },
+    { label: "Eco Smart Infra – Projects", action: "civil" },
+  ]},
+  { title: "STATUTORY COMPLIANCE", links: [
+    { label: "MCA Parameters", action: "mca" },
+    { label: "ASIC Standards", action: "asic" },
+    { label: "US Corporate Labor Codes", action: "labor" },
+  ]},
+  { title: "CORPORATE GATEWAY", links: [
+    { label: "About the Ascent", href: "/#about" },
+    { label: "Peak Intelligence Core", href: "/#ai-experience" },
+    { label: "Contact the Sherpas", href: "/#contact" },
+  ]},
+  { title: "VALIDATIONS", links: [
+    { label: "MSME Certified", action: "msme" },
+    { label: "Privacy & Security", action: "privacy" },
+  ]},
 ];
 
 const SOCIALS = [
@@ -99,37 +84,20 @@ export function Footer() {
           {COLUMNS.map((col) => (
             <StaggerItem key={col.title} className="shrink-0">
               <nav className="flex flex-col gap-[12px]">
-                <h2 className="font-display text-[15px] font-[500] leading-[20px] tracking-[0.04em] text-[#1E3A8A] uppercase">
-                  {col.title}
-                </h2>
+                <h2 className="font-display text-[15px] font-[500] leading-[20px] tracking-[0.04em] text-[#1E3A8A] uppercase">{col.title}</h2>
                 <ul className="flex flex-col gap-[10px]">
                   {col.links.map((link) => (
                     <li key={link.label}>
                       {link.action ? (
-                        <button
-                          type="button"
-                          onClick={() => handleAction(link.action)}
-                          className="group/link relative inline-flex cursor-pointer items-center gap-[6px] bg-transparent p-0 text-left font-display text-[15px] font-[400] leading-[22px] tracking-[0px] text-[#1E3A8A]/85 transition-all duration-300 hover:text-[#1A6CFF] hover:translate-x-[4px]"
-                        >
-                          <span className="relative">
-                            {link.label}
-                            <span className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-gradient-to-r from-[#1A6CFF] to-[#3AF900] transition-all duration-300 ease-out group-hover/link:w-full" />
-                          </span>
+                        <button type="button" onClick={() => handleAction(link.action)} className="group/link relative inline-flex cursor-pointer items-center gap-[6px] bg-transparent p-0 text-left font-display text-[15px] font-[400] leading-[22px] tracking-[0px] text-[#1E3A8A]/85 transition-all duration-300 hover:text-[#1A6CFF] hover:translate-x-[4px]">
+                          <span className="relative">{link.label}<span className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-gradient-to-r from-[#1A6CFF] to-[#3AF900] transition-all duration-300 ease-out group-hover/link:w-full" /></span>
                         </button>
                       ) : link.href ? (
-                        <a
-                          href={link.href}
-                          className="group/link relative inline-flex items-center gap-[6px] font-display text-[15px] font-[400] leading-[22px] tracking-[0px] text-[#1E3A8A]/85 transition-all duration-300 hover:text-[#1A6CFF] hover:translate-x-[4px]"
-                        >
-                          <span className="relative">
-                            {link.label}
-                            <span className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-gradient-to-r from-[#1A6CFF] to-[#3AF900] transition-all duration-300 ease-out group-hover/link:w-full" />
-                          </span>
+                        <a href={link.href} className="group/link relative inline-flex items-center gap-[6px] font-display text-[15px] font-[400] leading-[22px] tracking-[0px] text-[#1E3A8A]/85 transition-all duration-300 hover:text-[#1A6CFF] hover:translate-x-[4px]">
+                          <span className="relative">{link.label}<span className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-gradient-to-r from-[#1A6CFF] to-[#3AF900] transition-all duration-300 ease-out group-hover/link:w-full" /></span>
                         </a>
                       ) : (
-                        <span className="font-display text-[15px] font-[400] leading-[22px] tracking-[0px] text-[#1E3A8A]/85">
-                          {link.label}
-                        </span>
+                        <span className="font-display text-[15px] font-[400] leading-[22px] tracking-[0px] text-[#1E3A8A]/85">{link.label}</span>
                       )}
                     </li>
                   ))}
@@ -143,38 +111,21 @@ export function Footer() {
           {SOCIALS.map((s) => {
             const Icon = s.icon;
             return (
-              <AnimatedButton
-                key={s.alt}
-                variant="socialIcon"
-                href="#"
-                aria-label={s.alt}
-                className={`group flex h-[45px] w-[45px] items-center justify-center rounded-[10px] overflow-hidden transition-colors ${s.bg} ${s.hoverBg}`}
-              >
+              <AnimatedButton key={s.alt} variant="socialIcon" href="#" aria-label={s.alt} className={`group flex h-[45px] w-[45px] items-center justify-center rounded-[10px] overflow-hidden transition-colors ${s.bg} ${s.hoverBg}`}>
                 <Icon className="h-[22px] w-[22px] text-white transition-transform duration-300 group-hover:scale-110" />
               </AnimatedButton>
             );
           })}
         </FadeIn>
 
-        <FadeIn delay={0.3}>
-          <div className="h-px w-full bg-[#353434]/20" />
-        </FadeIn>
+        <FadeIn delay={0.3}><div className="h-px w-full bg-[#353434]/20" /></FadeIn>
       </div>
 
       <div className="relative z-10 w-full bg-[#2a2d33]">
         <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-[30px] px-[64px] max-md:px-[24px] max-lg:px-[40px] py-[30px]">
           <FadeIn delay={0.4}>
-            <div className="relative flex flex-col items-start gap-[12px]">
-              <Image
-                src="/assets/HillaryStepSolutionLogo.png"
-                alt="Hillary Step Solutions Logo"
-                width={280}
-                height={100}
-                className="object-contain"
-              />
-              {/* <p className="font-display text-[20px] font-[400] leading-[28px] tracking-[-0.5px] text-white">
-                Hillary Step Solutions
-              </p> */}
+            <div className="relative flex flex-col items-start gap-[12px] -translate-x-[14px] max-md:translate-x-0">
+              <Image src="/assets/HillaryStepSolutionLogo.png" alt="Hillary Step Solutions Logo" width={280} height={100} className="object-contain" />
             </div>
           </FadeIn>
 
@@ -189,71 +140,12 @@ export function Footer() {
       <ITSolutionsModal isOpen={isITModalOpen} onClose={() => setIsITModalOpen(false)} />
       <GlobalStaffingModal isOpen={isStaffingModalOpen} onClose={() => setIsStaffingModalOpen(false)} />
       <CivilInfraModal isOpen={isCivilModalOpen} onClose={() => setIsCivilModalOpen(false)} />
-      <MCAParametersModal
-        isOpen={isMCAModalOpen}
-        onClose={() => setIsMCAModalOpen(false)}
-        onNavigateType={(t) => {
-          setIsMCAModalOpen(false);
-          if (t === "asic") setIsASICModalOpen(true);
-          else if (t === "labor") setIsLaborModalOpen(true);
-          else if (t === "privacy") setIsPrivacyModalOpen(true);
-          else if (t === "msme") setIsMSMEModalOpen(true);
-          else setStatutoryType(t);
-        }}
-      />
-      <ASICStandardsModal
-        isOpen={isASICModalOpen}
-        onClose={() => setIsASICModalOpen(false)}
-        onNavigateType={(t) => {
-          setIsASICModalOpen(false);
-          if (t === "mca") setIsMCAModalOpen(true);
-          else if (t === "labor") setIsLaborModalOpen(true);
-          else if (t === "privacy") setIsPrivacyModalOpen(true);
-          else if (t === "msme") setIsMSMEModalOpen(true);
-          else setStatutoryType(t);
-        }}
-      />
-      <USLaborCodesModal
-        isOpen={isLaborModalOpen}
-        onClose={() => setIsLaborModalOpen(false)}
-        onNavigateType={(t) => {
-          setIsLaborModalOpen(false);
-          if (t === "mca") setIsMCAModalOpen(true);
-          else if (t === "asic") setIsASICModalOpen(true);
-          else if (t === "privacy") setIsPrivacyModalOpen(true);
-          else if (t === "msme") setIsMSMEModalOpen(true);
-          else setStatutoryType(t);
-        }}
-      />
-      <PrivacySecurityModal
-        isOpen={isPrivacyModalOpen}
-        onClose={() => setIsPrivacyModalOpen(false)}
-        onNavigateType={(t) => {
-          setIsPrivacyModalOpen(false);
-          if (t === "mca") setIsMCAModalOpen(true);
-          else if (t === "asic") setIsASICModalOpen(true);
-          else if (t === "labor") setIsLaborModalOpen(true);
-          else if (t === "msme") setIsMSMEModalOpen(true);
-          else setStatutoryType(t);
-        }}
-      />
-      <MSMECertifiedModal
-        isOpen={isMSMEModalOpen}
-        onClose={() => setIsMSMEModalOpen(false)}
-        onNavigateType={(t) => {
-          setIsMSMEModalOpen(false);
-          if (t === "mca") setIsMCAModalOpen(true);
-          else if (t === "asic") setIsASICModalOpen(true);
-          else if (t === "labor") setIsLaborModalOpen(true);
-          else if (t === "privacy") setIsPrivacyModalOpen(true);
-          else setStatutoryType(t as any);
-        }}
-      />
-      <StatutoryModal 
-        isOpen={statutoryType !== null} 
-        type={statutoryType} 
-        onClose={() => setStatutoryType(null)} 
-      />
+      <MCAParametersModal isOpen={isMCAModalOpen} onClose={() => setIsMCAModalOpen(false)} onNavigateType={(t) => { setIsMCAModalOpen(false); if (t === "asic") setIsASICModalOpen(true); else if (t === "labor") setIsLaborModalOpen(true); else if (t === "privacy") setIsPrivacyModalOpen(true); else if (t === "msme") setIsMSMEModalOpen(true); else setStatutoryType(t); }} />
+      <ASICStandardsModal isOpen={isASICModalOpen} onClose={() => setIsASICModalOpen(false)} onNavigateType={(t) => { setIsASICModalOpen(false); if (t === "mca") setIsMCAModalOpen(true); else if (t === "labor") setIsLaborModalOpen(true); else if (t === "privacy") setIsPrivacyModalOpen(true); else if (t === "msme") setIsMSMEModalOpen(true); else setStatutoryType(t); }} />
+      <USLaborCodesModal isOpen={isLaborModalOpen} onClose={() => setIsLaborModalOpen(false)} onNavigateType={(t) => { setIsLaborModalOpen(false); if (t === "mca") setIsMCAModalOpen(true); else if (t === "asic") setIsASICModalOpen(true); else if (t === "privacy") setIsPrivacyModalOpen(true); else if (t === "msme") setIsMSMEModalOpen(true); else setStatutoryType(t); }} />
+      <PrivacySecurityModal isOpen={isPrivacyModalOpen} onClose={() => setIsPrivacyModalOpen(false)} onNavigateType={(t) => { setIsPrivacyModalOpen(false); if (t === "mca") setIsMCAModalOpen(true); else if (t === "asic") setIsASICModalOpen(true); else if (t === "labor") setIsLaborModalOpen(true); else if (t === "msme") setIsMSMEModalOpen(true); else setStatutoryType(t); }} />
+      <MSMECertifiedModal isOpen={isMSMEModalOpen} onClose={() => setIsMSMEModalOpen(false)} onNavigateType={(t) => { setIsMSMEModalOpen(false); if (t === "mca") setIsMCAModalOpen(true); else if (t === "asic") setIsASICModalOpen(true); else if (t === "labor") setIsLaborModalOpen(true); else if (t === "privacy") setIsPrivacyModalOpen(true); else setStatutoryType(t as any); }} />
+      <StatutoryModal isOpen={statutoryType !== null} type={statutoryType} onClose={() => setStatutoryType(null)} />
     </footer>
   );
 }
