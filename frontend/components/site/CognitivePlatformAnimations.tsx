@@ -201,7 +201,7 @@ function ClerkCliCard() {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative h-[360px] w-full overflow-hidden rounded-[18px] border border-white/[0.08] bg-gradient-to-br from-[#07152F] via-[#0D2459] to-[#10251A] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none transition-colors duration-500 hover:border-white/[0.14]"
+      className="group relative h-[360px] w-full overflow-hidden rounded-[18px] border border-white/[0.10] bg-gradient-to-br from-[#06132D] via-[#0B2048] to-[#0D2417] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none transition-all duration-500 hover:border-[#1A6CFF]/40 hover:shadow-[0_24px_70px_rgba(26,108,255,0.16)]"
     >
       {/* Subtle radial ambient background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_44%_56%,rgba(26,108,255,0.10),transparent_65%)] pointer-events-none" />
@@ -211,7 +211,7 @@ function ClerkCliCard() {
         <h3 className="text-[17px] font-semibold tracking-[-0.01em] text-white">
           Clerk CLI
         </h3>
-        <p className="mt-1 text-[13px] leading-[20px] text-gray-400 max-w-[400px]">
+        <p className="mt-1 text-[13px] leading-[20px] text-white/65 max-w-[400px]">
           Manage your users, organizations, and authentication directly from the terminal. Streamline your development workflow with powerful CLI commands.
         </p>
       </div>
@@ -228,7 +228,7 @@ function ClerkCliCard() {
           <path
             d="M 12 42 L 28 42 L 38 52"
             fill="none"
-            stroke="rgba(255, 255, 255, 0.12)"
+            stroke="rgba(150, 190, 255, 0.18)"
             strokeWidth="1.5"
             vectorEffect="non-scaling-stroke"
           />
@@ -257,7 +257,7 @@ function ClerkCliCard() {
             y1="52"
             x2="66"
             y2="52"
-            stroke="rgba(255, 255, 255, 0.15)"
+            stroke="rgba(150, 210, 255, 0.22)"
             strokeWidth="1.5"
             vectorEffect="non-scaling-stroke"
           />
@@ -270,7 +270,7 @@ function ClerkCliCard() {
                 y1="52"
                 x2="66"
                 y2="52"
-                stroke="rgba(0, 229, 255, 0.85)"
+                stroke="rgba(64, 246, 0, 0.95)"
                 strokeWidth="1"
                 strokeDasharray="3 4"
                 vectorEffect="non-scaling-stroke"
@@ -280,8 +280,8 @@ function ClerkCliCard() {
               <m.ellipse
                 rx="0.8"
                 ry="1.5"
-                fill="#00f0ff"
-                filter="drop-shadow(0 0 5px rgba(0,240,255,0.9))"
+                fill="#7CFF00"
+                filter="drop-shadow(0 0 6px rgba(124,255,0,0.95))"
                 cy="52"
                 animate={{ cx: [48, 66], opacity: [0, 1, 1, 0] }}
                 transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
@@ -335,7 +335,7 @@ function ClerkCliCard() {
             transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
           >
             {/* Center Product Emblem: Glowing Cyan 'C' */}
-            <div className="text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.85)]">
+            <div className="text-[#1A6CFF] drop-shadow-[0_0_10px_rgba(26,108,255,0.85)]">
               <IconRenderer iconKey="clerk" className="w-6 h-6" />
             </div>
           </m.div>
@@ -344,7 +344,7 @@ function ClerkCliCard() {
         {/* 3 Satellite Nodes stacked diagonally to the right */}
         {/* Top-Right Satellite (default: Docker) */}
         <div
-          className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#202127] border border-white/[0.12] shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
+          className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#111B2B]/95 border border-[#7CA8FF]/20 shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden transition-all duration-300 group-hover:border-[#1A6CFF]/45 group-hover:shadow-[0_0_24px_rgba(26,108,255,0.18)]"
           style={{ left: "81%", top: "25%" }}
         >
           <CrossfadeIcon iconKey={slot0Key} />
@@ -352,7 +352,7 @@ function ClerkCliCard() {
 
         {/* Mid-Right Satellite (default: Notion) */}
         <div
-          className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#202127] border border-white/[0.14] shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
+          className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#111B2B] border border-[#7CA8FF]/22 shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
           style={{ left: "71%", top: "52%" }}
         >
           <CrossfadeIcon iconKey={slot1Key} />
@@ -360,7 +360,7 @@ function ClerkCliCard() {
 
         {/* Bottom-Right Satellite (default: Claude Spark / Starburst) */}
         <div
-          className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#202127] border border-white/[0.12] shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
+          className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#111B2B] border border-[#7CA8FF]/20 shadow-[0_8px_22px_rgba(0,0,0,0.35)] z-20 overflow-hidden"
           style={{ left: "81%", top: "82%" }}
         >
           <CrossfadeIcon iconKey={slot2Key} />
@@ -435,7 +435,7 @@ function RuntimeCard() {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative h-[360px] w-full overflow-hidden rounded-[18px] border border-white/[0.08] bg-[#121316] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none transition-colors duration-500 hover:border-white/[0.14]"
+      className="group relative h-[360px] w-full overflow-hidden rounded-[18px] border border-white/[0.10] bg-gradient-to-br from-[#07152F] via-[#0C1D3B] to-[#10251A] p-6 flex flex-col justify-between shadow-[0_18px_50px_rgba(0,0,0,0.25)] select-none transition-all duration-500 hover:border-[#40F600]/35 hover:shadow-[0_24px_70px_rgba(64,246,0,0.12)]"
     >
       {/* Subtle radial ambient background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(64,246,0,0.07),transparent_65%)] pointer-events-none" />
@@ -511,7 +511,7 @@ function RuntimeCard() {
                 y1="0"
                 x2="50"
                 y2="34"
-                stroke="rgba(255, 255, 255, 0.65)"
+                stroke="rgba(124, 255, 0, 0.88)"
                 strokeWidth="1.5"
                 strokeDasharray="3 5"
                 vectorEffect="non-scaling-stroke"
@@ -520,8 +520,8 @@ function RuntimeCard() {
               />
               <m.circle
                 r="2"
-                fill="#ffffff"
-                filter="drop-shadow(0 0 4px rgba(255,255,255,0.9))"
+                fill="#7CFF00"
+                filter="drop-shadow(0 0 6px rgba(124,255,0,0.95))"
                 cx="50"
                 animate={{ cy: [0, 34], opacity: [0, 1, 1, 0] }}
                 transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
@@ -536,10 +536,10 @@ function RuntimeCard() {
           style={{ left: "50%", top: "42%" }}
         >
           {/* Subtle ambient glow behind tile */}
-          <div className="absolute w-20 h-20 rounded-2xl bg-[#40F600]/10 blur-xl pointer-events-none" />
+          <div className="absolute w-20 h-20 rounded-2xl bg-[#1A6CFF]/10 blur-xl pointer-events-none" />
 
           {/* Rounded-Square Tile */}
-          <div className="relative flex items-center justify-center w-16 h-16 rounded-[18px] bg-[#1e2027] border border-white/[0.14] shadow-[0_12px_32px_rgba(0,0,0,0.4)]">
+          <div className="relative flex items-center justify-center w-16 h-16 rounded-[14px] bg-[#0D1B32] border border-[#1A6CFF]/35 shadow-[0_12px_32px_rgba(26,108,255,0.18)]">
             {/* Sleek Cloud / Platform Core Glyph (fixed, does not change) */}
             <div className="text-white/80">
               <IconRenderer iconKey="googlecloud" className="w-6 h-6 opacity-75" />
