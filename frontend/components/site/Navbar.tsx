@@ -62,6 +62,7 @@ export function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState("USA");
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isPointerOverNavRef = useRef(false);
 
   useEffect(() => {
     const clearHideTimer = () => {
@@ -69,6 +70,17 @@ export function Navbar() {
         clearTimeout(hideTimerRef.current);
         hideTimerRef.current = null;
       }
+    };
+
+    const scheduleHide = () => {
+      clearHideTimer();
+      if (window.scrollY <= 50 || open || isPointerOverNavRef.current) return;
+
+      hideTimerRef.current = setTimeout(() => {
+        if (!open && !isPointerOverNavRef.current && window.scrollY > 50) {
+          setIsVisible(false);
+        }
+      }, 850);
     };
 
     const handleScroll = () => {
@@ -82,10 +94,19 @@ export function Navbar() {
       // Keep it visible at the top of the page.
       if (currentScrollY <= 50) return;
 
-      // Once scrolling stops, hide it smoothly after a short pause.
-      hideTimerRef.current = setTimeout(() => {
-        if (!open) setIsVisible(false);
-      }, 850);
+      // Start the hide countdown only when the pointer is not over the navbar.
+      scheduleHide();
+    };
+
+    const handleNavMouseEnter = () => {
+      isPointerOverNavRef.current = true;
+      clearHideTimer();
+      setIsVisible(true);
+    };
+
+    const handleNavMouseLeave = () => {
+      isPointerOverNavRef.current = false;
+      scheduleHide();
     };
 
     handleScroll();
@@ -136,6 +157,8 @@ export function Navbar() {
     <>
       <div className="fixed top-0 inset-x-0 z-[9000]" style={{ pointerEvents: "none" }}>
         <m.header
+          onMouseEnter={handleNavMouseEnter}
+          onMouseLeave={handleNavMouseLeave}
           initial={{ y: 0, opacity: 1 }}
           animate={{ y: shouldHide ? "-120%" : 0, opacity: shouldHide ? 0 : 1 }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
