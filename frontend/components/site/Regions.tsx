@@ -71,58 +71,83 @@ export function Regions() {
   return (
     <section className="relative w-full overflow-hidden bg-white pt-[64px] pb-[64px] max-md:pt-[40px] max-md:pb-[40px]">
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <svg className="absolute left-[-18%] top-[6%] h-[88%] w-[132%] opacity-[0.72]" viewBox="0 0 1600 900" preserveAspectRatio="none">
+        <svg
+          className="absolute left-[18%] top-[-8%] h-[125%] w-[112%]"
+          viewBox="0 0 1600 1000"
+          preserveAspectRatio="none"
+        >
           <defs>
-            <linearGradient id="presence-ribbon-blue" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#1A6CFF" stopOpacity="0.08" />
-              <stop offset="48%" stopColor="#1A6CFF" stopOpacity="0.34" />
-              <stop offset="100%" stopColor="#007BFF" stopOpacity="0.10" />
+            <linearGradient id="global-presence-ribbon" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#FF7A18" stopOpacity="0.34" />
+              <stop offset="18%" stopColor="#FF3D81" stopOpacity="0.32" />
+              <stop offset="38%" stopColor="#40F600" stopOpacity="0.30" />
+              <stop offset="58%" stopColor="#20C8FF" stopOpacity="0.34" />
+              <stop offset="78%" stopColor="#2F7BFF" stopOpacity="0.32" />
+              <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.26" />
             </linearGradient>
-            <linearGradient id="presence-ribbon-green" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#40F600" stopOpacity="0.06" />
-              <stop offset="52%" stopColor="#40F600" stopOpacity="0.22" />
-              <stop offset="100%" stopColor="#40F600" stopOpacity="0.05" />
+            <linearGradient id="global-presence-ribbon-highlight" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.16" />
+              <stop offset="45%" stopColor="#FFFFFF" stopOpacity="0.30" />
+              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.12" />
             </linearGradient>
-            <linearGradient id="presence-ribbon-orange" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#FF9500" stopOpacity="0.04" />
-              <stop offset="55%" stopColor="#FF9500" stopOpacity="0.18" />
-              <stop offset="100%" stopColor="#FF9500" stopOpacity="0.04" />
-            </linearGradient>
-            <filter id="presence-ribbon-blur" x="-20%" y="-30%" width="140%" height="160%">
-              <feGaussianBlur stdDeviation="12" />
+            <filter id="global-presence-ribbon-blur" x="-15%" y="-35%" width="130%" height="170%">
+              <feGaussianBlur stdDeviation="18" />
             </filter>
           </defs>
 
-          <g filter="url(#presence-ribbon-blur)">
+          <g>
             <path
-              d="M-80 170 C 180 80, 360 105, 570 245 S 970 445, 1190 300 S 1460 125, 1710 215"
+              d="M-180 900 C 120 830, 260 730, 480 670 C 760 592, 1030 560, 1230 385 C 1370 264, 1480 112, 1740 30"
               fill="none"
-              stroke="url(#presence-ribbon-blue)"
-              strokeWidth="105"
+              stroke="url(#global-presence-ribbon)"
+              strokeWidth="150"
               strokeLinecap="round"
+              filter="url(#global-presence-ribbon-blur)"
+              opacity="0.92"
             >
-              <animate attributeName="d" dur="13s" repeatCount="indefinite"
-                values="M-80 170 C 180 80, 360 105, 570 245 S 970 445, 1190 300 S 1460 125, 1710 215;M-80 205 C 180 120, 360 125, 570 275 S 970 470, 1190 325 S 1460 145, 1710 245;M-80 170 C 180 80, 360 105, 570 245 S 970 445, 1190 300 S 1460 125, 1710 215" />
+              <animate
+                attributeName="d"
+                dur="10s"
+                repeatCount="indefinite"
+                values="M-180 900 C 120 830, 260 730, 480 670 C 760 592, 1030 560, 1230 385 C 1370 264, 1480 112, 1740 30;
+                        M-180 875 C 120 805, 260 700, 480 640 C 760 560, 1030 590, 1230 410 C 1370 286, 1480 132, 1740 5;
+                        M-180 900 C 120 830, 260 730, 480 670 C 760 592, 1030 560, 1230 385 C 1370 264, 1480 112, 1740 30"
+              />
             </path>
+
             <path
-              d="M-100 235 C 160 145, 350 160, 575 300 S 955 490, 1195 345 S 1460 180, 1710 270"
+              d="M-180 865 C 140 790, 280 710, 500 650 C 770 575, 1010 535, 1215 370 C 1380 238, 1495 100, 1740 10"
               fill="none"
-              stroke="url(#presence-ribbon-green)"
-              strokeWidth="54"
+              stroke="url(#global-presence-ribbon-highlight)"
+              strokeWidth="7"
               strokeLinecap="round"
+              opacity="0.9"
             >
-              <animate attributeName="d" dur="11s" repeatCount="indefinite"
-                values="M-100 235 C 160 145, 350 160, 575 300 S 955 490, 1195 345 S 1460 180, 1710 270;M-100 265 C 160 175, 350 180, 575 330 S 955 520, 1195 375 S 1460 205, 1710 300;M-100 235 C 160 145, 350 160, 575 300 S 955 490, 1195 345 S 1460 180, 1710 270" />
+              <animate
+                attributeName="d"
+                dur="10s"
+                repeatCount="indefinite"
+                values="M-180 865 C 140 790, 280 710, 500 650 C 770 575, 1010 535, 1215 370 C 1380 238, 1495 100, 1740 10;
+                        M-180 840 C 140 765, 280 680, 500 620 C 770 545, 1010 565, 1215 395 C 1380 260, 1495 118, 1740 -15;
+                        M-180 865 C 140 790, 280 710, 500 650 C 770 575, 1010 535, 1215 370 C 1380 238, 1495 100, 1740 10"
+              />
             </path>
+
             <path
-              d="M-100 290 C 145 205, 350 215, 575 350 S 960 545, 1200 400 S 1470 245, 1710 325"
+              d="M-160 930 C 160 850, 300 770, 520 700 C 790 615, 1050 575, 1260 405 C 1410 280, 1510 130, 1760 45"
               fill="none"
-              stroke="url(#presence-ribbon-orange)"
-              strokeWidth="32"
+              stroke="url(#global-presence-ribbon)"
+              strokeWidth="92"
               strokeLinecap="round"
+              opacity="0.52"
             >
-              <animate attributeName="d" dur="15s" repeatCount="indefinite"
-                values="M-100 290 C 145 205, 350 215, 575 350 S 960 545, 1200 400 S 1470 245, 1710 325;M-100 315 C 145 230, 350 240, 575 380 S 960 570, 1200 425 S 1470 270, 1710 350;M-100 290 C 145 205, 350 215, 575 350 S 960 545, 1200 400 S 1470 245, 1710 325" />
+              <animateTransform
+                attributeName="transform"
+                type="translate"
+                values="0 0; 24 -18; 0 0"
+                dur="8s"
+                repeatCount="indefinite"
+              />
             </path>
           </g>
         </svg>
