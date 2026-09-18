@@ -37,29 +37,29 @@ const NAV_TABS = [
 const VALUE_CARDS = [
   {
     num: "01",
-    title: "Global Reach, Local Intelligence",
-    desc: "We combine deep local market understanding with a vast global talent network to deliver the right match, faster.",
+    title: "Global Reach, Local Market Intelligence",
+    desc: "We combine local market knowledge with cross-border talent networks to help organizations access relevant professionals across regions.",
     icon: FaEarthAmericas,
     tabId: "overview",
   },
   {
     num: "02",
-    title: "Specialized Talent Solutions",
-    desc: "From IT to engineering, finance to operations — we provide skilled professionals tailored to your exact needs.",
+    title: "Specialized Staffing Solutions",
+    desc: "From technology and engineering to finance, operations, and specialist functions, we align talent to the requirements of each role.",
     icon: FaUserGroup,
     tabId: "capabilities",
   },
   {
     num: "03",
-    title: "Quality & Compliance First",
-    desc: "Rigorous vetting, verified credentials, and compliance standards ensure you get reliable, job-ready talent.",
+    title: "Structured Screening & Compliance",
+    desc: "Structured screening, qualification checks, and market-aware processes help create a dependable path from sourcing to placement.",
     icon: FaShieldHalved,
     tabId: "ai-edge",
   },
   {
     num: "04",
-    title: "Scalable & Flexible Engagement",
-    desc: "Scale your team up or down with ease. Our flexible hiring models adapt to your business goals.",
+    title: "Flexible Workforce Models",
+    desc: "Support permanent, contract, project, and flexible workforce requirements as your organization evolves.",
     icon: FaArrowTrendUp,
     tabId: "delivery",
   },
@@ -212,16 +212,16 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 3: THE COGNITIVE ENGINE - HOW WE STAY AHEAD          */}
+      {/* SECTION 3: STAFFING INTELLIGENCE - HOW WE STAY AHEAD          */}
       {/* ============================================================ */}
       <section className="relative w-full max-w-[1240px] mx-auto px-6 sm:px-10 lg:px-14 py-12">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div className="flex flex-col gap-2">
             <span className="text-[11.5px] font-[700] tracking-[0.16em] text-[#16A34A] uppercase">
-              THE COGNITIVE ENGINE
+              STAFFING INTELLIGENCE
             </span>
             <h2 className="font-display text-[32px] sm:text-[40px] font-[800] leading-tight tracking-[-0.02em] text-[#111827]">
-              How We Stay Ahead
+              How We Build Better Talent Pipelines
             </h2>
           </div>
           <p className="text-[13.5px] sm:text-[14.5px] leading-[1.5] text-[#64748B] max-w-[340px]">
@@ -243,7 +243,7 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                 higher accuracy and speed.
               </p>
               <div className="flex flex-wrap items-center gap-2 pt-1">
-                {["AI Matching", "Predictive Sourcing", "Smart Shortlisting"].map(
+                {["Talent Matching", "Intelligent Sourcing", "Smart Shortlisting"].map(
                   (t) => (
                     <span
                       key={t}
@@ -263,14 +263,14 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
           <div className="md:col-span-5 bg-[#F8FAFC] rounded-[22px] border border-[#E2E8F0]/80 p-5 sm:p-7 flex flex-col justify-between gap-5 sm:gap-6 hover:shadow-sm transition-all duration-300">
             <div className="flex flex-col gap-3">
               <h3 className="text-[18px] sm:text-[20px] font-[700] text-[#111827]">
-                Continuous Upgrades
+                Continuous Talent Network Development
               </h3>
               <p className="text-[13.5px] sm:text-[14px] leading-[1.6] text-[#64748B]">
                 We continuously upgrade our tools, processes, and tech stack to
                 stay ahead of industry shifts and client expectations.
               </p>
               <div className="flex flex-wrap items-center gap-2 pt-1">
-                {["Modern Stack", "Future Ready"].map((t) => (
+                {["Modern Processes", "Market Ready"].map((t) => (
                   <span
                     key={t}
                     className="px-3 py-1 rounded-full bg-white border border-gray-200/80 text-[12px] font-[600] text-[#16A34A] shadow-xs"
@@ -332,9 +332,9 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
               </p>
               <div className="flex flex-wrap items-center gap-2 pt-1">
                 {[
-                  "Campus Connect",
+                  "Campus Networks",
                   "Training Partnerships",
-                  "Future Workforce",
+                  "Emerging Talent",
                 ].map((t) => (
                   <span
                     key={t}
@@ -359,15 +359,15 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
       <BentoGridFeatures />
 
       {/* ============================================================ */}
-      {/* SECTION 4: DELIVERY METHODOLOGY - 4-STAGE DELIVERY PROCESS   */}
+      {/* SECTION 4: STAFFING DELIVERY - 4-STAGE DELIVERY PROCESS   */}
       {/* ============================================================ */}
       <section className="relative w-full max-w-[1240px] mx-auto px-6 sm:px-10 lg:px-14 py-12">
         <div className="flex flex-col gap-2 mb-8">
           <span className="text-[11.5px] font-[700] tracking-[0.16em] text-[#16A34A] uppercase">
-            DELIVERY METHODOLOGY
+            STAFFING DELIVERY
           </span>
           <h2 className="font-display text-[32px] sm:text-[40px] font-[800] leading-tight tracking-[-0.02em] text-[#111827]">
-            Our 4-Stage Delivery Process
+            Our 4-Stage Staffing Process
           </h2>
         </div>
 
@@ -381,7 +381,7 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
             </div>
             <div className="flex flex-col gap-1.5">
               <h4 className="text-[15.5px] font-[700] text-[#111827] leading-snug">
-                Requirement Blueprinting
+                Understand the Requirement
               </h4>
               <p className="text-[13px] leading-[1.6] text-[#64748B]">
                 We analyze your business needs and role expectations to create a
@@ -447,7 +447,7 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
       </section>
 
       {/* ============================================================ */}
-      {/* SECTION 5: READY TO GROW TOGETHER - BOTTOM DARK CTA BANNER    */}
+      {/* SECTION 5: READY TO BUILD YOUR TEAM - BOTTOM DARK CTA BANNER    */}
       {/* ============================================================ */}
       <section className="relative w-full max-w-[1240px] mx-auto px-6 sm:px-10 lg:px-14 py-12">
         <div className="w-full bg-[#0A0D12] text-white rounded-[26px] p-8 sm:p-12 md:p-14 flex flex-col lg:flex-row items-center justify-between gap-10 overflow-hidden relative shadow-xl">
@@ -455,12 +455,12 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
 
           <div className="flex flex-col items-start gap-4 max-w-[540px] z-10">
             <span className="text-[11px] font-[700] tracking-[0.16em] text-[#22C55E] uppercase">
-              READY TO GROW TOGETHER
+              READY TO BUILD YOUR TEAM
             </span>
             <h2 className="font-display text-[36px] sm:text-[46px] font-[800] leading-[1.1] tracking-[-0.03em] text-white">
               Let&apos;s Build Stronger Teams,
               <br />
-              Together.
+              Across Borders.
             </h2>
             <p className="text-[14.5px] sm:text-[15.5px] leading-[1.6] text-gray-300">
               Partner with Hillary Step to access global talent, local expertise
@@ -475,18 +475,18 @@ export function GlobalTalentShowcase({ onSelectTab }: GlobalTalentShowcaseProps)
                 onClick={() => handleAction("post")}
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#22C55E] hover:bg-[#16A34A] text-white text-[15px] font-[700] tracking-[-0.01em] transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] shadow-lg shadow-green-900/30 cursor-pointer"
               >
-                <span>Start Hiring Smarter</span>
+                <span>Start Your Staffing Conversation</span>
                 <FaArrowRight className="text-[13px]" />
               </button>
 
               <div className="flex flex-col gap-2 pt-1 text-[13px] text-gray-300 font-[500]">
                 <div className="flex items-center gap-2">
                   <FaCheck className="text-[#22C55E] text-[12px]" />
-                  <span>Global Talent, Local Understanding.</span>
+                  <span>Global Talent, Local Market Understanding.</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <FaCheck className="text-[#22C55E] text-[12px]" />
-                  <span>Reliable Hiring, Scalable Growth.</span>
+                  <span>Structured Staffing, Scalable Growth.</span>
                 </div>
               </div>
             </div>
