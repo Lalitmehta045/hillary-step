@@ -63,6 +63,7 @@ export function Navbar() {
   const [selectedRegion, setSelectedRegion] = useState("USA");
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isPointerOverNavRef = useRef(false);
+  const navHoverZoneRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const clearHideTimer = () => {
@@ -98,6 +99,29 @@ export function Navbar() {
       scheduleHide();
     };
 
+    const handlePointerMove = (event: PointerEvent) => {
+      const navZone = navHoverZoneRef.current;
+      if (!navZone) return;
+
+      const rect = navZone.getBoundingClientRect();
+      const insideNavZone =
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom;
+
+      if (insideNavZone) {
+        if (!isPointerOverNavRef.current) {
+          isPointerOverNavRef.current = true;
+          clearHideTimer();
+          setIsVisible(true);
+        }
+      } else if (isPointerOverNavRef.current) {
+        isPointerOverNavRef.current = false;
+        scheduleHide();
+      }
+    };
+
     const handleNavMouseEnter = () => {
       isPointerOverNavRef.current = true;
       clearHideTimer();
@@ -111,9 +135,11 @@ export function Navbar() {
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("pointermove", handlePointerMove);
       clearHideTimer();
     };
   }, [open]);
@@ -155,7 +181,7 @@ export function Navbar() {
 
   return (
     <>
-      <div className="fixed top-0 inset-x-0 z-[9000] pointer-events-auto" onMouseEnter={handleNavMouseEnter} onMouseLeave={handleNavMouseLeave}>
+      <div ref={navHoverZoneRef} className="fixed top-0 inset-x-0 z-[9000] h-[96px] pointer-events-auto" onMouseEnter={handleNavMouseEnter} onMouseLeave={handleNavMouseLeave}>
         <m.header
           initial={{ y: 0, opacity: 1 }}
           animate={{ y: shouldHide ? "-120%" : 0, opacity: shouldHide ? 0 : 1 }}
