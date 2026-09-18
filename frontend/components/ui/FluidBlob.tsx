@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 const DEFAULT_COUNT = 5200;
-const PALETTE = ["#0090FF", "#00FF87", "#FF6B00"];
-const WEIGHTS = [0.48, 0.18, 0.34];
+const PALETTE = ["#1A6CFF", "#40F600", "#7CFF00", "#FF7A18"];
+const WEIGHTS = [0.34, 0.28, 0.18, 0.20];
 
 const createDotTexture = (): THREE.CanvasTexture | null => {
   if (typeof document === "undefined") return null;
@@ -129,7 +129,9 @@ export function FluidBlob({
           ? PALETTE[0]
           : rv < WEIGHTS[0] + WEIGHTS[1]
             ? PALETTE[1]
-            : PALETTE[2]
+            : rv < WEIGHTS[0] + WEIGHTS[1] + WEIGHTS[2]
+              ? PALETTE[2]
+              : PALETTE[3]
       );
       colors.set([tempColor.r, tempColor.g, tempColor.b], i * 3);
       seeds[i] = Math.random();
