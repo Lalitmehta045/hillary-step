@@ -195,22 +195,32 @@ export default function Hero() {
                     </text>
                   </g>
 
-                  {/* Bottom Arc: Hover the Base. */}
-                  <g className="pointer-events-none select-none">
-                    {/* Decorative subtle dashed orbital guide */}
+                  {/* Bottom Arc: Hover the Base — same interaction treatment as the Summit. */}
+                  <g
+                    className="pointer-events-auto cursor-pointer group"
+                    onMouseEnter={handleSummitClick}
+                    onClick={handleSummitClick}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Hover or click the Base to trigger particle animation"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") handleSummitClick();
+                    }}
+                  >
                     <path
                       d="M 120,390 A 215,215 0 0,0 380,390"
                       fill="none"
-                      stroke="rgba(0, 255, 135, 0.2)"
+                      stroke="rgba(0, 229, 255, 0.22)"
                       strokeWidth="1"
                       strokeDasharray="3 5"
+                      className="transition-all duration-300 group-hover:stroke-[rgba(0,229,255,0.7)]"
                     />
                     <text
-                      className="fill-[#8A8A8A]"
+                      className="fill-[#00E5FF] transition-all duration-300 group-hover:fill-white group-hover:drop-shadow-[0_0_12px_rgba(0,229,255,0.9)]"
                       style={{
                         fontFamily: "var(--font-sf), monospace, sans-serif",
                         fontSize: "13px",
-                        fontWeight: 500,
+                        fontWeight: 600,
                         letterSpacing: "0.32em",
                         textTransform: "uppercase",
                       }}
@@ -241,10 +251,10 @@ export default function Hero() {
 
                 <div className="px-6 py-3.5 rounded-2xl bg-[#050505]/85 backdrop-blur-xl border border-[rgba(0,229,255,0.4)] shadow-[0_0_35px_rgba(0,229,255,0.3)] flex flex-col items-center gap-1">
                   <span className="text-[10px] sm:text-[11px] font-medium tracking-[0.35em] text-[#00E5FF] uppercase">
-                    HILLARY STEP
+                    HILLARY STEP SOLUTIONS
                   </span>
                   <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)] whitespace-nowrap">
-                    Your Tech Sherpas
+                    Hillary Step Solutions
                   </h3>
                 </div>
               </div>
