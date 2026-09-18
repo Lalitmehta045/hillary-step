@@ -64,35 +64,30 @@ export function Footer() {
   const [isMSMEModalOpen, setIsMSMEModalOpen] = useState(false);
   const [statutoryType, setStatutoryType] = useState<StatutoryType>(null);
   const [typedTagline, setTypedTagline] = useState("");
-  const [isDeletingTagline, setIsDeletingTagline] = useState(false);
+  const [isFadingTagline, setIsFadingTagline] = useState(false);
 
-  const footerTagline = "Hard Work At The Base. Honor At The Summit. WE ARE YOUR SHERPAS.";
+  const footerTagline = "Hard Work At The Base. Honor At The Summit.\\nWE ARE YOUR SHERPAS.";
 
   useEffect(() => {
-    const delay = !isDeletingTagline && typedTagline === footerTagline
-      ? 1800
-      : isDeletingTagline && typedTagline === ""
-        ? 700
-        : isDeletingTagline
-          ? 32
-          : 62;
+    if (isFadingTagline) {
+      const fadeTimer = window.setTimeout(() => {
+        setTypedTagline("");
+        setIsFadingTagline(false);
+      }, 750);
+      return () => window.clearTimeout(fadeTimer);
+    }
 
-    const timer = window.setTimeout(() => {
-      if (!isDeletingTagline) {
-        if (typedTagline.length < footerTagline.length) {
-          setTypedTagline(footerTagline.slice(0, typedTagline.length + 1));
-        } else {
-          setIsDeletingTagline(true);
-        }
-      } else if (typedTagline.length > 0) {
-        setTypedTagline(footerTagline.slice(0, typedTagline.length - 1));
-      } else {
-        setIsDeletingTagline(false);
-      }
-    }, delay);
+    if (typedTagline === footerTagline) {
+      const pauseTimer = window.setTimeout(() => setIsFadingTagline(true), 1600);
+      return () => window.clearTimeout(pauseTimer);
+    }
 
-    return () => window.clearTimeout(timer);
-  }, [typedTagline, isDeletingTagline]);
+    const typingTimer = window.setTimeout(() => {
+      setTypedTagline(footerTagline.slice(0, typedTagline.length + 1));
+    }, 62);
+
+    return () => window.clearTimeout(typingTimer);
+  }, [typedTagline, isFadingTagline]);
 
 
   const handleAction = (action: FooterLink["action"]) => {
@@ -162,7 +157,7 @@ export function Footer() {
             </FadeIn>
 
             <FadeIn delay={0.45} className="flex min-h-[70px] flex-1 items-center justify-end max-md:w-full max-md:justify-start">
-              <p className="max-w-[560px] text-right font-display text-[15px] max-md:text-[13px] font-[500] leading-[1.7] tracking-[0.03em] text-white/85 max-md:text-left">
+              <p className={`max-w-[560px] whitespace-pre-line text-right font-display text-[15px] max-md:text-[13px] font-[500] leading-[1.7] tracking-[0.03em] text-white/85 max-md:text-left transition-all duration-700 ease-out ${isFadingTagline ? "translate-y-[-18px] opacity-0" : "translate-y-0 opacity-100"}`}>
                 {typedTagline}<span className="ml-[3px] inline-block h-[18px] w-[1.5px] translate-y-[3px] bg-white/75 animate-pulse" aria-hidden="true" />
               </p>
             </FadeIn>
