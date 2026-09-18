@@ -180,7 +180,7 @@ export function USLaborCodesContent({
                 <span>Introduction</span>
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
-                Hillary Step Solutions LLP is committed to full compliance with all
+                Hillary Step Solutions LLC is committed to full compliance with all
                 applicable United States labor laws and regulations. This
                 framework outlines our approach to fair labor practices, employee
                 rights, workplace safety, and equal opportunity.
@@ -208,7 +208,7 @@ export function USLaborCodesContent({
               </h3>
               <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
                 This policy applies to all employees, contractors, consultants,
-                and third-party partners engaged by Hillary Step Solutions LLP across
+                and third-party partners engaged by Hillary Step Solutions LLC across
                 all US operations and jurisdictions.
               </p>
             </section>
@@ -561,10 +561,10 @@ export function USLaborCodesContent({
             <div className="border-t border-gray-100 pt-8 pb-4 mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex flex-col gap-0.5">
                 <span className="font-display text-[13px] font-[700] tracking-[0.06em] text-[#111827] uppercase">
-                  HILLARY STEP SOLUTIONS LLP
+                  HILLARY STEP SOLUTIONS LLC
                 </span>
                 <span className="font-display text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
-                  © 2026 HILLARY STEP SOLUTIONS LLP. ARCHITECTING ASCENT.
+                  © 2026 HILLARY STEP SOLUTIONS. ARCHITECTING ASCENT.
                 </span>
               </div>
 

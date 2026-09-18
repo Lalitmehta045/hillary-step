@@ -35,7 +35,7 @@ const REGIONS = {
     offices: "Delhi NCR · Bengaluru · Mumbai · Hydrabad · Chennai",
     entity: "Hillary Step Solutions Private Limited",
     principal: "Kantesh Prasad Singh, Regional CFO",
-    capabilities: "SaaS Product R&D · Eco-Smart Infra Projects · Global IT Delivery Hubs · RPO Outsourcing ",
+    capabilities: "SaaS Product R&D · Eco-Smart Infra Projects · Global IT Delivery Hubs · Outsourcing ",
     jurisdiction: "Pan-India Distribution & International Offshore Integration",
     operatingModel: "Centralized Engineering Command & Offshore Development Center (ODC)",
     timezone: "IST (UTC+05:30)",
