@@ -142,21 +142,6 @@ export function EcoSmartInfraShowcase() {
 
   return (
     <div className="w-full bg-white text-[#111827] font-display antialiased">
-      {/* 1. HERO BANNER */}
-      <m.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="relative w-full rounded-[20px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.1)]">
-        <div className="absolute inset-0 w-full h-full">
-          <img src="/assets/ChatGPT Image Sep 4, 2026, 09_48_06 AM.png" alt="Civil engineering and infrastructure construction" className="w-full h-full object-cover" style={{ objectPosition: "right top" }} />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FF7200] via-[#FFA000] via-38% md:via-48% to-transparent mix-blend-multiply pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B00]/80 via-[#FFA200]/60 via-42% to-transparent pointer-events-none" />
-        </div>
-        <div className="relative z-10 max-w-[620px] p-7 sm:p-10 md:p-14 lg:p-16 flex flex-col items-start justify-center min-h-[400px] md:min-h-[470px]">
-          <m.h1 initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.20 }} className="font-display text-[32px] sm:text-[42px] md:text-[48px] font-[800] leading-[1.1] tracking-[-1px] text-[#111827]"><span className="text-[#FF4A00] font-[900]">Building</span> durable foundations for tomorrow&apos;s world<span className="text-[#10B981]">.</span></m.h1>
-          <m.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.35 }} className="mt-4 sm:mt-5 text-[14px] sm:text-[15.5px] leading-[1.65] text-[#27272A] font-[450] max-w-[480px]">We connect businesses with qualified professionals across markets, helping organizations build reliable teams without the complexity of international hiring.</m.p>
-          <m.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 1, 1], delay: 0.50 }}>
-            <a href="#civil-services-section" onClick={handleBuildTogetherClick} className="mt-6 sm:mt-8 group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#0066FF] hover:bg-[#0052CC] text-white text-[14px] font-[600] tracking-wide shadow-[0_8px_20px_rgba(0,102,255,0.35)] hover:shadow-[0_12px_28px_rgba(0,102,255,0.45)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">Let&apos;s Build Together<ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" /></a>
-          </m.div>
-        </div>
-      </m.div>
 
       {/* 2. PINNED HORIZONTAL SCROLL CAROUSEL */}
       <div ref={trackRef} className="relative w-full h-[2200px] mt-16 md:mt-20">
