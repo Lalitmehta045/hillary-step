@@ -193,40 +193,7 @@ export function CivilInfraContent() {
       />
       </div>
 
-      {/* Added Sections from PillarPage */}
-      {ecoPillar && (
-        <div className="bg-[#0a0e1a] text-white font-sans">
-          {/* OVERVIEW */}
-          <section className="py-24 lg:py-32">
-            <div className="max-w-[1400px] mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-14 items-center">
-              <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}>
-                <p className="font-mono text-[11px] mb-6 uppercase tracking-wider" style={{ color: ecoPillar.colorSoft }}>Overview</p>
-                <h2 className="hs-heading text-[32px] sm:text-[46px] leading-tight font-display font-bold">
-                  Where ambition meets execution.
-                </h2>
-                <p className="mt-7 text-white/60 text-lg leading-relaxed">{ecoPillar.intro}</p>
-                <div className="mt-9 flex flex-wrap gap-4">
-                  <Link
-                    href="/#contact"
-                    className="group inline-flex items-center gap-2.5 text-white font-semibold px-7 py-3.5 rounded-full transition-transform hover:scale-[1.03]"
-                    style={{ backgroundColor: c }}
-                  >
-                    Start a conversation
-                    <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </m.div>
-              <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5, delay: 0.1 }}>
-                <div className="relative rounded-[24px] overflow-hidden border border-white/8">
-                  <img src={ecoPillar.altImage} alt={ecoPillar.title} className="w-full h-[420px] object-cover" />
-                  <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, transparent 40%, ${c}22 100%)` }} />
-                </div>
-              </m.div>
-            </div>
-          </section>
-
-          </div>
-        )}
+      
       </div>
     );
   }
