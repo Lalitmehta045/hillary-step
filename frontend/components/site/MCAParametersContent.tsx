@@ -561,7 +561,7 @@ export function MCAParametersContent({
                   HILLARY STEP SOLUTIONS PVT LTD
                 </span>
                 <span className="font-display text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">
-                  © 2026 HILLARY STEP SOLUTIONS PVT LTD. ARCHITECTING ASCENT.
+                  © 2026 HILLARY STEP SOLUTIONS. ARCHITECTING ASCENT.
                 </span>
               </div>
 
