@@ -81,10 +81,16 @@ export function USLaborCodesContent({
   };
 
   return (
-    <div
-      ref={contentContainerRef}
-      className="relative w-full bg-white text-[#191C1E] font-display antialiased"
-    >
+    <>
+      <style jsx global>{`
+        #sec-12 > div.grid > div:nth-child(2) > div:last-child {
+          margin-top: 20px !important;
+        }
+      `}</style>
+      <div
+        ref={contentContainerRef}
+        className="relative w-full bg-white text-[#191C1E] font-display antialiased"
+      >
       {/* Main Document Wrapper */}
       <div className="mx-auto w-full max-w-[1140px] px-6 md:px-12 pt-14 md:pt-16 pb-12">
         {/* Category Header */}
