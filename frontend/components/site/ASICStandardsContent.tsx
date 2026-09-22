@@ -185,11 +185,13 @@ export function ASICStandardsContent({
                   <div><span className="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">ACN (Australian Company Number)</span><span className="font-display text-[14px] leading-[1.6] text-[#4B5563]">702 340 789</span></div>
                   <div><span className="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">ABN (Australian Business Number)</span><span className="font-display text-[14px] leading-[1.6] text-[#4B5563]">[11-digit number, e.g., 12 123 456 789]</span></div>
                   <div><span className="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">Registration Date</span><span className="font-display text-[14px] leading-[1.6] text-[#4B5563]">14/09/2026</span></div>
-                  <div><span className="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">Email ID</span><a href="mailto:info@hillarystepsolutions.com" className="font-display text-[14px] leading-[1.6] text-[#1A6CFF] hover:underline break-all">info@hillarystepsolutions.com</a></div>
+
                 </div>
                 <div className="rounded-[12px] border border-[#E2E8F0]/70 bg-[#F8FAFC] p-4 sm:p-5 flex flex-col gap-3">
                   <span className="font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#FF9500]">Principal Place of Business &amp; Registered Office</span>
                   <span className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">6/213 Targo Road, Girraween<br />Sydney (NSW) 2145</span>
+                  <div className="h-px w-full bg-[#E2E8F0] my-3" />
+                  <div><span className="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">Email ID</span><a href="mailto:info@hillarystepsolutions.com" className="font-display text-[14px] leading-[1.6] text-[#1A6CFF] hover:underline break-all">info@hillarystepsolutions.com</a></div>
                 </div>
               </div>
             </section>
