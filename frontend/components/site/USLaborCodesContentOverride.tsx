@@ -25,12 +25,13 @@ export function USLaborCodesContent(props: USLaborCodesContentProps) {
           <div><span class="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">Incorporation Date</span><span class="font-display text-[14px] leading-[1.6] text-[#4B5563]">14/09/2026</span></div>
           <div><span class="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">Corporate ID / File Number</span><span class="font-display text-[14px] leading-[1.6] text-[#4B5563]">2026-002080383</span></div>
           <div><span class="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">DOL Compliance Status</span><span class="font-display text-[14px] leading-[1.6] text-[#4B5563]">Active</span></div>
-          <div><span class="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">Official Email ID</span><a href="mailto:info@hillarystepsolutions.com" class="font-display text-[14px] leading-[1.6] text-[#1A6CFF] hover:underline">info@hillarystepsolutions.com</a></div>
         </div>
         <div class="rounded-[12px] border border-[#E2E8F0]/70 bg-[#F8FAFC] p-4 sm:p-5 flex flex-col gap-3">
           <span class="font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#FF9500]">📍 Principal Place of Business &amp; Registered Agent Office</span>
           <span class="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">30 N Gould St Ste N<br />Sheridan, WY 82801</span>
           <div><span class="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">Registered Agent</span><span class="font-display text-[14px] leading-[1.6] text-[#4B5563]">Northwest Registered Agent Service Inc</span></div>
+          <div class="h-px w-full bg-[#E2E8F0] my-1" />
+          <div><span class="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#1A6CFF]">Official Email ID</span><a href="mailto:info@hillarystepsolutions.com" class="font-display text-[14px] leading-[1.6] text-[#1A6CFF] hover:underline break-all">info@hillarystepsolutions.com</a></div>
         </div>
       </div>
     `;
