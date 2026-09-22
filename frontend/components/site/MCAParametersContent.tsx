@@ -592,7 +592,7 @@ export function MCAParametersContent({
                   onClick={() => onNavigateType?.("privacy")}
                   className="text-[#FF6A00] font-[500] hover:underline cursor-pointer bg-transparent border-0 p-0"
                 >
-                  Privacy Policy
+                  Privacy & Terms
                 </button>
                 <span className="text-[#E5E7EB] select-none">|</span>
                 <button
@@ -600,7 +600,7 @@ export function MCAParametersContent({
                   onClick={() => onNavigateType?.("asic")}
                   className="text-[#6B7280] hover:text-[#111827] transition-colors cursor-pointer bg-transparent border-0 p-0"
                 >
-                  Terms of Service
+                  ASIC Standards
                 </button>
                 <span className="text-[#E5E7EB] select-none">|</span>
                 <button
@@ -608,7 +608,7 @@ export function MCAParametersContent({
                   onClick={() => onNavigateType?.("labor")}
                   className="text-[#6B7280] hover:text-[#111827] transition-colors cursor-pointer bg-transparent border-0 p-0"
                 >
-                  Security Architecture
+                  US Corporate Labor Codes 
                 </button>
                 <span className="text-[#E5E7EB] select-none">|</span>
                 <button
@@ -616,7 +616,7 @@ export function MCAParametersContent({
                   onClick={() => onNavigateType?.("msme")}
                   className="text-[#6B7280] hover:text-[#111827] transition-colors cursor-pointer bg-transparent border-0 p-0"
                 >
-                  Sitemap
+                  MSME Guidelines
                 </button>
               </div>
             </div>

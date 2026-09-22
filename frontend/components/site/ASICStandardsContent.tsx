@@ -203,10 +203,10 @@ export function ASICStandardsContent({
             <div className="border-t border-gray-100 pt-8 pb-4 mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex flex-col gap-0.5"><span className="font-display text-[13px] font-[700] tracking-[0.06em] text-[#111827] uppercase">HILLARY STEP SOLUTIONS PTY LTD</span><span className="font-display text-[11px] font-[400] text-[#9CA3AF] tracking-[0.04em] uppercase">© 2026 HILLARY STEP SOLUTIONS. ARCHITECTING ASCENT.</span></div>
               <div className="flex items-center gap-4 text-[12px] font-display flex-wrap">
-                <button type="button" onClick={() => onNavigateType?.("privacy")} className={footerLinkClass}>Privacy Policy</button><span className="text-[#E5E7EB] select-none">|</span>
-                <button type="button" onClick={() => onNavigateType?.("mca")} className={footerLinkClass}>Terms of Service</button><span className="text-[#E5E7EB] select-none">|</span>
-                <button type="button" onClick={() => onNavigateType?.("labor")} className={footerLinkClass}>Security Architecture</button><span className="text-[#E5E7EB] select-none">|</span>
-                <button type="button" onClick={() => onNavigateType?.("msme")} className={footerLinkClass}>Sitemap</button>
+                <button type="button" onClick={() => onNavigateType?.("privacy")} className={footerLinkClass}>Privacy & Terms</button><span className="text-[#E5E7EB] select-none">|</span>
+                <button type="button" onClick={() => onNavigateType?.("mca")} className={footerLinkClass}>MCA Parameters</button><span className="text-[#E5E7EB] select-none">|</span>
+                <button type="button" onClick={() => onNavigateType?.("labor")} className={footerLinkClass}>US Corporate Labor Codes</button><span className="text-[#E5E7EB] select-none">|</span>
+                <button type="button" onClick={() => onNavigateType?.("msme")} className={footerLinkClass}>MSME Guidelines</button>
               </div>
             </div>
           </main>
