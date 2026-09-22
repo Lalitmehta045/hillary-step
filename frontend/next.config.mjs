@@ -12,7 +12,7 @@ function resolveBackendOrigin() {
     return publicApi.replace(/\/api\/v1\/?$/, "").replace(/\/$/, "");
   }
 
-  return "https://hillary-step.onrender.com";
+  return "https://hillarystepsolutions.com";
 }
 
 const backendOrigin = resolveBackendOrigin();
