@@ -511,27 +511,48 @@ export function MCAParametersContent({
                 <span className="text-[#1A6CFF] font-[700]">12.</span>
                 <span>Corporate Identification</span>
               </h3>
-              <p className="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">
-                This policy is aligned with:
-              </p>
-              <ul className="flex flex-col gap-2 pt-1">
-                {[
-                  "Companies Act, 2013",
-                  "Companies (Accounts) Rules, 2026",
-                  "Secretarial Standards (SS-1 & SS-2)",
-                  "MCA Circulars & Notifications (as amended)",
-                ].map((refItem, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-start gap-2.5 font-display text-[14px] md:text-[14.5px] leading-[1.6] text-[#4B5563]"
-                  >
-                    <span className="text-[#1A6CFF] mt-1.5 text-[8px] leading-none shrink-0">
-                      ●
-                    </span>
-                    <span>{refItem}</span>
-                  </li>
-                ))}
-              </ul>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 items-stretch">
+                <div className="rounded-[12px] border border-[#E2E8F0]/70 bg-[#F8FAFC] p-4 sm:p-5 flex min-w-0 flex-col gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <span className="font-display text-[10px] font-[700] tracking-[0.1em] uppercase text-[#9CA3AF]">Legal Entity Name</span>
+                    <span className="font-display text-[14px] md:text-[14.5px] leading-[1.55] font-[600] text-[#111827]">Hillary Step Solutions Private Limited</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-5">
+                    <div className="min-w-0 flex flex-col gap-1.5">
+                      <span className="font-display text-[10px] font-[700] tracking-[0.08em] uppercase text-[#9CA3AF]">Date of Incorporation</span>
+                      <span className="font-display text-[14px] leading-[1.5] text-[#4B5563]">21 / 02 / 2020</span>
+                    </div>
+                    <div className="min-w-0 flex flex-col gap-1.5">
+                      <span className="font-display text-[10px] font-[700] tracking-[0.08em] uppercase text-[#9CA3AF]">CIN Number</span>
+                      <span className="font-display text-[13px] leading-[1.5] text-[#4B5563] break-all">U62011UP2020PTC127351</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <span className="font-display text-[10px] font-[700] tracking-[0.1em] uppercase text-[#9CA3AF]">GSTIN</span>
+                    <span className="font-display text-[14px] leading-[1.5] text-[#4B5563]">23AAFCH2272R1Z9</span>
+                  </div>
+                </div>
+
+                <div className="rounded-[12px] border border-[#E2E8F0]/70 bg-[#F8FAFC] p-4 sm:p-5 flex min-w-0 flex-col">
+                  <div className="flex flex-col gap-1.5">
+                    <span className="font-display text-[10px] font-[700] tracking-[0.1em] uppercase text-[#FF9500]">Registered Head Office</span>
+                    <span className="font-display text-[14px] md:text-[14.5px] leading-[1.55] text-[#4B5563]">E-842, 8th Floor, Gaur Global Village, GH Plot No. 4, Crossings Republik, Ghaziabad, Uttar Pradesh – 201016</span>
+                  </div>
+                  <div className="h-px w-full bg-[#E2E8F0] my-3" />
+                  <div className="flex flex-col gap-1.5">
+                    <span className="font-display text-[10px] font-[700] tracking-[0.1em] uppercase text-[#1A6CFF]">Branch Office</span>
+                    <span className="font-display text-[14px] md:text-[14.5px] leading-[1.55] text-[#4B5563]">Plot No. 850, 49/A, Near Sai Palace Barat Ghar, Pawan Bhoomi, Shaktinagar, Jabalpur, Madhya Pradesh – 482001</span>
+                  </div>
+                  <div className="mt-auto pt-3">
+                    <div className="h-px w-full bg-[#E2E8F0] mb-3" />
+                    <div className="flex min-w-0 flex-col gap-1.5">
+                      <span className="font-display text-[10px] font-[700] tracking-[0.1em] uppercase text-[#1A6CFF]">Corporate Email</span>
+                      <a href="mailto:info@hillarystepsolutions.com" className="block max-w-full truncate font-display text-[13.5px] leading-[1.5] text-[#1A6CFF] hover:underline">info@hillarystepsolutions.com</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </section>
 
             {/* Important Notice Box */}
