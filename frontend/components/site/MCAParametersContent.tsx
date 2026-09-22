@@ -518,12 +518,12 @@ export function MCAParametersContent({
                     <span className="font-display text-[10px] font-[700] tracking-[0.1em] uppercase text-[#9CA3AF]">Legal Entity Name</span>
                     <span className="font-display text-[14px] md:text-[14.5px] leading-[1.55] font-[600] text-[#111827]">Hillary Step Solutions Private Limited</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-5">
-                    <div className="min-w-0 flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-1.5">
                       <span className="font-display text-[10px] font-[700] tracking-[0.08em] uppercase text-[#9CA3AF]">Date of Incorporation</span>
                       <span className="font-display text-[14px] leading-[1.5] text-[#4B5563]">21 / 02 / 2020</span>
                     </div>
-                    <div className="min-w-0 flex flex-col gap-1.5">
+                    <div className="flex flex-col gap-1.5">
                       <span className="font-display text-[10px] font-[700] tracking-[0.08em] uppercase text-[#9CA3AF]">CIN Number</span>
                       <span className="font-display text-[13px] leading-[1.5] text-[#4B5563] break-all">U62011UP2020PTC127351</span>
                     </div>
