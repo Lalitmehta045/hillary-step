@@ -30,8 +30,8 @@ export function USLaborCodesContent(props: USLaborCodesContentProps) {
           <span class="font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#FF9500]">📍 Principal Place of Business &amp; Registered Agent Office</span>
           <span class="font-display text-[14px] md:text-[14.5px] leading-[1.65] text-[#4B5563]">30 N Gould St Ste N<br />Sheridan, WY 82801</span>
           <div><span class="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#9CA3AF]">Registered Agent</span><span class="font-display text-[14px] leading-[1.6] text-[#4B5563]">Northwest Registered Agent Service Inc</span></div>
-          <div class="h-px w-full bg-[#E2E8F0] my-1" />
-          <div><span class="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#1A6CFF]">Official Email ID</span><a href="mailto:info@hillarystepsolutions.com" class="font-display text-[14px] leading-[1.6] text-[#1A6CFF] hover:underline break-all">info@hillarystepsolutions.com</a></div>
+          <div class="h-px w-full bg-[#E2E8F0] mt-4 mb-3" />
+          <div class="pt-1"><span class="block font-display text-[11px] font-[700] tracking-[0.12em] uppercase text-[#1A6CFF]">Official Email ID</span><a href="mailto:info@hillarystepsolutions.com" class="font-display text-[14px] leading-[1.6] text-[#1A6CFF] hover:underline break-all">info@hillarystepsolutions.com</a></div>
         </div>
       </div>
     `;
