@@ -390,17 +390,17 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
   };
 
   return (
-    <div className="w-full font-display">
-      <div className={`px-4 md:px-8 ${isModal ? "pt-5 pb-12" : "pt-8 pb-16 max-w-[1280px] mx-auto"}`}>
-        {/* ============================================================ */}
-        {/* 1. HERO BANNER */}
-        {/* ============================================================ */}
-        <m.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full rounded-[20px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.14)] bg-[#07130D]"
-        >
+    <div className="w-full font-display bg-white">
+      {/* ============================================================ */}
+      {/* 1. HERO BANNER */}
+      {/* ============================================================ */}
+      <m.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={isModal ? "px-3 md:px-6 py-3.5 bg-white" : "px-4 md:px-8 pt-8 pb-4 max-w-[1280px] mx-auto"}
+      >
+        <div className="relative w-full rounded-[20px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.14)] bg-[#07130D]">
           <div className="absolute inset-0">
             <img
               src="/assets/staffing.png"
@@ -456,7 +456,10 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
               </m.button>
             </div>
           </div>
-        </m.div>
+        </div>
+      </m.div>
+
+      <div className={`px-4 md:px-8 ${isModal ? "pb-12" : "pb-16 max-w-[1280px] mx-auto"}`}>
         {/* ============================================================ */}
         {/* 2. FORM & TOGGLE SECTION (Collapsible with smooth animation) */}
         {/* ============================================================ */}

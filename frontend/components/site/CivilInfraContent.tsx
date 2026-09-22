@@ -159,12 +159,12 @@ export function CivilInfraContent() {
   const c = ecoPillar?.color || "#f5a623";
 
   return (
-    <div className="w-full font-display">
-      <div className="px-4 md:px-8 pt-5 pb-[80px]">
-        {/* Figma UI Showcase: Hero Banner, Project Highlights Carousel, Expertise & Services, Our Process */}
-        <EcoSmartInfraShowcase />
+    <div className="w-full font-display bg-white">
+      {/* Figma UI Showcase: Hero Banner, Project Highlights Carousel, Expertise & Services, Our Process */}
+      <EcoSmartInfraShowcase />
 
-        {/* Existing Grid Section (Preserved) */}
+      {/* Existing Grid Section (Preserved) */}
+      <div className="px-4 md:px-8 pb-[80px]">
         <div id="civil-services-section" className="flex flex-col items-center w-full mt-24 pt-16 border-t border-gray-100">
           <p className="text-[13px] font-[700] tracking-[1.5px] text-[#EA580C] uppercase mb-[12px] text-center">
             OUR INFRASTRUCTURE SERVICES
@@ -173,27 +173,25 @@ export function CivilInfraContent() {
             Engineering Excellence Across Every Scale
           </h3>
 
-        <div className="grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 gap-x-[24px] gap-y-[40px] w-full max-w-[1240px] mx-auto">
-          {civilServices.map((service, idx) => (
-            <HoverCard
-              key={idx}
-              service={service}
-              index={idx}
-              onExplore={() => setDetailService(service)}
-            />
-          ))}
+          <div className="grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 gap-x-[24px] gap-y-[40px] w-full max-w-[1240px] mx-auto">
+            {civilServices.map((service, idx) => (
+              <HoverCard
+                key={idx}
+                service={service}
+                index={idx}
+                onExplore={() => setDetailService(service)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Service Detail Modal */}
-      <ServiceDetailModal
-        isOpen={!!detailService}
-        onClose={() => setDetailService(null)}
-        service={detailService}
-      />
+        {/* Service Detail Modal */}
+        <ServiceDetailModal
+          isOpen={!!detailService}
+          onClose={() => setDetailService(null)}
+          service={detailService}
+        />
       </div>
-
-      
-      </div>
-    );
+    </div>
+  );
   }
