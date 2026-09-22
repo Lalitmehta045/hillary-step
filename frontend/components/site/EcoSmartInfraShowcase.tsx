@@ -144,21 +144,68 @@ export function EcoSmartInfraShowcase() {
     <div className="w-full bg-white text-[#111827] font-display antialiased">
 
       {/* 1. HERO BANNER */}
-      <m.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="relative w-full rounded-[20px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.1)]">
-        <div className="absolute inset-0 w-full h-full">
-          <img src="/assets/ChatGPT Image Sep 4, 2026, 09_48_06 AM.png" alt="Civil engineering and infrastructure construction" className="w-full h-full object-cover" style={{ objectPosition: "right top" }} />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FF7200] via-[#FFA000] via-38% md:via-48% to-transparent mix-blend-multiply pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FF6B00]/80 via-[#FFA200]/60 via-42% to-transparent pointer-events-none" />
+      <m.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="relative w-full rounded-[20px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.14)] bg-[#111827]"
+      >
+        <div className="absolute inset-0">
+          <img
+            src="/assets/ChatGPT Image Sep 4, 2026, 09_48_06 AM.png"
+            alt="Civil engineering and smart infrastructure construction"
+            className="w-full h-full object-cover"
+            style={{ objectPosition: "right center" }}
+          />
+          <div className="absolute inset-0 bg-black/55" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/82 via-black/48 via-48% to-black/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
         </div>
-        <div className="relative z-10 max-w-[620px] p-7 sm:p-10 md:p-14 lg:p-16 flex flex-col items-start justify-center min-h-[400px] md:min-h-[470px]">
-          <m.h1 initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.20 }} className="font-display text-[32px] sm:text-[42px] md:text-[48px] font-[800] leading-[1.1] tracking-[-1px] text-[#111827]"><span className="text-[#FF4A00] font-[900]">Building</span> durable foundations for tomorrow&apos;s world<span className="text-[#10B981]">.</span></m.h1>
-          <m.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.35 }} className="mt-4 sm:mt-5 text-[14px] sm:text-[15.5px] leading-[1.65] text-[#27272A] font-[450] max-w-[480px]">We connect businesses with qualified professionals across markets, helping organizations build reliable teams without the complexity of international hiring.</m.p>
-          <m.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 1, 1], delay: 0.50 }}>
-            <a href="#civil-services-section" onClick={handleBuildTogetherClick} className="mt-6 sm:mt-8 group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#0066FF] hover:bg-[#0052CC] text-white text-[14px] font-[600] tracking-wide shadow-[0_8px_20px_rgba(0,102,255,0.35)] hover:shadow-[0_12px_28px_rgba(0,102,255,0.45)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">Let&apos;s Build Together<ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" /></a>
-          </m.div>
+
+        <div className="relative z-10 min-h-[400px] md:min-h-[500px] px-7 sm:px-10 md:px-16 lg:px-16 py-12 md:py-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+          <div className="max-w-[570px]">
+            <m.p
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.12 }}
+              className="text-[12px] font-[800] tracking-[0.12em] uppercase text-[#FF7A18] mb-4"
+            >
+              SMART INFRASTRUCTURE
+            </m.p>
+            <m.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="font-display text-[38px] sm:text-[50px] md:text-[58px] font-[800] leading-[1.02] tracking-[-2px] text-white"
+            >
+              Infrastructure<br />
+              that moves the<br />
+              world forward<span className="text-[#7CFF00]">.</span>
+            </m.h1>
+          </div>
+
+          <div className="max-w-[420px] lg:mr-2">
+            <m.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.35 }}
+              className="text-[14px] sm:text-[15px] leading-[1.65] text-white/85"
+            >
+              From civil engineering and project delivery to smart-city systems and sustainable infrastructure, we build the physical backbone that resilient economies depend on.
+            </m.p>
+            <m.a
+              href="#civil-services-section"
+              onClick={handleBuildTogetherClick}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.48 }}
+              className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-[13px] font-[700] text-[#111827] shadow-[0_8px_25px_rgba(0,0,0,0.22)] hover:bg-[#F4FFF0] hover:-translate-y-0.5 transition-all duration-300"
+            >
+              Build With HSS <ArrowRight className="w-4 h-4" />
+            </m.a>
+          </div>
         </div>
       </m.div>
-
       {/* 2. PINNED HORIZONTAL SCROLL CAROUSEL */}
       <div ref={trackRef} className="relative w-full h-[2200px] mt-16 md:mt-20">
         <div ref={stickyRef} className="sticky top-0 w-full pt-4 pb-8 overflow-hidden bg-white z-20">
