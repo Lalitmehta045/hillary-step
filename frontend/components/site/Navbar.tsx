@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { m, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 
@@ -65,25 +65,36 @@ export function Navbar() {
   const isPointerOverNavRef = useRef(false);
   const navHoverZoneRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const clearHideTimer = () => {
-      if (hideTimerRef.current) {
-        clearTimeout(hideTimerRef.current);
-        hideTimerRef.current = null;
+  const clearHideTimer = useCallback(() => {
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+  }, []);
+
+  const scheduleHide = useCallback(() => {
+    clearHideTimer();
+    if (typeof window === "undefined" || window.scrollY <= 50 || open || isPointerOverNavRef.current) return;
+
+    hideTimerRef.current = setTimeout(() => {
+      if (!open && !isPointerOverNavRef.current && window.scrollY > 50) {
+        setIsVisible(false);
       }
-    };
+    }, 850);
+  }, [open, clearHideTimer]);
 
-    const scheduleHide = () => {
-      clearHideTimer();
-      if (window.scrollY <= 50 || open || isPointerOverNavRef.current) return;
+  const handleNavMouseEnter = useCallback(() => {
+    isPointerOverNavRef.current = true;
+    clearHideTimer();
+    setIsVisible(true);
+  }, [clearHideTimer]);
 
-      hideTimerRef.current = setTimeout(() => {
-        if (!open && !isPointerOverNavRef.current && window.scrollY > 50) {
-          setIsVisible(false);
-        }
-      }, 850);
-    };
+  const handleNavMouseLeave = useCallback(() => {
+    isPointerOverNavRef.current = false;
+    scheduleHide();
+  }, [scheduleHide]);
 
+  useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrolled(currentScrollY > 30);
@@ -122,17 +133,6 @@ export function Navbar() {
       }
     };
 
-    const handleNavMouseEnter = () => {
-      isPointerOverNavRef.current = true;
-      clearHideTimer();
-      setIsVisible(true);
-    };
-
-    const handleNavMouseLeave = () => {
-      isPointerOverNavRef.current = false;
-      scheduleHide();
-    };
-
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
@@ -142,7 +142,7 @@ export function Navbar() {
       window.removeEventListener("pointermove", handlePointerMove);
       clearHideTimer();
     };
-  }, [open]);
+  }, [clearHideTimer, scheduleHide]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -181,7 +181,7 @@ export function Navbar() {
 
   return (
     <>
-      <div ref={navHoverZoneRef} className="fixed top-0 inset-x-0 z-[9000] h-[96px] pointer-events-auto">
+      <div ref={navHoverZoneRef} className="fixed top-0 inset-x-0 z-[9000] h-[96px] pointer-events-auto" onMouseEnter={handleNavMouseEnter} onMouseLeave={handleNavMouseLeave}>
         <m.header
           initial={{ y: 0, opacity: 1 }}
           animate={{ y: shouldHide ? "-120%" : 0, opacity: shouldHide ? 0 : 1 }}

@@ -34,24 +34,32 @@ export function RegionsGradientAnimation() {
     resize();
     window.addEventListener("resize", resize);
 
+    // Redesigned for a softer, premium ambient flow
     const ribbons = [
-      { color: "#1A6CFF", width: 26, y: 0.78, amplitude: 18, phase: 0.0, speed: 0.0007 },
-      { color: "#40F600", width: 18, y: 0.815, amplitude: 14, phase: 1.4, speed: 0.00062 },
-      { color: "#FF9500", width: 20, y: 0.85, amplitude: 16, phase: 2.6, speed: 0.00078 },
+      { color: "#1A6CFF", width: 70, y: 0.65, amplitude: 35, phase: 0.0, speed: 0.0004 },
+      { color: "#40F600", width: 50, y: 0.78, amplitude: 25, phase: 1.4, speed: 0.00035 },
+      { color: "#FF9500", width: 55, y: 0.88, amplitude: 30, phase: 2.6, speed: 0.00045 },
     ];
 
     const drawRibbon = (ribbon: (typeof ribbons)[number], t: number, offset: number) => {
-      const points = Math.max(90, Math.floor(width / 8));
+      const points = Math.max(100, Math.floor(width / 12));
       ctx.beginPath();
 
       for (let i = 0; i <= points; i++) {
-        const p = i / points;
-        const x = width * (p - 0.08);
+        const x_norm = i / points;
+        // Extend rendering slightly off-screen to prevent edge clipping artifacts
+        const x = width * (x_norm * 1.2 - 0.1); 
+        
+        // Smoothly scaling phase for natural wave curves across any screen size
+        const p = x_norm * 2.0; 
+        
         const baseY = height * ribbon.y;
         const wave =
-          Math.sin(p * 7.2 + t * ribbon.speed * 1000 + ribbon.phase) * ribbon.amplitude +
-          Math.sin(p * 13.5 - t * ribbon.speed * 720 + ribbon.phase * 0.7) * 5;
-        const y = baseY + wave + offset * (p - 0.5);
+          Math.sin(p * 3.5 + t * ribbon.speed * 1000 + ribbon.phase) * ribbon.amplitude +
+          Math.sin(p * 5.2 - t * ribbon.speed * 720 + ribbon.phase * 0.7) * (ribbon.amplitude * 0.35);
+          
+        const y = baseY + wave + offset * Math.sin(p * 2);
+        
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
@@ -60,11 +68,12 @@ export function RegionsGradientAnimation() {
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       ctx.strokeStyle = ribbon.color;
-      ctx.globalAlpha = 0.22;
+      ctx.globalAlpha = 0.3; 
       ctx.stroke();
 
-      ctx.lineWidth = Math.max(2, ribbon.width * 0.16);
-      ctx.globalAlpha = 0.12;
+      // Core highlight for richer depth
+      ctx.lineWidth = Math.max(15, ribbon.width * 0.4);
+      ctx.globalAlpha = 0.18;
       ctx.stroke();
     };
 
@@ -78,12 +87,11 @@ export function RegionsGradientAnimation() {
       const t = now * 0.001;
 
       ctx.save();
-      ctx.filter = `blur(${Math.max(10, Math.min(width, height) * 0.018)}px)`;
-      ctx.beginPath();
-      ctx.rect(width * 0.42, height * 0.58, width * 0.66, height * 0.5);
-      ctx.clip();
-
-      ribbons.forEach((ribbon, index) => drawRibbon(ribbon, t, index * 4));
+      // Increase blur for an enterprise-grade glowing atmosphere
+      ctx.filter = `blur(${Math.max(35, Math.min(width, height) * 0.045)}px)`;
+      
+      // Removed previous harsh geometric clip paths to allow smooth ambient blending
+      ribbons.forEach((ribbon, index) => drawRibbon(ribbon, t, index * 8));
 
       ctx.restore();
       animationFrameId = requestAnimationFrame(render);
@@ -111,7 +119,13 @@ export function RegionsGradientAnimation() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute bottom-0 right-0 z-0 h-[42%] w-[58%] overflow-hidden select-none"
+      // Expand to cover the full width and a larger vertical area for a continuous gradient
+      className="pointer-events-none absolute bottom-0 left-0 right-0 z-0 h-[65%] w-full overflow-hidden select-none opacity-90"
+      style={{
+        // Premium CSS mask to naturally fade the gradient into the background instead of cutting it
+        maskImage: "linear-gradient(to top, black 25%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to top, black 25%, transparent 100%)"
+      }}
       aria-hidden="true"
     >
       <canvas ref={canvasRef} className="block h-full w-full" />

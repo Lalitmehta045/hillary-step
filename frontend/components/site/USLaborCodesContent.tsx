@@ -612,5 +612,6 @@ export function USLaborCodesContent({
         </div>
       </div>
     </div>
+    </>
   );
 }
