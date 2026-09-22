@@ -83,7 +83,7 @@ export class ScannerService {
       const error = e as ExecError;
       this.logger.error(
         `Scanner raw error:`,
-        JSON.stringify(e, Object.getOwnPropertyNames(e as object)),
+        JSON.stringify(e, Object.getOwnPropertyNames(e)),
       );
 
       // On Windows, MpCmdRun returns 2 for malware

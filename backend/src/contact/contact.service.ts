@@ -30,10 +30,18 @@ export class ContactService {
   async create(data: CreateEnquiryDto, ip?: string) {
     const enquiryNumber = await this.generateEnquiryNumber();
     const organization =
-      data.organizationName?.trim() || data.organization?.trim() || data.companyName?.trim() || null;
+      data.organizationName?.trim() ||
+      data.organization?.trim() ||
+      data.companyName?.trim() ||
+      null;
     const companyName =
-      data.companyName?.trim() || data.organizationName?.trim() || data.organization?.trim() || null;
-    const name = data.name?.trim() || [data.firstName, data.lastName].filter(Boolean).join(' ');
+      data.companyName?.trim() ||
+      data.organizationName?.trim() ||
+      data.organization?.trim() ||
+      null;
+    const name =
+      data.name?.trim() ||
+      [data.firstName, data.lastName].filter(Boolean).join(' ');
 
     const { organizationName: _orgName, ...restData } = data;
 
@@ -99,8 +107,8 @@ export class ContactService {
       case 'USA':
         return {
           OR: [
-            { countryCode: { contains: 'USA', mode: 'insensitive' } },
-            { phone: { contains: '(USA)', mode: 'insensitive' } },
+            { countryCode: { contains: 'USA' } },
+            { phone: { contains: '(USA)' } },
             { phone: { startsWith: '+1 (' } },
             { phone: { startsWith: '+1 ' } },
           ],
@@ -108,17 +116,17 @@ export class ContactService {
       case 'IND':
         return {
           OR: [
-            { countryCode: { contains: 'IND', mode: 'insensitive' } },
-            { phone: { contains: '(IND)', mode: 'insensitive' } },
-            { phone: { contains: '+91', mode: 'insensitive' } },
+            { countryCode: { contains: 'IND' } },
+            { phone: { contains: '(IND)' } },
+            { phone: { contains: '+91' } },
           ],
         };
       case 'AUS':
         return {
           OR: [
-            { countryCode: { contains: 'AUS', mode: 'insensitive' } },
-            { phone: { contains: '(AUS)', mode: 'insensitive' } },
-            { phone: { contains: '+61', mode: 'insensitive' } },
+            { countryCode: { contains: 'AUS' } },
+            { phone: { contains: '(AUS)' } },
+            { phone: { contains: '+61' } },
           ],
         };
       default:
@@ -136,17 +144,17 @@ export class ContactService {
     const and: Prisma.EnquiryWhereInput[] = [];
 
     if (filters.status) {
-      where.status = filters.status as EnquiryStatus;
+      where.status = filters.status;
     }
     if (filters.search?.trim()) {
       const q = filters.search.trim();
       and.push({
         OR: [
-          { companyName: { contains: q, mode: 'insensitive' } },
-          { contactPerson: { contains: q, mode: 'insensitive' } },
-          { email: { contains: q, mode: 'insensitive' } },
-          { name: { contains: q, mode: 'insensitive' } },
-          { organization: { contains: q, mode: 'insensitive' } },
+          { companyName: { contains: q } },
+          { contactPerson: { contains: q } },
+          { email: { contains: q } },
+          { name: { contains: q } },
+          { organization: { contains: q } },
         ],
       });
     }

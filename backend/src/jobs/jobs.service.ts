@@ -60,8 +60,8 @@ export class JobsService {
     if (filters.industry) where.industry = filters.industry;
     if (filters.search) {
       where.OR = [
-        { jobTitle: { contains: filters.search, mode: 'insensitive' } },
-        { organizationName: { contains: filters.search, mode: 'insensitive' } },
+        { jobTitle: { contains: filters.search } },
+        { organizationName: { contains: filters.search } },
       ];
     }
 

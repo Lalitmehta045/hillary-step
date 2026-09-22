@@ -34,9 +34,7 @@ export default () => ({
   email: {
     resendApiKey: process.env.RESEND_API_KEY,
     adminNotificationEmail:
-      process.env.ADMIN_NOTIFICATION_EMAIL ||
-      'info@hillarystepsolutions.com',
-    from:
-      process.env.EMAIL_FROM || 'Hillary Step <onboarding@resend.dev>',
+      process.env.ADMIN_NOTIFICATION_EMAIL || 'info@hillarystepsolutions.com',
+    from: process.env.EMAIL_FROM || 'Hillary Step <onboarding@resend.dev>',
   },
 });

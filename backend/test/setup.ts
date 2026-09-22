@@ -1,10 +1,10 @@
 // Test setup for staging integration gate
 // Uses isolated hillary_staging_test database - no production data touched
-process.env.PORT = '3001';
+process.env.PORT = '5000';
 process.env.NODE_ENV = 'test';
 process.env.FRONTEND_URL = 'http://localhost:3000';
 process.env.DATABASE_URL =
-  'postgresql://postgres:Lalit_45@localhost:5432/hillary_staging_test?schema=public';
+  'mysql://root:%40Root123@localhost:3306/hillary_step';
 process.env.AWS_REGION = 'us-east-1';
 process.env.AWS_S3_BUCKET_NAME = 'hillary-staging-test';
 process.env.AWS_ACCESS_KEY_ID = 'test-access-key-id';

@@ -36,8 +36,7 @@ describe('EmailService', () => {
             get: (key: string) => {
               const map: Record<string, string> = {
                 'email.resendApiKey': 're_test_key',
-                'email.adminNotificationEmail':
-                  'info@hillarystepsolutions.com',
+                'email.adminNotificationEmail': 'info@hillarystepsolutions.com',
                 'email.from': 'Hillary Step <noreply@hillarystepsolutions.com>',
               };
               return map[key];

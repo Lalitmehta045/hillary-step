@@ -80,7 +80,11 @@ export class CreateEnquiryDto {
   entityType: string;
 
   @ApiPropertyOptional({ example: 'Acme Corp' })
-  @ValidateIf((o: CreateEnquiryDto) => o.entityType === 'Private Enterprise' || o.entityType === 'Public Sector Organisation')
+  @ValidateIf(
+    (o: CreateEnquiryDto) =>
+      o.entityType === 'Private Enterprise' ||
+      o.entityType === 'Public Sector Organisation',
+  )
   @IsString()
   @MinLength(1)
   @MaxLength(200)

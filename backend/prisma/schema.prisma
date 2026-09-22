@@ -3,13 +3,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 // Admin users with authentication
 model Admin {
-  id             String    @id @default(uuid()) @db.Uuid
+  id             String    @id @default(uuid())
   email          String    @unique
   name           String
   passwordHash   String    @map("password_hash")
@@ -40,8 +40,8 @@ enum AdminRole {
 
 // Admin sessions (secure cookie-based)
 model AdminSession {
-  id           String   @id @default(uuid()) @db.Uuid
-  adminId      String   @map("admin_id") @db.Uuid
+  id           String   @id @default(uuid())
+  adminId      String   @map("admin_id")
   token        String   @unique
   ipAddress    String?  @map("ip_address")
   userAgent    String?  @map("user_agent")
@@ -58,7 +58,7 @@ model AdminSession {
 
 // Jobs posted (both from admin and public "Post a Job" form)
 model Job {
-  id                String      @id @default(uuid()) @db.Uuid
+  id                String      @id @default(uuid())
   jobTitle          String      @map("job_title")
   organizationName  String?     @map("organization_name")
   roleType          String?     @map("role_type")  // full-time, part-time, contract, etc.
@@ -100,7 +100,7 @@ enum JobStatus {
 
 // Job applications (Find a Job form)
 model Application {
-  id                 String            @id @default(uuid()) @db.Uuid
+  id                 String            @id @default(uuid())
   applicationNumber  String            @unique @map("application_number") // e.g. APP-001
   fullName           String            @map("full_name")
   email              String
@@ -118,7 +118,7 @@ model Application {
   resumeFileSize     Int?              @map("resume_file_size")
   resumeMimeType     String?           @map("resume_mime_type")
   status             ApplicationStatus @default(NEW)
-  jobId              String?           @map("job_id") @db.Uuid
+  jobId              String?           @map("job_id")
   parsedData         Json?             @map("parsed_data")
   submissionIp       String?           @map("submission_ip")
   createdAt          DateTime          @default(now()) @map("created_at")
@@ -148,8 +148,8 @@ enum ApplicationStatus {
 
 // Documents attached to applications
 model Document {
-  id            String   @id @default(uuid()) @db.Uuid
-  applicationId String   @map("application_id") @db.Uuid
+  id            String   @id @default(uuid())
+  applicationId String   @map("application_id")
   fileName      String   @map("file_name")
   fileKey       String   @map("file_key") // S3 key
   fileSize      Int      @map("file_size")
@@ -164,7 +164,7 @@ model Document {
 
 // Contact/Enquiry submissions
 model Enquiry {
-  id             String        @id @default(uuid()) @db.Uuid
+  id             String        @id @default(uuid())
   enquiryNumber  String        @unique @map("enquiry_number") // e.g. ENQ-001
   // Contact form fields
   firstName      String?       @map("first_name")
@@ -210,9 +210,9 @@ enum EnquiryPriority {
 
 // Internal notes on applications
 model InternalNote {
-  id            String   @id @default(uuid()) @db.Uuid
-  applicationId String   @map("application_id") @db.Uuid
-  adminId       String   @map("admin_id") @db.Uuid
+  id            String   @id @default(uuid())
+  applicationId String   @map("application_id")
+  adminId       String   @map("admin_id")
   content       String   @db.Text
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
@@ -226,8 +226,8 @@ model InternalNote {
 
 // Activity log for applications (system-generated)
 model ActivityLog {
-  id            String   @id @default(uuid()) @db.Uuid
-  applicationId String   @map("application_id") @db.Uuid
+  id            String   @id @default(uuid())
+  applicationId String   @map("application_id")
   action        String   // e.g. "Application Received", "Status Changed", "Resume Downloaded"
   performedBy   String   @map("performed_by") // "System" or admin name
   metadata      Json?    // optional extra data
@@ -242,11 +242,11 @@ model ActivityLog {
 
 // Audit log for security/compliance
 model AuditLog {
-  id         String   @id @default(uuid()) @db.Uuid
+  id         String   @id @default(uuid())
   action     String   // e.g. "ADMIN_LOGIN", "APPLICATION_STATUS_CHANGE"
   entityType String?  @map("entity_type") // e.g. "Application", "Job"
   entityId   String?  @map("entity_id")
-  adminId    String?  @map("admin_id") @db.Uuid
+  adminId    String?  @map("admin_id")
   ipAddress  String?  @map("ip_address")
   userAgent  String?  @map("user_agent")
   metadata   Json?    // flexible payload

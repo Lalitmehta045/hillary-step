@@ -218,11 +218,11 @@ describe('ContactService', () => {
         AND: [
           {
             OR: [
-              { companyName: { contains: 'test', mode: 'insensitive' } },
-              { contactPerson: { contains: 'test', mode: 'insensitive' } },
-              { email: { contains: 'test', mode: 'insensitive' } },
-              { name: { contains: 'test', mode: 'insensitive' } },
-              { organization: { contains: 'test', mode: 'insensitive' } },
+              { companyName: { contains: 'test' } },
+              { contactPerson: { contains: 'test' } },
+              { email: { contains: 'test' } },
+              { name: { contains: 'test' } },
+              { organization: { contains: 'test' } },
             ],
           },
         ],

@@ -131,9 +131,21 @@ export class EmailService {
 
     const topic = enquiry.topic || 'General Inquiry';
     let recipientEmail = this.adminEmail;
-    if (['Information Technology', 'Talent Acquisition', 'Civil & Infrastructure'].includes(topic)) {
+    if (
+      [
+        'Information Technology',
+        'Talent Acquisition',
+        'Civil & Infrastructure',
+      ].includes(topic)
+    ) {
       recipientEmail = 'growth@hillarystepsolutions.com';
-    } else if (['Feedback & Suggestions', 'Grievance Redressal', 'General Inquiry'].includes(topic)) {
+    } else if (
+      [
+        'Feedback & Suggestions',
+        'Grievance Redressal',
+        'General Inquiry',
+      ].includes(topic)
+    ) {
       recipientEmail = 'info@hillarystepsolutions.com';
     }
 

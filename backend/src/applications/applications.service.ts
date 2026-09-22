@@ -68,10 +68,7 @@ export class ApplicationsService {
     return Number.isFinite(years) ? years : null;
   }
 
-  private experienceInRange(
-    years: number | null,
-    range: string,
-  ): boolean {
+  private experienceInRange(years: number | null, range: string): boolean {
     if (years === null) return false;
     switch (range) {
       case '0-2':
@@ -127,21 +124,17 @@ export class ApplicationsService {
 
     if (filters.status) where.status = filters.status;
     if (filters.practice) {
-      where.practice = { equals: filters.practice, mode: 'insensitive' };
+      where.practice = { equals: filters.practice };
     }
     if (filters.location) {
       where.preferredLocation = {
         equals: filters.location,
-        mode: 'insensitive',
       };
     }
     if (filters.search?.trim()) {
       const q = filters.search.trim();
       and.push({
-        OR: [
-          { fullName: { contains: q, mode: 'insensitive' } },
-          { email: { contains: q, mode: 'insensitive' } },
-        ],
+        OR: [{ fullName: { contains: q } }, { email: { contains: q } }],
       });
     }
     if (filters.date) {

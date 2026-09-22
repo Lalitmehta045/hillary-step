@@ -79,7 +79,9 @@ export class AuthService {
         loginDto.password,
       );
     } catch (e) {
-      this.logger.warn(`Argon2 verify failed for admin ${admin.id}: ${e.message}`);
+      this.logger.warn(
+        `Argon2 verify failed for admin ${admin.id}: ${e.message}`,
+      );
       isPasswordValid = false;
     }
 

@@ -355,7 +355,8 @@ describe('Staging Integration Gate (e2e)', () => {
 
     it('should reject application with missing required fields', async () => {
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications')
+        .set('cf-turnstile-response', 'valid-token')
         .send({ phone: '1234567890' }) // missing required: fullName, email
         .expect(400);
 
@@ -364,7 +365,8 @@ describe('Staging Integration Gate (e2e)', () => {
 
     it('should reject application with invalid email', async () => {
       await request(app.getHttpServer())
-        .post('/api/v1/applications').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications')
+        .set('cf-turnstile-response', 'valid-token')
         .send({ fullName: 'Test User', email: 'not-an-email' })
         .expect(400);
     }, 15000);
@@ -400,7 +402,8 @@ describe('Staging Integration Gate (e2e)', () => {
 
     it('should accept valid public application', async () => {
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications')
+        .set('cf-turnstile-response', 'valid-token')
         .send({
           fullName: 'John Doe',
           email: 'john@example.com',
@@ -515,7 +518,8 @@ describe('Staging Integration Gate (e2e)', () => {
 
     it('should create an application with job ID', async () => {
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications')
+        .set('cf-turnstile-response', 'valid-token')
         .send({
           fullName: 'Integration Test User',
           email: 'integration@test.com',
@@ -696,14 +700,16 @@ describe('Staging Integration Gate (e2e)', () => {
 
     it('should reject non-multipart requests', async () => {
       await request(app.getHttpServer())
-        .post('/api/v1/applications/upload-resume').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications/upload-resume')
+        .set('cf-turnstile-response', 'valid-token')
         .send({ file: 'not-a-file' })
         .expect(400);
     }, 15000);
 
     it('should reject files with disallowed MIME types (.js)', async () => {
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications/upload-resume').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications/upload-resume')
+        .set('cf-turnstile-response', 'valid-token')
         .attach('file', Buffer.from('console.log("hello");'), {
           filename: 'malicious.js',
           contentType: 'application/javascript',
@@ -714,7 +720,8 @@ describe('Staging Integration Gate (e2e)', () => {
 
     it('should reject files with disallowed MIME types (.exe)', async () => {
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications/upload-resume').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications/upload-resume')
+        .set('cf-turnstile-response', 'valid-token')
         .attach('file', Buffer.from([0x4d, 0x5a, 0x90, 0x00]), {
           filename: 'virus.exe',
           contentType: 'application/octet-stream',
@@ -728,7 +735,8 @@ describe('Staging Integration Gate (e2e)', () => {
         'This is not a PDF, just pretending to be one.',
       );
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications/upload-resume').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications/upload-resume')
+        .set('cf-turnstile-response', 'valid-token')
         .attach('file', fakePdf, {
           filename: 'fake.pdf',
           contentType: 'application/pdf',
@@ -746,7 +754,8 @@ describe('Staging Integration Gate (e2e)', () => {
       largeBuffer[3] = 0x46;
 
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications/upload-resume').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications/upload-resume')
+        .set('cf-turnstile-response', 'valid-token')
         .attach('file', largeBuffer, {
           filename: 'large.pdf',
           contentType: 'application/pdf',
@@ -764,7 +773,8 @@ describe('Staging Integration Gate (e2e)', () => {
       ]);
 
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications/upload-resume').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications/upload-resume')
+        .set('cf-turnstile-response', 'valid-token')
         .attach('file', validPdf, {
           filename: 'resume.pdf',
           contentType: 'application/pdf',
@@ -789,7 +799,8 @@ describe('Staging Integration Gate (e2e)', () => {
       ]);
 
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications/upload-resume').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications/upload-resume')
+        .set('cf-turnstile-response', 'valid-token')
         .attach('file', validDocx, {
           filename: 'resume.docx',
           contentType:
@@ -807,7 +818,8 @@ describe('Staging Integration Gate (e2e)', () => {
       ]);
 
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications/upload-resume').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications/upload-resume')
+        .set('cf-turnstile-response', 'valid-token')
         .attach('file', validPdf, {
           filename: 'parsed.pdf',
           contentType: 'application/pdf',
@@ -834,7 +846,8 @@ describe('Staging Integration Gate (e2e)', () => {
       ]);
 
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications/upload-resume').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications/upload-resume')
+        .set('cf-turnstile-response', 'valid-token')
         .attach('file', infectedBuffer, {
           filename: 'infected.pdf',
           contentType: 'application/pdf',
@@ -858,7 +871,8 @@ describe('Staging Integration Gate (e2e)', () => {
       ]);
 
       const res = await request(app.getHttpServer())
-        .post('/api/v1/applications/upload-resume').set('cf-turnstile-response', 'valid-token')
+        .post('/api/v1/applications/upload-resume')
+        .set('cf-turnstile-response', 'valid-token')
         .attach('file', validPdf, {
           filename: 'resume.pdf',
           contentType: 'application/pdf',
@@ -1332,7 +1346,7 @@ describe('Staging Integration Gate (e2e)', () => {
         success: false,
         errorCodes: ['invalid-input-response'],
       });
-      
+
       const dummyBuffer = Buffer.from('dummy resume');
       await request(app.getHttpServer())
         .post('/api/v1/applications/upload-resume')

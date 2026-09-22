@@ -76,7 +76,10 @@ async function bootstrap() {
   const corsOriginOption =
     !corsOrigin || corsOrigin.trim() === '*'
       ? true
-      : corsOrigin.split(',').map((o) => o.trim()).filter(Boolean);
+      : corsOrigin
+          .split(',')
+          .map((o) => o.trim())
+          .filter(Boolean);
 
   await fastifyInstance.register(fastifyCors, {
     origin: corsOriginOption,
@@ -87,7 +90,10 @@ async function bootstrap() {
 
   // Production uses SameSite=None so the Vercel SPA can send cookies to Render.
   await fastifyInstance.register(fastifyCookie, {
-    secret: configService.get<string>('auth.sessionSecret', 'fallback-secret-key-at-least-32-chars-long'),
+    secret: configService.get<string>(
+      'auth.sessionSecret',
+      'fallback-secret-key-at-least-32-chars-long',
+    ),
     parseOptions: {
       httpOnly: true,
       secure: nodeEnv === 'production',

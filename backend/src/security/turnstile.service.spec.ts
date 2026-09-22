@@ -118,7 +118,8 @@ describe('TurnstileService', () => {
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       expect.objectContaining({ method: 'POST' }),
     );
-    const body = (global.fetch as jest.Mock).mock.calls[0][1].body as URLSearchParams;
+    const body = (global.fetch as jest.Mock).mock.calls[0][1]
+      .body as URLSearchParams;
     expect(body.get('response')).toBe('token');
     // Private/loopback IPs must not be forwarded as remoteip.
     expect(body.get('remoteip')).toBeNull();
@@ -139,7 +140,8 @@ describe('TurnstileService', () => {
     });
 
     await service.verify('token', '203.0.113.10');
-    const body = (global.fetch as jest.Mock).mock.calls[0][1].body as URLSearchParams;
+    const body = (global.fetch as jest.Mock).mock.calls[0][1]
+      .body as URLSearchParams;
     expect(body.get('remoteip')).toBe('203.0.113.10');
   });
 
