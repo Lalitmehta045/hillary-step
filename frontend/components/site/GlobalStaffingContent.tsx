@@ -393,93 +393,70 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
     <div className="w-full font-display">
       <div className={`px-4 md:px-8 ${isModal ? "pt-5 pb-12" : "pt-8 pb-16 max-w-[1280px] mx-auto"}`}>
         {/* ============================================================ */}
-        {/* 1. HERO BANNER                                               */}
+        {/* 1. HERO BANNER */}
         {/* ============================================================ */}
         <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full rounded-[28px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)] bg-[#061E12]"
+          className="relative w-full rounded-[20px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.14)] bg-[#07130D]"
         >
-          {/* Background Image & Ambient Lighting */}
-          <div className="absolute inset-0 w-full h-full">
+          <div className="absolute inset-0">
             <img
               src="/assets/staffing.png"
-              alt="Global talent acquisition and staffing solutions"
-              className="w-full h-full object-cover rounded-[28px] border-0"
-              style={{ objectPosition: "right top" }}
+              alt="Global staffing and talent solutions"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: "right center" }}
             />
-            {/* Luminous Brand Gradients: Smooth transition on left for crystal-clear readability, preserving the right visual */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 via-38% md:via-48% to-transparent pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#DCFCE7]/70 via-[#BBF7D0]/30 via-42% to-transparent mix-blend-multiply pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-black/55" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 via-48% to-black/10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
           </div>
 
-          {/* Content Container */}
-          <div className="relative z-10 max-w-[620px] p-7 sm:p-10 md:p-14 lg:p-16 flex flex-col items-start justify-center min-h-[400px] md:min-h-[470px]">
-            {/* Eyebrow / Pill Tag */}
-            <m.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#EAF8EE] border border-[#DCFCE7] mb-3 sm:mb-4 shadow-xs"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
-              <span className="text-[11.5px] font-[700] tracking-[0.14em] text-[#15803D] uppercase">
-                GLOBAL STAFFING &bull; TALENT
-              </span>
-            </m.div>
+          <div className="relative z-10 min-h-[400px] md:min-h-[500px] px-7 sm:px-10 md:px-16 lg:px-16 py-12 md:py-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+            <div className="max-w-[560px]">
+              <m.p
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.12 }}
+                className="text-[12px] font-[800] tracking-[0.12em] uppercase text-[#40F600] mb-4"
+              >
+                GLOBAL STAFFING
+              </m.p>
+              <m.h1
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="font-display text-[38px] sm:text-[50px] md:text-[58px] font-[800] leading-[1.02] tracking-[-2px] text-white"
+              >
+                Global talent<br />
+                built for<br />
+                borderless growth<span className="text-[#7CFF00]">.</span>
+              </m.h1>
+            </div>
 
-            {/* Headline */}
-            <m.h1
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.20 }}
-              className="font-display text-[32px] sm:text-[42px] md:text-[48px] font-[800] leading-[1.1] tracking-[-1px] text-[#111827]"
-            >
-              <span className="text-[#16A34A] font-[900]">Global</span> Talent.
-              <br />
-              Local Understanding<span className="text-[#10B981]">.</span>
-            </m.h1>
-
-            {/* Subtitle */}
-            <m.p
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
-              className="mt-4 sm:mt-5 text-[14px] sm:text-[15.5px] leading-[1.65] text-[#27272A] font-[450] max-w-[480px]"
-            >
-              We help organizations build high-performing teams across borders through structured sourcing, specialist talent networks, and local market expertise.
-            </m.p>
-
-            {/* CTA Buttons */}
-            <m.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.50 }}
-              className="mt-6 sm:mt-8 flex flex-wrap items-center gap-3.5"
-            >
-              <button
+            <div className="max-w-[420px] lg:mr-2">
+              <m.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.35 }}
+                className="text-[14px] sm:text-[15px] leading-[1.65] text-white/85"
+              >
+                We help organizations build high-performing teams across borders through structured sourcing, specialist talent networks, and local market expertise.
+              </m.p>
+              <m.button
                 type="button"
                 onClick={() => handleHeroTabClick("post")}
-                className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#0066FF] hover:bg-[#0052CC] text-white text-[14px] font-[600] tracking-wide shadow-[0_8px_20px_rgba(0,102,255,0.35)] hover:shadow-[0_12px_28px_rgba(0,102,255,0.45)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.48 }}
+                className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-[13px] font-[700] text-[#111827] shadow-[0_8px_25px_rgba(0,0,0,0.22)] hover:bg-[#F4FFF0] hover:-translate-y-0.5 transition-all duration-300"
               >
-                <span>Start Hiring</span>
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleHeroTabClick("find")}
-                className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-white/90 hover:bg-white text-[#111827] border border-gray-200/90 text-[14px] font-[600] tracking-wide shadow-xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer backdrop-blur-sm"
-              >
-                <span>Explore Opportunities</span>
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
-            </m.div>
+                Start Hiring <ArrowRight className="w-4 h-4" />
+              </m.button>
+            </div>
           </div>
         </m.div>
-
         {/* ============================================================ */}
         {/* 2. FORM & TOGGLE SECTION (Collapsible with smooth animation) */}
         {/* ============================================================ */}
