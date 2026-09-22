@@ -157,47 +157,60 @@ export function ITSolutionsContent() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="px-3 md:px-6 py-3.5 bg-white"
       >
-        <div className="relative w-full h-[500px] rounded-[18px] overflow-hidden flex flex-col justify-center">
-          <img src="/images/it_workspace_hero.jpg" alt="Hero Background" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/60"></div>
+        <div className="relative w-full min-h-[400px] md:min-h-[500px] rounded-[20px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.14)] bg-[#07111F]">
+          <div className="absolute inset-0">
+            <img
+              src="/images/it_workspace_hero.jpg"
+              alt="Secure, scalable technology solutions"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: "right center" }}
+            />
+            <div className="absolute inset-0 bg-black/55" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/82 via-black/48 via-48% to-black/10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+          </div>
 
-          <div className="relative z-10 w-full px-8 md:px-16 flex flex-col md:flex-row md:items-center justify-between gap-8">
-            <div className="flex flex-col">
+          <div className="relative z-10 min-h-[400px] md:min-h-[500px] px-7 sm:px-10 md:px-16 lg:px-16 py-12 md:py-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+            <div className="max-w-[570px]">
               <m.p
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.12 }}
+                className="text-[12px] font-[800] tracking-[0.12em] uppercase text-[#1A6CFF] mb-4"
+              >
+                IT SOLUTIONS
+              </m.p>
+
+              <m.h1
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-                className="text-[13px] font-[600] tracking-wide text-[#3b82f6] uppercase mb-[12px]"
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="font-display text-[38px] sm:text-[50px] md:text-[58px] font-[800] leading-[1.02] tracking-[-2px] text-white"
               >
-                IT Solutions
-              </m.p>
-              <m.h1
-                initial={{ opacity: 0, y: 28 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.30 }}
-                className="text-white text-[40px] md:text-[48px] lg:text-[56px] font-bold leading-[1.1] max-w-[600px]"
-              >
-                Technology that powers your business forward.
+                Technology that<br />
+                powers your<br />
+                business forward<span className="text-[#40F600]">.</span>
               </m.h1>
             </div>
-            <div className="flex flex-col items-start md:items-end gap-6 max-w-[400px]">
+
+            <div className="max-w-[420px] lg:mr-2">
               <m.p
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.45 }}
-                className="text-white text-[13px] md:text-[14px] leading-relaxed opacity-90 md:text-right"
+                transition={{ duration: 0.8, delay: 0.35 }}
+                className="text-[14px] sm:text-[15px] leading-[1.65] text-white/85"
               >
                 From strategy to deployment, we build secure, scalable, and future-ready solutions to help your business adapt, innovate, and grow.
               </m.p>
-              <m.div
-                initial={{ opacity: 0, y: 24 }}
+
+              <m.button
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.60 }}
+                transition={{ duration: 0.8, delay: 0.48 }}
+                className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-[13px] font-[700] text-[#111827] shadow-[0_8px_25px_rgba(0,0,0,0.22)] hover:bg-[#F4FFF0] hover:-translate-y-0.5 transition-all duration-300"
               >
-                <button className="bg-white text-black font-semibold px-8 py-3 rounded-full hover:bg-gray-100 transition-colors text-[13px]">
-                  Start Your IT Transformation
-                </button>
-              </m.div>
+                Start Your IT Transformation
+              </m.button>
             </div>
           </div>
         </div>
