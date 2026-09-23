@@ -100,7 +100,7 @@ export function Hero() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           poster={HERO_POSTER_SRC}
           disablePictureInPicture
           disableRemotePlayback

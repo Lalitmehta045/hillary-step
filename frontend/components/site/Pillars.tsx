@@ -3,10 +3,21 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { GradientReveal } from "@/components/motion/GradientReveal";
 import { PillarCard } from "@/components/ui/PillarCard";
-import { GlobalStaffingModal } from "@/components/site/GlobalStaffingModal";
-import { ITSolutionsModal } from "@/components/site/ITSolutionsModal";
-import { CivilInfraModal } from "@/components/site/CivilInfraModal";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+
+const GlobalStaffingModal = dynamic(
+  () => import("@/components/site/GlobalStaffingModal").then((mod) => mod.GlobalStaffingModal),
+  { ssr: false }
+);
+const ITSolutionsModal = dynamic(
+  () => import("@/components/site/ITSolutionsModal").then((mod) => mod.ITSolutionsModal),
+  { ssr: false }
+);
+const CivilInfraModal = dynamic(
+  () => import("@/components/site/CivilInfraModal").then((mod) => mod.CivilInfraModal),
+  { ssr: false }
+);
 
 type Pillar = {
   eyebrow: string;

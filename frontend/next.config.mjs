@@ -19,6 +19,15 @@ const backendOrigin = resolveBackendOrigin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compress: true,
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "@react-three/fiber",
+      "three",
+      "framer-motion",
+    ],
+  },
   images: {
     // Enable modern image formats for smaller file sizes and faster decoding
     formats: ["image/avif", "image/webp"],
@@ -44,18 +53,7 @@ const nextConfig = {
   // Fixes: site only loads in Incognito (stale cached HTML + JS chunks mismatch)
   async headers() {
     return [
-      // ① Next.js static assets (_next/static) → cache 1 year, immutable
-      //   These have content-hashed filenames so new deploys always bust cache.
-      {
-        source: "/_next/static/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      // ② Public static files (images, fonts, icons) → cache 1 week, revalidate
+      // ① Public static files (images, fonts, icons) → cache 1 week, revalidate
       {
         source: "/assets/:path*",
         headers: [
