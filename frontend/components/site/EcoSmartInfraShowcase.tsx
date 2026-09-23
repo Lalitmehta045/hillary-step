@@ -163,13 +163,13 @@ export function EcoSmartInfraShowcase() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
           </div>
 
-          <div className="relative z-10 min-h-[400px] md:min-h-[500px] px-7 sm:px-10 md:px-16 lg:px-16 py-12 md:py-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+          <div className="relative z-10 min-h-[400px] md:min-h-[500px] px-5 sm:px-10 md:px-16 lg:px-16 py-10 md:py-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 md:gap-10">
             <div className="max-w-[570px]">
               <m.p
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.12 }}
-                className="text-[12px] font-[800] tracking-[0.12em] uppercase text-[#FF7A18] mb-4"
+                className="text-[12px] font-[800] tracking-[0.12em] uppercase text-[#FF7A18] mb-3 md:mb-4"
               >
                 SMART INFRASTRUCTURE
               </m.p>
@@ -177,7 +177,7 @@ export function EcoSmartInfraShowcase() {
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="font-display text-[38px] sm:text-[50px] md:text-[58px] font-[800] leading-[1.02] tracking-[-2px] text-white"
+                className="font-display text-[30px] sm:text-[46px] md:text-[58px] font-[800] leading-[1.05] tracking-[-1.5px] max-md:tracking-[-1px] text-white"
               >
                 Infrastructure<br />
                 that moves the<br />
@@ -200,7 +200,7 @@ export function EcoSmartInfraShowcase() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.48 }}
-                className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-[13px] font-[700] text-[#111827] shadow-[0_8px_25px_rgba(0,0,0,0.22)] hover:bg-[#F4FFF0] hover:-translate-y-0.5 transition-all duration-300"
+                className="mt-6 md:mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-6 md:px-7 py-3 md:py-3.5 text-[13px] font-[700] text-[#111827] shadow-[0_8px_25px_rgba(0,0,0,0.22)] hover:bg-[#F4FFF0] hover:-translate-y-0.5 transition-all duration-300"
               >
                 Build With HSS <ArrowRight className="w-4 h-4" />
               </m.a>
@@ -209,41 +209,41 @@ export function EcoSmartInfraShowcase() {
         </div>
       </m.div>
 
-      <div className="px-4 md:px-8">
+      <div className="px-3 sm:px-4 md:px-8">
       {/* 2. PINNED HORIZONTAL SCROLL CAROUSEL */}
-      <div ref={trackRef} className="relative w-full h-[2200px] mt-16 md:mt-20">
+      <div ref={trackRef} className="relative w-full h-[1500px] md:h-[2200px] mt-12 md:mt-20">
         <div ref={stickyRef} className="sticky top-0 w-full pt-4 pb-8 overflow-hidden bg-white z-20">
-          <div className="flex items-center justify-between mb-6 sm:mb-8 px-1">
+          <div className="flex items-center justify-between mb-4 sm:mb-8 px-1">
             <div><p className="text-[12px] sm:text-[13px] font-[700] tracking-[0.18em] text-[#64748B] uppercase">PROJECT HIGHLIGHTS</p><p className="text-[11.5px] text-gray-400 font-sans mt-0.5 hidden sm:block">Scroll down to slide through all projects</p></div>
             <div className="flex items-center gap-4">
               <div className="hidden sm:flex items-center gap-2"><div className="w-24 h-1.5 rounded-full bg-gray-100 overflow-hidden"><div className="h-full bg-gradient-to-r from-[#EA580C] to-[#F59E0B] rounded-full transition-all duration-150 ease-out" style={{ width: `${Math.max(10, scrollProgress * 100)}%` }} /></div><span className="font-mono text-[11px] font-semibold text-gray-400">{String(activeCardIndex + 1).padStart(2, "0")}/{String(HIGHLIGHTS.length).padStart(2, "0")}</span></div>
               <div className="flex items-center gap-2"><button onClick={handlePrev} disabled={activeCardIndex === 0} aria-label="Previous project" className="w-8 h-8 rounded-full border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 flex items-center justify-center text-gray-600 transition-colors shadow-sm cursor-pointer active:scale-95"><ChevronLeft className="w-4 h-4" /></button><button onClick={handleNext} disabled={activeCardIndex === HIGHLIGHTS.length - 1} aria-label="Next project" className="w-8 h-8 rounded-full border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 flex items-center justify-center text-gray-600 transition-colors shadow-sm cursor-pointer active:scale-95"><ChevronRight className="w-4 h-4" /></button></div>
             </div>
           </div>
-          <div className="relative w-full overflow-visible py-2"><div ref={cardsRowRef} className="flex items-stretch gap-6 will-change-transform" style={{ transform: "translate3d(0px, 0, 0)" }}>{HIGHLIGHTS.map((item, index) => <div key={item.id} onClick={() => scrollToCard(index)} className="group relative shrink-0 w-[300px] sm:w-[330px] md:w-[350px] h-[360px] sm:h-[390px] rounded-[20px] overflow-hidden shadow-[0_12px_36px_rgba(0,0,0,0.09)] border border-gray-100 bg-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_16px_44px_rgba(234,88,12,0.18)]"><img src={item.image} alt={item.alt} className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105" /><div className="absolute top-4 left-4 z-10 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold tracking-wider uppercase">{item.tag}</div><div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent group-hover:from-black/60 transition-colors duration-300" /><div className="absolute bottom-5 left-5 right-5 p-3.5 sm:p-4 rounded-[16px] bg-white/95 backdrop-blur-md shadow-lg border border-white/80 transition-transform duration-300 group-hover:-translate-y-1"><h4 className="font-display text-[15px] font-[700] text-[#111827] leading-snug">{item.title}</h4><p className="font-sans text-[12.5px] text-[#6B7280] font-[450] mt-0.5">{item.location}</p></div></div>)}</div></div>
-          <div className="flex items-center justify-between mt-5 px-2"><div className="flex items-center gap-1.5">{HIGHLIGHTS.map((_, i) => <button key={i} onClick={() => scrollToCard(i)} aria-label={`Jump to project ${i + 1}`} className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${activeCardIndex === i ? "w-7 bg-[#EA580C]" : "w-2 bg-gray-200 hover:bg-gray-300"}`} />)}</div><div className="flex items-center gap-1.5 text-[11.5px] text-gray-400 font-sans"><span>Scroll down to continue</span><ArrowDown className="w-3.5 h-3.5 animate-bounce text-[#EA580C]" /></div></div>
+          <div className="relative w-full overflow-visible py-2"><div ref={cardsRowRef} className="flex items-stretch gap-4 sm:gap-6 will-change-transform" style={{ transform: "translate3d(0px, 0, 0)" }}>{HIGHLIGHTS.map((item, index) => <div key={item.id} onClick={() => scrollToCard(index)} className="group relative shrink-0 w-[270px] sm:w-[330px] md:w-[350px] h-[340px] sm:h-[390px] rounded-[20px] overflow-hidden shadow-[0_12px_36px_rgba(0,0,0,0.09)] border border-gray-100 bg-gray-100 cursor-pointer transition-all duration-300 hover:shadow-[0_16px_44px_rgba(234,88,12,0.18)]"><img src={item.image} alt={item.alt} className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105" /><div className="absolute top-4 left-4 z-10 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold tracking-wider uppercase">{item.tag}</div><div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent group-hover:from-black/60 transition-colors duration-300" /><div className="absolute bottom-4 sm:bottom-5 left-4 sm:left-5 right-4 sm:right-5 p-3 sm:p-4 rounded-[16px] bg-white/95 backdrop-blur-md shadow-lg border border-white/80 transition-transform duration-300 group-hover:-translate-y-1"><h4 className="font-display text-[14px] sm:text-[15px] font-[700] text-[#111827] leading-snug">{item.title}</h4><p className="font-sans text-[12px] sm:text-[12.5px] text-[#6B7280] font-[450] mt-0.5">{item.location}</p></div></div>)}</div></div>
+          <div className="flex items-center justify-between mt-4 sm:mt-5 px-1 sm:px-2"><div className="flex items-center gap-1.5">{HIGHLIGHTS.map((_, i) => <button key={i} onClick={() => scrollToCard(i)} aria-label={`Jump to project ${i + 1}`} className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${activeCardIndex === i ? "w-6 sm:w-7 bg-[#EA580C]" : "w-2 bg-gray-200 hover:bg-gray-300"}`} />)}</div><div className="flex items-center gap-1.5 text-[11px] sm:text-[11.5px] text-gray-400 font-sans"><span>Scroll down</span><ArrowDown className="w-3.5 h-3.5 animate-bounce text-[#EA580C]" /></div></div>
         </div>
       </div>
 
       {/* 3. SMART INFRASTRUCTURE — INTERACTIVE SYSTEM MAP */}
-      <section className="relative mt-12 md:mt-20 rounded-[20px] overflow-hidden bg-white border border-[#E2E8F0] px-6 py-14 sm:px-10 md:px-14 lg:px-16 shadow-[0_10px_40px_rgba(15,23,42,0.04)]">
+      <section className="relative mt-10 md:mt-20 rounded-[20px] overflow-hidden bg-white border border-[#E2E8F0] px-4 sm:px-10 md:px-14 lg:px-16 py-8 md:py-14 shadow-[0_10px_40px_rgba(15,23,42,0.04)]">
         <div className="absolute -top-32 -right-20 w-80 h-80 rounded-full bg-[#40F600]/[0.07] blur-3xl pointer-events-none" />
         <div className="absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-[#1A6CFF]/[0.06] blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-[1180px] mx-auto">
           <div className="max-w-[720px]">
             <p className="text-[11px] sm:text-[12px] font-[800] tracking-[0.2em] text-[#16A34A] uppercase">SMART ECO INFRASTRUCTURE</p>
-            <h2 className="mt-4 font-display text-[34px] sm:text-[46px] md:text-[56px] font-[800] leading-[1.02] tracking-[-2px] text-[#111827]">
+            <h2 className="mt-3 md:mt-4 font-display text-[26px] sm:text-[42px] md:text-[56px] font-[800] leading-[1.08] tracking-[-1px] text-[#111827]">
               One ecosystem.<br />
               <span className="text-[#1A6CFF]">Four connected systems.</span>
             </h2>
-            <p className="mt-5 max-w-[650px] text-[14px] sm:text-[16px] leading-[1.75] text-[#64748B] font-sans">
+            <p className="mt-4 md:mt-5 max-w-[650px] text-[13.5px] sm:text-[16px] leading-[1.7] text-[#64748B] font-sans">
               Smart infrastructure works when energy, water, mobility and materials are planned as one coordinated system — from the first design decision through long-term operation.
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-5 items-stretch">
-            <div className="grid grid-cols-2 gap-3">
+          <div className="mt-8 md:mt-10 grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-5 items-stretch">
+            <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-2.5 sm:gap-3">
               {SYSTEMS.map((system, index) => {
                 const layerIndex = Math.min(index, SMART_LAYERS.length - 1);
                 const active = activeLayer === layerIndex;
@@ -254,22 +254,22 @@ export function EcoSmartInfraShowcase() {
                     onClick={() => setActiveLayer(layerIndex)}
                     whileHover={{ y: -4 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`group relative text-left rounded-[18px] border p-5 sm:p-6 transition-all duration-300 cursor-pointer overflow-hidden ${
+                    className={`group relative text-left rounded-[18px] border p-4 sm:p-6 transition-all duration-300 cursor-pointer overflow-hidden ${
                       active
                         ? "bg-[#F8FBFF] border-[#1A6CFF]/30 shadow-[0_14px_35px_rgba(26,108,255,0.10)]"
                         : "bg-[#F8FAFC] border-[#E2E8F0] hover:bg-white hover:border-[#CBD5E1]"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className={`w-10 h-10 rounded-[12px] flex items-center justify-center text-[18px] font-semibold transition-all duration-300 ${
+                      <span className={`w-9 h-9 sm:w-10 sm:h-10 rounded-[12px] flex items-center justify-center text-[16px] sm:text-[18px] font-semibold transition-all duration-300 ${
                         active ? "bg-[#1A6CFF] text-white shadow-[0_6px_18px_rgba(26,108,255,0.28)]" : "bg-white text-[#64748B] border border-[#E2E8F0]"
                       }`}>{system.icon}</span>
                       <span className="font-mono text-[9px] tracking-[0.16em] text-[#94A3B8]">0{index + 1}</span>
                     </div>
-                    <p className="mt-6 text-[10px] font-[800] tracking-[0.18em] text-[#64748B]">{system.label}</p>
-                    <p className="mt-1 font-display text-[27px] sm:text-[31px] font-[800] text-[#111827]">{system.value}</p>
-                    <p className="mt-1 text-[11.5px] leading-relaxed text-[#64748B]">{system.detail}</p>
-                    <div className="mt-4 h-1 rounded-full bg-[#E2E8F0] overflow-hidden">
+                    <p className="mt-4 sm:mt-6 text-[10px] font-[800] tracking-[0.18em] text-[#64748B]">{system.label}</p>
+                    <p className="mt-1 font-display text-[24px] sm:text-[31px] font-[800] text-[#111827]">{system.value}</p>
+                    <p className="mt-1 text-[11px] sm:text-[11.5px] leading-relaxed text-[#64748B]">{system.detail}</p>
+                    <div className="mt-3 sm:mt-4 h-1 rounded-full bg-[#E2E8F0] overflow-hidden">
                       <m.div initial={{ width: 0 }} whileInView={{ width: `${system.metric}%` }} viewport={{ once: true }} transition={{ duration: 1, delay: index * 0.1 }} className={`h-full rounded-full ${active ? "bg-gradient-to-r from-[#1A6CFF] to-[#40F600]" : "bg-[#94A3B8]"}`} />
                     </div>
                   </m.button>
@@ -282,7 +282,7 @@ export function EcoSmartInfraShowcase() {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="relative min-h-[390px] rounded-[18px] bg-[#07111F] overflow-hidden border border-[#10243D] p-6 sm:p-8"
+              className="relative min-h-[350px] sm:min-h-[390px] rounded-[18px] bg-[#07111F] overflow-hidden border border-[#10243D] p-5 sm:p-8"
             >
               <div className="absolute inset-0 opacity-50" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
               <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-[#1A6CFF]/20 blur-3xl" />

@@ -63,21 +63,21 @@ const HoverCard = ({ service, index, onExplore }: { service: ServiceData, index:
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group relative w-full h-[470px] max-md:h-[450px] hover:z-50"
+      className="group relative w-full h-[470px] max-md:h-auto max-md:min-h-[340px] hover:z-50"
     >
       <div
         className="w-full h-full relative cursor-pointer overflow-visible"
         onClick={onExplore}
       >
 
-        {/* Left side: Entire card scales down as one unit */}
+        {/* Left side: Entire card scales down as one unit on desktop only */}
         <div
-          className="absolute inset-0 w-full h-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-[0.76] z-10"
+          className="absolute inset-0 w-full h-full max-md:relative transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] md:group-hover:scale-[0.76] z-10"
           style={{ transformOrigin: 'left center' }}
         >
           <div className="w-full h-full flex flex-col overflow-hidden bg-white rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.12)] group-hover:shadow-[0_20px_50px_rgba(194,65,12,0.18)] border border-orange-100 transition-shadow duration-700">
             {/* Image */}
-            <div className="w-full h-[180px] max-md:h-[160px] relative overflow-hidden">
+            <div className="w-full h-[180px] max-md:h-[150px] relative overflow-hidden">
               <img
                 src={service.image}
                 alt={service.title}
@@ -94,13 +94,13 @@ const HoverCard = ({ service, index, onExplore }: { service: ServiceData, index:
               </div>
             </div>
             {/* Description area */}
-            <div className="p-[20px] flex-1 flex flex-col bg-white">
+            <div className="p-[20px] max-md:p-[16px] flex-1 flex flex-col bg-white">
               <p className="text-[13px] leading-[21px] text-gray-600 mb-3 line-clamp-3">
                 {service.desc}
               </p>
               <button
                 onClick={(e) => { e.stopPropagation(); onExplore(); }}
-                className="mt-auto flex items-center gap-2 text-[13px] font-[700] text-[#EA580C] group-hover:text-[#9A3412] transition-colors cursor-pointer hover:gap-3"
+                className="mt-auto flex items-center gap-2 text-[13px] font-[700] text-[#EA580C] group-hover:text-[#9A3412] transition-colors cursor-pointer hover:gap-3 active:scale-95"
               >
                 Explore Details
                 <div className="flex items-center justify-center w-6 h-6 rounded-full bg-[#EA580C]/10 group-hover:bg-[#EA580C]/20 transition-colors duration-500">
@@ -114,8 +114,8 @@ const HoverCard = ({ service, index, onExplore }: { service: ServiceData, index:
           </div>
         </div>
 
-        {/* Right side: Capabilities Panel (slides in from the right) */}
-        <div className="absolute right-0 top-[4%] h-[92%] w-[54%] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] translate-x-[110%] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 z-20 pointer-events-none group-hover:pointer-events-auto">
+        {/* Right side: Capabilities Panel (slides in from the right on desktop only) */}
+        <div className="hidden md:block absolute right-0 top-[4%] h-[92%] w-[54%] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] translate-x-[110%] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 z-20 pointer-events-none group-hover:pointer-events-auto">
           <div className="w-full h-full bg-gradient-to-br from-[#C2410C] to-[#7C2D12] rounded-3xl shadow-[-8px_0_30px_rgba(194,65,12,0.35)] p-[20px] pt-[24px] border border-orange-400/20 flex flex-col overflow-hidden relative">
             {/* Subtle decorative glow */}
             <div className="absolute top-0 right-0 w-[120px] h-[120px] bg-[#EA580C]/15 rounded-full blur-[60px] pointer-events-none"></div>

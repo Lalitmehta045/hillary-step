@@ -9,22 +9,37 @@ interface GradientRevealProps {
 }
 
 const parentVariants: Variants = {
-  hidden: {},
-  visible: {},
+  hidden: { y: 24, scale: 0.96 },
+  visible: {
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 1.2,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
 };
 
 const customEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-const textVariants: Variants = {
-  hidden: { opacity: 0, y: 24, scale: 0.96, filter: "blur(10px)" },
+const blurTextVariants: Variants = {
+  hidden: { opacity: 1 },
   visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    filter: "blur(0px)",
+    opacity: 0,
     transition: {
       duration: 1.2,
-      ease: [0.16, 1, 0.3, 1],
+      ease: customEase,
+    },
+  },
+};
+
+const sharpTextVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 1.2,
+      ease: customEase,
     },
   },
 };
@@ -57,10 +72,20 @@ export function GradientReveal({ children, className = "" }: GradientRevealProps
       viewport={{ once: true, amount: 0.1 }}
       variants={parentVariants}
     >
-      {/* Base Text */}
+      {/* Blurred Text */}
       <m.span
-        className={`inline-block ${className}`}
-        variants={textVariants}
+        className={`absolute inset-0 pointer-events-none select-none inline-block ${className}`}
+        variants={blurTextVariants}
+        style={{ filter: "blur(10px)" }}
+        aria-hidden="true"
+      >
+        {children}
+      </m.span>
+
+      {/* Sharp Text */}
+      <m.span
+        className={`relative inline-block ${className}`}
+        variants={sharpTextVariants}
       >
         {children}
       </m.span>

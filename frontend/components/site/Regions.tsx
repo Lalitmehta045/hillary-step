@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { m } from "framer-motion";
+
 import { Globe } from "@/components/site/Globe";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { GradientReveal } from "@/components/motion/GradientReveal";
@@ -69,15 +71,7 @@ export function Regions() {
 
   return (
     <section className="relative w-full overflow-hidden bg-white pt-[64px] pb-[64px] max-md:pt-[40px] max-md:pb-[40px]">
-      <div
-        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
-        aria-hidden="true"
-        style={{
-          contain: "strict",
-          willChange: "transform",
-          transform: "translate3d(0,0,0)",
-        }}
-      >
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
         <svg
           className="absolute inset-0 h-full w-full"
           viewBox="0 0 1600 1000"
@@ -122,16 +116,7 @@ export function Regions() {
               strokeLinecap="round"
               filter="url(#global-presence-ribbon-blur)"
               opacity="0.98"
-            >
-              <animate
-                attributeName="d"
-                dur="11s"
-                repeatCount="indefinite"
-                values="M-120 930 C 250 865, 560 760, 820 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15;
-                        M-120 900 C 250 830, 560 735, 820 665 C 1040 590, 1170 495, 1290 345 C 1400 210, 1490 80, 1690 -15;
-                        M-120 930 C 250 865, 560 760, 820 690 C 1040 615, 1170 520, 1290 370 C 1400 235, 1490 105, 1690 15"
-              />
-            </path>
+            />
 
             <path
               d="M-140 955 C 250 885, 560 790, 830 715 C 1050 640, 1190 535, 1310 390 C 1420 250, 1510 125, 1710 30"
@@ -186,16 +171,15 @@ export function Regions() {
           </StaggerItem>
         </StaggerContainer>
 
-        <FadeIn delay={0.2} className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
+        <m.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1], delay: 0.2 }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row"
+        >
           {/* Map card */}
-          <div
-            className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-br from-[#02050A] via-[#0A101B] to-[#010308] p-[1px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.35)] lg:w-[691px]"
-            style={{
-              contain: "paint",
-              willChange: "transform",
-              transform: "translate3d(0,0,0)",
-            }}
-          >
+          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-br from-[#02050A] via-[#0A101B] to-[#010308] p-[1px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.35)] lg:w-[691px]">
             <div className="relative h-full w-full overflow-hidden rounded-[23px] bg-[#010308]">
               <Globe active={active} />
 
@@ -240,7 +224,7 @@ export function Regions() {
               </dl>
             </div>
           </div>
-        </FadeIn>
+        </m.div>
       </div>
     </section>
   );

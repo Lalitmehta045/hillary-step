@@ -55,16 +55,16 @@ const HoverCard = ({ service, index, onExplore }: { service: ServiceData, index:
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group relative w-full h-[320px] max-md:h-[300px] hover:z-50"
+      className="group relative w-full h-[320px] max-md:h-auto max-md:min-h-[300px] hover:z-50"
     >
       <div
         className="w-full h-full relative cursor-pointer overflow-visible"
         onClick={onExplore}
       >
 
-        {/* Left side: Entire card scales down as one unit */}
+        {/* Left side: Entire card scales down as one unit on desktop only */}
         <div
-          className="absolute inset-0 w-full h-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-[0.80] z-10"
+          className="absolute inset-0 w-full h-full max-md:relative transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] md:group-hover:scale-[0.80] z-10"
           style={{ transformOrigin: 'left center' }}
         >
           <div className="w-full h-full flex flex-col overflow-hidden bg-white rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.12)] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-gray-100/50 transition-shadow duration-700">
@@ -80,19 +80,19 @@ const HoverCard = ({ service, index, onExplore }: { service: ServiceData, index:
                 <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white shrink-0 transition-all duration-500 group-hover:bg-[#1A6CFF]">
                   {icon}
                 </div>
-                <h4 className="font-display text-[20px] font-[700] leading-tight text-white drop-shadow-md">
+                <h4 className="font-display text-[20px] max-md:text-[18px] font-[700] leading-tight text-white drop-shadow-md">
                   {service.title}
                 </h4>
               </div>
             </div>
             {/* Description area */}
-            <div className="p-[24px] flex-1 flex flex-col bg-white">
+            <div className="p-[24px] max-md:p-[18px] flex-1 flex flex-col bg-white">
               <p className="text-[14px] leading-[22px] text-gray-600 mb-4 line-clamp-3">
                 {service.desc}
               </p>
               <button
                 onClick={(e) => { e.stopPropagation(); onExplore(); }}
-                className="mt-auto flex items-center gap-2 text-[13px] font-[700] text-[#1A6CFF] group-hover:text-[#0D2459] transition-colors cursor-pointer hover:gap-3"
+                className="mt-auto flex items-center gap-2 text-[13px] font-[700] text-[#1A6CFF] group-hover:text-[#0D2459] transition-colors cursor-pointer hover:gap-3 active:scale-95"
               >
                 Explore Details
                 <div className="flex items-center justify-center w-6 h-6 rounded-full bg-[#1A6CFF]/10 group-hover:bg-[#1A6CFF]/20 transition-colors duration-500">
@@ -106,8 +106,8 @@ const HoverCard = ({ service, index, onExplore }: { service: ServiceData, index:
           </div>
         </div>
 
-        {/* Right side: Capabilities Panel (slides in from the right) */}
-        <div className="absolute right-0 top-[5%] h-[90%] w-[52%] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] translate-x-[110%] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 z-20 pointer-events-none group-hover:pointer-events-auto">
+        {/* Right side: Capabilities Panel (slides in from the right on desktop only) */}
+        <div className="hidden md:block absolute right-0 top-[5%] h-[90%] w-[52%] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] translate-x-[110%] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 z-20 pointer-events-none group-hover:pointer-events-auto">
           <div className="w-full h-full bg-gradient-to-br from-[#153B8C] to-[#0D2459] rounded-2xl shadow-[-8px_0_30px_rgba(21,59,140,0.35)] p-[20px] pt-[24px] border border-white/10 flex flex-col overflow-hidden relative">
             {/* Subtle decorative glow */}
             <div className="absolute top-0 right-0 w-[120px] h-[120px] bg-[#1A6CFF]/15 rounded-full blur-[60px] pointer-events-none"></div>
@@ -170,13 +170,13 @@ export function ITSolutionsContent() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
           </div>
 
-          <div className="relative z-10 min-h-[400px] md:min-h-[500px] px-7 sm:px-10 md:px-16 lg:px-16 py-12 md:py-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+          <div className="relative z-10 min-h-[400px] md:min-h-[500px] px-5 sm:px-10 md:px-16 lg:px-16 py-10 md:py-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 md:gap-10">
             <div className="max-w-[570px]">
               <m.p
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.12 }}
-                className="text-[12px] font-[800] tracking-[0.12em] uppercase text-[#1A6CFF] mb-4"
+                className="text-[12px] font-[800] tracking-[0.12em] uppercase text-[#1A6CFF] mb-3 md:mb-4"
               >
                 IT SOLUTIONS
               </m.p>
@@ -185,7 +185,7 @@ export function ITSolutionsContent() {
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="font-display text-[38px] sm:text-[50px] md:text-[58px] font-[800] leading-[1.02] tracking-[-2px] text-white"
+                className="font-display text-[30px] sm:text-[46px] md:text-[58px] font-[800] leading-[1.05] tracking-[-1.5px] max-md:tracking-[-1px] text-white"
               >
                 Technology that<br />
                 powers your<br />
@@ -207,7 +207,7 @@ export function ITSolutionsContent() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.48 }}
-                className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-[13px] font-[700] text-[#111827] shadow-[0_8px_25px_rgba(0,0,0,0.22)] hover:bg-[#F4FFF0] hover:-translate-y-0.5 transition-all duration-300"
+                className="mt-6 md:mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-6 md:px-7 py-3 md:py-3.5 text-[13px] font-[700] text-[#111827] shadow-[0_8px_25px_rgba(0,0,0,0.22)] hover:bg-[#F4FFF0] hover:-translate-y-0.5 transition-all duration-300"
               >
                 Start Your IT Transformation
               </m.button>
@@ -217,16 +217,16 @@ export function ITSolutionsContent() {
       </m.div>
 
       {/* RESTORED SERVICES SECTION */}
-      <div className="px-8 md:px-16 pt-8 pb-16 max-w-[1400px] mx-auto">
+      <div className="px-4 sm:px-8 md:px-16 pt-8 pb-16 max-w-[1400px] mx-auto">
         <div className="flex flex-col items-center w-full">
-          <p className="text-[14px] font-[700] tracking-[1px] text-[#1A6CFF] uppercase mb-[12px] text-center">
+          <p className="text-[13px] md:text-[14px] font-[700] tracking-[1px] text-[#1A6CFF] uppercase mb-[10px] text-center">
             SERVICES
           </p>
-          <h3 className="font-display text-[28px] max-md:text-[24px] font-[700] text-[#111111] mb-[48px] text-center">
+          <h3 className="font-display text-[24px] md:text-[28px] font-[700] text-[#111111] mb-[36px] md:mb-[48px] text-center">
             Our Technology Solutions
           </h3>
 
-          <div className="grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 gap-x-[24px] gap-y-[40px] w-full max-w-[1200px] mx-auto">
+          <div className="grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 gap-x-[24px] gap-y-[32px] md:gap-y-[40px] w-full max-w-[1200px] mx-auto">
             {itServices.map((service, idx) => (
               <HoverCard
                 key={idx}
@@ -246,28 +246,28 @@ export function ITSolutionsContent() {
       />
 
       {/* STATS & WHO WE ARE */}
-      <div className="px-8 md:px-16 py-8">
-        <div className="grid lg:grid-cols-3 gap-6 max-w-[1136px] mx-auto">
+      <div className="px-4 sm:px-8 md:px-16 py-6 md:py-8">
+        <div className="grid lg:grid-cols-3 gap-5 md:gap-6 max-w-[1136px] mx-auto">
           {/* Stats Card */}
           <m.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="lg:col-span-1 rounded-[24px] p-8 text-white flex flex-col justify-between lg:h-[228px]"
+            className="lg:col-span-1 rounded-[24px] p-6 sm:p-8 text-white flex flex-col justify-between lg:h-[228px]"
             style={{ backgroundColor: 'rgba(14, 77, 183, 1)' }}
           >
             <div className="flex justify-between items-start">
               <span className="text-[12px] font-bold tracking-widest uppercase opacity-90">OUR COMPANY<br />IN NUMBERS</span>
               <span className="text-[32px] opacity-70 font-light leading-none">$</span>
             </div>
-            <div className="flex gap-8 mt-4">
+            <div className="flex gap-6 sm:gap-8 mt-4">
               <div>
-                <div className="text-[40px] font-bold leading-none mb-1">150+</div>
+                <div className="text-[32px] sm:text-[40px] font-bold leading-none mb-1">150+</div>
                 <div className="text-[12px] opacity-90">Enterprise Technology Solutions</div>
               </div>
               <div>
-                <div className="text-[40px] font-bold leading-none mb-1">10+</div>
+                <div className="text-[32px] sm:text-[40px] font-bold leading-none mb-1">10+</div>
                 <div className="text-[12px] opacity-90">Years of Technology<br />Experience</div>
               </div>
             </div>
@@ -279,7 +279,7 @@ export function ITSolutionsContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-2 bg-[#b4c9e8] rounded-[24px] p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden lg:h-[228px]"
+            className="lg:col-span-2 bg-[#b4c9e8] rounded-[24px] p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 relative overflow-hidden lg:h-[228px]"
           >
             <div className="flex-1 max-w-[500px] flex flex-col justify-center">
               <h3 className="text-[24px] font-bold text-[#1a2b4c] mb-3">Who We Are</h3>
@@ -304,14 +304,14 @@ export function ITSolutionsContent() {
       <FrameworksIntegrationsSection />
 
       {/* HOW WE SIMPLIFY */}
-      <div className="px-8 md:px-16 py-12 relative">
+      <div className="px-4 sm:px-8 md:px-16 py-12 relative">
         <div className="max-w-[1400px] mx-auto">
           <m.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-[32px] md:text-[40px] font-bold text-[#111111] mb-16 max-w-[500px] leading-[1.2]"
+            className="text-[28px] sm:text-[32px] md:text-[40px] font-bold text-[#111111] mb-8 md:mb-16 max-w-[500px] leading-[1.2]"
           >
             How We <span className="text-[#1A6CFF]">Deliver</span> Your IT Solutions
           </m.h2>
@@ -358,7 +358,7 @@ export function ITSolutionsContent() {
               return (
                 <div
                   key={i}
-                  className="sticky top-[120px] lg:top-[160px] w-full"
+                  className="sticky top-[90px] md:top-[120px] lg:top-[160px] w-full"
                   style={{ marginTop: i === 0 ? "0" : "-95vh" }}
                 >
                   <m.div
@@ -366,22 +366,22 @@ export function ITSolutionsContent() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.6 }}
-                    className="bg-white rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] flex flex-col md:flex-row overflow-hidden relative origin-top w-full"
+                    className="bg-white rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] flex flex-col md:flex-row overflow-hidden relative origin-top w-full border border-gray-100"
                   >
-                    <div className="flex-1 p-10 md:p-16 relative bg-white z-10">
-                      <div className="absolute top-4 left-8 text-[180px] font-bold text-[#f0f4f8] leading-none z-0 pointer-events-none select-none">
+                    <div className="flex-1 p-6 sm:p-10 md:p-16 relative bg-white z-10">
+                      <div className="absolute top-2 md:top-4 left-4 md:left-8 text-[110px] md:text-[180px] font-bold text-[#f0f4f8] leading-none z-0 pointer-events-none select-none">
                         {step.num}
                       </div>
-                      <div className="relative z-10 pt-16 max-w-[400px]">
-                        <h3 className="text-[24px] font-bold text-[#111111] mb-6">
+                      <div className="relative z-10 pt-10 sm:pt-16 max-w-[400px]">
+                        <h3 className="text-[20px] sm:text-[24px] font-bold text-[#111111] mb-3 md:mb-6">
                           {parts[0]}<span className="text-[#3b82f6]">{step.highlight}</span>{parts[1]}
                         </h3>
-                        <p className="text-[#49454F] text-[14px] leading-relaxed">
+                        <p className="text-[#49454F] text-[13px] sm:text-[14px] leading-relaxed">
                           {step.desc}
                         </p>
                       </div>
                     </div>
-                    <div className="flex-1 h-[300px] md:h-auto min-h-[400px] bg-white z-10">
+                    <div className="flex-1 h-[200px] sm:h-[260px] md:h-auto md:min-h-[400px] bg-white z-10">
                       <img src={step.img} alt={step.title} className="w-full h-full object-cover" />
                     </div>
                   </m.div>
@@ -393,7 +393,7 @@ export function ITSolutionsContent() {
       </div>
 
       {/* WHY CHOOSE */}
-      <div className="px-8 md:px-16 py-12">
+      <div className="px-4 sm:px-8 md:px-16 py-12">
         <div className="max-w-[1400px] mx-auto">
           <m.h2
             initial={{ opacity: 0, y: 30 }}
@@ -516,18 +516,18 @@ export function ITSolutionsContent() {
       </div>
 
       {/* FINAL CTA */}
-      <section className="px-8 md:px-16 py-16 bg-white">
+      <section className="px-4 sm:px-8 md:px-16 py-12 md:py-16 bg-white">
         <div className="max-w-[1200px] mx-auto rounded-[20px] bg-gradient-to-r from-[#1A6CFF] via-[#40F600] to-[#FF7A18] p-[1px] overflow-hidden">
-          <div className="rounded-[19px] bg-[#07111f] px-8 md:px-16 py-12 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="rounded-[19px] bg-[#07111f] px-5 sm:px-8 md:px-16 py-8 md:py-12 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 text-center md:text-left">
             <div>
-              <p className="text-[12px] font-bold tracking-[0.18em] text-[#7CFF00] uppercase mb-3">Ready to build?</p>
-              <h2 className="text-[30px] md:text-[40px] font-bold text-white leading-tight">Let’s build your next digital solution.</h2>
-              <p className="mt-3 text-[14px] text-white/70 max-w-[620px]">Talk with our technology team about product engineering, cloud, AI, cybersecurity, or managed IT services.</p>
+              <p className="text-[12px] font-bold tracking-[0.18em] text-[#7CFF00] uppercase mb-2 md:mb-3">Ready to build?</p>
+              <h2 className="text-[26px] sm:text-[30px] md:text-[40px] font-bold text-white leading-tight">Let’s build your next digital solution.</h2>
+              <p className="mt-3 text-[13px] sm:text-[14px] text-white/70 max-w-[620px]">Talk with our technology team about product engineering, cloud, AI, cybersecurity, or managed IT services.</p>
             </div>
             <a href="/#contact" className="shrink-0 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-[13px] font-bold text-[#0D2459] transition-all duration-300 hover:scale-[1.03] hover:bg-[#F4FFF0]">Talk to the Sherpas <span>↗</span></a>
           </div>
         </div>
-        <div className="max-w-[1200px] mx-auto mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[13px] font-semibold text-[#1E3A8A]">
+        <div className="max-w-[1200px] mx-auto mt-8 flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-8 gap-y-3 text-[12px] sm:text-[13px] font-semibold text-[#1E3A8A]">
           <a href="/#about" className="hover:text-[#1A6CFF] transition-colors">About the Ascent</a>
           <a href="/#ai-experience" className="hover:text-[#1A6CFF] transition-colors">Peak Intelligence Core</a>
           <a href="/#global-presence" className="hover:text-[#1A6CFF] transition-colors">Global Presence</a>

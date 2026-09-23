@@ -413,13 +413,13 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
             <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
           </div>
 
-          <div className="relative z-10 min-h-[400px] md:min-h-[500px] px-7 sm:px-10 md:px-16 lg:px-16 py-12 md:py-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+          <div className="relative z-10 min-h-[400px] md:min-h-[500px] px-5 sm:px-10 md:px-16 lg:px-16 py-10 md:py-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 md:gap-10">
             <div className="max-w-[560px]">
               <m.p
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.12 }}
-                className="text-[12px] font-[800] tracking-[0.12em] uppercase text-[#40F600] mb-4"
+                className="text-[12px] font-[800] tracking-[0.12em] uppercase text-[#40F600] mb-3 md:mb-4"
               >
                 GLOBAL STAFFING
               </m.p>
@@ -427,7 +427,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="font-display text-[38px] sm:text-[50px] md:text-[58px] font-[800] leading-[1.02] tracking-[-2px] text-white"
+                className="font-display text-[30px] sm:text-[46px] md:text-[58px] font-[800] leading-[1.05] tracking-[-1.5px] max-md:tracking-[-1px] text-white"
               >
                 Global talent<br />
                 built for<br />
@@ -450,7 +450,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.48 }}
-                className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-[13px] font-[700] text-[#111827] shadow-[0_8px_25px_rgba(0,0,0,0.22)] hover:bg-[#F4FFF0] hover:-translate-y-0.5 transition-all duration-300"
+                className="mt-6 md:mt-7 inline-flex items-center gap-2.5 rounded-full bg-white px-6 md:px-7 py-3 md:py-3.5 text-[13px] font-[700] text-[#111827] shadow-[0_8px_25px_rgba(0,0,0,0.22)] hover:bg-[#F4FFF0] hover:-translate-y-0.5 transition-all duration-300"
               >
                 Start Hiring <ArrowRight className="w-4 h-4" />
               </m.button>
@@ -471,23 +471,23 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
               animate={{ opacity: 1, height: "auto", y: 0 }}
               exit={{ opacity: 0, height: 0, y: -20 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-12 sm:mt-16 max-w-[1000px] mx-auto overflow-hidden"
+              className="mt-8 sm:mt-16 max-w-[1000px] mx-auto overflow-hidden"
             >
               {/* Toggle Buttons & Close button */}
-              <div className="flex items-center justify-center relative mb-[48px] max-md:mb-[32px]">
-                <div className="relative flex w-[320px] rounded-full bg-[#F3F3F4] p-[4px]">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 relative mb-[36px] max-md:mb-[28px]">
+                <div className="relative grid grid-cols-2 w-full max-w-[320px] rounded-full bg-[#F3F3F4] p-[4px]">
                   {/* Animated Background */}
                   <m.div
-                    className="absolute top-[4px] bottom-[4px] w-[156px] rounded-full bg-white shadow-[0px_2px_8px_rgba(0,0,0,0.06)]"
+                    className="absolute top-[4px] bottom-[4px] w-[calc(50%-4px)] rounded-full bg-white shadow-[0px_2px_8px_rgba(0,0,0,0.06)]"
                     initial={false}
-                    animate={{ x: activeTab === "post" ? 0 : 156 }}
+                    animate={{ left: activeTab === "post" ? "4px" : "calc(50%)" }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
 
                   <button
                     type="button"
                     onClick={() => setActiveTab("post")}
-                    className={`relative z-10 flex-1 rounded-full py-[12px] text-center font-sans text-[15px] font-[600] transition-colors duration-200 cursor-pointer ${activeTab === "post" ? "text-[#111111]" : "text-[#6B7280] hover:text-[#111111]"}`}
+                    className={`relative z-10 rounded-full py-[10px] sm:py-[12px] text-center font-sans text-[14px] sm:text-[15px] font-[600] transition-colors duration-200 cursor-pointer ${activeTab === "post" ? "text-[#111111]" : "text-[#6B7280] hover:text-[#111111]"}`}
                   >
                     Post a Job
                   </button>
@@ -495,7 +495,7 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                   <button
                     type="button"
                     onClick={() => setActiveTab("find")}
-                    className={`relative z-10 flex-1 rounded-full py-[12px] text-center font-sans text-[15px] font-[600] transition-colors duration-200 cursor-pointer ${activeTab === "find" ? "text-[#111111]" : "text-[#6B7280] hover:text-[#111111]"}`}
+                    className={`relative z-10 rounded-full py-[10px] sm:py-[12px] text-center font-sans text-[14px] sm:text-[15px] font-[600] transition-colors duration-200 cursor-pointer ${activeTab === "find" ? "text-[#111111]" : "text-[#6B7280] hover:text-[#111111]"}`}
                   >
                     Find a Job
                   </button>
@@ -505,11 +505,11 @@ export function GlobalStaffingContent({ isModal = false }: { isModal?: boolean }
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-gray-500 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer"
+                  className="sm:absolute right-0 top-1/2 sm:-translate-y-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-gray-500 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer"
                   title="Hide form"
                   aria-label="Hide form"
                 >
-                  <span className="hidden sm:inline">Close</span>
+                  <span>Close</span>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M18 6 6 18M6 6l12 12" />
                   </svg>
