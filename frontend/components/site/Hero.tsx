@@ -5,9 +5,18 @@ import { StaggerContainer, StaggerItem, FadeIn } from "@/components/motion/FadeI
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 import { Navbar } from "@/components/site/Navbar";
 
-const HERO_VIDEO_SRC = "/hero-video/CINE%20V5.mp4";
-const HERO_VIDEO_MOBILE_SRC = "/hero-video/cine-v5-mobile.mp4";
-const HERO_POSTER_SRC = "/hero-video/hero-poster.webp";
+// CDN base URL (set NEXT_PUBLIC_HERO_VIDEO_BASE_URL in env to serve from CloudFront).
+// Falls back to local Next.js static path so dev & staging work without the env var.
+const CDN_BASE = process.env.NEXT_PUBLIC_HERO_VIDEO_BASE_URL ?? "";
+const HERO_VIDEO_SRC = CDN_BASE
+  ? `${CDN_BASE}/CINE-V5.mp4`
+  : "/hero-video/CINE%20V5.mp4";
+const HERO_VIDEO_MOBILE_SRC = CDN_BASE
+  ? `${CDN_BASE}/cine-v5-mobile.mp4`
+  : "/hero-video/cine-v5-mobile.mp4";
+const HERO_POSTER_SRC = CDN_BASE
+  ? `${CDN_BASE}/hero-poster.webp`
+  : "/hero-video/hero-poster.webp";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
