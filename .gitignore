@@ -11,3 +11,23 @@ Thumbs.db
 *.pdf
 *.bak.mp4
 
+# ─── Environment / Secret files — NEVER commit these! ────────────────────────
+# Root-level
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+.env.test
+
+# All subdirectories (backend/, frontend/, etc.)
+**/.env
+**/.env.local
+**/.env.development
+**/.env.production
+**/.env.staging
+**/.env.test
+
+# ─── Dependencies ─────────────────────────────────────────────────────────────
+node_modules/
+**/node_modules/
