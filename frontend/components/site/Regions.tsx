@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { WorldMapCanvas } from "@/components/site/WorldMapCanvas";
 import { Globe } from "@/components/site/Globe";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { GradientReveal } from "@/components/motion/GradientReveal";
@@ -70,7 +69,15 @@ export function Regions() {
 
   return (
     <section className="relative w-full overflow-hidden bg-white pt-[64px] pb-[64px] max-md:pt-[40px] max-md:pb-[40px]">
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+      <div
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+        aria-hidden="true"
+        style={{
+          contain: "strict",
+          willChange: "transform",
+          transform: "translate3d(0,0,0)",
+        }}
+      >
         <svg
           className="absolute inset-0 h-full w-full"
           viewBox="0 0 1600 1000"
@@ -181,7 +188,14 @@ export function Regions() {
 
         <FadeIn delay={0.2} className="mt-[64px] max-md:mt-[40px] flex flex-col gap-[48px] lg:flex-row">
           {/* Map card */}
-          <div className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-br from-[#02050A] via-[#0A101B] to-[#010308] p-[1px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.35)] lg:w-[691px]">
+          <div
+            className="relative h-[500px] max-md:h-[350px] w-full shrink-0 overflow-hidden rounded-[24px] bg-gradient-to-br from-[#02050A] via-[#0A101B] to-[#010308] p-[1px] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.35)] lg:w-[691px]"
+            style={{
+              contain: "paint",
+              willChange: "transform",
+              transform: "translate3d(0,0,0)",
+            }}
+          >
             <div className="relative h-full w-full overflow-hidden rounded-[23px] bg-[#010308]">
               <Globe active={active} />
 
