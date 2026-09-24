@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   FaChevronDown,
   FaPlus,
@@ -74,14 +74,37 @@ export function BentoGridFeatures() {
   // Card 3 focus / blur reveal cycle
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const isVisible = useRef<boolean>(false);
+  const reducedMotion = useReducedMotion();
+
+  // Track visibility with IntersectionObserver
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible.current = entry?.isIntersecting ?? false;
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   // Synchronized pulse timer for Card 1 and Card 2 (every 2.5 seconds)
   useEffect(() => {
+    if (reducedMotion) return;
+
     const interval = setInterval(() => {
+      if (!isVisible.current) return;
       setStep((prev) => prev + 1);
     }, 2500);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [reducedMotion]);
 
   // Active indices derived from step
   const activeRoleIndex = step % ROLES.length;
@@ -92,8 +115,11 @@ export function BentoGridFeatures() {
 
   // Card 3 Blur / Focus reveal loop
   useEffect(() => {
+    if (reducedMotion) return;
+
     let timeoutId: NodeJS.Timeout;
     const loopFocus = () => {
+      if (!isVisible.current) return;
       setIsFocused(true);
       timeoutId = setTimeout(() => {
         setIsFocused(false);
@@ -109,10 +135,10 @@ export function BentoGridFeatures() {
       clearTimeout(timeoutId);
       clearTimeout(initialTimer);
     };
-  }, []);
+  }, [reducedMotion]);
 
   return (
-    <section className="relative w-full bg-white py-14 px-4 sm:px-8 lg:px-14 border-t border-gray-200/70 font-display">
+    <section ref={sectionRef} className="relative w-full bg-white py-14 px-4 sm:px-8 lg:px-14 border-t border-gray-200/70 font-display">
       <div className="max-w-[1240px] mx-auto">
         {/* 3-Column Bento Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">

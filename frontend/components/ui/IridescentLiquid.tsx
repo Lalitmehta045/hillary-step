@@ -369,9 +369,9 @@ export default function IridescentLiquid({
     };
 
     if (interactive && !reduced) {
-      host.addEventListener("pointermove", onMove);
-      host.addEventListener("pointerenter", onEnter);
-      host.addEventListener("pointerleave", onLeave);
+      host.addEventListener("pointermove", onMove, { passive: true });
+      host.addEventListener("pointerenter", onEnter, { passive: true });
+      host.addEventListener("pointerleave", onLeave, { passive: true });
     }
 
     // pause when offscreen / tab hidden

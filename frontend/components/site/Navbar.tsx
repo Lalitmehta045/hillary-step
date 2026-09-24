@@ -64,6 +64,8 @@ export function Navbar() {
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isPointerOverNavRef = useRef(false);
   const navHoverZoneRef = useRef<HTMLDivElement | null>(null);
+  const cachedRect = useRef<DOMRect | null>(null);
+  const rafPending = useRef(false);
 
   const clearHideTimer = useCallback(() => {
     if (hideTimerRef.current) {
@@ -95,6 +97,13 @@ export function Navbar() {
   }, [scheduleHide]);
 
   useEffect(() => {
+    // ── Rect cache helpers ─────────────────────────────────────────
+    const updateCachedRect = () => {
+      if (navHoverZoneRef.current) {
+        cachedRect.current = navHoverZoneRef.current.getBoundingClientRect();
+      }
+    };
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrolled(currentScrollY > 30);
@@ -111,34 +120,57 @@ export function Navbar() {
     };
 
     const handlePointerMove = (event: PointerEvent) => {
-      const navZone = navHoverZoneRef.current;
-      if (!navZone) return;
+      // Skip if a RAF frame is already queued — process only once per frame.
+      if (rafPending.current) return;
+      rafPending.current = true;
 
-      const rect = navZone.getBoundingClientRect();
-      const insideNavZone =
-        event.clientX >= rect.left &&
-        event.clientX <= rect.right &&
-        event.clientY >= rect.top &&
-        event.clientY <= rect.bottom;
+      requestAnimationFrame(() => {
+        rafPending.current = false;
 
-      if (insideNavZone) {
-        if (!isPointerOverNavRef.current) {
-          isPointerOverNavRef.current = true;
-          clearHideTimer();
-          setIsVisible(true);
+        // Use cached rect; fall back to a live read if the cache is empty.
+        const rect = cachedRect.current ?? (() => {
+          updateCachedRect();
+          return cachedRect.current;
+        })();
+        if (!rect) return;
+
+        const insideNavZone =
+          event.clientX >= rect.left &&
+          event.clientX <= rect.right &&
+          event.clientY >= rect.top &&
+          event.clientY <= rect.bottom;
+
+        if (insideNavZone) {
+          if (!isPointerOverNavRef.current) {
+            isPointerOverNavRef.current = true;
+            clearHideTimer();
+            setIsVisible(true);
+          }
+        } else if (isPointerOverNavRef.current) {
+          isPointerOverNavRef.current = false;
+          scheduleHide();
         }
-      } else if (isPointerOverNavRef.current) {
-        isPointerOverNavRef.current = false;
-        scheduleHide();
-      }
+      });
     };
+
+    // Populate cache immediately on mount.
+    updateCachedRect();
+
+    // Re-cache on scroll (position of fixed headers can shift in some
+    // edge-cases) and on resize (viewport / element size may change).
+    const handleScrollForRect = () => updateCachedRect();
+    const handleResize = () => updateCachedRect();
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScrollForRect, { passive: true });
+    window.addEventListener("resize", handleResize, { passive: true });
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScrollForRect);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", handlePointerMove);
       clearHideTimer();
     };

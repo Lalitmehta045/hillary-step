@@ -408,25 +408,26 @@ function RuntimeCard() {
       setIndexA((prev) => (prev + 1) % CARD2_POOL_A.length);
     }, 2300);
 
+    let timerB: NodeJS.Timeout | undefined;
+    let timerC: NodeJS.Timeout | undefined;
+    let timerD: NodeJS.Timeout | undefined;
+
     const timeoutB = setTimeout(() => {
-      const timerB = setInterval(() => {
+      timerB = setInterval(() => {
         setIndexB((prev) => (prev + 1) % CARD2_POOL_B.length);
       }, 2750);
-      return () => clearInterval(timerB);
     }, 600);
 
     const timeoutC = setTimeout(() => {
-      const timerC = setInterval(() => {
+      timerC = setInterval(() => {
         setIndexC((prev) => (prev + 1) % CARD2_POOL_C.length);
       }, 2450);
-      return () => clearInterval(timerC);
     }, 1200);
 
     const timeoutD = setTimeout(() => {
-      const timerD = setInterval(() => {
+      timerD = setInterval(() => {
         setIndexD((prev) => (prev + 1) % CARD2_POOL_D.length);
       }, 2900);
-      return () => clearInterval(timerD);
     }, 1800);
 
     return () => {
@@ -434,6 +435,9 @@ function RuntimeCard() {
       clearTimeout(timeoutB);
       clearTimeout(timeoutC);
       clearTimeout(timeoutD);
+      clearInterval(timerB);
+      clearInterval(timerC);
+      clearInterval(timerD);
     };
   }, [isHovered]);
 

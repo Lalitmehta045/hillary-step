@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FooterWave } from "@/components/site/FooterWave";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion/FadeIn";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
@@ -53,22 +53,13 @@ const SOCIALS = [
   { icon: FaLocationDot, alt: "Google Map", bg: "bg-[#34A853]", hoverBg: "hover:bg-[#2B8A44]" },
 ];
 
-export function Footer() {
-  const [isITModalOpen, setIsITModalOpen] = useState(false);
-  const [isStaffingModalOpen, setIsStaffingModalOpen] = useState(false);
-  const [isCivilModalOpen, setIsCivilModalOpen] = useState(false);
-  const [isMCAModalOpen, setIsMCAModalOpen] = useState(false);
-  const [isASICModalOpen, setIsASICModalOpen] = useState(false);
-  const [isLaborModalOpen, setIsLaborModalOpen] = useState(false);
-  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
-  const [isMSMEModalOpen, setIsMSMEModalOpen] = useState(false);
-  const [statutoryType, setStatutoryType] = useState<StatutoryType>(null);
+const footerTaglineLine1 = "Hard Work At The Base. Honor At The Summit.";
+const footerTaglineLine2 = "WE ARE YOUR SHERPAS.";
+
+const FooterTagline = React.memo(function FooterTagline() {
   const [typedTaglineLine1, setTypedTaglineLine1] = useState("");
   const [typedTaglineLine2, setTypedTaglineLine2] = useState("");
   const [isFadingTagline, setIsFadingTagline] = useState(false);
-
-  const footerTaglineLine1 = "Hard Work At The Base. Honor At The Summit.";
-  const footerTaglineLine2 = "WE ARE YOUR SHERPAS.";
 
   useEffect(() => {
     if (isFadingTagline) {
@@ -96,6 +87,39 @@ export function Footer() {
     return () => window.clearTimeout(typingTimer);
   }, [typedTaglineLine1, typedTaglineLine2, isFadingTagline]);
 
+  return (
+    <FadeIn delay={0.45} className="flex min-h-[70px] flex-1 items-center justify-end max-md:w-full max-md:justify-start">
+      <div
+        className={`max-w-[560px] min-h-[54px] text-right max-md:text-left transition-all duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${isFadingTagline ? "translate-y-[-12px] scale-[0.985] opacity-0 blur-[4px]" : "translate-y-0 scale-100 opacity-100 blur-0"}`}
+      >
+        <p className="font-display text-[15px] max-md:text-[13px] font-[500] leading-[1.7] tracking-[0.03em] text-white/85">
+          {typedTaglineLine1}
+          {typedTaglineLine1.length > 0 && typedTaglineLine1.length < footerTaglineLine1.length && (
+            <span className="ml-[2px] inline-block h-[16px] w-[1.5px] translate-y-[2px] bg-white/75 animate-pulse" aria-hidden="true" />
+          )}
+        </p>
+        <p className="font-display text-[15px] max-md:text-[13px] font-[500] leading-[1.7] tracking-[0.03em] text-white/85">
+          {typedTaglineLine2}
+          {typedTaglineLine1 === footerTaglineLine1 && typedTaglineLine2.length < footerTaglineLine2.length && (
+            <span className="ml-[2px] inline-block h-[16px] w-[1.5px] translate-y-[2px] bg-white/75 animate-pulse" aria-hidden="true" />
+          )}
+        </p>
+      </div>
+    </FadeIn>
+  );
+});
+
+export function Footer() {
+
+  const [isITModalOpen, setIsITModalOpen] = useState(false);
+  const [isStaffingModalOpen, setIsStaffingModalOpen] = useState(false);
+  const [isCivilModalOpen, setIsCivilModalOpen] = useState(false);
+  const [isMCAModalOpen, setIsMCAModalOpen] = useState(false);
+  const [isASICModalOpen, setIsASICModalOpen] = useState(false);
+  const [isLaborModalOpen, setIsLaborModalOpen] = useState(false);
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [isMSMEModalOpen, setIsMSMEModalOpen] = useState(false);
+  const [statutoryType, setStatutoryType] = useState<StatutoryType>(null);
 
   const handleAction = (action: FooterLink["action"]) => {
     if (action === "it") setIsITModalOpen(true);
@@ -163,24 +187,7 @@ export function Footer() {
               </div>
             </FadeIn>
 
-            <FadeIn delay={0.45} className="flex min-h-[70px] flex-1 items-center justify-end max-md:w-full max-md:justify-start">
-              <div
-                className={`max-w-[560px] min-h-[54px] text-right max-md:text-left transition-all duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${isFadingTagline ? "translate-y-[-12px] scale-[0.985] opacity-0 blur-[4px]" : "translate-y-0 scale-100 opacity-100 blur-0"}`}
-              >
-                <p className="font-display text-[15px] max-md:text-[13px] font-[500] leading-[1.7] tracking-[0.03em] text-white/85">
-                  {typedTaglineLine1}
-                  {typedTaglineLine1.length > 0 && typedTaglineLine1.length < footerTaglineLine1.length && (
-                    <span className="ml-[2px] inline-block h-[16px] w-[1.5px] translate-y-[2px] bg-white/75 animate-pulse" aria-hidden="true" />
-                  )}
-                </p>
-                <p className="font-display text-[15px] max-md:text-[13px] font-[500] leading-[1.7] tracking-[0.03em] text-white/85">
-                  {typedTaglineLine2}
-                  {typedTaglineLine1 === footerTaglineLine1 && typedTaglineLine2.length < footerTaglineLine2.length && (
-                    <span className="ml-[2px] inline-block h-[16px] w-[1.5px] translate-y-[2px] bg-white/75 animate-pulse" aria-hidden="true" />
-                  )}
-                </p>
-              </div>
-            </FadeIn>
+            <FooterTagline />
           </div>
 
           <FadeIn delay={0.5} className="flex w-full justify-center max-md:justify-start">

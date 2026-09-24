@@ -102,8 +102,17 @@ export function FluidBlob({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     container.appendChild(renderer.domElement);
 
-    // Particles Data
-    const count = particleCount;
+    // Particles Data (Adaptive: 3600 on desktop, 2000 on mobile/low-core devices)
+    const isMobile =
+      typeof window !== "undefined" &&
+      (window.innerWidth < 768 ||
+        (navigator.hardwareConcurrency != null && navigator.hardwareConcurrency <= 4));
+    const count =
+      particleCount !== DEFAULT_COUNT
+        ? particleCount
+        : isMobile
+        ? 2000
+        : 3600;
     const positions = new Float32Array(count * 3);
     const homes = new Float32Array(count * 3);
     const scatters = new Float32Array(count * 3);
@@ -224,9 +233,11 @@ export function FluidBlob({
     );
     intersectionObserver.observe(container);
 
+    const shatterDir = new THREE.Vector3();
+
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      if (!isVisible) return;
+      if (!isVisible || (typeof document !== "undefined" && document.hidden)) return;
 
       const delta = clock.getDelta();
       const t = clock.getElapsedTime();
@@ -237,7 +248,7 @@ export function FluidBlob({
         shatterStart = t;
         for (let i = 0; i < count; i++) {
           const ix = i * 3;
-          const dir = new THREE.Vector3(
+          shatterDir.set(
             homes[ix] + (Math.random() - 0.5) * 1.4,
             homes[ix + 1] + (Math.random() - 0.5) * 1.4,
             homes[ix + 2] + (Math.random() - 0.5) * 1.4
@@ -245,9 +256,9 @@ export function FluidBlob({
           const mag = 1.5 + Math.random() * 2.5;
           scatters.set(
             [
-              homes[ix] + dir.x * mag,
-              homes[ix + 1] + dir.y * mag,
-              homes[ix + 2] + dir.z * mag,
+              homes[ix] + shatterDir.x * mag,
+              homes[ix + 1] + shatterDir.y * mag,
+              homes[ix + 2] + shatterDir.z * mag,
             ],
             ix
           );

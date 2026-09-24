@@ -76,7 +76,6 @@ export function GradientReveal({ children, className = "" }: GradientRevealProps
       <m.span
         className={`absolute inset-0 pointer-events-none select-none inline-block ${className}`}
         variants={blurTextVariants}
-        style={{ filter: "blur(10px)" }}
         aria-hidden="true"
       >
         {children}

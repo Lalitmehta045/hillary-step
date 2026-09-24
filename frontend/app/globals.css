@@ -1,6 +1,7 @@
 @font-face {
   font-family: "SF Pro Display";
-  src: url("/sf-pro-display/SFPRODISPLAYREGULAR.OTF") format("opentype");
+  src: url("/sf-pro-display/SFPRODISPLAYREGULAR.woff2") format("woff2"),
+       url("/sf-pro-display/SFPRODISPLAYREGULAR.OTF") format("opentype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -8,40 +9,18 @@
 
 @font-face {
   font-family: "SF Pro Display";
-  src: url("/sf-pro-display/SFPRODISPLAYMEDIUM.OTF") format("opentype");
-  font-weight: 500;
+  src: url("/sf-pro-display/SFPRODISPLAYMEDIUM.woff2") format("woff2"),
+       url("/sf-pro-display/SFPRODISPLAYMEDIUM.OTF") format("opentype");
+  font-weight: 500 510;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: "SF Pro Display";
-  src: url("/sf-pro-display/SFPRODISPLAYMEDIUM.OTF") format("opentype");
-  font-weight: 510;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SF Pro Display";
-  src: url("/sf-pro-display/SFPRODISPLAYBOLD.OTF") format("opentype");
-  font-weight: 590;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SF Pro Display";
-  src: url("/sf-pro-display/SFPRODISPLAYBOLD.OTF") format("opentype");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SF Pro Display";
-  src: url("/sf-pro-display/SFPRODISPLAYBOLD.OTF") format("opentype");
-  font-weight: 700;
+  src: url("/sf-pro-display/SFPRODISPLAYBOLD.woff2") format("woff2"),
+       url("/sf-pro-display/SFPRODISPLAYBOLD.OTF") format("opentype");
+  font-weight: 590 700;
   font-style: normal;
   font-display: swap;
 }
@@ -136,8 +115,16 @@ body {
   color: transparent;
   -webkit-text-fill-color: transparent;
   background-size: 300% 100%;
-  will-change: background-position;
   animation: gradient-flow 8s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grad-text,
+  .grad-text-bg,
+  .grad-text-bgreen,
+  .grad-text-green {
+    animation: none !important;
+  }
 }
 
 /* Sweep overlay for heading animations */

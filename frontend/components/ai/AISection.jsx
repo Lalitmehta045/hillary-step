@@ -27,9 +27,16 @@ export default function AISection() {
   const reduced = useReducedMotion();
 
   useEffect(() => {
-    // Connect to outer Lenis smooth scroll if available
+    // Connect to outer Lenis smooth scroll with RAF throttling
+    let ticking = false;
     const handleScrollUpdate = () => {
-      ScrollTrigger.update();
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          ScrollTrigger.update();
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     // @ts-ignore
@@ -38,11 +45,14 @@ export default function AISection() {
       window.lenis.on("scroll", handleScrollUpdate);
     }
 
+    const rootEl = rootRef.current;
     const onMove = (e) => {
       aiState.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
       aiState.mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
     };
-    window.addEventListener("pointermove", onMove);
+    if (rootEl) {
+      rootEl.addEventListener("pointermove", onMove, { passive: true });
+    }
 
     const ctx = gsap.context(() => {
       // Initial state: hidden
@@ -51,10 +61,10 @@ export default function AISection() {
         visibility: "hidden",
       });
 
-      // Core lifecycle: active only within AI Hero -> Architecture view range
+      // Core lifecycle: pre-warm at top 120% so WebGL compile occurs before visual fade
       ScrollTrigger.create({
         trigger: "#ai-hero",
-        start: "top bottom",
+        start: "top 120%",
         endTrigger: "#ai-architecture",
         end: "bottom top",
         onEnter: () => {
@@ -119,7 +129,9 @@ export default function AISection() {
 
     return () => {
       ctx.revert();
-      window.removeEventListener("pointermove", onMove);
+      if (rootEl) {
+        rootEl.removeEventListener("pointermove", onMove);
+      }
       // @ts-ignore
       if (window.lenis) {
         // @ts-ignore

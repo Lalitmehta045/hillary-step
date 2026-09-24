@@ -55,19 +55,104 @@ const BLUE = [26, 108, 255];
 const GREEN = [64, 246, 0];
 const ORANGE = [255, 149, 0];
 
-type Label = {
-  id: number;
-  x: number;
-  y: number;
-  o: number;
-  def: ArcDef["label"];
-};
+// Precomputed color lookup table for land dots to eliminate per-frame string allocations
+const K_STEPS = 32;
+const OP_STEPS = 20;
+const COLOR_LUT: string[][] = [];
+for (let ki = 0; ki <= K_STEPS; ki++) {
+  COLOR_LUT[ki] = [];
+  const k = ki / K_STEPS;
+  const rc =
+    k < 0.5
+      ? BLUE[0]! + ((GREEN[0]! - BLUE[0]!) * k) / 0.5
+      : GREEN[0]! + ((ORANGE[0]! - GREEN[0]!) * (k - 0.5)) / 0.5;
+  const gc =
+    k < 0.5
+      ? BLUE[1]! + ((GREEN[1]! - BLUE[1]!) * k) / 0.5
+      : GREEN[1]! + ((ORANGE[1]! - GREEN[1]!) * (k - 0.5)) / 0.5;
+  const bc =
+    k < 0.5
+      ? BLUE[2]! + ((GREEN[2]! - BLUE[2]!) * k) / 0.5
+      : GREEN[2]! + ((ORANGE[2]! - GREEN[2]!) * (k - 0.5)) / 0.5;
+  for (let opi = 0; opi <= OP_STEPS; opi++) {
+    const op = opi / OP_STEPS;
+    COLOR_LUT[ki]![opi] = `rgba(${rc | 0},${gc | 0},${bc | 0},${op.toFixed(2)})`;
+  }
+}
+
+// Alpha lookup table for starfield
+const WHITE_ALPHA_LUT: string[] = [];
+for (let ai = 0; ai <= 20; ai++) {
+  WHITE_ALPHA_LUT[ai] = `rgba(255,255,255,${(ai / 20).toFixed(2)})`;
+}
+
+// Module-level cached land points & phase arrays
+let cachedDots: Vec3[] | null = null;
+let cachedPh0: Float32Array | null = null;
+let cachedPh1: Float32Array | null = null;
+let cachedSpd: Float32Array | null = null;
+let cachedAmp: Float32Array | null = null;
+
+function getCachedDots() {
+  if (!cachedDots) {
+    // 10,000 sampling points yields ~2,200 crisp land dots with 40% less per-frame math
+    cachedDots = landPoints(10000);
+    const n = cachedDots.length;
+    cachedPh0 = new Float32Array(n);
+    cachedPh1 = new Float32Array(n);
+    cachedSpd = new Float32Array(n);
+    cachedAmp = new Float32Array(n);
+    for (let i = 0; i < n; i++) {
+      cachedPh0[i] = Math.random() * Math.PI * 2;
+      cachedPh1[i] = Math.random() * Math.PI * 2;
+      cachedSpd[i] = 0.35 + Math.random() * 0.9;
+      cachedAmp[i] = 0.006 + Math.random() * 0.03;
+    }
+  }
+  return {
+    dots: cachedDots,
+    ph0: cachedPh0!,
+    ph1: cachedPh1!,
+    spd: cachedSpd!,
+    amp: cachedAmp!,
+  };
+}
+
+let cachedEarthTexture: THREE.Texture | null = null;
+let cachedLightsTexture: THREE.Texture | null = null;
+let texturesLoaded = false;
+let textureCallbacks: (() => void)[] = [];
+
+function getEarthTextures(onLoad?: () => void) {
+  if (!cachedEarthTexture) {
+    const loader = new THREE.TextureLoader();
+    let loadedCount = 0;
+    const checkLoad = () => {
+      loadedCount++;
+      if (loadedCount === 2) {
+        texturesLoaded = true;
+        textureCallbacks.forEach((cb) => cb());
+        textureCallbacks = [];
+      }
+    };
+    cachedEarthTexture = loader.load("/assets/earth-blue-marble.jpg", checkLoad);
+    cachedEarthTexture.colorSpace = THREE.SRGBColorSpace;
+    cachedLightsTexture = loader.load("/assets/earth-lights.png", checkLoad);
+    cachedLightsTexture.colorSpace = THREE.SRGBColorSpace;
+  } else if (texturesLoaded && onLoad) {
+    setTimeout(onLoad, 0);
+  } else if (onLoad) {
+    textureCallbacks.push(onLoad);
+  }
+  return { earthTexture: cachedEarthTexture, lightsTexture: cachedLightsTexture! };
+}
 
 export function Globe({ active = "India" }: { active?: string }) {
   const wrap = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const threeCanvas = useRef<HTMLCanvasElement>(null);
-  const [labels, setLabels] = useState<Label[]>([]);
+  const labelRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [isReady, setIsReady] = useState(false);
 
   const targetLon =
     active === "United States" ? -95 : active === "Australia" ? 135 : 80;
@@ -81,7 +166,47 @@ export function Globe({ active = "India" }: { active?: string }) {
     targetSpinRef.current = (-targetLon * Math.PI) / 180;
   }, [active, targetLon]);
 
+  // Preload initialization: trigger during browser idle or when within 400px of viewport
   useEffect(() => {
+    const el = wrap.current;
+    if (!el) return;
+
+    let idleId: any = null;
+    if (typeof window !== "undefined" && typeof (window as any).requestIdleCallback === "function") {
+      idleId = (window as any).requestIdleCallback(
+        () => setIsReady(true),
+        { timeout: 800 }
+      );
+    } else {
+      idleId = setTimeout(() => setIsReady(true), 800);
+    }
+
+    const preIo = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setIsReady(true);
+          preIo.disconnect();
+        }
+      },
+      { rootMargin: "400px" }
+    );
+    preIo.observe(el);
+
+    return () => {
+      preIo.disconnect();
+      if (idleId !== null) {
+        if (typeof window !== "undefined" && typeof (window as any).cancelIdleCallback === "function") {
+          (window as any).cancelIdleCallback(idleId);
+        } else {
+          clearTimeout(idleId);
+        }
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isReady) return;
+
     const el = wrap.current;
     const cv = canvas.current;
     const threeCv = threeCanvas.current;
@@ -90,7 +215,7 @@ export function Globe({ active = "India" }: { active?: string }) {
     const ctx = cv.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    // Three.js scene
+    // Three.js scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
     const renderer = new THREE.WebGLRenderer({
@@ -102,20 +227,16 @@ export function Globe({ active = "India" }: { active?: string }) {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.28;
 
-    const loader = new THREE.TextureLoader();
-    const earthTexture = loader.load("/assets/earth-blue-marble.jpg", () => {
-      earthMat.needsUpdate = true;
+    const { earthTexture, lightsTexture } = getEarthTextures(() => {
+      // Force GPU texture upload asynchronously to avoid scroll jank
+      if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
     });
-    earthTexture.colorSpace = THREE.SRGBColorSpace;
-
-    const lightsTexture = loader.load("/assets/earth-lights.png", () => {
-      earthMat.needsUpdate = true;
-    });
-    lightsTexture.colorSpace = THREE.SRGBColorSpace;
 
     const group = new THREE.Group();
     scene.add(group);
-    const geo = new THREE.SphereGeometry(0.998, 48, 48); // Optimized segment count (48 vs 64) for smooth 60fps
+    const geo = new THREE.SphereGeometry(0.998, 48, 48);
 
     const earthMat = new THREE.ShaderMaterial({
       uniforms: {
@@ -174,6 +295,8 @@ export function Globe({ active = "India" }: { active?: string }) {
     rim2.position.set(-5, -2, -5);
     scene.add(rim2);
 
+    renderer.compile(scene, camera);
+
     const enter = () => {
       pausedRef.current = true;
     };
@@ -183,16 +306,9 @@ export function Globe({ active = "India" }: { active?: string }) {
     el.addEventListener("pointerenter", enter);
     el.addEventListener("pointerleave", leave);
 
-    // Optimized starfield: 200 stars with fast rect blit
-    const stars: {
-      x: number;
-      y: number;
-      s: number;
-      a: number;
-      speed: number;
-      bright: number;
-    }[] = [];
-    for (let i = 0; i < 200; i++) {
+    // Fast Starfield: 120 stars with fast rect blit
+    const stars: { x: number; y: number; s: number; a: number; speed: number; bright: number }[] = [];
+    for (let i = 0; i < 120; i++) {
       stars.push({
         x: Math.random(),
         y: Math.random(),
@@ -224,19 +340,8 @@ export function Globe({ active = "India" }: { active?: string }) {
       });
     }
 
-    // High performance dots: 16,000 sampling points yields ~3,500 crisp land dots
-    const dots = landPoints(16000);
+    const { dots, ph0, ph1, spd, amp } = getCachedDots();
     const n = dots.length;
-    const ph0 = new Float32Array(n);
-    const ph1 = new Float32Array(n);
-    const spd = new Float32Array(n);
-    const amp = new Float32Array(n);
-    for (let i = 0; i < n; i++) {
-      ph0[i] = Math.random() * Math.PI * 2;
-      ph1[i] = Math.random() * Math.PI * 2;
-      spd[i] = 0.35 + Math.random() * 0.9;
-      amp[i] = 0.006 + Math.random() * 0.03;
-    }
 
     const drifted: Vec3 = { x: 0, y: 0, z: 0 };
     const arcs = ARCS.map((a) => ({
@@ -253,9 +358,10 @@ export function Globe({ active = "India" }: { active?: string }) {
       cx = 0,
       cy = 0;
     const cam = 4.2;
+    let cachedVg: CanvasGradient | null = null;
 
     const resize = () => {
-      dpr = Math.min(1.5, window.devicePixelRatio || 1);
+      dpr = Math.min(1.25, window.devicePixelRatio || 1);
       w = el.clientWidth;
       h = el.clientHeight;
       cv.width = Math.floor(w * dpr);
@@ -270,12 +376,17 @@ export function Globe({ active = "India" }: { active?: string }) {
       cx = w * 0.5;
       cy = h * 0.5;
 
-      // Update camera projection matrix only on resize
       camera.fov = (2 * Math.atan(h / 2 / (R * cam)) * 180) / Math.PI;
       camera.aspect = w / h;
       camera.position.set(0, 0, cam);
       camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
+
+      // Cache atmosphere vignette gradient on resize
+      cachedVg = ctx.createRadialGradient(cx, cy, R * 0.82, cx, cy, R);
+      cachedVg.addColorStop(0, "rgba(5,10,25,0)");
+      cachedVg.addColorStop(0.85, "rgba(5,10,25,.2)");
+      cachedVg.addColorStop(1, "rgba(10,15,35,.5)");
     };
 
     resize();
@@ -283,12 +394,17 @@ export function Globe({ active = "India" }: { active?: string }) {
     ro.observe(el);
 
     let raf = 0;
-    let visible = true;
+    let isVisible = false;
+
     const io = new IntersectionObserver(
-      (e) => {
-        if (e[0]) visible = e[0].isIntersecting;
+      ([entry]) => {
+        isVisible = !!entry?.isIntersecting;
+        if (isVisible && !raf) {
+          lastTime.current = performance.now();
+          raf = requestAnimationFrame(render);
+        }
       },
-      { threshold: 0.05 }
+      { threshold: 0 }
     );
     io.observe(el);
 
@@ -296,16 +412,23 @@ export function Globe({ active = "India" }: { active?: string }) {
     lastTime.current = start;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    let frameCount = 0;
+    const sw = new THREE.Vector3();
+    let sunGeo = toVec(0, 0);
+
+    // Label items tracking for direct DOM updates
+    type ActiveLabel = { idx: number; x: number; y: number; o: number };
+    const activeLabels: ActiveLabel[] = [];
 
     const render = (now: number) => {
+      if (!isVisible || (typeof document !== "undefined" && document.hidden)) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(render);
-      if (!visible) return;
 
       const dt = Math.min((now - lastTime.current) / 1000, 0.1);
       lastTime.current = now;
       t = (now - start) / 1000 + 15;
-      frameCount++;
 
       if (!reduce && !pausedRef.current) {
         targetSpinRef.current += dt * 0.1;
@@ -315,7 +438,7 @@ export function Globe({ active = "India" }: { active?: string }) {
       const utc =
         d.getUTCHours() + d.getUTCMinutes() / 60 + d.getUTCSeconds() / 3600;
       const sunLon = (12 - utc) * 15;
-      const sunGeo = toVec(0, sunLon);
+      sunGeo = toVec(0, sunLon);
 
       let diff = targetSpinRef.current - focusRef.current;
       while (diff > Math.PI) diff -= Math.PI * 2;
@@ -360,7 +483,8 @@ export function Globe({ active = "India" }: { active?: string }) {
         if (dx * dx + dy * dy < rSquared) continue;
         const tw = 0.22 + 0.78 * (0.5 + 0.5 * Math.sin(t * s.speed + s.a));
         const alpha = Math.min(1, s.bright * tw * 0.72);
-        ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(2)})`;
+        const aIdx = Math.max(0, Math.min(20, Math.round(alpha * 20)));
+        ctx.fillStyle = WHITE_ALPHA_LUT[aIdx]!;
         ctx.fillRect(x - s.s * 0.5, y - s.s * 0.5, s.s, s.s);
       }
 
@@ -377,14 +501,14 @@ export function Globe({ active = "India" }: { active?: string }) {
         const tx = hx - cosA * c.length * w;
         const ty = hy - sinA * c.length * h * 0.72;
 
-        for (let j = 0; j < 8; j++) {
-          const u = j / 7;
+        for (let j = 0; j < 6; j++) {
+          const u = j / 5;
           const x = hx + (tx - hx) * u;
           const y = hy + (ty - hy) * u;
           const dx = x - cx;
           const dy = y - cy;
           if (dx * dx + dy * dy < cometRSquared) continue;
-          const a = (1 - u) * 0.24 * (1 - j / 10);
+          const a = (1 - u) * 0.22 * (1 - j / 8);
           ctx.fillStyle = `rgba(220,235,255,${a.toFixed(2)})`;
           const sz = Math.max(0.5, c.size * (1 - u));
           ctx.fillRect(x - sz * 0.5, y - sz * 0.5, sz, sz);
@@ -395,25 +519,23 @@ export function Globe({ active = "India" }: { active?: string }) {
       group.rotation.x = TILT;
       earth.rotation.y = spin - Math.PI / 2;
       group.updateMatrixWorld(true);
-      const sw = new THREE.Vector3();
       sun.getWorldPosition(sw);
       earthMat.uniforms.sunDirection.value.copy(
         earth.worldToLocal(sw).normalize()
       );
       renderer.render(scene, camera);
 
-      // Atmosphere vignette
-      const vg = ctx.createRadialGradient(cx, cy, R * 0.82, cx, cy, R);
-      vg.addColorStop(0, "rgba(5,10,25,0)");
-      vg.addColorStop(0.85, "rgba(5,10,25,.2)");
-      vg.addColorStop(1, "rgba(10,15,35,.5)");
-      ctx.beginPath();
-      ctx.arc(cx, cy, R, 0, Math.PI * 2);
-      ctx.fillStyle = vg;
-      ctx.fill();
+      // Cached atmosphere vignette
+      if (cachedVg) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, R, 0, Math.PI * 2);
+        ctx.fillStyle = cachedVg;
+        ctx.fill();
+      }
 
       // Render Land Dots
       const dotScale = R / 620;
+      let lastDotColor = "";
       for (let i = 0; i < n; i++) {
         const d = dots[i]!;
         const a = amp[i]!;
@@ -432,19 +554,6 @@ export function Globe({ active = "India" }: { active?: string }) {
         const g = 0.5 + ((q.x - cx) / R) * 0.5 - ((q.y - cy) / R) * 0.5;
         const k = Math.max(0, Math.min(1, g));
 
-        const rc =
-          k < 0.5
-            ? BLUE[0]! + ((GREEN[0]! - BLUE[0]!) * k) / 0.5
-            : GREEN[0]! + ((ORANGE[0]! - GREEN[0]!) * (k - 0.5)) / 0.5;
-        const gc =
-          k < 0.5
-            ? BLUE[1]! + ((GREEN[1]! - BLUE[1]!) * k) / 0.5
-            : GREEN[1]! + ((ORANGE[1]! - GREEN[1]!) * (k - 0.5)) / 0.5;
-        const bc =
-          k < 0.5
-            ? BLUE[2]! + ((GREEN[2]! - BLUE[2]!) * k) / 0.5
-            : GREEN[2]! + ((ORANGE[2]! - GREEN[2]!) * (k - 0.5)) / 0.5;
-
         const tw = 0.78 + 0.22 * f2;
         const fade = Math.min(1, (q.z - 0.22) / 0.2);
         let op = Math.min(1, (1.05 + 0.55 * fade) * tw);
@@ -454,12 +563,18 @@ export function Globe({ active = "India" }: { active?: string }) {
         const size = Math.max(0.6, 1.05 * q.s * dotScale);
         op *= sd < 0 ? Math.max(0, 1 + sd * 4) : Math.max(0.32, si);
 
-        ctx.fillStyle = `rgba(${rc | 0},${gc | 0},${bc | 0},${op.toFixed(2)})`;
+        const kIdx = Math.max(0, Math.min(K_STEPS, Math.round(k * K_STEPS)));
+        const opIdx = Math.max(0, Math.min(OP_STEPS, Math.round(op * OP_STEPS)));
+        const dotColor = COLOR_LUT[kIdx]![opIdx]!;
+        if (dotColor !== lastDotColor) {
+          ctx.fillStyle = dotColor;
+          lastDotColor = dotColor;
+        }
         ctx.fillRect(q.x - size, q.y - size, size * 2, size * 2);
       }
 
       // Arcs & Flight lines
-      const next: Label[] = [];
+      activeLabels.length = 0;
       const cycle = 28;
       const arcScale = R / 520;
 
@@ -505,8 +620,8 @@ export function Globe({ active = "India" }: { active?: string }) {
           ctx.beginPath();
           let started = false;
 
-          for (let s = 0; s <= 32; s++) {
-            const u = tail + ((head - tail) * s) / 32;
+          for (let s = 0; s <= 24; s++) {
+            const u = tail + ((head - tail) * s) / 24;
             const q = project(point(u));
             const occ =
               q.z < 0.22 && Math.hypot(q.x - cx, q.y - cy) < R * 0.99;
@@ -546,47 +661,38 @@ export function Globe({ active = "India" }: { active?: string }) {
 
         const dest = ring(arc.b, da);
         if (dest && hp >= 0.9) {
-          next.push({
-            id: idx,
-            x: dest.x,
-            y: dest.y,
+          activeLabels.push({
+            idx,
+            x: dest.x + 14,
+            y: dest.y - 22,
             o: Math.max(0, Math.min(1, da)),
-            def: arc.def.label,
           });
         }
       }
 
-      // Throttle React state updates to every 4th frame (~15fps) to prevent main thread blocking
-      if (frameCount % 4 === 0) {
-        next.sort((a, b) => a.y - b.y);
-        for (let i = 0; i < next.length; i++) {
-          for (let j = 0; j < i; j++) {
-            if (
-              Math.abs(next[i]!.x - next[j]!.x) < 160 &&
-              Math.abs(next[i]!.y - next[j]!.y) < 42
-            ) {
-              next[i]!.y = next[j]!.y + 42;
-            }
+      // DIRECT DOM UPDATE FOR LABELS: 0 React re-renders!
+      // Updates transform and opacity directly on the static element pool
+      const activeIndices = new Set<number>();
+      for (let i = 0; i < activeLabels.length; i++) {
+        const item = activeLabels[i]!;
+        activeIndices.add(item.idx);
+        const node = labelRefs.current[item.idx];
+        if (node) {
+          node.style.transform = `translate3d(${item.x.toFixed(1)}px, ${item.y.toFixed(1)}px, 0)`;
+          node.style.opacity = item.o.toFixed(2);
+          node.style.display = item.o > 0.02 ? "flex" : "none";
+        }
+      }
+      for (let idx = 0; idx < ARCS.length; idx++) {
+        if (!activeIndices.has(idx)) {
+          const node = labelRefs.current[idx];
+          if (node && node.style.display !== "none") {
+            node.style.display = "none";
+            node.style.opacity = "0";
           }
         }
-        next.sort((a, b) => a.id - b.id);
-
-        setLabels((prev) =>
-          prev.length === next.length &&
-          prev.every(
-            (p, i) =>
-              p.id === next[i]?.id &&
-              Math.abs(p.x - next[i]!.x) < 1 &&
-              Math.abs(p.y - next[i]!.y) < 1 &&
-              Math.abs(p.o - next[i]!.o) < 0.05
-          )
-            ? prev
-            : next
-        );
       }
     };
-
-    raf = requestAnimationFrame(render);
 
     return () => {
       cancelAnimationFrame(raf);
@@ -600,7 +706,7 @@ export function Globe({ active = "India" }: { active?: string }) {
       earthTexture.dispose();
       lightsTexture.dispose();
     };
-  }, []);
+  }, [isReady]);
 
   return (
     <div
@@ -608,7 +714,6 @@ export function Globe({ active = "India" }: { active?: string }) {
       className="relative h-full w-full overflow-hidden bg-slate-950"
       style={{ contain: "strict" }}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_52%,rgba(255,180,100,0.10),transparent_34%),radial-gradient(circle_at_78%_20%,rgba(20,55,120,0.16),transparent_38%)] pointer-events-none z-0" />
       <canvas
         ref={threeCanvas}
         className="absolute inset-0 block h-full w-full pointer-events-none z-[5]"
@@ -619,31 +724,33 @@ export function Globe({ active = "India" }: { active?: string }) {
         className="block h-full w-full relative z-10 pointer-events-none"
         aria-hidden
       />
+      {/* Zero React state re-render label pool with solid backdrop to avoid compositor readback */}
       <div className="pointer-events-none absolute inset-0 z-20">
-        {labels.map((l) => (
+        {ARCS.map((arc, i) => (
           <div
-            key={l.id}
-            className="absolute flex -translate-y-1/2 items-center gap-2 rounded-lg px-2 py-1.5 shadow-[0_8px_24px_-8px_rgba(38,20,90,0.35)] ring-1 backdrop-blur bg-slate-900/95 ring-white/10 transition-opacity duration-150"
+            key={arc.label.city}
+            ref={(el) => {
+              labelRefs.current[i] = el;
+            }}
+            className="absolute left-0 top-0 hidden -translate-y-1/2 items-center gap-2 rounded-lg px-2 py-1.5 shadow-[0_8px_24px_-8px_rgba(38,20,90,0.35)] ring-1 bg-slate-900/95 ring-white/10"
             style={{
-              left: l.x + 14,
-              top: l.y - 22,
-              opacity: l.o,
               willChange: "transform, opacity",
+              opacity: 0,
             }}
           >
             <span
-              className="flex h-6 w-6 items-center justify-center rounded-md text-[11px] text-primary-foreground"
-              style={{ backgroundColor: l.def.tint }}
+              className="flex h-6 w-6 items-center justify-center rounded-md text-[11px] text-primary-foreground font-semibold"
+              style={{ backgroundColor: arc.label.tint }}
             >
-              {l.def.glyph}
+              {arc.label.glyph}
             </span>
             <span className="text-[13px] font-semibold text-slate-100">
-              {l.def.city}
-              {l.def.country ? "," : ""}
+              {arc.label.city}
+              {arc.label.country ? "," : ""}
             </span>
-            {l.def.country && (
+            {arc.label.country && (
               <span className="text-[13px] text-slate-400">
-                {l.def.country}
+                {arc.label.country}
               </span>
             )}
           </div>

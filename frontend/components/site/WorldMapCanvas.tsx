@@ -106,9 +106,35 @@ export function WorldMapCanvas({ activeRegion }: { activeRegion: string }) {
       }
     };
 
+    // Offscreen canvas for static grid — drawn once, blit every frame
+    let gridCanvas: HTMLCanvasElement | null = document.createElement("canvas");
+    let gridCtx: CanvasRenderingContext2D | null = gridCanvas.getContext("2d");
+
+    const buildGridCache = () => {
+      if (!gridCanvas || !gridCtx) return;
+      gridCanvas.width = width;
+      gridCanvas.height = height;
+      gridCtx.clearRect(0, 0, width, height);
+      gridCtx.strokeStyle = "rgba(0, 0, 0, 0.035)";
+      gridCtx.lineWidth = 1;
+      const gridGap = 44;
+      // Batch all lines into a single path for minimal stroke calls
+      gridCtx.beginPath();
+      for (let x = 0; x < width; x += gridGap) {
+        gridCtx.moveTo(x, 0);
+        gridCtx.lineTo(x, height);
+      }
+      for (let y = 0; y < height; y += gridGap) {
+        gridCtx.moveTo(0, y);
+        gridCtx.lineTo(width, y);
+      }
+      gridCtx.stroke();
+    };
+
     const handleResize = () => {
       if (!container || !canvas) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Lowered DPR cap from 2 → 1.5 for better rendering performance
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       width = container.clientWidth;
       height = container.clientHeight;
       canvas.width = width * dpr;
@@ -118,10 +144,12 @@ export function WorldMapCanvas({ activeRegion }: { activeRegion: string }) {
       ctx.resetTransform();
       ctx.scale(dpr, dpr);
       initDots();
+      buildGridCache();
     };
 
+    const resizeObserver = new ResizeObserver(handleResize);
+    resizeObserver.observe(container);
     handleResize();
-    window.addEventListener("resize", handleResize);
 
     const startTime = performance.now();
 
@@ -135,21 +163,9 @@ export function WorldMapCanvas({ activeRegion }: { activeRegion: string }) {
 
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Draw subtle ambient background grid lines
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.035)";
-      ctx.lineWidth = 1;
-      const gridGap = 44;
-      for (let x = 0; x < width; x += gridGap) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-      }
-      for (let y = 0; y < height; y += gridGap) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
+      // 1. Blit cached static grid (drawn once, never redrawn per frame)
+      if (gridCanvas && width > 0 && height > 0) {
+        ctx.drawImage(gridCanvas, 0, 0, width, height);
       }
 
       // 2. Draw World Matrix Dots
@@ -258,10 +274,13 @@ export function WorldMapCanvas({ activeRegion }: { activeRegion: string }) {
 
     return () => {
       observer.disconnect();
+      resizeObserver.disconnect();
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
-      window.removeEventListener("resize", handleResize);
+      // Release offscreen canvas resources
+      gridCanvas = null;
+      gridCtx = null;
     };
   }, []); // Removed [activeRegion] — now uses ref to avoid teardown/rebuild
 
