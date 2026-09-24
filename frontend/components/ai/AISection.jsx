@@ -61,10 +61,10 @@ export default function AISection() {
         visibility: "hidden",
       });
 
-      // Core lifecycle: pre-warm at top 120% so WebGL compile occurs before visual fade
+      // Core lifecycle: pre-warm at top 100% so WebGL compile occurs before visual fade
       ScrollTrigger.create({
         trigger: "#ai-hero",
-        start: "top 120%",
+        start: "top 100%",
         endTrigger: "#ai-architecture",
         end: "bottom top",
         onEnter: () => {

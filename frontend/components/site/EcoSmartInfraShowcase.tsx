@@ -95,9 +95,20 @@ export function EcoSmartInfraShowcase() {
     const parent = findScrollParent(trackRef.current);
     scrollParentRef.current = parent;
     const targetElement = parent || window;
-    targetElement.addEventListener("scroll", handleScrollUpdate, { passive: true });
-    window.addEventListener("resize", handleScrollUpdate, { passive: true });
+    
+    let scrollRaf: number | null = null;
+    const onScroll = () => {
+      if (scrollRaf !== null) return;
+      scrollRaf = requestAnimationFrame(() => {
+        handleScrollUpdate();
+        scrollRaf = null;
+      });
+    };
+
+    targetElement.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
     handleScrollUpdate();
+
     const tick = () => {
       if (cardsRowRef.current) {
         const diff = targetXRef.current - currentXRef.current;
@@ -109,9 +120,11 @@ export function EcoSmartInfraShowcase() {
       animFrameRef.current = requestAnimationFrame(tick);
     };
     animFrameRef.current = requestAnimationFrame(tick);
+
     return () => {
-      targetElement.removeEventListener("scroll", handleScrollUpdate);
-      window.removeEventListener("resize", handleScrollUpdate);
+      targetElement.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (scrollRaf !== null) cancelAnimationFrame(scrollRaf);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     };
   }, [handleScrollUpdate]);

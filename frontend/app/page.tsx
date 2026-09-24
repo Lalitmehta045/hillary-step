@@ -1,13 +1,15 @@
+import dynamic from "next/dynamic";
 import { Hero } from "@/components/site/Hero";
 import { Pillars } from "@/components/site/Pillars";
 import { InnovationLab } from "@/components/site/InnovationLab";
 import { About } from "@/components/site/About";
 import { Journey } from "@/components/site/Journey";
 import { Leadership } from "@/components/site/Leadership";
-import { Regions } from "@/components/site/Regions";
-import AISection from "@/components/ai/AISection";
 import { Forms } from "@/components/site/Forms";
-import { Footer } from "@/components/site/Footer";
+
+const Regions = dynamic(() => import("@/components/site/Regions").then((mod) => mod.Regions), { ssr: true });
+const AISection = dynamic(() => import("@/components/ai/AISection"), { ssr: true });
+const Footer = dynamic(() => import("@/components/site/Footer").then((mod) => mod.Footer), { ssr: true });
 
 export default function Home() {
   return (
@@ -32,4 +34,3 @@ export default function Home() {
     </main>
   );
 }
-

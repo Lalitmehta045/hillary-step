@@ -72,7 +72,7 @@ export function MCAParametersModal({
             <div className="sticky top-0 z-50 w-full flex justify-end pointer-events-none p-4 sm:p-6 pb-0 -mb-[52px]">
               <button
                 onClick={onClose}
-                className="pointer-events-auto w-[38px] h-[38px] flex items-center justify-center rounded-full bg-white/95 backdrop-blur-md shadow-md border border-gray-200/80 text-[#1E3A8A] transition-all hover:bg-white hover:scale-110 hover:text-[#FF6A00] focus:outline-none cursor-pointer"
+                className="ml-auto pointer-events-auto w-[38px] h-[38px] flex items-center justify-center rounded-full bg-white/95 backdrop-blur-md shadow-md border border-gray-200/80 text-[#1E3A8A] transition-all hover:bg-white hover:scale-110 hover:text-[#FF6A00] focus:outline-none cursor-pointer"
                 aria-label="Close MCA Compliance document"
               >
                 <svg

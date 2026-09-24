@@ -60,121 +60,64 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState("USA");
-  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const isPointerOverNavRef = useRef(false);
-  const navHoverZoneRef = useRef<HTMLDivElement | null>(null);
-  const cachedRect = useRef<DOMRect | null>(null);
-  const rafPending = useRef(false);
-
-  const clearHideTimer = useCallback(() => {
-    if (hideTimerRef.current) {
-      clearTimeout(hideTimerRef.current);
-      hideTimerRef.current = null;
-    }
-  }, []);
-
-  const scheduleHide = useCallback(() => {
-    clearHideTimer();
-    if (typeof window === "undefined" || window.scrollY <= 50 || open || isPointerOverNavRef.current) return;
-
-    hideTimerRef.current = setTimeout(() => {
-      if (!open && !isPointerOverNavRef.current && window.scrollY > 50) {
-        setIsVisible(false);
-      }
-    }, 850);
-  }, [open, clearHideTimer]);
-
-  const handleNavMouseEnter = useCallback(() => {
-    isPointerOverNavRef.current = true;
-    clearHideTimer();
-    setIsVisible(true);
-  }, [clearHideTimer]);
-
-  const handleNavMouseLeave = useCallback(() => {
-    isPointerOverNavRef.current = false;
-    scheduleHide();
-  }, [scheduleHide]);
 
   useEffect(() => {
-    // ── Rect cache helpers ─────────────────────────────────────────
-    const updateCachedRect = () => {
-      if (navHoverZoneRef.current) {
-        cachedRect.current = navHoverZoneRef.current.getBoundingClientRect();
-      }
+    let scrollRaf: number;
+    let hideTimeout: NodeJS.Timeout;
+
+    const onScroll = () => {
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      if (hideTimeout) clearTimeout(hideTimeout);
+      
+      scrollRaf = requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        
+        // Update scrolled state cleanly
+        setScrolled(currentScrollY > 30);
+        
+        // Always show while scrolling
+        setIsVisible(true);
+      });
+
+      // Hide navbar when scrolling stops
+      hideTimeout = setTimeout(() => {
+        // Keep it visible if at the very top
+        if (window.scrollY > 50) {
+          setIsVisible(false);
+        }
+      }, 600);
     };
 
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setScrolled(currentScrollY > 30);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
 
-      // Always show the navbar while the user is actively scrolling.
-      setIsVisible(true);
-      clearHideTimer();
-
-      // Keep it visible at the top of the page.
-      if (currentScrollY <= 50) return;
-
-      // Start the hide countdown only when the pointer is not over the navbar.
-      scheduleHide();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      if (hideTimeout) clearTimeout(hideTimeout);
     };
+  }, []);
 
-    const handlePointerMove = (event: PointerEvent) => {
-      // Skip if a RAF frame is already queued — process only once per frame.
-      if (rafPending.current) return;
-      rafPending.current = true;
-
-      requestAnimationFrame(() => {
-        rafPending.current = false;
-
-        // Use cached rect; fall back to a live read if the cache is empty.
-        const rect = cachedRect.current ?? (() => {
-          updateCachedRect();
-          return cachedRect.current;
-        })();
-        if (!rect) return;
-
-        const insideNavZone =
-          event.clientX >= rect.left &&
-          event.clientX <= rect.right &&
-          event.clientY >= rect.top &&
-          event.clientY <= rect.bottom;
-
-        if (insideNavZone) {
-          if (!isPointerOverNavRef.current) {
-            isPointerOverNavRef.current = true;
-            clearHideTimer();
-            setIsVisible(true);
-          }
-        } else if (isPointerOverNavRef.current) {
-          isPointerOverNavRef.current = false;
-          scheduleHide();
+  useEffect(() => {
+    let hoverRaf: number;
+    const onMouseMove = (e: MouseEvent) => {
+      if (hoverRaf) cancelAnimationFrame(hoverRaf);
+      hoverRaf = requestAnimationFrame(() => {
+        if (e.clientY < 90) {
+          setIsHovered(true);
+        } else if (e.clientY > 160) {
+          setIsHovered(false);
         }
       });
     };
-
-    // Populate cache immediately on mount.
-    updateCachedRect();
-
-    // Re-cache on scroll (position of fixed headers can shift in some
-    // edge-cases) and on resize (viewport / element size may change).
-    const handleScrollForRect = () => updateCachedRect();
-    const handleResize = () => updateCachedRect();
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("scroll", handleScrollForRect, { passive: true });
-    window.addEventListener("resize", handleResize, { passive: true });
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("scroll", handleScrollForRect);
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("pointermove", handlePointerMove);
-      clearHideTimer();
+      window.removeEventListener("mousemove", onMouseMove);
+      if (hoverRaf) cancelAnimationFrame(hoverRaf);
     };
-  }, [clearHideTimer, scheduleHide]);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -209,15 +152,15 @@ export function Navbar() {
     }, 450);
   };
 
-  const shouldHide = !isVisible && !open;
+  const shouldHide = !isVisible && !open && !isHovered;
 
   return (
     <>
-      <div ref={navHoverZoneRef} className="fixed top-0 inset-x-0 z-[9000] h-[96px] pointer-events-auto" onMouseEnter={handleNavMouseEnter} onMouseLeave={handleNavMouseLeave}>
+      <div className="fixed top-0 inset-x-0 z-[9000] pointer-events-none">
         <m.header
           initial={{ y: 0, opacity: 1 }}
           animate={{ y: shouldHide ? "-120%" : 0, opacity: shouldHide ? 0 : 1 }}
-          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           style={{ pointerEvents: shouldHide ? "none" : "auto" }}
           className={`relative w-full transition-all duration-200 ${scrolled ? "py-3" : "py-5 md:py-6"}`}
         >

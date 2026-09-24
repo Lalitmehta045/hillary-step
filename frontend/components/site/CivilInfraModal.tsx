@@ -72,7 +72,7 @@ export function CivilInfraModal({ isOpen, onClose }: CivilInfraModalProps) {
               </div>
               <button
                 onClick={onClose}
-                className="pointer-events-auto w-[36px] h-[36px] max-md:w-[32px] max-md:h-[32px] flex items-center justify-center rounded-full bg-white/95 backdrop-blur-md shadow-md border border-[#EA580C]/20 text-[#EA580C] transition-all hover:bg-[#EA580C]/10 hover:scale-110 active:scale-90"
+                className="ml-auto pointer-events-auto w-[36px] h-[36px] max-md:w-[32px] max-md:h-[32px] flex items-center justify-center rounded-full bg-white/95 backdrop-blur-md shadow-md border border-[#EA580C]/20 text-[#EA580C] transition-all hover:bg-[#EA580C]/10 hover:scale-110 active:scale-90"
                 aria-label="Close modal"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

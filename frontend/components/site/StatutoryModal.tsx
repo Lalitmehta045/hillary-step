@@ -70,7 +70,7 @@ export function StatutoryModal({ type, isOpen, onClose }: StatutoryModalProps) {
             <div className="sticky top-0 z-50 w-full flex justify-end pointer-events-none p-[24px] pb-0 -mb-[56px]">
               <button
                 onClick={onClose}
-                className="pointer-events-auto w-[36px] h-[36px] flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-md border border-white/20 text-[#1E3A8A] transition-all hover:bg-white hover:scale-110"
+                className="ml-auto pointer-events-auto w-[36px] h-[36px] flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-md border border-white/20 text-[#1E3A8A] transition-all hover:bg-white hover:scale-110"
                 aria-label="Close modal"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

@@ -166,39 +166,25 @@ export function Globe({ active = "India" }: { active?: string }) {
     targetSpinRef.current = (-targetLon * Math.PI) / 180;
   }, [active, targetLon]);
 
-  // Preload initialization: trigger during browser idle or when within 400px of viewport
+  // Preload initialization: trigger during browser idle after a safe delay, completely decoupled from scroll
   useEffect(() => {
-    const el = wrap.current;
-    if (!el) return;
-
     let idleId: any = null;
-    if (typeof window !== "undefined" && typeof (window as any).requestIdleCallback === "function") {
-      idleId = (window as any).requestIdleCallback(
-        () => setIsReady(true),
-        { timeout: 800 }
-      );
-    } else {
-      idleId = setTimeout(() => setIsReady(true), 800);
-    }
-
-    const preIo = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setIsReady(true);
-          preIo.disconnect();
-        }
-      },
-      { rootMargin: "400px" }
-    );
-    preIo.observe(el);
+    
+    // Wait for the critical initial page render and animations to finish
+    const timer = setTimeout(() => {
+      if (typeof window !== "undefined" && typeof (window as any).requestIdleCallback === "function") {
+        // No timeout parameter - it will wait until the main thread is TRULY idle
+        idleId = (window as any).requestIdleCallback(() => setIsReady(true));
+      } else {
+        setIsReady(true);
+      }
+    }, 2500);
 
     return () => {
-      preIo.disconnect();
+      clearTimeout(timer);
       if (idleId !== null) {
         if (typeof window !== "undefined" && typeof (window as any).cancelIdleCallback === "function") {
           (window as any).cancelIdleCallback(idleId);
-        } else {
-          clearTimeout(idleId);
         }
       }
     };
